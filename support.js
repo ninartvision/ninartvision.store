@@ -40,8 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", function(e) {
       e.stopPropagation();
       e.preventDefault();
-      const langCode = this.getAttribute("onclick").match(/'(\w+)'/)[1];
-      setLang(langCode, e);
+      const onclickAttr = this.getAttribute("onclick");
+      const match = onclickAttr ? onclickAttr.match(/'(\w+)'/) : null;
+      if (match) {
+        setLang(match[1], e);
+      }
     });
   });
 });

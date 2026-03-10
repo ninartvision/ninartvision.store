@@ -137,7 +137,12 @@ async function fetchFeaturedArtworks(limit = null) {
   }
   
   query += ARTWORK_PROJECTION;
-   and cache-busting
+
+  return executeSanityQuery(query);
+}
+
+/**
+ * Execute a GROQ query against the Sanity API with params and cache-busting
  */
 async function executeSanityQuery(query, params = {}) {
   try {
@@ -153,12 +158,7 @@ async function executeSanityQuery(query, params = {}) {
         'Pragma': 'no-cache',
         'Expires': '0'
       }
-    }codeURIComponent(query)}`;
-    const urlWithParams = params && Object.keys(params).length > 0
-      ? `${url}&${new URLSearchParams(Object.entries(params).map(([k, v]) => [`$${k}`, v]))}`
-      : url;
-    
-    const response = await fetch(urlWithParams);
+    });
     
     if (!response.ok) {
       throw new Error(`Sanity API error: ${response.status} ${response.statusText}`);
