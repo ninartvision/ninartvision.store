@@ -50,15 +50,8 @@
     `
 
     const res = await fetch(
-      'https://8t5h923j.api.sanity.io/v2025-02-05/data/query/production?query=' +
-        encodeURIComponent(query),
-      {
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
-      }
+      'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production?query=' +
+        encodeURIComponent(query)
     )
 
     if (!res.ok) {
@@ -108,15 +101,8 @@
     `
 
     const res = await fetch(
-      'https://8t5h923j.api.sanity.io/v2025-02-05/data/query/production?query=' +
-        encodeURIComponent(query),
-      {
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
-      }
+      'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production?query=' +
+        encodeURIComponent(query)
     )
 
     if (!res.ok) {
@@ -191,16 +177,25 @@
     if (!galleryContainer) return
     
     // Render gallery images
-    const galleryHTML = gallery.map((img, index) => `
+    const iUrl = typeof window.sanityImgUrl === 'function' ? window.sanityImgUrl : u => u
+    const iSet = typeof window.sanitySrcset === 'function' ? window.sanitySrcset : () => ''
+    const galleryHTML = gallery.map((img, index) => {
+      const rawUrl = img.asset?.url || ''
+      const src = iUrl(rawUrl, { w: 800, q: 80 })
+      const srcset = iSet(rawUrl, [400, 700, 1000])
+      return `
       <div class="gallery-item" data-index="${index}">
-        <img 
-          src="${img.asset?.url || ''}" 
+        <img
+          src="${src}"
+          ${srcset ? `srcset="${srcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 450px"` : ''}
           alt="${img.alt || 'Artist gallery image'}"
           loading="lazy"
+          decoding="async"
+          width="800" height="600"
           onerror="this.src='../images/placeholder.jpg'"
         >
       </div>
-    `).join('')
+    `}).join('')
     
     galleryContainer.innerHTML = `
       <h3 class="gallery-title">Gallery</h3>
@@ -236,13 +231,18 @@
     grid.innerHTML = artworks
       .map(
         (a) => {
-          // Get image URL from new structure
-          const imgUrl = a.image?.asset?.url || '../images/placeholder.jpg'
-          
-          // Get all photos (images array + main image as fallback)
+          const iUrl = typeof window.sanityImgUrl === 'function' ? window.sanityImgUrl : u => u
+          const iSet = typeof window.sanitySrcset === 'function' ? window.sanitySrcset : () => ''
+
+          // Thumbnail at 600px; lightbox photos at 1200px
+          const rawUrl = a.image?.asset?.url || null
+          const imgUrl = rawUrl ? iUrl(rawUrl, { w: 600, q: 80 }) : '../images/placeholder.jpg'
+          const imgSrcset = rawUrl ? iSet(rawUrl, [400, 600, 800]) : ''
+
+          // Get all photos at 1200px for the lightbox
           const allPhotos = a.images && a.images.length > 0
-            ? a.images.map(img => img.asset?.url).filter(Boolean)
-            : [imgUrl]
+            ? a.images.map(img => img.asset?.url).filter(Boolean).map(u => iUrl(u, { w: 1200, q: 85 }))
+            : (rawUrl ? [iUrl(rawUrl, { w: 1200, q: 85 })] : ['../images/placeholder.jpg'])
           
           return `
       <div class="shop-item ${a.status === 'sold' ? 'sold' : 'sale'}"
@@ -253,14 +253,14 @@
         data-medium="${a.medium || ''}"
         data-year="${a.year || ''}"
         data-desc="${a.desc || a.shortDescription || ''}"
-        data-photos="${allPhotos.join(',')}">
+        data-photos="${allPhotos.join(',')}">  
 
-        <img src="${imgUrl}" 
+        <img src="${imgUrl}"
+             ${imgSrcset ? `srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 300px"` : ''}
              alt="${a.image?.alt || a.title || 'Artwork'}" 
              loading="lazy"
-             onerror="this.src='../images/placeholder.jpg'">
-
-        ${a.status === 'sold' ? '<div class="sold-badge"></div>' : ''}
+             decoding="async"
+             width="600" height="750"
 
         <div class="shop-meta">
           <span>${a.title || 'Untitled'}</span>
@@ -304,7 +304,10 @@ if (statusEl) {
       
       // Handle new image structure
       if (avatarEl && artist.image?.asset?.url) {
-        avatarEl.src = artist.image.asset.url
+        const rawAvatarUrl = artist.image.asset.url
+        avatarEl.src = typeof window.sanityImgUrl === 'function'
+          ? window.sanityImgUrl(rawAvatarUrl, { w: 800, q: 80 })
+          : rawAvatarUrl
         avatarEl.alt = artist.image.alt || artist.name || 'Artist Avatar'
         avatarEl.style.display = 'block'
       } else if (avatarEl) {

@@ -35,10 +35,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const items = artists.slice(start, end);
 
     grid.innerHTML = items.map(artist => {
-      const avatarUrl =
+      const rawUrl =
         artist.image && artist.image.asset && artist.image.asset.url
           ? artist.image.asset.url
-          : "../images/artists/placeholder.jpg";
+          : null;
+      const avatarUrl = rawUrl
+        ? (typeof window.sanityImgUrl === 'function'
+            ? window.sanityImgUrl(rawUrl, { w: 300, h: 300, fit: 'crop', q: 80 })
+            : rawUrl)
+        : "../images/artists/placeholder.jpg";
 
       return `
         <a class="artist-card" href="${getArtistLink(artist)}">

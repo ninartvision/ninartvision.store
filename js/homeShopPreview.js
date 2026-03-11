@@ -37,8 +37,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       const div = document.createElement("div");
       div.className = "shop-item " + p.status;
 
+      const imgSrc = (typeof window.sanityImgUrl === 'function')
+        ? window.sanityImgUrl(p.image, { w: 600, q: 80 })
+        : p.image;
+      const imgSrcset = (typeof window.sanitySrcset === 'function')
+        ? window.sanitySrcset(p.image, [400, 600, 800])
+        : '';
+
       div.innerHTML = `
-        <img src="${p.image}" alt="${p.alt || p.title}" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+        <img src="${imgSrc}"${imgSrcset ? ` srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 350px"` : ''}
+             alt="${p.alt || p.title}" loading="lazy" decoding="async"
+             width="600" height="750" onerror="this.src='images/placeholder.jpg'">
         <div class="shop-meta">
           <span>${p.title}</span>
           ${p.price ? `<span class="price">${p.price}</span>` : ''}

@@ -7,9 +7,52 @@ const SANITY_CONFIG = {
   projectId: '8t5h923j',
   dataset: 'production',
   apiVersion: '2025-02-05',
-  useCdn: false,          // always fresh data
+  useCdn: true,           // use CDN for edge caching
   perspective: 'published'
 };
+
+/* --------------------------------------------------
+   SANITY IMAGE URL OPTIMIZATION
+   Appends ?auto=format (WebP for modern browsers),
+   width, height, quality, and fit params to Sanity CDN URLs.
+-------------------------------------------------- */
+/**
+ * @param {string} url       Raw Sanity asset URL
+ * @param {{w?:number,h?:number,q?:number,fit?:string,auto?:boolean}} [opts]
+ * @returns {string}
+ */
+function sanityImgUrl(url, opts) {
+  if (!url || typeof url !== 'string' || !url.includes('cdn.sanity.io')) return url || '';
+  opts = opts || {};
+  var w = opts.w, h = opts.h;
+  var q = opts.q !== undefined ? opts.q : 80;
+  var fit = opts.fit || 'max';
+  var auto = opts.auto !== false;
+  var base = url.split('?')[0];
+  var p = new URLSearchParams();
+  if (auto) p.set('auto', 'format');
+  if (w) p.set('w', String(w));
+  if (h) p.set('h', String(h));
+  p.set('q', String(q));
+  if ((w || h) && fit !== 'max') p.set('fit', fit);
+  return base + '?' + p.toString();
+}
+
+/**
+ * Generates a srcset string for responsive images.
+ * @param {string} url       Raw Sanity asset URL
+ * @param {number[]} [widths] Default: [400, 800, 1200]
+ * @param {object}  [opts]   Additional sanityImgUrl options
+ * @returns {string}
+ */
+function sanitySrcset(url, widths, opts) {
+  if (!url || !url.includes('cdn.sanity.io')) return '';
+  widths = widths || [400, 800, 1200];
+  opts = opts || {};
+  return widths.map(function(w) {
+    return sanityImgUrl(url, Object.assign({}, opts, { w: w })) + ' ' + w + 'w';
+  }).join(', ');
+}
 
 /* --------------------------------------------------
    FETCH ARTISTS
@@ -51,9 +94,9 @@ async function fetchArtistsFromSanity(limit = null, featuredOnly = false) {
       seoDescription
     }`;
 
-    const url = `https://${SANITY_CONFIG.projectId}.api.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+    const url = `https://${SANITY_CONFIG.projectId}.apicdn.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
 
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url);
     const data = await res.json();
 
     return data.result || [];
@@ -96,9 +139,9 @@ async function fetchArtistBySlug(identifier) {
       seoDescription
     }`;
 
-    const url = `https://${SANITY_CONFIG.projectId}.api.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+    const url = `https://${SANITY_CONFIG.projectId}.apicdn.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
 
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url);
     const data = await res.json();
 
     return data.result || null;
@@ -156,9 +199,9 @@ async function fetchFeaturedArtworks(limit = null) {
       }
     }`;
 
-    const url = `https://${SANITY_CONFIG.projectId}.api.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+    const url = `https://${SANITY_CONFIG.projectId}.apicdn.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
 
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url);
     const data = await res.json();
 
     return data.result || [];
@@ -174,3 +217,5 @@ async function fetchFeaturedArtworks(limit = null) {
 window.fetchArtistsFromSanity = fetchArtistsFromSanity;
 window.fetchArtistBySlug = fetchArtistBySlug;
 window.fetchFeaturedArtworks = fetchFeaturedArtworks;
+window.sanityImgUrl = sanityImgUrl;
+window.sanitySrcset = sanitySrcset;

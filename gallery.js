@@ -6,6 +6,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  /* ---- Sanity image helpers (inline so gallery.html stays self-contained) ---- */
+  function sanityImgUrl(url, opts) {
+    if (!url || typeof url !== 'string' || !url.includes('cdn.sanity.io')) return url || '';
+    opts = opts || {};
+    var w = opts.w, h = opts.h, q = opts.q !== undefined ? opts.q : 80;
+    var fit = opts.fit || 'max';
+    var auto = opts.auto !== false;
+    var base = url.split('?')[0];
+    var p = new URLSearchParams();
+    if (auto) p.set('auto', 'format');
+    if (w) p.set('w', String(w));
+    if (h) p.set('h', String(h));
+    p.set('q', String(q));
+    if ((w || h) && fit !== 'max') p.set('fit', fit);
+    return base + '?' + p.toString();
+  }
+  function sanitySrcset(url, widths, opts) {
+    if (!url || !url.includes('cdn.sanity.io')) return '';
+    widths = widths || [400, 800, 1200];
+    opts = opts || {};
+    return widths.map(function(w) {
+      return sanityImgUrl(url, Object.assign({}, opts, { w: w })) + ' ' + w + 'w';
+    }).join(', ');
+  }
+
   grid.innerHTML = "<p class='muted'>Loading artworks...</p>";
 
   try {
@@ -34,15 +59,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     const res = await fetch(
-      "https://8t5h923j.api.sanity.io/v2026-02-01/data/query/production?query=" +
-        encodeURIComponent(query),
-      {
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
-      }
+      "https://8t5h923j.apicdn.sanity.io/v2026-02-01/data/query/production?query=" +
+        encodeURIComponent(query)
     );
 
     if (!res.ok) {
@@ -82,7 +100,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.className = "card";
 
       card.innerHTML = `
-        <img class="thumb-img" src="${art.img}" alt="${art.title}" />
+        <img class="thumb-img"
+          src="${sanityImgUrl(art.img, {w: 600, q: 80})}"
+          srcset="${sanitySrcset(art.img, [400, 600, 800])}"
+          sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 400px"
+          alt="${art.title}"
+          loading="lazy"
+          decoding="async"
+          width="600" height="450" />
 
         <div class="card-body">
           <h3>${art.title}</h3>

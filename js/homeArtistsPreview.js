@@ -16,9 +16,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     grid.innerHTML = artists.map(artist => {
       const slug = artist.slug || artist._id;
 
-      const avatar =
-        artist.image?.asset?.url ||
-        "images/artists/placeholder.jpg";
+      const avatarRaw = artist.image?.asset?.url || null;
+      const avatar = avatarRaw
+        ? (typeof window.sanityImgUrl === 'function'
+            ? window.sanityImgUrl(avatarRaw, { w: 300, h: 300, fit: 'crop', q: 80 })
+            : avatarRaw)
+        : "images/artists/placeholder.jpg";
 
       return `
         <a class="artist-card"

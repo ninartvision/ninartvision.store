@@ -4,7 +4,7 @@
  * REAL-TIME MODE: No CDN, immediate updates
  */
 
-const SANITY_API_BASE = 'https://8t5h923j.api.sanity.io/v2025-02-05/data/query/production';
+const SANITY_API_BASE = 'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production';
 
 /**
  * Standard artist projection - use this in all artist queries
@@ -151,14 +151,7 @@ async function executeSanityQuery(query, params = {}) {
       ? `${url}&${new URLSearchParams(Object.entries(params).map(([k, v]) => [`$${k}`, v]))}`
       : url;
     
-    // Fetch with cache-busting headers for real-time updates
-    const response = await fetch(urlWithParams, {
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      }
-    });
+    const response = await fetch(urlWithParams);
     
     if (!response.ok) {
       throw new Error(`Sanity API error: ${response.status} ${response.statusText}`);

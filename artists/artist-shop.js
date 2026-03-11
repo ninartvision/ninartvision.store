@@ -53,15 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       const res = await fetch(
-        "https://8t5h923j.api.sanity.io/v2026-02-01/data/query/production?query=" +
-          encodeURIComponent(query),
-        {
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-          }
-        }
+        "https://8t5h923j.apicdn.sanity.io/v2026-02-01/data/query/production?query=" +
+          encodeURIComponent(query)
       );
 
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
@@ -90,9 +83,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Set avatar (defensive)
     if (avatar && artistData?.avatar) {
-      avatar.src = artistData.avatar.startsWith('http') 
-        ? artistData.avatar 
+      const avatarUrl = artistData.avatar.startsWith('http')
+        ? (typeof window.sanityImgUrl === 'function'
+            ? window.sanityImgUrl(artistData.avatar, { w: 600, q: 80 })
+            : artistData.avatar)
         : "../" + artistData.avatar;
+      avatar.src = avatarUrl;
       avatar.style.display = "block";
     } else if (avatar) {
       avatar.style.display = "none";
@@ -257,15 +253,8 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       const res = await fetch(
-        "https://8t5h923j.api.sanity.io/v2026-02-01/data/query/production?query=" +
-          encodeURIComponent(query),
-        {
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-          }
-        }
+        "https://8t5h923j.apicdn.sanity.io/v2026-02-01/data/query/production?query=" +
+          encodeURIComponent(query)
       );
 
       if (!res.ok) {
@@ -273,6 +262,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const { result } = await res.json();
+
+      const imgOpt = typeof window.sanityImgUrl === 'function'
+        ? (u, w) => window.sanityImgUrl(u, { w: w || 600, q: 80 })
+        : (u) => u;
 
       allArtworks = (result || [])
         .filter(a => a.img)
@@ -283,10 +276,16 @@ document.addEventListener("DOMContentLoaded", () => {
           size: a.size || "",
           medium: a.medium || "",
           year: a.year || "",
-          img: a.img,
+          img: imgOpt(a.img, 600),
+          imgSrcset: typeof window.sanitySrcset === 'function'
+            ? window.sanitySrcset(a.img, [400, 600, 800])
+            : '',
           description: a.description || "",
           alt: a.image?.alt || a.title || "Artwork image",
-          photos: a.photos?.length ? a.photos : [a.img]
+          // Lightbox photos at higher resolution
+          photos: a.photos?.length
+            ? a.photos.map(u => imgOpt(u, 1200))
+            : [imgOpt(a.img, 1200)]
         }));
 
       console.log(`✅ Loaded ${allArtworks.length} artworks from Sanity`);
@@ -323,7 +322,10 @@ document.addEventListener("DOMContentLoaded", () => {
         data-alt="${a.alt}"
         data-photos="${a.photos.join(",")}">
 
-        <img src="${a.img}" alt="${a.alt}" loading="lazy" onerror="this.src='../images/placeholder.jpg'">
+        <img src="${a.img}"
+             ${a.imgSrcset ? `srcset="${a.imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 300px"` : ''}
+             alt="${a.alt}" loading="lazy" decoding="async"
+             width="600" height="750" onerror="this.src='../images/placeholder.jpg'">
 
         ${a.status === 'sold' ? '<div class="sold-badge"></div>' : ''}
 
