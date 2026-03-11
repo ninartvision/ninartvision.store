@@ -1,0 +1,82 @@
+# Ninart Vision - Performance optimizations
+# Works on Apache hosts. GitHub Pages ignores this file.
+
+# ─── GZIP Compression ─────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml font/woff font/woff2
+</IfModule>
+
+# ─── Brotli Compression (if available) ────────────────────────────────────────
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json
+</IfModule>
+
+# ─── Browser Caching ──────────────────────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # HTML - short cache (pages change)
+  ExpiresByType text/html "access plus 1 hour"
+
+  # CSS and JavaScript - 1 year (versioned via cache-busting query strings)
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+
+  # Images - 1 year
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  # Fonts - 1 year
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType application/font-woff "access plus 1 year"
+  ExpiresByType application/font-woff2 "access plus 1 year"
+</IfModule>
+
+# ─── Cache-Control Headers ────────────────────────────────────────────────────
+<IfModule mod_headers.c>
+  # Immutable assets (images, fonts, minified CSS/JS)
+  <FilesMatch "\.(webp|jpg|jpeg|png|gif|svg|ico|woff|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # HTML - short cache
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=3600, must-revalidate"
+  </FilesMatch>
+
+  # Security headers
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ─── WebP Rewrite (serve WebP when supported) ─────────────────────────────────
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Only rewrite if WebP is accepted by the browser
+  RewriteCond %{HTTP_ACCEPT} image/webp
+
+  # Serve .webp instead of .jpg/.jpeg/.png if it exists
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME}.webp -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME%\.[^.]+}.webp -f
+  RewriteRule ^(.+)\.(jpe?g|png)$ $1.webp [T=image/webp,E=accept:1,L]
+</IfModule>
+
+# ─── MIME types for WebP ──────────────────────────────────────────────────────
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+</IfModule>

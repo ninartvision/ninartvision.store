@@ -6,7 +6,7 @@
   <title>Artists | Ninart Vision</title>
   <meta name="description" content="Discover talented contemporary Georgian artists. Browse artist profiles, explore their unique styles, and view their available artworks.">
 
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../style.min.css" />
   <link rel="icon" href="../images/favicon.png">
 
 <!-- Google Analytics 4 -->
@@ -21,7 +21,7 @@
     'allow_ad_personalization_signals': false
   });
 </script>
-<script src="../analytics.js"></script>
+<script src="../analytics.min.js"></script>
 </head>
 <body>
 
@@ -85,8 +85,8 @@
 <div class="artists-grid" id="artistsGrid"></div>
 
 <!-- SCRIPTS -->
-<script src="../script.js"></script>
-<script src="../sanity-client.js"></script>
+<script src="../script.min.js"></script>
+<script src="../sanity-client.min.js"></script>
 
 <script>
   const grid = document.getElementById("artistsGrid");
@@ -235,7 +235,7 @@
 
 
           <h3 class="artist-name">
-            <img src="../images/icon.jpg" alt="Georgia" class="flag-icon">
+            <img src="../images/icon.jpg" alt="Georgia" class="flag-icon" decoding="async" loading="lazy">
             <span>${artist.name}</span>
           </h3>
 

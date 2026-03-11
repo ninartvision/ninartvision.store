@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="description" content="Support Georgian artists and creative projects. Submit your project idea or contribute to ongoing artistic initiatives in Georgia.">
 
-  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./style.min.css" />
   <link rel="icon" href="./images/favicon.png">
   
   <!-- Google Analytics 4 -->
@@ -21,7 +21,7 @@
       'allow_ad_personalization_signals': false
     });
   </script>
-  <script src="./analytics.js"></script>
+  <script src="./analytics.min.js"></script>
   
   <!-- EmailJS SDK -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -48,13 +48,13 @@
     <!-- LANGUAGE SWITCH (outside nav to stay visible on mobile) -->
     <div class="lang-switch">
       <button onclick="setLang('ka')" class="lang-item active">
-        <img src="./images/icon.jpg" alt="KA">
+        <img src="./images/icon.jpg" alt="KA" decoding="async" loading="lazy">
         <span>KA</span>
         <i class="arrow">›</i>
       </button>
 
       <button onclick="setLang('en')" class="lang-item">
-        <img src="./images/america.png" alt="EN">
+        <img src="./images/america.png" alt="EN" decoding="async" loading="lazy">
         <span>EN</span>
         <i class="arrow">›</i>
       </button>
@@ -351,7 +351,7 @@
 
 <!-- JS -->
 <script src="support.js"></script>
-<script src="payment-modal.js"></script>
+<script defer src="payment-modal.min.js"></script>
   <!-- EmailJS Configuration and Form Handler -->
   <script>
     // Initialize EmailJS with your Public Key
@@ -431,6 +431,6 @@
     }
   </script>
 
-  <script src="./script.js"></script>
+  <script src="./script.min.js"></script>
 </body>
 </html>

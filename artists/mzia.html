@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Artist - Ninart Vision</title>
 
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../style.min.css" />
   <link rel="icon" href="../images/favicon.png">
   <style>
     .artist-header-wrapper {
@@ -79,7 +79,7 @@
     <div class="artist-header-wrapper">
       <!-- Left: Artist Info -->
       <div class="section-top" style="display: flex; align-items: center; gap: 20px; margin: 0;">
-        <img id="artistAvatar" class="artist-avatar" src="" alt="Artist Avatar" style="width: 95px; height: 95px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+        <img id="artistAvatar" class="artist-avatar" src="" alt="Artist Avatar" style="width: 95px; height: 95px; border-radius: 50%; object-fit: cover; flex-shrink: 0;" decoding="async" loading="lazy">
         <div>
           <h2 class="artist-name" style="margin: 0 0 4px 0;"></h2>
           <p class="muted" style="margin: 0;">Artist's artworks</p>
@@ -130,7 +130,7 @@
       <div class="product-left">
         <div class="product-gallery">
           <button class="gallery-arrow left" id="galleryPrev" aria-label="Previous photo">‹</button>
-          <img id="productImg" src="" alt="Artwork">
+          <img id="productImg" src="" alt="Artwork" decoding="async" loading="lazy">
           <button class="gallery-arrow right" id="galleryNext" aria-label="Next photo">›</button>
         </div>
       </div>
@@ -167,13 +167,13 @@
 
 
 <!-- SCRIPT -->
-<script src="../script.js"></script>
+<script src="../script.min.js"></script>
 
 <!-- data first -->
-<script src="../data.js"></script>
+<script src="../data.min.js"></script>
 
 <!-- artist shop renderer -->
-<script src="artist-shop.js"></script>
+<script src="artist-shop.min.js"></script>
 
 </body>
 </html>

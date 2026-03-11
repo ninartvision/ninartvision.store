@@ -17,7 +17,7 @@
   <meta name="twitter:title" content="Shop Original Artworks | Ninart Vision">
   <meta name="twitter:description" content="Browse and purchase original paintings by contemporary Georgian artists.">
 
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../style.min.css" />
   <link rel="icon" href="../images/favicon.png">
 
 <!-- Google Analytics 4 -->
@@ -32,7 +32,7 @@
     'allow_ad_personalization_signals': false
   });
 </script>
-<script src="../analytics.js"></script>
+<script src="../analytics.min.js"></script>
 </head>
 
 <body>
@@ -121,7 +121,7 @@
       <div class="product-left">
         <div class="product-gallery">
           <button class="gallery-arrow left" id="galleryPrev" aria-label="Previous photo">‹</button>
-          <img id="productImg" src="" alt="Artwork">
+          <img id="productImg" src="" alt="Artwork" decoding="async" loading="lazy">
           <button class="gallery-arrow right" id="galleryNext" aria-label="Next photo">›</button>
         </div>
       </div>
@@ -160,10 +160,10 @@
 
 
 <!-- ✅ SCRIPT ყოველთვის ბოლოს -->
-<script src="../sanity-client.js"></script>
-<script src="../data.js"></script>
-<script src="shop-render.js"></script>
-<script src="../script.js"></script>
+<script src="../sanity-client.min.js"></script>
+<script src="../data.min.js"></script>
+<script defer src="shop-render.min.js"></script>
+<script src="../script.min.js"></script>
 
 </body>
 </html>

@@ -19,8 +19,8 @@
   <meta name="twitter:description" id="twitterDescription" content="Discover contemporary Georgian artists and their artworks at Ninart Vision.">
   <meta name="twitter:image" id="twitterImage" content="">
 
-  <link rel="stylesheet" href="../style.css" />
-  <link rel="stylesheet" href="../css/artist-gallery.css" />
+  <link rel="stylesheet" href="../style.min.css" />
+  <link rel="stylesheet" href="../css/artist-gallery.min.css" />
   <link rel="icon" href="../images/favicon.png">
 
 <!-- Google Analytics 4 -->
@@ -35,7 +35,7 @@
     'allow_ad_personalization_signals': false
   });
 </script>
-<script src="../analytics.js"></script>
+<script src="../analytics.min.js"></script>
 </head>
 <body>
 
@@ -91,7 +91,7 @@
     <!-- ARTIST HEADER -->
     <div class="artist-header">
       <div class="artist-info">
-        <img id="artistAvatar" class="artist-avatar" src="" alt="Artist Avatar">
+        <img id="artistAvatar" class="artist-avatar" src="" alt="Artist Avatar" decoding="async" loading="lazy">
         
         <div class="artist-title-row">
           <h2 class="artist-name"></h2>
@@ -129,7 +129,7 @@
       <div class="product-left">
         <div class="product-gallery">
           <button class="gallery-arrow left" id="galleryPrev" aria-label="Previous">‹</button>
-          <img id="productImg" src="" alt="Artwork">
+          <img id="productImg" src="" alt="Artwork" decoding="async" loading="lazy">
           <button class="gallery-arrow right" id="galleryNext" aria-label="Next">›</button>
         </div>
       </div>
@@ -162,9 +162,9 @@
 </div>
 
 <!-- SCRIPTS -->
-<script src="../script.js"></script>
-<script src="../sanity-client.js"></script>
-<script src="artist-shop.js"></script>
+<script src="../script.min.js"></script>
+<script src="../sanity-client.min.js"></script>
+<script src="artist-shop.min.js"></script>
 
 </body>
 </html>

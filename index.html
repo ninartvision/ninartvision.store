@@ -55,14 +55,76 @@
 <meta name="twitter:image" content="https://ninartvision.store/images/og-image.png">
 
 
-  <link rel="stylesheet" href="./style.css" />
-  <link rel="icon" href="./images/favicon.png">
+  <!-- Preconnect to external origins before everything else -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap" rel="stylesheet"> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com">
+  <link rel="dns-prefetch" href="https://cdn.sanity.io">
 
-<!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <!-- Preload LCP hero image (garden9 is the first active slide) -->
+  <link rel="preload" as="image" href="./images/garden9.webp" type="image/webp" fetchpriority="high">
+  <link rel="preload" as="image" href="./images/garden9.jpg" fetchpriority="high">
+
+  <!-- Critical above-the-fold CSS inlined to prevent FOUC while full CSS loads async -->
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{overflow-x:hidden;max-width:100%;scroll-behavior:auto;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+    html.loaded{scroll-behavior:smooth}
+    body{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;overflow-x:hidden;width:100%;position:relative}
+    img,video{max-width:100%;height:auto}
+    .container{width:min(1100px,92%);margin:0 auto;max-width:100%}
+    .header{position:fixed;top:0;left:0;width:100%;z-index:9999;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,0,0,.06)}
+    .header-row{min-height:80px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:16px 0;gap:12px}
+    .brand{display:flex;align-items:center}
+    .brand img{height:48px;width:auto;display:block}
+    .desktop-nav{display:flex;gap:18px;align-items:center}
+    .desktop-nav a{text-decoration:none;font-size:14px;font-weight:600;color:#111}
+    .desktop-nav a.active{text-decoration:underline}
+    .nav-btn{padding:10px 14px;border:1px solid rgba(0,0,0,.2);border-radius:12px;background:transparent;color:#111;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s ease;text-decoration:none}
+    .nav-btn.signin{background:#111;color:#fff;border-color:#111}
+    .hamburger{width:44px;height:44px;background:transparent;border:none;cursor:pointer;display:none;flex-direction:column;justify-content:center;gap:6px}
+    .hamburger span{width:26px;height:2px;background:#111;border-radius:6px}
+    .hero-slider{position:relative;width:100%;height:70dvh;min-height:500px;max-height:750px;overflow:hidden;background:#f5f5f5;margin-top:0}
+    .hero-slider .hero-slides,.hero-slider .slides{position:absolute;inset:0;width:100%;height:100%}
+    .hero-slider .slide{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;background-color:#f5f5f5;opacity:0;transition:opacity .4s ease-in-out}
+    .hero-slider .slide.active{opacity:1}
+    .hero-slider .slide img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+    .hero-slider .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.25));z-index:2;pointer-events:none}
+    .hero-slider .hero-inner{position:relative;z-index:3;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;padding:40px 20px}
+    .hero-slider .hero-content{width:100%;max-width:100%}
+    .hero-slider .hero-content h1{font-size:clamp(26px,6.5vw,42px);font-weight:700;line-height:1.2;margin:0 0 20px;text-shadow:0 3px 15px rgba(0,0,0,.5)}
+    .hero-slider .hero-content p{font-size:clamp(14px,3.5vw,17px);line-height:1.6;max-width:90%;margin:0 auto;opacity:.95;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+    .as-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;border:none;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);width:44px;height:44px;border-radius:50%;font-size:28px;font-weight:300;color:#fff;cursor:pointer;opacity:.85;display:flex;align-items:center;justify-content:center;transition:all .3s ease}
+    .as-arrow.left{left:12px}
+    .as-arrow.right{right:12px}
+    .search-section{background:#f9f9f9;border-bottom:1px solid rgba(0,0,0,.06);padding:16px 0;margin-top:76px}
+    .search-social-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:nowrap}
+    .search-wrapper{position:relative;flex:0 1 400px;max-width:400px;min-width:200px}
+    .search-input{width:100%;padding:12px 40px 12px 20px;border-radius:999px;border:1px solid rgba(0,0,0,.08);font-size:14px;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.06);transition:all .25s ease}
+    .search-icon{position:absolute;right:20px;top:50%;transform:translateY(-50%);opacity:.55;font-size:16px;pointer-events:none}
+    .social-icons{display:flex;align-items:center;gap:12px;margin:0;flex-shrink:0}
+    .social-icons .soc{width:38px;height:38px;border-radius:50%;border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.6);display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:#111;position:relative;overflow:visible}
+    .social-icons .soc svg{width:18px;height:18px;position:relative;z-index:1}
+    .social-icons .soc[aria-label="Facebook"] svg{fill:#1877F2}
+    .social-icons .soc[aria-label="Instagram"] svg{fill:#E4405F}
+    .social-icons .soc[aria-label="WhatsApp"] svg{fill:#25D366}
+    @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{flex:0 1 300px;max-width:300px}.search-input{padding:10px 36px 10px 16px;font-size:13px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
+    @media(max-width:600px){.header-row{min-height:64px;padding:10px 0}.brand img{height:36px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{flex:1 1 auto;max-width:60%;min-width:150px}.search-input{padding:9px 32px 9px 14px;font-size:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
+    @media(min-width:900px){.hero-slider{height:82dvh;min-height:600px;max-height:950px}.hero-slider .slide{background-color:#fff}.hero-slider .slide img{object-fit:contain}.as-arrow{width:56px;height:56px;font-size:36px;background:rgba(255,255,255,.12)}.as-arrow.left{left:32px}.as-arrow.right{right:32px}}
+  </style>
+
+  <!-- Full stylesheet loaded asynchronously (non-render-blocking) -->
+  <link rel="preload" href="./style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="./style.min.css"></noscript>
+
+  <link rel="icon" href="./images/favicon.png">
+
+  <!-- Google Fonts loaded non-blocking (font-display:swap already set via &display=swap) -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap"></noscript>
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -73,7 +135,7 @@
     'allow_ad_personalization_signals': false
   });
 </script>
-<script src="./analytics.js"></script>
+<script defer src="./analytics.min.js"></script>
 
 <!-- Prevent flash of unstyled icons and hash navigation jump -->
 <script>
@@ -99,7 +161,10 @@
     <div class="container header-row">
 
       <a class="brand" href="./">
-        <img src="./images/logo.png" alt="Ninart Vision Logo">
+        <picture>
+          <source srcset="./images/logo.webp" type="image/webp">
+          <img src="./images/logo.png" alt="Ninart Vision Logo" width="751" height="134" fetchpriority="high" decoding="sync">
+        </picture>
       </a>
 
       <nav class="desktop-nav">
@@ -223,26 +288,122 @@
     <section class="hero-slider">
 
   <div class="hero-slides">
-    <div class="slide active" style="background-image:url('./images/garden9.jpg');"></div>
-<div class="slide" style="background-image:url('./images/abstract3.jpg');"></div>
-<div class="slide" style="background-image:url('./images/svaneti10.jpg');"></div>
-<div class="slide" style="background-image:url('./images/jvarimonastery5.jpg');"></div>
-<div class="slide" style="background-image:url('./images/babuacvera4.jpg');"></div>
-<div class="slide" style="background-image:url('./images/naturmort6.jpg');"></div>
-<div class="slide" style="background-image:url('./images/jvari7.jpg');"></div>
-<div class="slide" style="background-image:url('./images/lily8.jpg');"></div>
-<div class="slide" style="background-image:url('./images/dream9.jpg');"></div>
-<div class="slide" style="background-image:url('./images/rose1.jpg');"></div>
-<div class="slide" style="background-image:url('./images/sea4.jpg');"></div>
-<div class="slide" style="background-image:url('./images/waterlily1.jpg');"></div>
-<div class="slide" style="background-image:url('./images/swan1.jpg');"></div>
-<div class="slide" style="background-image:url('./images/seaorange8.jpg');"></div>
-<div class="slide" style="background-image:url('./images/lilac6.jpg');"></div>
-<div class="slide" style="background-image:url('./images/kids3.jpg');"></div>
-<div class="slide" style="background-image:url('./images/boat.jpg');"></div>
-<div class="slide" style="background-image:url('./images/daffodils6.jpg');"></div>
-<div class="slide" style="background-image:url('./images/deer5.jpg');"></div>
-
+    <!-- First slide: fetchpriority=high for LCP, no lazy loading -->
+    <div class="slide active">
+      <picture>
+        <source srcset="./images/garden9.webp" type="image/webp">
+        <img src="./images/garden9.jpg" alt="Garden artwork" width="1500" height="1875" fetchpriority="high" decoding="sync">
+      </picture>
+    </div>
+    <!-- Remaining slides: lazy loaded -->
+    <div class="slide">
+      <picture>
+        <source srcset="./images/abstract3.webp" type="image/webp">
+        <img src="./images/abstract3.jpg" alt="Abstract artwork" width="1500" height="1875" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/svaneti10.webp" type="image/webp">
+        <img src="./images/svaneti10.jpg" alt="Svaneti artwork" width="1500" height="1125" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/jvarimonastery5.webp" type="image/webp">
+        <img src="./images/jvarimonastery5.jpg" alt="Jvari Monastery artwork" width="1500" height="1125" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/babuacvera4.webp" type="image/webp">
+        <img src="./images/babuacvera4.jpg" alt="Babuacvera artwork" width="1500" height="2000" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/naturmort6.webp" type="image/webp">
+        <img src="./images/naturmort6.jpg" alt="Still life artwork" width="1500" height="1875" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/jvari7.webp" type="image/webp">
+        <img src="./images/jvari7.jpg" alt="Jvari artwork" width="1500" height="1125" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/lily8.webp" type="image/webp">
+        <img src="./images/lily8.jpg" alt="Lily artwork" width="1390" height="1727" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/dream9.webp" type="image/webp">
+        <img src="./images/dream9.jpg" alt="Dream artwork" width="1500" height="1125" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/rose1.webp" type="image/webp">
+        <img src="./images/rose1.jpg" alt="Rose artwork" width="1500" height="1875" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/sea4.webp" type="image/webp">
+        <img src="./images/sea4.jpg" alt="Sea artwork" width="1500" height="1125" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/waterlily1.webp" type="image/webp">
+        <img src="./images/waterlily1.jpg" alt="Water lily artwork" width="1500" height="1125" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/swan1.webp" type="image/webp">
+        <img src="./images/swan1.jpg" alt="Swan artwork" width="1500" height="2250" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/seaorange8.webp" type="image/webp">
+        <img src="./images/seaorange8.jpg" alt="Sea orange artwork" width="1500" height="1125" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/lilac6.webp" type="image/webp">
+        <img src="./images/lilac6.jpg" alt="Lilac artwork" width="1500" height="1875" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/kids3.webp" type="image/webp">
+        <img src="./images/kids3.jpg" alt="Kids artwork" width="1500" height="1125" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/boat.webp" type="image/webp">
+        <img src="./images/boat.jpg" alt="Boat artwork" width="1500" height="2250" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/daffodils6.webp" type="image/webp">
+        <img src="./images/daffodils6.jpg" alt="Daffodils artwork" width="1500" height="1875" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="slide">
+      <picture>
+        <source srcset="./images/deer5.webp" type="image/webp">
+        <img src="./images/deer5.jpg" alt="Deer artwork" width="1500" height="1125" loading="lazy" decoding="async">
+      </picture>
+    </div>
   </div>
 
   <div class="hero-overlay"></div>
@@ -289,7 +450,10 @@ Colors speak louder 💫
       <div class="projects-slider" id="projectsSlider">
         <div class="projects-track" id="projectsTrack">
           <a class="card" href="project1.html">
-            <img src="./images/me9.jpg" alt="Project" loading="lazy">
+            <picture>
+              <source srcset="./images/me9.webp" type="image/webp">
+              <img src="./images/me9.jpg" alt="Svaneti project" loading="lazy" decoding="async" width="800" height="880">
+            </picture>
             <div class="card-body">
               <h3>„Svaneti"-„სვანეთი"</h3>
               <p class="muted">Limited edition artworks and fan experiences.</p>
@@ -299,7 +463,10 @@ Colors speak louder 💫
       
 
           <a class="card" href="project2.html">
-            <img src="./images/me10.jpg" alt="Project">
+            <picture>
+              <source srcset="./images/me10.webp" type="image/webp">
+              <img src="./images/me10.jpg" alt="Silent Bloom project" loading="lazy" decoding="async" width="800" height="1067">
+            </picture>
             <div class="card-body">
               <h3>„Silent Bloom" - „ჩუმი ყვავილობა " </h3>
               <p class="muted">Join the journey and be part of the creation.</p>
@@ -307,7 +474,10 @@ Colors speak louder 💫
             </div>
           </a>
           <a class="card" href="project3.html">
-            <img src="./images/me6.jpg" alt="Project">
+            <picture>
+              <source srcset="./images/me6.webp" type="image/webp">
+              <img src="./images/me6.jpg" alt="Roseslover project" loading="lazy" decoding="async" width="800" height="835">
+            </picture>
             <div class="card-body">
               <h3>„Roseslover"</h3>
               <p class="muted">Limited edition.</p>
@@ -315,7 +485,10 @@ Colors speak louder 💫
             </div>
           </a>
           <a class="card" href="project4.html">
-            <img src="./images/me5.jpg" alt="Project">
+            <picture>
+              <source srcset="./images/me5.webp" type="image/webp">
+              <img src="./images/me5.jpg" alt="Origin of Nature project" loading="lazy" decoding="async" width="800" height="1067">
+            </picture>
             <div class="card-body">
               <h3>„The Origin of Nature" - „ბუნების საწყისი "</h3>
               <p class="muted">Exclusive access, behind-the-scenes, and more.</p>
@@ -323,7 +496,10 @@ Colors speak louder 💫
             </div>
           </a>
           <a class="card" href="project5.html">
-  <img src="./images/me3.jpg" alt="Project">
+  <picture>
+    <source srcset="./images/me3.webp" type="image/webp">
+    <img src="./images/me3.jpg" alt="Magical World project" loading="lazy" decoding="async" width="800" height="1038">
+  </picture>
   <div class="card-body">
     <h3>„Magical world" - „ზღაპრული სამყარო "</h3>
     <p class="muted">An exceptional artwork.</p>
@@ -331,7 +507,10 @@ Colors speak louder 💫
   </div>
 </a>
 <a class="card" href="project6.html">
-            <img src="./images/me8.jpg" alt="Project">
+            <picture>
+              <source srcset="./images/me8.webp" type="image/webp">
+              <img src="./images/me8.jpg" alt="Way to the monastery project" loading="lazy" decoding="async" width="800" height="799">
+            </picture>
             <div class="card-body">
               <h3>„The way to the monastery " </h3>
               <p class="muted">Join the journey and be part of the creation.</p>
@@ -340,7 +519,10 @@ Colors speak louder 💫
           </a>
 
           <a class="card" href="project7.html">
-            <img src="./images/me7.jpg" alt="Project">
+            <picture>
+              <source srcset="./images/me7.webp" type="image/webp">
+              <img src="./images/me7.jpg" alt="Amber Glow project" loading="lazy" decoding="async" width="800" height="840">
+            </picture>
             <div class="card-body">
               <h3>„Amber Glow" - „ქარვისფერი ნათება "</h3>
               <p class="muted">Exclusive access, behind-the-scenes, and more.</p>
@@ -610,17 +792,17 @@ Colors speak louder 💫
 </section>
 
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<!-- Firebase SDK (deferred - loads after HTML parse) -->
+<script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
-<!-- 🔑 Sanity (სწორი path) -->
-<script src="./sanity-client.js"></script>
-<script defer src="./data.js"></script>
-<script defer src="./js/homeShopPreview.js"></script>
-<script defer src="./js/homeArtistsPreview.js"></script>
-<script defer src="./auth.js"></script>
-<script defer src="./script.js"></script>
+<!-- Sanity & app scripts (all deferred) -->
+<script defer src="./sanity-client.min.js"></script>
+<script defer src="./data.min.js"></script>
+<script defer src="./js/homeShopPreview.min.js"></script>
+<script defer src="./js/homeArtistsPreview.min.js"></script>
+<script defer src="./auth.min.js"></script>
+<script defer src="./script.min.js"></script>
 <div class="wa-widget">
 
   <div class="wa-popup" id="waPopup">
@@ -662,6 +844,15 @@ Colors speak louder 💫
       const popup = document.getElementById("waPopup");
       popup.style.display =
         popup.style.display === "block" ? "none" : "block";
+    }
+  </script>
+
+  <!-- Service Worker registration for offline caching & performance -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js').catch(function(){});
+      });
     }
   </script>
 </body>
