@@ -601,3 +601,18 @@ document.addEventListener("click", e => {
 
   item.classList.toggle("open");
 });
+
+/* =========================
+   ADMIN KEYBOARD SHORTCUT
+   Ctrl + Shift + A  →  opens /admin.html in a new tab.
+   Only you know this shortcut exists.
+========================= */
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+    e.preventDefault();
+    const isSubPage =
+      location.pathname.includes('/artists/') ||
+      location.pathname.includes('/sale/');
+    window.open(isSubPage ? '../admin.html' : './admin.html', '_blank');
+  }
+});

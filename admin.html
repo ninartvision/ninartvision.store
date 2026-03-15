@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Ninart Vision</title>
+  <!-- Never index this page -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="./images/favicon.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: #f5f5f5;
+      color: #111;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 460px;
+    }
+    .logo {
+      display: block;
+      height: 36px;
+      width: auto;
+      margin: 0 auto 28px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #777;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 15px 20px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: background .2s;
+    }
+    .btn-primary:hover { background: #333; }
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 13px 20px;
+      background: transparent;
+      color: #333;
+      border: 1px solid rgba(0,0,0,.15);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: 28px;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-secondary:hover { background: #f0f0f0; border-color: rgba(0,0,0,.3); }
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin-bottom: 24px;
+    }
+    h2 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: #999;
+      margin-bottom: 16px;
+    }
+    .steps { list-style: none; }
+    .steps li {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #111;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .step-text strong { display: block; font-weight: 600; color: #111; }
+    .step-text span { color: #666; }
+    code {
+      background: #f0f0f0;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 12px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      color: #111;
+    }
+    .info-box {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 24px;
+    }
+    .info-box p { font-size: 12px; color: #999; margin-bottom: 4px; }
+    .info-box code { background: none; padding: 0; }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 24px;
+      font-size: 13px;
+      color: #aaa;
+      text-decoration: none;
+    }
+    .back-link:hover { color: #555; }
+    .shortcut-hint {
+      text-align: center;
+      font-size: 11px;
+      color: #bbb;
+      margin-top: 8px;
+    }
+    kbd {
+      display: inline-block;
+      padding: 1px 5px;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 11px;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- Logo -->
+    <img src="./images/logo.png" alt="Ninart Vision" class="logo">
+
+    <h1>Content Dashboard</h1>
+    <p class="subtitle">Manage artworks, artists, and platform content via Sanity CMS.</p>
+
+    <!-- Primary action: Open Sanity Studio -->
+    <a
+      href="https://8t5h923j.sanity.studio/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-primary"
+    >
+      🎨 Open Sanity Studio
+    </a>
+
+    <!-- Secondary: Sanity project settings -->
+    <a
+      href="https://manage.sanity.io/projects/8t5h923j"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-secondary"
+    >
+      ⚙️ Project Settings &amp; API Keys
+    </a>
+
+    <hr class="divider">
+
+    <!-- How to add a new painting -->
+    <h2>How to add a new painting</h2>
+    <ul class="steps">
+      <li>
+        <span class="step-num">1</span>
+        <span class="step-text">
+          <strong>Open Sanity Studio above</strong>
+          <span>Sign in with your Sanity account if prompted.</span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span class="step-text">
+          <strong>Go to Content → Artworks</strong>
+          <span>Click <em>New Document</em> to create a new artwork entry.</span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span class="step-text">
+          <strong>Fill in the required fields</strong>
+          <span>Title, Image, Status (<code>sale</code> or <code>sold</code>), and Artist reference.</span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num">4</span>
+        <span class="step-text">
+          <strong>Tick "Featured" to show on homepage</strong>
+          <span>The <code>featured</code> flag makes it appear in the homepage Artworks section automatically.</span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num">5</span>
+        <span class="step-text">
+          <strong>Publish the document</strong>
+          <span>Click <em>Publish</em> — the website updates immediately, no code changes needed.</span>
+        </span>
+      </li>
+    </ul>
+
+    <!-- Available fields reference -->
+    <hr class="divider" style="margin-top:24px;">
+    <h2>Artwork fields reference</h2>
+    <ul class="steps">
+      <li>
+        <span class="step-num" style="background:#555;">·</span>
+        <span class="step-text">
+          <strong><code>title</code></strong>
+          <span>Painting title displayed on the card and product modal.</span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num" style="background:#555;">·</span>
+        <span class="step-text">
+          <strong><code>image</code> / <code>images[]</code></strong>
+          <span>Main photo + additional gallery photos. Upload directly from Sanity Studio.</span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num" style="background:#555;">·</span>
+        <span class="step-text">
+          <strong><code>price</code></strong>
+          <span>Price in GEL (₾). Example: <code>250</code></span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num" style="background:#555;">·</span>
+        <span class="step-text">
+          <strong><code>dimensions</code></strong>
+          <span>Size string. Example: <code>60×80 cm</code></span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num" style="background:#555;">·</span>
+        <span class="step-text">
+          <strong><code>medium</code></strong>
+          <span>Painting technique. Example: <code>Acrylic on canvas</code></span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num" style="background:#555;">·</span>
+        <span class="step-text">
+          <strong><code>year</code></strong>
+          <span>Year created. Example: <code>2026</code></span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num" style="background:#555;">·</span>
+        <span class="step-text">
+          <strong><code>status</code></strong>
+          <span><code>sale</code> = available for purchase &nbsp;·&nbsp; <code>sold</code> = sold</span>
+        </span>
+      </li>
+      <li>
+        <span class="step-num" style="background:#555;">·</span>
+        <span class="step-text">
+          <strong><code>artist</code></strong>
+          <span>Reference to an artist document. Links the artwork to an artist profile.</span>
+        </span>
+      </li>
+    </ul>
+
+    <!-- Project info -->
+    <div class="info-box">
+      <p>Sanity project</p>
+      <code style="font-size:13px;color:#333;">Project ID: 8t5h923j &nbsp;·&nbsp; Dataset: production</code>
+    </div>
+
+    <a href="./" class="back-link">← Back to website</a>
+    <p class="shortcut-hint">Keyboard shortcut: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd></p>
+
+  </div>
+
+</body>
+</html>
