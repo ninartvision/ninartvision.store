@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title id="pageTitle">Project | Ninart Vision</title>
+  <meta name="description" id="pageDescription" content="Original artwork project by Ninart Vision.">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="article">
+  <meta property="og:site_name"   content="Ninart Vision">
+  <meta property="og:title"       id="ogTitle"       content="Project | Ninart Vision">
+  <meta property="og:description" id="ogDescription" content="">
+  <meta property="og:image"       id="ogImage"       content="">
+
+  <link rel="stylesheet" href="./style.min.css" />
+  <link rel="icon" href="./images/favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID', { anonymize_ip: true, allow_google_signals: false });
+  </script>
+</head>
+<body>
+
+  <!-- ─── TOP NAV ──────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="container header-row">
+      <a class="brand" href="./">
+        <picture>
+          <source srcset="./images/logo.webp" type="image/webp">
+          <img src="./images/logo.png" alt="Ninart Vision Logo" width="751" height="134" fetchpriority="high" decoding="sync">
+        </picture>
+      </a>
+      <nav class="desktop-nav">
+        <a href="./">Home</a>
+        <a href="support.html">Support a Project</a>
+        <a href="sale/shop.html">Shop</a>
+        <a href="artists/">Artists</a>
+        <a href="news.html">News</a>
+        <a href="about.html">About</a>
+      </nav>
+      <button class="hamburger" id="openMenu" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile menu overlay -->
+  <div class="menu-overlay" id="menuOverlay">
+    <button class="menu-close" id="closeMenu" aria-label="Close menu">✕</button>
+    <nav class="menu-links">
+      <a href="./"           class="menu-link">HOME</a>
+      <a href="support.html" class="menu-link">SUPPORT A PROJECT</a>
+      <a href="sale/shop.html" class="menu-link">SHOP</a>
+      <a href="artists/"     class="menu-link">ARTISTS</a>
+      <a href="news.html"    class="menu-link">NEWS</a>
+      <a href="about.html"   class="menu-link">ABOUT</a>
+    </nav>
+  </div>
+
+  <!-- ─── LOADING STATE ────────────────────────────────────────── -->
+  <div id="projectLoading"
+       style="min-height:80vh;display:flex;align-items:center;
+              justify-content:center;padding-top:100px;">
+    <p class="muted" style="font-size:16px;">Loading project…</p>
+  </div>
+
+  <!-- ─── PROJECT CONTENT (hidden until JS populates it) ─────────  -->
+  <main id="projectContent" class="project-page" style="display:none;">
+
+    <section class="project-hero">
+
+      <div class="project-text">
+        <h1 id="projTitle"></h1>
+        <p class="muted" id="projDesc"></p>
+
+        <!-- Bilingual body text rendered by JS -->
+        <div id="projBodyKa"></div>
+        <div id="projBodyEn"></div>
+
+        <ul class="project-details" id="projDetails"></ul>
+
+        <!-- Artist link — hidden until an artist reference exists -->
+        <a id="projArtistLink"
+           href="artists/"
+           class="link"
+           style="display:none;margin-bottom:12px;">View artist →</a>
+
+        <a class="link back-link" href="javascript:history.back()">← Back</a>
+      </div>
+
+      <div class="project-image" id="projMainImage"></div>
+
+    </section>
+
+    <!-- Extra gallery — hidden until images[] exists -->
+    <section class="project-gallery" id="projGallerySection" style="display:none;">
+      <h2>More photos</h2>
+      <div class="gallery-list" id="projGalleryList"></div>
+    </section>
+
+  </main>
+
+  <!-- ─── LIGHTBOX ─────────────────────────────────────────────── -->
+  <div class="lightbox" id="lightbox"
+       role="dialog" aria-modal="true" aria-hidden="true">
+    <span class="close" id="lightboxClose" aria-label="Close lightbox">&times;</span>
+    <img class="lightbox-img" id="lightboxImg"
+         src="" alt="Enlarged view" decoding="async" loading="lazy">
+  </div>
+
+  <!-- ─── SCRIPTS ──────────────────────────────────────────────── -->
+  <script defer src="./script.min.js"></script>
+
+  <script>
+    /* ── Lightbox helpers ─────────────────────────────────────── */
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    /* ── Project loader ───────────────────────────────────────── */
+    (async function loadProject() {
+      const API = 'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production';
+
+      const params = new URLSearchParams(location.search);
+      const rawSlug = params.get('p') || '';
+
+      // Sanitize: allow only URL-safe slug characters
+      const safeSlug = rawSlug.replace(/[^a-zA-Z0-9_\-]/g, '');
+
+      if (!safeSlug) {
+        showError('No project specified. <a href="./" class="link">Go home →</a>');
+        return;
+      }
+
+      const query = encodeURIComponent(
+        `*[_type == "featuredProject" && slug.current == "${safeSlug}"][0]{
+          _id,
+          titleKa,
+          titleEn,
+          "slug": slug.current,
+          coverImage{ asset->{ _id, url, metadata{lqip,dimensions} }, alt },
+          images[]{ asset->{ _id, url, metadata{lqip,dimensions} }, alt, _key },
+          shortDescEn,
+          bodyKa,
+          bodyEn,
+          medium,
+          "size": dimensions,
+          year,
+          "artist": artist->{ _id, name, "slug": slug.current }
+        }`
+      );
+
+      let project;
+      try {
+        const res  = await fetch(`${API}?query=${query}`);
+        const json = await res.json();
+        project = json.result;
+      } catch (err) {
+        showError('Failed to load project. Please try again.');
+        return;
+      }
+
+      if (!project) {
+        showError('Project not found. <a href="./" class="link">Go home →</a>');
+        return;
+      }
+
+      populatePage(project);
+    })();
+
+    /* ── Populate page DOM ────────────────────────────────────── */
+    function populatePage(p) {
+      const titleEn = p.titleEn || '';
+      const titleKa = p.titleKa ? `„${p.titleKa}"` : '';
+      const fullTitle = [titleEn, titleKa].filter(Boolean).join(' – ');
+
+      // Page / meta
+      document.getElementById('pageTitle').textContent   = `${titleEn || titleKa} | Ninart Vision`;
+      document.getElementById('pageDescription').content = p.shortDescEn || '';
+      document.getElementById('ogTitle').content         = fullTitle;
+      document.getElementById('ogDescription').content   = p.shortDescEn || '';
+
+      // Heading + short description
+      document.getElementById('projTitle').textContent = fullTitle;
+      if (p.shortDescEn) document.getElementById('projDesc').textContent = p.shortDescEn;
+
+      // Body text
+      document.getElementById('projBodyKa').innerHTML = renderBlocks(p.bodyKa, 'geo');
+      document.getElementById('projBodyEn').innerHTML = renderBlocks(p.bodyEn, 'eng');
+
+      // Details list
+      const details = [];
+      if (p.medium) details.push(`<li><strong>Technique:</strong> ${p.medium}</li>`);
+      if (p.size)   details.push(`<li><strong>Size:</strong> ${p.size}</li>`);
+      if (p.year)   details.push(`<li><strong>Year:</strong> ${p.year}</li>`);
+      document.getElementById('projDetails').innerHTML = details.join('');
+
+      // Artist link
+      if (p.artist) {
+        const link  = document.getElementById('projArtistLink');
+        const aSlug = p.artist.slug || p.artist._id;
+        link.href        = `artists/artist.html?artist=${encodeURIComponent(aSlug)}`;
+        link.textContent = `View ${p.artist.name}'s profile →`;
+        link.style.display = '';
+      }
+
+      // Cover image
+      const coverUrl = p.coverImage?.asset?.url;
+      if (coverUrl) {
+        const img = document.createElement('img');
+        img.src     = `${coverUrl}?auto=format&w=1200&q=85`;
+        img.srcset  = [
+          `${coverUrl}?auto=format&w=600&q=80 600w`,
+          `${coverUrl}?auto=format&w=900&q=80 900w`,
+          `${coverUrl}?auto=format&w=1200&q=85 1200w`,
+        ].join(', ');
+        img.sizes   = '(max-width:900px) 100vw, 50vw';
+        img.alt     = p.coverImage?.alt || fullTitle;
+        img.decoding = 'async';
+        img.loading  = 'lazy';
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', () =>
+          openLightbox(`${coverUrl}?auto=format&w=1600&q=90`)
+        );
+        document.getElementById('projMainImage').appendChild(img);
+
+        document.getElementById('ogImage').content =
+          `${coverUrl}?auto=format&w=1200&q=85`;
+      }
+
+      // Gallery
+      const extras = p.images || [];
+      if (extras.length > 0) {
+        const list = document.getElementById('projGalleryList');
+        extras.forEach((imgObj) => {
+          const url = imgObj?.asset?.url;
+          if (!url) return;
+          const img    = document.createElement('img');
+          img.src      = `${url}?auto=format&w=800&q=80`;
+          img.alt      = imgObj.alt || fullTitle;
+          img.decoding = 'async';
+          img.loading  = 'lazy';
+          img.style.cursor = 'zoom-in';
+          img.addEventListener('click', () =>
+            openLightbox(`${url}?auto=format&w=1600&q=90`)
+          );
+          list.appendChild(img);
+        });
+        document.getElementById('projGallerySection').style.display = '';
+      }
+
+      // Show content, hide loader
+      document.getElementById('projectLoading').style.display = 'none';
+      document.getElementById('projectContent').style.display = '';
+    }
+
+    /* ── Portable-text → HTML ─────────────────────────────────── */
+    function renderBlocks(blocks, cssClass) {
+      if (!Array.isArray(blocks)) return '';
+      return blocks
+        .filter((b) => b._type === 'block' && Array.isArray(b.children))
+        .map((b) => {
+          const html = b.children
+            .map((c) => {
+              let t = (c.text || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+              if (c.marks?.includes('strong')) t = `<strong>${t}</strong>`;
+              if (c.marks?.includes('em'))     t = `<em>${t}</em>`;
+              return t;
+            })
+            .join('');
+          return `<p class="project-paragraph ${cssClass}">${html}</p>`;
+        })
+        .join('\n');
+    }
+
+    /* ── Error state ──────────────────────────────────────────── */
+    function showError(msg) {
+      document.getElementById('projectLoading').innerHTML =
+        `<p class="muted" style="text-align:center;">${msg}</p>`;
+    }
+  </script>
+
+</body>
+</html>

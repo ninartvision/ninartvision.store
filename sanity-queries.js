@@ -165,3 +165,111 @@ async function executeSanityQuery(query, params = {}) {
     throw error;
   }
 }
+
+// ============================================================
+// CMS-DRIVEN SITE  —  new content type queries
+// Added to support full dynamic rendering without HTML edits.
+// ============================================================
+
+/**
+ * Fetch the siteSettings singleton (always [0]).
+ * Controls: social links, WhatsApp, contact email, banner text, mission.
+ */
+async function fetchSiteSettings() {
+  const query = `*[_type == "siteSettings"][0]{
+    facebookUrl,
+    instagramUrl,
+    whatsappNumber,
+    contactEmail,
+    clothBannerKa,
+    clothBannerEn,
+    missionTitle,
+    missionTextEn
+  }`;
+  return executeSanityQuery(query);
+}
+
+/**
+ * Fetch active hero slides ordered by display order.
+ */
+async function fetchHeroSlides() {
+  const query = `*[_type == "heroSlide" && active != false] | order(order asc){
+    _id,
+    image{
+      asset->{ _id, url, metadata{lqip, dimensions} },
+      alt
+    },
+    altText,
+    order
+  }`;
+  return executeSanityQuery(query);
+}
+
+/**
+ * Fetch published news posts, newest first.
+ * @param {number|null} limit  Optional maximum count
+ */
+async function fetchNewsPosts(limit = null) {
+  let query = `*[_type == "newsPost"] | order(publishedAt desc)`;
+  if (limit) query += `[0...${limit}]`;
+  query += `{
+    _id,
+    titleKa,
+    titleEn,
+    "slug": slug.current,
+    publishedAt,
+    bodyKa,
+    bodyEn
+  }`;
+  return executeSanityQuery(query);
+}
+
+/**
+ * Fetch active featured projects ordered by display order.
+ */
+async function fetchFeaturedProjects() {
+  const query = `*[_type == "featuredProject" && active != false] | order(order asc){
+    _id,
+    titleKa,
+    titleEn,
+    "slug": slug.current,
+    coverImage{
+      asset->{ _id, url, metadata{lqip, dimensions} },
+      alt
+    },
+    shortDescEn,
+    legacyUrl,
+    order
+  }`;
+  return executeSanityQuery(query);
+}
+
+/**
+ * Fetch a single featured project by slug (for project.html?p=slug).
+ * @param {string} slug
+ */
+async function fetchProjectBySlug(slug) {
+  const query = `*[_type == "featuredProject" && slug.current == $slug][0]{
+    _id,
+    titleKa,
+    titleEn,
+    "slug": slug.current,
+    coverImage{
+      asset->{ _id, url, metadata{lqip, dimensions} },
+      alt
+    },
+    images[]{
+      asset->{ _id, url, metadata{lqip, dimensions} },
+      alt,
+      _key
+    },
+    shortDescEn,
+    bodyKa,
+    bodyEn,
+    medium,
+    "size": dimensions,
+    year,
+    "artist": artist->{ _id, name, "slug": slug.current }
+  }`;
+  return executeSanityQuery(query, { slug });
+}
