@@ -152,6 +152,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 1",
+    keywords: "still life, ნატურმორტი, naturmort, flowers, floral, vase, fruits, botanical, table arrangement, colorful, acrylic on canvas, contemporary, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, interior, decorative",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
@@ -176,6 +177,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 2",
+    keywords: "abstract, აბსტრაქცია, abstract art, contemporary, modern, expressionism, emotion, color field, non-figurative, vibrant, bold colors, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, dynamic, energetic",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
@@ -200,6 +202,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 3",
+    keywords: "garden, ბაღი, flowers, floral, nature, landscape, botanical, green, trees, summer, outdoor, bloom, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, impressionism, colorful, lush",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
@@ -224,6 +227,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 4",
+    keywords: "sea, ზღვა, ocean, seascape, water, waves, blue, marine, coastal, Black Sea, შავი ზღვა, landscape, nature, calm, horizon, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 250,
     size: "40 x 50 cm",
     medium: "Acrylic on canvas",
@@ -245,6 +249,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 5",
+    keywords: "rose, ვარდი, roses, red rose, flowers, floral, botanical, still life, bloom, blossom, romantic, oil, oil on canvas, ზეთი, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, classic, elegant",
     price: 300,
     size: "40 x 50 cm",
     medium: "Oil on canvas",
@@ -269,6 +274,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 6",
+    keywords: "sea, ზღვა, ocean, seascape, sunset, orange sunset, warm colors, dramatic sky, coastal, marine, dusk, evening, Black Sea, შავი ზღვა, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, vibrant, atmospheric",
     price: 350,
     size: "60 x 80 cm",
     medium: "Acrylic on canvas",
@@ -292,6 +298,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 7",
+    keywords: "lily, შროშანი, ლილია, lilies, lily flowers, flowers, floral, botanical, still life, pink, white, elegant, bloom, blossom, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, delicate, spring",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
@@ -314,6 +321,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 8",
+    keywords: "swan, გედი, bird, wildlife, water, lake, pond, white, graceful, elegant, peaceful, nature, aquatic, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, small painting",
     price: 50,
     size: "20 x 30 cm",
     medium: "acrylic on canvas",
@@ -335,6 +343,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 9",
+    keywords: "water lily, ვარდისფერი შროშანი, lotus, ლოტოსი, waterlily, water flower, pond, aquatic, nature, pink, white, bloom, serene, peaceful, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 200,
     size: "30 x 40 cm",
     medium: "acrylic on canvas",
@@ -355,6 +364,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 10",
+    keywords: "boat, ნავი, sea, ზღვა, nautical, marine, water, coastal, vessel, seascape, river, sail, sailing, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, small painting",
     price: 50,
     size: "20 x 30 cm",
     medium: "acrylic on canvas",
@@ -371,6 +381,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "Sold ",
+    keywords: "deer, ირემი, stag, animal, wildlife, forest, woodland, nature, fauna, autumn, wild, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 250,
     size: "30 x 40 cm",
     medium: "acrylic on canvas",
@@ -390,6 +401,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
+    keywords: "Jvari, ჯვარი, Georgian cross, cross, church, Christian, religious, Georgia, Mtskheta, მცხეთა, sacred, spiritual, landmark, architecture, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, heritage",
     price: 350,
     size: "30 x 40 cm",
     medium: "acrylic on canvas",
@@ -411,6 +423,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
+    keywords: "children, ბავშვები, kids, childhood, figurative, people, portrait, group scene, narrative, playful, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 300,
     size: "30 x 40 cm",
     medium: "acrylic on canvas",
@@ -431,6 +444,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
+    keywords: "daffodil, ნარცისი, narcissus, daffodils, yellow flowers, floral, botanical, spring, still life, bloom, bright, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 250,
     size: "40 x 50 cm",
     medium: "Acrylic on canvas",
@@ -451,6 +465,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
+    keywords: "lilac, იასამანი, purple lilac, violet, flowers, floral, botanical, spring, still life, blossom, fragrant, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
@@ -472,6 +487,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
+    keywords: "Svaneti, სვანეთი, mountain, Georgian highlands, Caucasus, landscape, village, Svan tower, სვანური კოშკი, snow, alpine, travel, Georgia, nature, scenic, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 300,
     size: "50 x 70 cm",
     medium: "acrylic on canvas",
@@ -499,6 +515,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold",
+    keywords: "grandfather, ბაბუა, elder, old man, figurative, portrait, Georgian figure, village life, Georgian heritage, storytelling, traditional, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 350,
     size: "60 x 80 cm",
     medium: "acrylic on canvas",
@@ -520,6 +537,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold",
+    keywords: "Jvari Monastery, ჯვრის მონასტერი, monastery, church, Georgian Orthodox, architecture, Mtskheta, მცხეთა, landmark, UNESCO, heritage, sacred, spiritual, historic, Georgia, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 400,
     size: "60 x 80 cm",
     medium: "acrylic on canvas",
@@ -539,6 +557,7 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
+    keywords: "dream, ოცნება, სიზმარი, fantasy, surreal, imaginative, lyrical, emotional, visionary, colorful, abstract, expressive, large format, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
     price: 500,
     size: "80 x 100 cm",
     medium: "acrylic on canvas",
@@ -571,6 +590,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia1.jpg"
     ],
+    keywords: "oil on canvas, ზეთი, impressionism, realism, classic, figurative, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, vintage, 1980s",
     showInShop: false
   },
   {
@@ -587,6 +607,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia2.jpg"
     ],
+    keywords: "oil on canvas, ზეთი, impressionism, realism, classic, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, vintage, 1980s",
     showInShop: false
   },
   {
@@ -603,6 +624,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia3.jpg"
     ],
+    keywords: "acrylic on canvas, contemporary, impressionism, realism, colorful, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
     showInShop: false
   },
   {
@@ -619,6 +641,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia8.jpg"
     ],
+    keywords: "oil on canvas, ზეთი, impressionism, realism, expressive, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
     showInShop: false
   },
   {
@@ -635,6 +658,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia5.jpg"
     ],
+    keywords: "acrylic on canvas, contemporary, impressionism, realism, colorful, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
     showInShop: false
   },
   {
@@ -651,6 +675,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia7.jpg"
     ],
+    keywords: "acrylic on canvas, contemporary, impressionism, realism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
     showInShop: false
   },
   {
@@ -667,6 +692,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia4.jpg"
     ],
+    keywords: "acrylic on canvas, contemporary, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
     showInShop: false
   },
   {
@@ -683,6 +709,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia6.jpg"
     ],
+    keywords: "oil on canvas, ზეთი, impressionism, realism, expressive, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
     showInShop: false
   },
   {
@@ -699,6 +726,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia12.jpg"
     ],
+    keywords: "watercolour, watercolor, აკვარელი, on paper, transparent, delicate, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage",
     showInShop: false
   },
   {
@@ -715,6 +743,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia13.jpg"
     ],
+    keywords: "watercolour, watercolor, აკვარელი, on paper, transparent, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage",
     showInShop: false
   },
   {
@@ -731,6 +760,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia9.jpg"
     ],
+    keywords: "pastel, pastel on paper, soft, delicate, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage, small",
     showInShop: false
   },
   {
@@ -747,6 +777,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia11.jpg"
     ],
+    keywords: "on paper, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage, small",
     showInShop: false
   },
   {
@@ -763,6 +794,7 @@ window.ARTWORKS = [
     photos: [
       "images/artists/mziakashia/mziakashia10.jpg"
     ],
+    keywords: "watercolour, watercolor, აკვარელი, on paper, transparent, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage",
     showInShop: false
   },
   {
@@ -770,6 +802,7 @@ window.ARTWORKS = [
     artist: "nanuli",
     status: "sale",
     title: "Nanuli Painting 1",
+    keywords: "tapestry, გობელენი, handwoven, textile art, woven, fabric art, decorative, impressionism, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, craft, traditional, handmade",
     price: 300,
     size: "40 x 50 cm",
     medium: "handwoven tapestry â€“ áƒ’áƒáƒ‘áƒ”áƒšáƒ”áƒœáƒ˜",
@@ -786,6 +819,7 @@ window.ARTWORKS = [
     artist: "nanuli",
     status: "sale",
     title: "Nanuli Painting 2",
+    keywords: "acrylic, acrylic on paper, decorative impressionism, colorful, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, contemporary, expressive, large format",
     price: 360,
     size: "70 x 65 cm",
     medium: "acrylylic on paper",
@@ -802,6 +836,7 @@ window.ARTWORKS = [
   artist: "nanuli",
   status: "sale",
   title: "Nanuli Painting 3",
+  keywords: "pastel, pastel on paper, soft colors, delicate, decorative, impressionism, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, small painting, intimate",
   price: 90,
   size: "15 x 20 cm",
   medium: "pastel on paper",
@@ -818,6 +853,7 @@ window.ARTWORKS = [
   artist: "nanuli",
   status: "sale",
   title: "Nanuli Painting 4",
+  keywords: "pastel, pastel on paper, soft colors, decorative, impressionism, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, affordable, small format",
   price: 150,
   size: "25 x 30 cm",
   medium: "pastel on paper â€“",
@@ -834,6 +870,7 @@ window.ARTWORKS = [
   artist: "nanuli",
   status: "sale",
   title: "Nanuli Painting 5",
+  keywords: "oil, oil on canvas, ზეთი, decorative impressionism, colorful, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, classic, expressive",
   price: 250,
   size: "40 x 60 cm",
   medium: "oil on canvas",

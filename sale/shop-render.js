@@ -1,14 +1,24 @@
 /**
  * Shop page rendering with artist filtering from Sanity
+ * Optimized: items rendered once via DocumentFragment;
+ * filter/search changes only toggle a CSS class — no DOM rebuild.
  */
 
 // ========================================
-// State management
+// State
 // ========================================
 
-let selectedArtist = "all"; // "all" or artist ID (nini, mzia, nanuli)
-let selectedFilter = "all"; // "all", "sale", "sold"
-let allArtists = []; // Populated from Sanity
+let selectedArtist = "all";
+let selectedFilter = "all";
+let selectedSearch = "";
+let allArtists = [];
+let allRenderedItems = []; // DOM node refs — avoids re-render on filter change
+
+// Debounce helper
+function debounce(fn, ms) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
 
 // Slug to ID mapping (matches artist.js)
 const slugToId = {
@@ -42,7 +52,7 @@ async function populateArtistFilter() {
     artistFilter.innerHTML = '<option value="all">All Artists</option>';
     
     allArtists.forEach(artist => {
-      const artistId = artist.slug?.current ? slugToId[artist.slug.current] : null;
+      const artistId = artist.slug ? slugToId[artist.slug] : null;
       if (artistId) {
         const option = document.createElement('option');
         option.value = artistId;
@@ -57,68 +67,130 @@ async function populateArtistFilter() {
 }
 
 // ========================================
-// Filter and display logic
+// Initial render — builds all items once via DocumentFragment
+// artworksData: optional array from Sanity (normalised on-the-fly);
+//               pass null to fall back to window.ARTWORKS (data.js shape)
 // ========================================
-
-/**
- * Render artworks based on selected artist and status filter
- */
-function renderArtworks() {
+function renderAllItems(artworksData) {
   const grid = document.getElementById("shopGrid");
+  if (!grid) return;
 
-  if (!window.ARTWORKS) {
-    grid.innerHTML = "❌ ARTWORKS not loaded";
+  const source = artworksData || window.ARTWORKS;
+  if (!source || !source.length) {
+    grid.innerHTML = '❌ ARTWORKS not loaded';
     return;
   }
 
-  // Apply filters
-  const filtered = window.ARTWORKS.filter(art => {
-    // Filter by showInShop flag - only show artworks explicitly marked for shop
-    const showInShop = art.showInShop === true;
-    
-    // Filter by artist
-    const matchesArtist = selectedArtist === "all" || art.artist === selectedArtist;
-    
-    // Filter by status
-    const matchesStatus = {
-      all: true,
-      sale: art.status === "sale",
-      sold: art.status === "sold"
-    }[selectedFilter];
+  // Normalise: handles both Sanity-shaped and static data.js-shaped artworks
+  const normalize = a => {
+    // Artist: Sanity returns {_id, name, slug}; data.js returns string ID
+    const artist = typeof a.artist === 'object'
+      ? (slugToId[a.artist?.slug] || a.artist?.slug || '')
+      : (a.artist || '');
+    // Status: Sanity uses "published" for for-sale items — map to "sale"
+    const status = a.status === 'published' ? 'sale' : (a.status || 'sale');
+    // Image src: Sanity CDN full URL vs relative path (shop page is in /sale/)
+    const imgSrc = a.image?.asset?.url || `../${ (a.img || '').toLowerCase() }`;
+    // Photos array
+    const photos = (Array.isArray(a.images) && a.images.length)
+      ? a.images.map(i => i?.asset?.url).filter(Boolean)
+      : (Array.isArray(a.photos) ? a.photos : [imgSrc]);
+    const title    = a.title    || '';
+    const keywords = a.keywords || '';
+    return {
+      artist,
+      status,
+      title,
+      keywords,
+      price:  String(a.price  || ''),
+      size:   a.size || a.dimensions || '',
+      medium: a.medium || '',
+      year:   String(a.year || ''),
+      desc:   a.shortDescription || a.desc || a.description || '',
+      imgSrc,
+      photos,
+      // Pre-build searchBlob: title + comma-split keywords, all lowercased
+      searchBlob: [title, ...keywords.split(',').map(k => k.trim()).filter(Boolean)]
+        .join(' ').toLowerCase(),
+      // When artworksData comes from Sanity it's already filtered; otherwise check flag
+      showInShop: artworksData ? true : (a.showInShop === true),
+    };
+  };
 
-    return showInShop && matchesArtist && matchesStatus;
-  });
+  const shopItems = source
+    .map(normalize)
+    .filter(a => a.showInShop)
+    .sort((a, b) =>
+      a.status === 'sale' && b.status !== 'sale' ? -1 :
+      a.status !== 'sale' && b.status === 'sale' ?  1 : 0
+    );
 
-  // Sort: sale items first, then sold
-  const sorted = filtered.sort((a, b) => {
-    if (a.status === 'sale' && b.status !== 'sale') return -1;
-    if (a.status !== 'sale' && b.status === 'sale') return 1;
-    return 0;
-  });
-
-  if (sorted.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">
-        <p>No artworks found for the selected filters.</p>
-      </div>
-    `;
-    return;
-  }
-
-  grid.innerHTML = sorted.map(a => `
-    <div class="shop-item ${a.status}" data-artist="${a.artist}" data-status="${a.status}" data-title="${a.title}" data-price="${a.price}" data-size="${a.size}" data-medium="${a.medium}" data-year="${a.year}" data-desc="${a.desc}" data-photos="${a.photos.join(',')}">
-      <img src="../${a.img.toLowerCase()}" alt="${a.title}" loading="lazy">
+  const frag = document.createDocumentFragment();
+  allRenderedItems = shopItems.map(a => {
+    const div = document.createElement('div');
+    div.className        = `shop-item ${a.status}`;
+    div.dataset.artist   = a.artist;
+    div.dataset.status   = a.status;
+    div.dataset.title    = a.title;
+    div.dataset.titleLow = a.title.toLowerCase();
+    div.dataset.keywords = a.keywords;
+    div.dataset.searchBlob = a.searchBlob;
+    div.dataset.price    = a.price;
+    div.dataset.size     = a.size;
+    div.dataset.medium   = a.medium;
+    div.dataset.year     = a.year;
+    div.dataset.desc     = a.desc;
+    div.dataset.photos   = a.photos.join(',');
+    div.innerHTML = `
+      <img src="${a.imgSrc}" alt="${a.title}" loading="lazy">
       ${a.status === 'sold' ? '<div class="sold-badge"></div>' : ''}
       <div class="shop-meta">
         <span>${a.title}</span>
         <span class="price">₾${a.price}</span>
       </div>
-    </div>
-  `).join("");
+    `;
+    frag.appendChild(div);
+    return div;
+  });
 
-  // Re-initialize modal functionality for the newly rendered items
-  if (window.initShopItems) {
-    window.initShopItems();
+  // Single DOM mutation — append all items at once
+  grid.appendChild(frag);
+
+  // Set up event delegation once (idempotent inside initShopItems)
+  if (window.initShopItems) window.initShopItems();
+}
+
+// ========================================
+// Apply filters — toggles CSS class, no DOM rebuild
+// ========================================
+function applyFilters() {
+  const grid = document.getElementById("shopGrid");
+  if (!grid) return;
+
+  // Split query into terms — "oil portrait" requires both words to match
+  const terms = selectedSearch ? selectedSearch.trim().split(/\s+/).filter(Boolean) : [];
+
+  let visibleCount = 0;
+  allRenderedItems.forEach(item => {
+    const visible =
+      (selectedArtist === 'all' || item.dataset.artist === selectedArtist) &&
+      (selectedFilter === 'all' || item.dataset.status === selectedFilter) &&
+      (!terms.length || terms.every(t => item.dataset.searchBlob.includes(t)));
+    item.classList.toggle('is-hidden', !visible);
+    if (visible) visibleCount++;
+  });
+
+  let empty = grid.querySelector('.no-results-msg');
+  if (!visibleCount && allRenderedItems.length) {
+    if (!empty) {
+      empty = document.createElement('div');
+      empty.className = 'no-results-msg';
+      empty.style.cssText = 'grid-column:1/-1;text-align:center;padding:40px;color:#999';
+      empty.innerHTML = '<p>No artworks found for the selected filters.</p>';
+      grid.appendChild(empty);
+    }
+  } else if (empty) {
+    empty.remove();
   }
 }
 
@@ -127,25 +199,21 @@ function renderArtworks() {
 // ========================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Populate artist filter from Sanity
   await populateArtistFilter();
 
   // Artist filter change
   const artistFilter = document.getElementById("artistFilter");
   if (artistFilter) {
-    artistFilter.addEventListener("change", (e) => {
+    artistFilter.addEventListener("change", e => {
       selectedArtist = e.target.value;
-      
-      // Track shop filter usage
       if (typeof trackShopFilter === 'function') {
         const artistName = allArtists.find(a => {
-          const artistId = a.slug?.current ? slugToId[a.slug.current] : null;
-          return artistId === e.target.value;
+          const id = a.slug ? slugToId[a.slug] : null;
+          return id === e.target.value;
         })?.name || e.target.value;
         trackShopFilter('artist', artistName);
       }
-      
-      renderArtworks();
+      applyFilters();
     });
   }
 
@@ -156,19 +224,40 @@ document.addEventListener("DOMContentLoaded", async () => {
       pills.forEach(x => x.classList.remove("active"));
       p.classList.add("active");
       selectedFilter = p.dataset.filter;
-      
-      // Track status filter usage
-      if (typeof trackShopFilter === 'function') {
-        trackShopFilter('status', selectedFilter);
-      }
-      
-      renderArtworks();
+      if (typeof trackShopFilter === 'function') trackShopFilter('status', selectedFilter);
+      applyFilters();
     });
   });
-
-  // Set "ALL" pill active on load
   pills[0]?.classList.add("active");
 
-  // Initial render (shows all artists, all statuses)
-  renderArtworks();
+  // Search — debounced 150 ms to avoid re-filter on every keystroke
+  const shopSearch = document.getElementById('shopSearch');
+  if (shopSearch) {
+    const debouncedSearch = debounce(() => {
+      selectedSearch = shopSearch.value.trim().toLowerCase();
+      applyFilters();
+    }, 150);
+    shopSearch.addEventListener('input', debouncedSearch);
+    shopSearch.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        shopSearch.value = '';
+        selectedSearch = '';
+        applyFilters();
+        shopSearch.blur();
+      }
+    });
+  }
+
+  // Try Sanity first; fall back to static window.ARTWORKS if unavailable or empty
+  let sanityArtworks = null;
+  if (typeof window.fetchShopArtworks === 'function') {
+    try {
+      sanityArtworks = await window.fetchShopArtworks();
+      console.log('[shop-render] Loaded from Sanity:', sanityArtworks?.length, 'artworks');
+    } catch (e) {
+      console.warn('[shop-render] Sanity fetch failed, using static data:', e);
+    }
+  }
+  renderAllItems(sanityArtworks && sanityArtworks.length ? sanityArtworks : null);
+  applyFilters();
 });

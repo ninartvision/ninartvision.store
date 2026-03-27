@@ -191,6 +191,8 @@ async function fetchFeaturedArtworks(limit = null) {
       description,
       price,
       status,
+      keywords,
+      showInShop,
       featured,
       "artist": artist->{
         _id,
@@ -212,10 +214,74 @@ async function fetchFeaturedArtworks(limit = null) {
 }
 
 /* --------------------------------------------------
+   FETCH ALL SHOP ARTWORKS
+   Used by the shop page — gets every artwork visible in the shop.
+   Falls back gracefully to static data.js if this returns empty.
+-------------------------------------------------- */
+async function fetchShopArtworks(limit = null) {
+  try {
+    let query = `
+      *[
+        _type == "artwork" &&
+        (!defined(showInShop) || showInShop == true) &&
+        (!defined(status) || status in ["published", "sold", "sale"])
+      ]
+      | order(coalesce(order, 999) asc, _createdAt desc)
+    `;
+
+    if (limit) {
+      query += `[0...${limit}]`;
+    }
+
+    query += `{
+      _id,
+      title,
+      "slug": slug.current,
+      shortDescription,
+      image{
+        asset->{_id, url, metadata{lqip, dimensions}},
+        alt
+      },
+      images[]{
+        asset->{_id, url, metadata{lqip, dimensions}},
+        alt,
+        _key
+      },
+      year,
+      medium,
+      dimensions,
+      category,
+      description,
+      price,
+      status,
+      keywords,
+      showInShop,
+      featured,
+      "artist": artist->{
+        _id,
+        name,
+        "slug": slug.current
+      }
+    }`;
+
+    const url = `https://${SANITY_CONFIG.projectId}.apicdn.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    return data.result || [];
+  } catch (err) {
+    console.error('❌ fetchShopArtworks error:', err);
+    return [];
+  }
+}
+
+/* --------------------------------------------------
    EXPOSE GLOBAL FUNCTIONS
 -------------------------------------------------- */
 window.fetchArtistsFromSanity = fetchArtistsFromSanity;
 window.fetchArtistBySlug = fetchArtistBySlug;
 window.fetchFeaturedArtworks = fetchFeaturedArtworks;
+window.fetchShopArtworks = fetchShopArtworks;
 window.sanityImgUrl = sanityImgUrl;
 window.sanitySrcset = sanitySrcset;

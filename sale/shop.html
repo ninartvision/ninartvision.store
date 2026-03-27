@@ -32,7 +32,7 @@
     'allow_ad_personalization_signals': false
   });
 </script>
-<script src="../analytics.min.js"></script>
+<script defer src="../analytics.min.js"></script>
 </head>
 
 <body>
@@ -85,6 +85,14 @@
     <div class="section-top">
       <h2>Shop</h2>
       <p class="muted">Browse all available original artworks</p>
+    </div>
+
+    <!-- Search -->
+    <div style="margin-bottom: 16px;">
+      <div class="search-wrapper" style="max-width:360px">
+        <input type="text" id="shopSearch" class="search-input" placeholder="Search by artwork name..." autocomplete="off" aria-label="Search artworks">
+        <span class="search-icon">⌕</span>
+      </div>
     </div>
 
     <!-- Artist Filter -->

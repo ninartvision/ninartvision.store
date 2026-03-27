@@ -75,6 +75,8 @@ const ARTWORK_PROJECTION = `{
   "desc": description,
   price,
   status,
+  keywords,
+  showInShop,
   featured,
   "artist": artist->{
     _id,

@@ -1,4 +1,5 @@
 *{ margin:0; padding:0; box-sizing:border-box; }
+.is-hidden{ display:none !important; }
 
 html {
   overflow-x: hidden;
@@ -521,12 +522,6 @@ img, video {
   border-radius: 16px;
   overflow:hidden;
   border: 1px solid rgba(0,0,0,0.08);
-}
-
-.shop-item img{
-  width:100%;
-  height:400px;
-  object-fit:cover;
 }
 
 .shop-meta{
@@ -1469,7 +1464,8 @@ img, video {
 ========================= */
 .filter-tabs{
   display:flex;
-  gap:14px;
+  flex-wrap: wrap;
+  gap:10px;
   align-items:center;
   margin: 10px 0 20px;
 }
@@ -1628,14 +1624,6 @@ img, video {
   margin: 14px 0;
   padding-left: 18px;
   line-height: 1.6;
-}
-
-.product-buy{
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  gap: 14px;
-  margin-top: 16px;
 }
 
 .product-price{
@@ -1815,6 +1803,13 @@ a.pill:visited{
   margin-left: 6px;
 }
 
+@media (max-width: 600px){
+  .pill{
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
 
 
 
@@ -1891,21 +1886,6 @@ a.pill:visited{
 .menu-social .soc:hover svg {
   transform: scale(1.05);
 }
-.imgModal{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.78);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: 18px;
-}
-
-.imgModal.open{
-  display: flex;
-}
-
 .imgModal img{
   max-width: 92vw;
   max-height: 86dvh;
@@ -1950,84 +1930,6 @@ a.pill:visited{
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.20);
   outline: none;
-}
-/* ✅ 2 artworks per row on artist page */
-#artistWorksGrid{
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 18px !important;
-  align-items: start;
-}
-
-/* ✅ each card must fit the grid column (not full width) */
-#artistWorksGrid > *{
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-/* images inside cards */
-#artistWorksGrid img{
-  width: 100% !important;
-  height: 240px !important;
-  object-fit: cover !important;
-  display: block !important;
-  border-radius: 14px;
-}
-
-/* Mobile: 1 per row */
-@media (max-width: 650px){
-  #artistWorksGrid{
-    grid-template-columns: 1fr !important;
-  }
-  #artistWorksGrid img{
-    height: 200px !important;
-  }
-}
-/* Desktop already 2 columns */
-#artistWorksGrid{
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 14px !important;
-}
-
-/* Make sure cards fit */
-#artistWorksGrid > *{
-  width: 100% !important;
-}
-
-/* 🔥 mobile: keep 2 columns */
-@media (max-width: 700px){
-  #artistWorksGrid{
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-  }
-
-  /* 👇 აქ არის მთავარი: არ მოიჭრას */
-  #artistWorksGrid img{
-    height: 160px !important;
-    object-fit: contain !important;
-background: #f2f2f2;
-
-  }
-}
-/* ✅ Desktop: keep same box size but NO CROP */
-@media (min-width: 701px){
-  #artistWorksGrid img{
-    width: 100% !important;
-    height: 300px !important;        /* დატოვე ზომა */
-    object-fit: contain !important;  /* ✅ აღარ მოიჭრება */
-    object-position: center !important;
-    background: #f2f2f2;             /* ცარიელ ადგილს ლამაზად დაფარავს */
-  }
-}
-
-/* ✅ Mobile: keep your perfect feed (unchanged) */
-@media (max-width: 700px){
-  #artistWorksGrid img{
-    height: 170px !important;
-    object-fit: cover !important;
-    background: transparent !important;
-  }
 }
 /* Modal overlay */
 .imgModal{
@@ -2581,14 +2483,7 @@ background: #f2f2f2;
   line-height: 1.6;
 }
 
-/* ===== HERO SLIDER ===== */
-.hero-slider{
-  position: relative;
-  height: 90dvh;
-  min-height: 520px;
-  overflow: hidden;
-  background: #000;
-}
+/* ===== HERO SLIDER (legacy slide-bg support) ===== */
 
 .hero-slides{
   position:absolute;
@@ -2634,11 +2529,6 @@ background: #f2f2f2;
     min-height: 140px;
     padding: 14px 10px;
   }
-
-  .hero-slider{
-    height: 62dvh !important;
-    min-height: 320px !important;
-  }
 }
 
 @media (max-width: 600px){
@@ -2646,11 +2536,6 @@ background: #f2f2f2;
     margin-top: 65px;
     min-height: 160px;
     padding: 14px 8px;
-  }
-
-  .hero-slider{
-    height: 55dvh !important;
-    min-height: 280px !important;
   }
 }
 
@@ -2695,13 +2580,6 @@ background: #f2f2f2;
 /* როცა გახსნილია - ისარი აიწევა */
 .morePhotosBtn.open .arrow{
   transform: rotate(180deg);
-}
-
-.product-buy{
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  gap: 14px;
 }
 
 .morePhotosRow{
@@ -2939,14 +2817,6 @@ background: #f2f2f2;
 #artists a.btn:hover{
   text-decoration: underline !important;
 }
-.cloth-banner{
-  margin-top: 0px;
-  padding-top: 30px;
-  padding-bottom: 30px;
-}
-.cloth-banner{
-  margin-left: 0px;   /* რამდენით მარჯვნივ */
-}
 /* 🔴 მხოლოდ SOLD ტექსტი (პირველი ელემენტი) */
 .shop-item.sold .shop-meta > *:first-child {
   color: #e53935 !important;
@@ -2959,7 +2829,7 @@ background: #f2f2f2;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   max-width: 960px;
-  margin: 60px auto;
+  margin: 20px auto;
   padding: 0 20px;
 }
 
@@ -3905,7 +3775,7 @@ background: #f2f2f2;
   display: flex;
   align-items: center;
   max-width: 1100px;
-  margin: 60px auto;
+  margin: 20px auto;
 }
 
 .artists-track{
@@ -4421,7 +4291,7 @@ background: #f2f2f2;
 }
 /* Artists title + small art */
 .artists-header {
-  margin-top: 120px;
+  margin-top: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4430,7 +4300,7 @@ background: #f2f2f2;
 
 /* Artists title */
 .artists-header h2 {
-  margin: 1;
+  margin: 0;
 }
 
 /* Small decorative image on the right */

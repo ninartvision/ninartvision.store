@@ -20,43 +20,61 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function render() {
-    grid.innerHTML = "";
-
-    const filtered = items.filter(
-      item => item.status === currentFilter
-    );
-
+    const filtered = items.filter(item => item.status === currentFilter);
     const show = shuffle(filtered).slice(0, LIMIT);
 
+    // Build all nodes in a detached fragment — zero reflows during construction
+    const frag = document.createDocumentFragment();
+
     if (!show.length) {
-      grid.innerHTML = `<p class="muted">No artworks available.</p>`;
-      return;
+      const p = document.createElement('p');
+      p.className = 'muted';
+      p.textContent = 'No artworks available.';
+      frag.appendChild(p);
+    } else {
+      show.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "shop-item " + p.status;
+
+        const imgSrc = (typeof window.sanityImgUrl === 'function')
+          ? window.sanityImgUrl(p.image, { w: 600, q: 80 })
+          : p.image;
+        const imgSrcset = (typeof window.sanitySrcset === 'function')
+          ? window.sanitySrcset(p.image, [400, 600, 800])
+          : '';
+
+        div.dataset.title = p.title || '';
+        div.dataset.price = (p.price || '').replace('₾', '');
+        div.dataset.photos = (p.photos || [imgSrc]).join(',');
+        div.dataset.desc = p.shortDescription || '';
+        div.dataset.keywords = p.keywords || '';
+        // Pre-build searchBlob so applyHomeSearch can filter without DOM reads
+        div.dataset.searchBlob = [
+          p.title || '',
+          p.keywords || ''
+        ].map(s => s.trim()).filter(Boolean).join(' ').toLowerCase();
+        console.log('[homeShopPreview] rendered item:', p.title, '| searchBlob:', div.dataset.searchBlob.slice(0, 80));
+
+        div.innerHTML = `
+          <img src="${imgSrc}"${imgSrcset ? ` srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 350px"` : ''}
+               alt="${p.alt || p.title}" loading="lazy" decoding="async"
+               width="600" height="750" onerror="this.src='images/placeholder.jpg'">
+          <div class="shop-meta">
+            <span>${p.title}</span>
+            ${p.price ? `<span class="price">${p.price}</span>` : ''}
+          </div>
+          ${p.shortDescription ? `<p class="short-desc">${p.shortDescription}</p>` : ''}
+        `;
+
+        frag.appendChild(div);
+      });
     }
 
-    show.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "shop-item " + p.status;
+    // Single DOM mutation — replaces all children atomically
+    grid.replaceChildren(frag);
 
-      const imgSrc = (typeof window.sanityImgUrl === 'function')
-        ? window.sanityImgUrl(p.image, { w: 600, q: 80 })
-        : p.image;
-      const imgSrcset = (typeof window.sanitySrcset === 'function')
-        ? window.sanitySrcset(p.image, [400, 600, 800])
-        : '';
-
-      div.innerHTML = `
-        <img src="${imgSrc}"${imgSrcset ? ` srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 350px"` : ''}
-             alt="${p.alt || p.title}" loading="lazy" decoding="async"
-             width="600" height="750" onerror="this.src='images/placeholder.jpg'">
-        <div class="shop-meta">
-          <span>${p.title}</span>
-          ${p.price ? `<span class="price">${p.price}</span>` : ''}
-        </div>
-        ${p.shortDescription ? `<p class="short-desc">${p.shortDescription}</p>` : ''}
-      `;
-
-      grid.appendChild(div);
-    });
+    if (window.initShopItems) window.initShopItems();
+    if (window.applyHomeSearch) window.applyHomeSearch();
   }
 
   // Load artworks - prioritize Sanity featured, fallback to showInShop artworks
@@ -70,6 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         title: artwork.title || 'Untitled',
         shortDescription: artwork.shortDescription || '',
         price: artwork.price ? `₾${artwork.price}` : '',
+        keywords: artwork.keywords || '',
         // Prefer explicit asset URL, fall back to older shapes
         image: artwork.image?.asset?.url || (Array.isArray(artwork.images) && artwork.images[0]?.asset?.url) || artwork.image || 'images/placeholder.jpg',
         photos: Array.isArray(artwork.images) ? artwork.images.map(i => i?.asset?.url).filter(Boolean) : (artwork.image?.asset?.url ? [artwork.image.asset.url] : []),
@@ -85,6 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               title: a.title || 'Untitled',
               shortDescription: a.shortDescription || a.desc || '',
               price: a.price ? `₾${a.price}` : '',
+              keywords: a.keywords || '',
               image: (a.img || '').toLowerCase(),
               photos: a.photos || [a.img],
               alt: a.alt || a.title || 'Artwork'
@@ -103,6 +123,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           title: a.title || 'Untitled',
           shortDescription: a.shortDescription || a.desc || '',
           price: a.price ? `₾${a.price}` : '',
+          keywords: a.keywords || '',
           image: (a.img || '').toLowerCase(),
           photos: a.photos || [a.img],
           alt: a.alt || a.title || 'Artwork'
@@ -117,7 +138,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Initial render and auto-rotation
   render();
-  setInterval(render, 5000); // 🔁 Auto-rotate every 5 seconds
+
+  // Pause rotation when the page tab is not visible (saves CPU/battery)
+  let rotationInterval = setInterval(render, 5000);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearInterval(rotationInterval);
+      rotationInterval = null;
+    } else if (!rotationInterval) {
+      rotationInterval = setInterval(render, 5000);
+    }
+  });
 
   // Filter button handlers
   buttons.forEach(btn => {

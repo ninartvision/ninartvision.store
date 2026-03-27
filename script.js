@@ -111,26 +111,32 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.classList.add("open");
   }
 
-  // Function to initialize shop items with modal functionality
-  window.initShopItems = function() {
-    document.querySelectorAll(".shop-item").forEach(item => {
-      // Remove existing listener if any
-      item.replaceWith(item.cloneNode(true));
-    });
+  // Expose openModal for external use (e.g. delegation handlers)
+  window.openProductModal = openModal;
 
-    document.querySelectorAll(".shop-item").forEach(item => {
-      item.addEventListener("click", e => {
-        if (e.target.closest("a, button")) return;
-        
-        // Track artwork click
-        if (typeof trackArtworkClick === 'function') {
-          const title = item.dataset.title || 'Unknown';
-          const artistId = item.dataset.artist || '';
-          const artist = window.CURRENT_ARTIST || window.ARTISTS?.find(a => a.id === artistId);
-          trackArtworkClick(title, title, artist?.name || artistId);
-        }
-        
-        openModal(item);
+  // Event delegation — one listener per container instead of N per item.
+  // Safe to call multiple times; skips containers already delegated.
+  window.initShopItems = function() {
+    const selectors = [
+      '#shopGrid', '#homeShopGrid', '#artistWorksGrid',
+      '.shop-grid', '.shop-grid-small', '.home-shop-grid'
+    ];
+    selectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(container => {
+        if (container.dataset.shopDelegated) return;
+        container.dataset.shopDelegated = '1';
+        container.addEventListener('click', e => {
+          if (e.target.closest('a, button')) return;
+          const item = e.target.closest('.shop-item');
+          if (!item) return;
+          if (typeof trackArtworkClick === 'function') {
+            const title = item.dataset.title || 'Unknown';
+            const artistId = item.dataset.artist || '';
+            const artist = window.CURRENT_ARTIST || window.ARTISTS?.find(a => a.id === artistId);
+            trackArtworkClick(title, title, artist?.name || artistId);
+          }
+          openModal(item);
+        });
       });
     });
   };
@@ -422,8 +428,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function applyFilter(type) {
     pills.forEach(p => p.classList.toggle("active", p.dataset.filter === type));
     document.querySelectorAll(".shop-item").forEach(i => {
-      i.style.display =
-        type === "all" || i.dataset.status === type ? "block" : "none";
+      i.classList.toggle('is-hidden', !(type === "all" || i.dataset.status === type));
     });
   }
 
@@ -601,6 +606,99 @@ document.addEventListener("click", e => {
 
   item.classList.toggle("open");
 });
+
+/* =========================
+   HOMEPAGE SEARCH
+   Filters #homeShopGrid (.shop-item) and #homeArtistsGrid (.artist-card)
+   in real-time from existing DOM elements. No backend.
+   Debounced + rAF-batched to avoid forced layout on every keystroke.
+========================= */
+(function () {
+  let rafId = null;
+
+  function _doSearch(q, rawVal, shopGrid, artistGrid) {
+    // Split into terms so "oil portrait" matches items containing both words
+    const terms = q ? q.split(/\s+/).filter(Boolean) : [];
+
+    // --- shop items ---
+    if (shopGrid) {
+      const items = shopGrid.querySelectorAll('.shop-item');
+      let visible = 0;
+      items.forEach(item => {
+        // Use pre-built searchBlob (title + keywords) when available; build on the fly otherwise
+        const blob = item.dataset.searchBlob || [
+          item.dataset.title || item.querySelector('.shop-meta span')?.textContent || '',
+          item.dataset.keywords || ''
+        ].map(s => s.trim()).filter(Boolean).join(' ').toLowerCase();
+        const show = !terms.length || terms.every(t => blob.includes(t));
+        item.classList.toggle('is-hidden', !show);
+        if (show) visible++;
+      });
+      let noRes = shopGrid.querySelector('.search-no-results');
+      if (!visible && items.length && q) {
+        if (!noRes) {
+          noRes = document.createElement('p');
+          noRes.className = 'muted search-no-results';
+          noRes.style.cssText = 'grid-column:1/-1;text-align:center;padding:20px 0';
+          shopGrid.appendChild(noRes);
+        }
+        noRes.textContent = 'No artworks found for "' + rawVal + '"';
+      } else if (noRes) {
+        noRes.remove();
+      }
+    }
+
+    // --- artist cards ---
+    if (artistGrid) {
+      artistGrid.querySelectorAll('.artist-card').forEach(card => {
+        const blob = [
+          card.querySelector('.artist-name span')?.textContent || card.querySelector('.artist-name')?.textContent || '',
+          card.querySelector('.artist-style')?.textContent || '',
+          card.dataset.keywords || ''
+        ].map(s => s.trim()).filter(Boolean).join(' ').toLowerCase();
+        card.classList.toggle('is-hidden', !(!terms.length || terms.every(t => blob.includes(t))));
+      });
+    }
+  }
+
+  function applyHomeSearch() {
+    const input = document.getElementById('siteSearch');
+    if (!input) return;
+    const q = input.value.trim().toLowerCase();
+    const rawVal = input.value;
+    const shopGrid = document.getElementById('homeShopGrid');
+    const artistGrid = document.getElementById('homeArtistsGrid');
+    console.log('[applyHomeSearch] query:', JSON.stringify(rawVal),
+      '| shopItems:', shopGrid ? shopGrid.querySelectorAll('.shop-item').length : 'no grid');
+    // Batch all DOM writes into a single animation frame
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(() => {
+      rafId = null;
+      _doSearch(q, rawVal, shopGrid, artistGrid);
+    });
+  }
+
+  // Expose so homeShopPreview.js can re-apply after auto-rotate
+  window.applyHomeSearch = applyHomeSearch;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('siteSearch');
+    if (!input) return;
+    let debTimer;
+    input.addEventListener('input', () => {
+      clearTimeout(debTimer);
+      debTimer = setTimeout(applyHomeSearch, 120);
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        clearTimeout(debTimer);
+        input.value = '';
+        applyHomeSearch();
+        input.blur();
+      }
+    });
+  });
+})();
 
 /* =========================
    ADMIN KEYBOARD SHORTCUT

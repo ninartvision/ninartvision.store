@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   *[_type == "artwork" && defined(image)]
   | order(order asc, _createdAt desc) {
     _id,
+    _createdAt,
     title,
     "img": image.asset->url,
     "photos": images[].asset->url,

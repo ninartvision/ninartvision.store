@@ -20,10 +20,11 @@
     'allow_ad_personalization_signals': false
   });
 </script>
-<script src="./analytics.min.js"></script>
+<script defer src="./analytics.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap"></noscript>
 </head>
 <body>
 

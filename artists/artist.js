@@ -260,8 +260,7 @@
              alt="${a.image?.alt || a.title || 'Artwork'}" 
              loading="lazy"
              decoding="async"
-             width="600" height="750"
-
+             width="600" height="750">
         <div class="shop-meta">
           <span>${a.title || 'Untitled'}</span>
           ${a.price ? `<span class="price">₾${a.price}</span>` : ''}
