@@ -47,6 +47,23 @@
 }
 </script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://ninartvision.store/#website",
+  "url": "https://ninartvision.store/",
+  "name": "Ninart Vision",
+  "description": "Original contemporary paintings by Georgian artists — explore and collect handcrafted artworks.",
+  "publisher": {"@id": "https://ninartvision.store/#artist"},
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {"@type": "EntryPoint", "urlTemplate": "https://ninartvision.store/?q={search_term_string}"},
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
 
   <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
@@ -111,25 +128,28 @@
     @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{flex:0 1 300px;max-width:300px}.search-input{padding:10px 36px 10px 16px;font-size:13px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
     @media(max-width:600px){.header-row{min-height:64px;padding:10px 0}.brand img{height:36px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{flex:1 1 auto;max-width:60%;min-width:150px}.search-input{padding:9px 32px 9px 14px;font-size:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
     @media(min-width:900px){.hero-slider{height:82dvh;min-height:600px;max-height:950px}.hero-slider .slide{background-color:#fff}.hero-slider .slide img{object-fit:contain}.as-arrow{width:56px;height:56px;font-size:36px;background:rgba(255,255,255,.12)}.as-arrow.left{left:32px}.as-arrow.right{right:32px}}
+    .site-footer{background:#111;color:#aaa;text-align:center;padding:28px 20px;font-size:13px;line-height:1.8}
+    .site-footer a{color:#ccc;text-decoration:none}.site-footer a:hover{color:#fff;text-decoration:underline}
   </style>
 
   <!-- Full stylesheet loaded asynchronously (non-render-blocking) -->
   <link rel="preload" href="./style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="./style.min.css"></noscript>
 
-  <link rel="icon" href="./images/favicon.png">
+  <link rel="icon" type="image/png" href="./images/favicon.png">
+  <link rel="apple-touch-icon" href="./images/favicon.png">
 
   <!-- Google Fonts loaded non-blocking (font-display:swap already set via &display=swap) -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap"></noscript>
 
   <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1H7SY0J2EB"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'GA_MEASUREMENT_ID', {
+  gtag('config', 'G-1H7SY0J2EB', {
     'anonymize_ip': true,
     'allow_google_signals': false,
     'allow_ad_personalization_signals': false
@@ -167,7 +187,7 @@
         </picture>
       </a>
 
-      <nav class="desktop-nav">
+      <nav class="desktop-nav" aria-label="Main navigation">
         <a href="./" class="active">Home</a>
         <a href="support.html">Support a Project</a>
 
@@ -195,7 +215,7 @@
   
 
   <!-- SEARCH BAR SECTION (Below Header) -->
-  <section class="search-section">
+  <section class="search-section" aria-label="Search artworks" role="search">
     <div class="container">
       <div class="search-social-row">
         <!-- Search bar on left -->
@@ -206,19 +226,19 @@
 
         <!-- Social Icons on right -->
         <div class="social-icons">
-          <a class="soc" href="https://www.facebook.com/share/1D6m5jjWW5/?mibextid=wwXIfr" target="_blank" aria-label="Facebook">
+          <a class="soc" href="https://www.facebook.com/share/1D6m5jjWW5/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.22 10.44 22v-7.02H7.9v-2.92h2.54V9.85c0-2.52 1.49-3.92 3.77-3.92 1.1 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.44 2.92h-2.34V22C18.34 21.22 22 17.08 22 12.06z"/>
             </svg>
           </a>
-          <a class="soc" href="https://www.instagram.com/ninart.vision?igsh=Z3R4cWV1ZHd1MGNj&utm_source=qr" target="_blank" aria-label="Instagram">
+          <a class="soc" href="https://www.instagram.com/ninart.vision?igsh=Z3R4cWV1ZHd1MGNj&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3z"/>
               <path d="M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
               <path d="M17.5 6.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
             </svg>
           </a>
-          <a class="soc" href="https://wa.me/995579388833" target="_blank" aria-label="WhatsApp">
+          <a class="soc" href="https://wa.me/995579388833" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M20.5 11.9c0 4.73-3.86 8.6-8.6 8.6-1.46 0-2.85-.37-4.09-1.03L3 21l1.57-4.63A8.53 8.53 0 0 1 3.3 11.9c0-4.73 3.86-8.6 8.6-8.6s8.6 3.86 8.6 8.6zm-8.6-6.93a6.93 6.93 0 0 0-6.93 6.93c0 1.33.38 2.58 1.05 3.64l.2.31-.91 2.7 2.78-.88.3.18a6.88 6.88 0 0 0 3.51.96 6.93 6.93 0 0 0 6.93-6.93 6.93 6.93 0 0 0-6.93-6.93z"/>
               <path d="M15.92 13.9c-.2-.1-1.16-.57-1.34-.64-.18-.07-.31-.1-.44.1-.13.2-.5.64-.62.77-.11.13-.22.15-.42.05-.2-.1-.83-.3-1.58-.97-.58-.52-.97-1.16-1.08-1.36-.11-.2-.01-.31.09-.41.09-.09.2-.22.3-.33.1-.11.13-.2.2-.33.07-.13.03-.25-.02-.35-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.38c-.13 0-.35.05-.53.25-.18.2-.7.68-.7 1.66 0 .98.72 1.93.82 2.06.1.13 1.42 2.16 3.45 3.03.48.21.86.34 1.15.43.48.15.92.13 1.27.08.39-.06 1.16-.47 1.32-.93.16-.46.16-.86.11-.93-.05-.07-.18-.13-.38-.23z"/>
@@ -233,7 +253,7 @@
 <div class="menu-overlay" id="menuOverlay">
   <button class="menu-close" id="closeMenu" aria-label="Close menu">✕</button>
 
-  <nav class="menu-links">
+  <nav class="menu-links" aria-label="Mobile navigation">
     <a href="./" class="menu-link">HOME</a>
     <a href="support.html" class="menu-link">SUPPORT A PROJECT</a>
 
@@ -250,7 +270,7 @@
       <!-- FACEBOOK -->
       <a class="soc"
          href="https://www.facebook.com/share/1D6m5jjWW5/?mibextid=wwXIfr"
-         target="_blank" aria-label="Facebook">
+         target="_blank" rel="noopener noreferrer" aria-label="Facebook">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.22 10.44 22v-7.02H7.9v-2.92h2.54V9.85c0-2.52 1.49-3.92 3.77-3.92 1.1 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.44 2.92h-2.34V22C18.34 21.22 22 17.08 22 12.06z"/>
         </svg>
@@ -259,7 +279,7 @@
       <!-- INSTAGRAM -->
       <a class="soc"
          href="https://www.instagram.com/ninart.vision?igsh=Z3R4cWV1ZHd1MGNj&utm_source=qr"
-         target="_blank" aria-label="Instagram">
+         target="_blank" rel="noopener noreferrer" aria-label="Instagram">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3z"/>
           <path d="M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
@@ -270,7 +290,7 @@
       <!-- WHATSAPP -->
       <a class="soc"
          href="https://wa.me/995579388833"
-         target="_blank" aria-label="WhatsApp">
+         target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M20.5 11.9c0 4.73-3.86 8.6-8.6 8.6-1.46 0-2.85-.37-4.09-1.03L3 21l1.57-4.63A8.53 8.53 0 0 1 3.3 11.9c0-4.73 3.86-8.6 8.6-8.6s8.6 3.86 8.6 8.6zm-8.6-6.93a6.93 6.93 0 0 0-6.93 6.93c0 1.33.38 2.58 1.05 3.64l.2.31-.91 2.7 2.78-.88.3.18a6.88 6.88 0 0 0 3.51.96 6.93 6.93 0 0 0 6.93-6.93 6.93 6.93 0 0 0-6.93-6.93z"/>
           <path d="M15.92 13.9c-.2-.1-1.16-.57-1.34-.64-.18-.07-.31-.1-.44.1-.13.2-.5.64-.62.77-.11.13-.22.15-.42.05-.2-.1-.83-.3-1.58-.97-.58-.52-.97-1.16-1.08-1.36-.11-.2-.01-.31.09-.41.09-.09.2-.22.3-.33.1-.11.13-.2.2-.33.07-.13.03-.25-.02-.35-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.38c-.13 0-.35.05-.53.25-.18.2-.7.68-.7 1.66 0 .98.72 1.93.82 2.06.1.13 1.42 2.16 3.45 3.03.48.21.86.34 1.15.43.48.15.92.13 1.27.08.39-.06 1.16-.47 1.32-.93.16-.46.16-.86.11-.93-.05-.07-.18-.13-.38-.23z"/>
@@ -292,129 +312,136 @@
     <div class="slide active">
       <picture>
         <source srcset="./images/garden9.webp" type="image/webp">
-        <img src="./images/garden9.jpg" alt="Garden artwork" width="1500" height="1875" fetchpriority="high" decoding="sync">
+        <img src="./images/garden9.jpg" alt="Garden painting by Nini Mzhavia — original acrylic on canvas" width="1500" height="1875" fetchpriority="high" decoding="sync">
       </picture>
     </div>
     <!-- Remaining slides: lazy loaded -->
     <div class="slide">
       <picture>
         <source srcset="./images/abstract3.webp" type="image/webp">
-        <img src="./images/abstract3.jpg" alt="Abstract artwork" width="1500" height="1875" loading="lazy" decoding="async">
+        <img src="./images/abstract3.jpg" alt="Abstract painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/svaneti10.webp" type="image/webp">
-        <img src="./images/svaneti10.jpg" alt="Svaneti artwork" width="1500" height="1125" loading="lazy" decoding="async">
+        <img src="./images/svaneti10.jpg" alt="Svaneti mountain landscape painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/jvarimonastery5.webp" type="image/webp">
-        <img src="./images/jvarimonastery5.jpg" alt="Jvari Monastery artwork" width="1500" height="1125" loading="lazy" decoding="async">
+        <img src="./images/jvarimonastery5.jpg" alt="Jvari Monastery painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/babuacvera4.webp" type="image/webp">
-        <img src="./images/babuacvera4.jpg" alt="Babuacvera artwork" width="1500" height="2000" loading="lazy" decoding="async">
+        <img src="./images/babuacvera4.jpg" alt="Babuacvera painting by Nini Mzhavia" width="1500" height="2000" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/naturmort6.webp" type="image/webp">
-        <img src="./images/naturmort6.jpg" alt="Still life artwork" width="1500" height="1875" loading="lazy" decoding="async">
+        <img src="./images/naturmort6.jpg" alt="Still life painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/jvari7.webp" type="image/webp">
-        <img src="./images/jvari7.jpg" alt="Jvari artwork" width="1500" height="1125" loading="lazy" decoding="async">
+        <img src="./images/jvari7.jpg" alt="Jvari landscape painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/lily8.webp" type="image/webp">
-        <img src="./images/lily8.jpg" alt="Lily artwork" width="1390" height="1727" loading="lazy" decoding="async">
+        <img src="./images/lily8.jpg" alt="Lily flower painting by Nini Mzhavia" width="1390" height="1727" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/dream9.webp" type="image/webp">
-        <img src="./images/dream9.jpg" alt="Dream artwork" width="1500" height="1125" loading="lazy" decoding="async">
+        <img src="./images/dream9.jpg" alt="Dream landscape painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/rose1.webp" type="image/webp">
-        <img src="./images/rose1.jpg" alt="Rose artwork" width="1500" height="1875" loading="lazy" decoding="async">
+        <img src="./images/rose1.jpg" alt="Rose painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/sea4.webp" type="image/webp">
-        <img src="./images/sea4.jpg" alt="Sea artwork" width="1500" height="1125" loading="lazy" decoding="async">
+        <img src="./images/sea4.jpg" alt="Seascape painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/waterlily1.webp" type="image/webp">
-        <img src="./images/waterlily1.jpg" alt="Water lily artwork" width="1500" height="1125" loading="lazy" decoding="async">
+        <img src="./images/waterlily1.jpg" alt="Water lily painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/swan1.webp" type="image/webp">
-        <img src="./images/swan1.jpg" alt="Swan artwork" width="1500" height="2250" loading="lazy" decoding="async">
+        <img src="./images/swan1.jpg" alt="Swan painting by Nini Mzhavia" width="1500" height="2250" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/seaorange8.webp" type="image/webp">
-        <img src="./images/seaorange8.jpg" alt="Sea orange artwork" width="1500" height="1125" loading="lazy" decoding="async">
+        <img src="./images/seaorange8.jpg" alt="Sea orange sunset painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/lilac6.webp" type="image/webp">
-        <img src="./images/lilac6.jpg" alt="Lilac artwork" width="1500" height="1875" loading="lazy" decoding="async">
+        <img src="./images/lilac6.jpg" alt="Lilac floral painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/kids3.webp" type="image/webp">
-        <img src="./images/kids3.jpg" alt="Kids artwork" width="1500" height="1125" loading="lazy" decoding="async">
+        <img src="./images/kids3.jpg" alt="Children theme painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/boat.webp" type="image/webp">
-        <img src="./images/boat.jpg" alt="Boat artwork" width="1500" height="2250" loading="lazy" decoding="async">
+        <img src="./images/boat.jpg" alt="Boat at sea painting by Nini Mzhavia" width="1500" height="2250" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/daffodils6.webp" type="image/webp">
-        <img src="./images/daffodils6.jpg" alt="Daffodils artwork" width="1500" height="1875" loading="lazy" decoding="async">
+        <img src="./images/daffodils6.jpg" alt="Daffodils floral painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
         <source srcset="./images/deer5.webp" type="image/webp">
-        <img src="./images/deer5.jpg" alt="Deer artwork" width="1500" height="1125" loading="lazy" decoding="async">
+        <img src="./images/deer5.jpg" alt="Deer nature painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
       </picture>
     </div>
   </div>
 
   <div class="hero-overlay"></div>
 
-  <!-- Arrows like Artistshare -->
-  <button class="as-arrow left" id="prevSlide"><</button>
-<button class="as-arrow right" id="nextSlide">></button>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <h1>Original Georgian Art &mdash; Paintings &amp; Collections</h1>
+      <p>Discover and collect handcrafted original artworks by Georgian artist Nini Mzhavia</p>
+    </div>
+  </div>
+
+  <!-- Slider navigation arrows -->
+  <button class="as-arrow left" id="prevSlide" aria-label="Previous artwork">&#8249;</button>
+  <button class="as-arrow right" id="nextSlide" aria-label="Next artwork">&#8250;</button>
 </section>
 
 
-<section class="cloth-banner">
+<section class="cloth-banner" aria-label="Welcome message">
   <div class="cloth-banner-text">
 
     <p class="ka">მოგესალმებით ჩემს შემოქმედებით სამყაროში ✨</p>
@@ -767,11 +794,11 @@
         </div>
 
         <form class="form">
-          <label>Email</label>
-          <input type="email" placeholder="your@email.com" required />
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" name="email" placeholder="your@email.com" required autocomplete="email" />
 
-          <label>Password</label>
-          <input type="password" placeholder="••••••••" required />
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" name="password" placeholder="••••••••" required autocomplete="current-password" />
 
           <button class="btn btn-dark" type="submit">Log In</button>
           <p class="muted small">Forgot password?</p>
@@ -786,6 +813,13 @@
   </div>
 </section>
 
+  </main>
+
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="container">
+      <p>&copy; 2026 Ninart Vision &middot; Original Georgian Art &middot; <a href="about.html">About</a> &middot; <a href="support.html">Contact</a></p>
+    </div>
+  </footer>
 
 <!-- Firebase SDK (deferred - loads after HTML parse) -->
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -807,7 +841,7 @@
   <div class="wa-popup" id="waPopup">
     <div class="wa-header">
       <div class="wa-avatar">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo">
       </div>
       <div class="wa-title">
         <strong>Ninart Vision</strong>
@@ -824,6 +858,7 @@
     <a
       href="https://wa.me/995579388833"
       target="_blank"
+      rel="noopener noreferrer"
       class="wa-btn"
     >
       Chat on WhatsApp
