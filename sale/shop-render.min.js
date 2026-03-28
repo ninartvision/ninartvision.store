@@ -1,131 +1,67 @@
 /**
- * Shop page rendering with artist filtering from Sanity
- * Optimized: items rendered once via DocumentFragment;
- * filter/search changes only toggle a CSS class — no DOM rebuild.
+ * Shop page rendering — Nini Mzhavia artworks only.
+ * No artist filter, no search, no unnecessary state.
+ * NEVER falls back to window.ARTWORKS (would show all artists).
  */
 
-// ========================================
-// State
-// ========================================
-
-let selectedArtist = "all";
-let selectedFilter = "all";
-let selectedSearch = "";
-let allArtists = [];
-let allRenderedItems = []; // DOM node refs — avoids re-render on filter change
-
-// Debounce helper
-function debounce(fn, ms) {
-  let t;
-  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
-}
-
-// Slug to ID mapping (matches artist.js)
-const slugToId = {
-  'nini-mzhavia': 'nini',
-  'mzia-kashia': 'mzia',
-  'nanuli-gogiberidze': 'nanuli'
-};
-
-// ========================================
-// Fetch and populate artist filter
-// ========================================
-
-async function populateArtistFilter() {
-  const artistFilter = document.getElementById("artistFilter");
-  
-  if (!artistFilter) {
-    console.warn('Artist filter element not found');
-    return;
-  }
-
+// Bust any stale "all artworks" localStorage cache keys left from old code
+(function bustOldCache() {
   try {
-    // Fetch all artists from Sanity
-    allArtists = await fetchArtistsFromSanity();
-    
-    if (!allArtists || allArtists.length === 0) {
-      console.warn('No artists found in Sanity');
-      return;
-    }
-
-    // Populate dropdown with artists
-    artistFilter.innerHTML = '<option value="all">All Artists</option>';
-    
-    allArtists.forEach(artist => {
-      const artistId = artist.slug ? slugToId[artist.slug] : null;
-      if (artistId) {
-        const option = document.createElement('option');
-        option.value = artistId;
-        option.textContent = artist.name;
-        artistFilter.appendChild(option);
+    ['nv_shop_all', 'nv_shop_nini_all', 'nv_shop_nini_null'].forEach(k => localStorage.removeItem(k));
+    // Also remove any nv_shop_* key that isn't the current v2 key
+    Object.keys(localStorage).forEach(k => {
+      if (k.startsWith('nv_shop_') && !k.startsWith('nv_shop_nini_v2')) {
+        localStorage.removeItem(k);
       }
     });
+  } catch (e) { /* ignore */ }
+})();
 
-  } catch (error) {
-    console.error('Error fetching artists:', error);
-  }
-}
+let allRenderedItems = [];
 
 // ========================================
-// Initial render — builds all items once via DocumentFragment
-// artworksData: optional array from Sanity (normalised on-the-fly);
-//               pass null to fall back to window.ARTWORKS (data.js shape)
+// Render grid
 // ========================================
 function renderAllItems(artworksData) {
-  const grid = document.getElementById("shopGrid");
+  const grid = document.getElementById('shopGrid');
   if (!grid) return;
 
-  const source = artworksData || window.ARTWORKS;
-  if (!source || !source.length) {
+  // STRICT: never use window.ARTWORKS — it contains all artists
+  if (!artworksData || !artworksData.length) {
     if (window.nvEmpty) window.nvEmpty(grid, 'No artworks available');
     else grid.innerHTML = '<p class="muted">No artworks available.</p>';
     return;
   }
 
-  // Normalise: handles both Sanity-shaped and static data.js-shaped artworks
+  const source = artworksData;
+
+  const iUrl = typeof sanityImgUrl === 'function' ? sanityImgUrl : u => u;
+  const iSet = typeof sanitySrcset === 'function' ? sanitySrcset : () => '';
+
   const normalize = a => {
-    // Artist: Sanity returns {_id, name, slug}; data.js returns string ID
-    const artist = typeof a.artist === 'object'
-      ? (slugToId[a.artist?.slug] || a.artist?.slug || '')
-      : (a.artist || '');
-    // Status: Sanity uses "published" for for-sale items — map to "sale"
-    const status = a.status === 'published' ? 'sale' : (a.status || 'sale');
-    // Image src: optimised width for thumbnails; fallback for static data
-    const rawUrl = a.image?.asset?.url;
-    const iUrl = typeof sanityImgUrl === 'function' ? sanityImgUrl : u => u;
-    const iSet = typeof sanitySrcset === 'function' ? sanitySrcset : () => '';
-    const imgSrc = rawUrl ? iUrl(rawUrl, {w: 400}) : `../${ (a.img || '').toLowerCase() }`;
-    const srcset = rawUrl ? iSet(rawUrl, [400, 800]) : '';
-    // Photos array — medium width for modal view
-    const photos = (Array.isArray(a.images) && a.images.length)
+    const status  = a.status === 'published' ? 'sale' : (a.status || 'sale');
+    const rawUrl  = a.image?.asset?.url;
+    const imgSrc  = rawUrl ? iUrl(rawUrl, {w: 400}) : `../${ (a.img || '').toLowerCase() }`;
+    const srcset  = rawUrl ? iSet(rawUrl, [400, 800]) : '';
+    const lqip    = a.image?.asset?.metadata?.lqip || '';
+    const photos  = (Array.isArray(a.images) && a.images.length)
       ? a.images.map(i => i?.asset?.url).filter(Boolean).map(u => iUrl(u, {w: 800}))
       : (Array.isArray(a.photos) ? a.photos : [imgSrc]);
-    const title    = a.title    || '';
-    const keywords = a.keywords || '';
-    const lqip = a.image?.asset?.metadata?.lqip || '';
     return {
-      artist,
       status,
-      title,
-      keywords,
-      lqip,
-      srcset,
-      price:  String(a.price  || ''),
+      title:  a.title || '',
+      price:  String(a.price || ''),
       size:   a.size || a.dimensions || '',
       medium: a.medium || '',
       year:   String(a.year || ''),
       desc:   a.shortDescription || a.desc || a.description || '',
-      imgSrc,
-      photos,
-      // Pre-build searchBlob: title + comma-split keywords, all lowercased
-      searchBlob: [title, ...keywords.split(',').map(k => k.trim()).filter(Boolean)]
-        .join(' ').toLowerCase(),
-      // When artworksData comes from Sanity it's already filtered; otherwise check flag
-      showInShop: artworksData ? true : (a.showInShop === true),
+      keywords: a.keywords || '',
+      imgSrc, srcset, lqip, photos,
+      showInShop: true, // always true — Sanity query already filters for showInShop
     };
   };
 
-  const shopItems = source
+  const items = source
     .map(normalize)
     .filter(a => a.showInShop)
     .sort((a, b) =>
@@ -134,20 +70,17 @@ function renderAllItems(artworksData) {
     );
 
   const frag = document.createDocumentFragment();
-  allRenderedItems = shopItems.map(a => {
+  allRenderedItems = items.map(a => {
     const div = document.createElement('div');
     div.className        = `shop-item ${a.status}`;
-    div.dataset.artist   = a.artist;
     div.dataset.status   = a.status;
     div.dataset.title    = a.title;
-    div.dataset.titleLow = a.title.toLowerCase();
-    div.dataset.keywords = a.keywords;
-    div.dataset.searchBlob = a.searchBlob;
     div.dataset.price    = a.price;
     div.dataset.size     = a.size;
     div.dataset.medium   = a.medium;
     div.dataset.year     = a.year;
     div.dataset.desc     = a.desc;
+    div.dataset.keywords = a.keywords;
     div.dataset.photos   = a.photos.join(',');
     div.innerHTML = `
       <div class="nv-img-wrap"${a.lqip ? ` style="background-image:url(${a.lqip})"` : ''}>
@@ -167,117 +100,53 @@ function renderAllItems(artworksData) {
     return div;
   });
 
-  // Clear any previous content (skeleton or stale results) before appending
   grid.innerHTML = '';
-  // Single DOM mutation — append all items at once
   grid.appendChild(frag);
 
-  // Set up event delegation once (idempotent inside initShopItems)
   if (window.initShopItems) window.initShopItems();
 }
 
 // ========================================
-// Apply filters — toggles CSS class, no DOM rebuild
+// Status filter pills (ALL / SALE / SOLD)
 // ========================================
-function applyFilters() {
-  const grid = document.getElementById("shopGrid");
-  if (!grid) return;
-
-  // Split query into terms — "oil portrait" requires both words to match
-  const terms = selectedSearch ? selectedSearch.trim().split(/\s+/).filter(Boolean) : [];
-
-  let visibleCount = 0;
+function applyStatusFilter(status) {
   allRenderedItems.forEach(item => {
-    const visible =
-      (selectedArtist === 'all' || item.dataset.artist === selectedArtist) &&
-      (selectedFilter === 'all' || item.dataset.status === selectedFilter) &&
-      (!terms.length || terms.every(t => item.dataset.searchBlob.includes(t)));
+    const visible = status === 'all' || item.dataset.status === status;
     item.classList.toggle('is-hidden', !visible);
-    if (visible) visibleCount++;
   });
-
-  let empty = grid.querySelector('.no-results-msg');
-  if (!visibleCount && allRenderedItems.length) {
-    if (!empty) {
-      empty = document.createElement('div');
-      empty.className = 'no-results-msg';
-      empty.style.cssText = 'grid-column:1/-1;text-align:center;padding:40px;color:#999';
-      empty.innerHTML = '<p>No artworks found for the selected filters.</p>';
-      grid.appendChild(empty);
-    }
-  } else if (empty) {
-    empty.remove();
-  }
 }
 
 // ========================================
-// Event listeners
+// Boot
 // ========================================
-
-document.addEventListener("DOMContentLoaded", async () => {
-  // Show skeleton immediately — before any async work
-  const _skGrid = document.getElementById("shopGrid");
-  if (_skGrid && window.nvSkeleton) window.nvSkeleton(_skGrid, 8);
-
-  await populateArtistFilter();
-
-  // Artist filter change
-  const artistFilter = document.getElementById("artistFilter");
-  if (artistFilter) {
-    artistFilter.addEventListener("change", e => {
-      selectedArtist = e.target.value;
-      if (typeof trackShopFilter === 'function') {
-        const artistName = allArtists.find(a => {
-          const id = a.slug ? slugToId[a.slug] : null;
-          return id === e.target.value;
-        })?.name || e.target.value;
-        trackShopFilter('artist', artistName);
-      }
-      applyFilters();
-    });
-  }
+document.addEventListener('DOMContentLoaded', async () => {
+  const grid = document.getElementById('shopGrid');
+  if (grid && window.nvSkeleton) window.nvSkeleton(grid, 8);
 
   // Status filter pills
-  const pills = document.querySelectorAll(".filter-tabs .pill");
+  const pills = document.querySelectorAll('.filter-tabs .pill');
+  let activeStatus = 'all';
   pills.forEach(p => {
-    p.addEventListener("click", () => {
-      pills.forEach(x => x.classList.remove("active"));
-      p.classList.add("active");
-      selectedFilter = p.dataset.filter;
-      if (typeof trackShopFilter === 'function') trackShopFilter('status', selectedFilter);
-      applyFilters();
+    p.addEventListener('click', () => {
+      pills.forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+      activeStatus = p.dataset.filter;
+      if (typeof trackShopFilter === 'function') trackShopFilter('status', activeStatus);
+      applyStatusFilter(activeStatus);
     });
   });
-  pills[0]?.classList.add("active");
+  pills[0]?.classList.add('active');
 
-  // Search — debounced 150 ms to avoid re-filter on every keystroke
-  const shopSearch = document.getElementById('shopSearch');
-  if (shopSearch) {
-    const debouncedSearch = debounce(() => {
-      selectedSearch = shopSearch.value.trim().toLowerCase();
-      applyFilters();
-    }, 150);
-    shopSearch.addEventListener('input', debouncedSearch);
-    shopSearch.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        shopSearch.value = '';
-        selectedSearch = '';
-        applyFilters();
-        shopSearch.blur();
-      }
-    });
-  }
-
-  // Try Sanity first; fall back to static window.ARTWORKS if unavailable or empty
-  let sanityArtworks = null;
+  // Fetch Nini Mzhavia artworks from Sanity (reference-based filter — no fallback to static data)
+  let artworks = null;
   if (typeof window.fetchShopArtworks === 'function') {
     try {
-      sanityArtworks = await window.fetchShopArtworks();
-      console.log('[shop-render] Loaded from Sanity:', sanityArtworks?.length, 'artworks');
+      artworks = await window.fetchShopArtworks();
+      console.log('[shop-render] artworks received:', artworks?.length, artworks);
     } catch (e) {
-      console.warn('[shop-render] Sanity fetch failed, using static data:', e);
+      console.error('[shop-render] Sanity fetch failed:', e);
     }
   }
-  renderAllItems(sanityArtworks && sanityArtworks.length ? sanityArtworks : null);
-  applyFilters();
+  renderAllItems(artworks);
+  applyStatusFilter(activeStatus);
 });

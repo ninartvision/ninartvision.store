@@ -265,15 +265,19 @@ async function fetchFeaturedArtworks(limit = null) {
    Falls back gracefully to static data.js if this returns empty.
 -------------------------------------------------- */
 async function fetchShopArtworks(limit = null) {
-  const _cKey = `nv_shop_nini_${limit || 'all'}`;
+  // v2: reference-based filter — never shows other artists even if name drifts
+  const _cKey = `nv_shop_nini_v2_${limit || 'all'}`;
   const _hit = cacheGet(_cKey);
-  if (_hit) return _hit;
+  if (_hit) {
+    console.log('[shop] cache hit —', _hit.length, 'artworks');
+    return _hit;
+  }
 
   try {
     let query = `
       *[
         _type == "artwork" &&
-        artist->name == "Nini Mzhavia" &&
+        artist._ref in *[_type == "artist" && name == "Nini Mzhavia"]._id &&
         (!defined(showInShop) || showInShop == true) &&
         (!defined(status) || status in ["published", "sold", "sale"])
       ]
@@ -323,7 +327,8 @@ async function fetchShopArtworks(limit = null) {
     const data = await res.json();
 
     const result = data.result || [];
-    cacheSet(_cKey, result);
+    console.log('[shop] Sanity returned', result.length, 'artworks for Nini Mzhavia');
+    if (result.length) cacheSet(_cKey, result);
     return result;
   } catch (err) {
     console.error('❌ fetchShopArtworks error:', err);
