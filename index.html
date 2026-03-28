@@ -78,9 +78,8 @@
   <link rel="preconnect" href="https://www.gstatic.com">
   <link rel="dns-prefetch" href="https://cdn.sanity.io">
 
-  <!-- Preload LCP hero image (garden9 is the first active slide) -->
-  <link rel="preload" as="image" href="./images/garden9.webp" type="image/webp" fetchpriority="high">
-  <link rel="preload" as="image" href="./images/garden9.jpg" fetchpriority="high">
+  <!-- Preload only the exact LCP image candidate to avoid duplicate downloads -->
+  <link rel="preload" as="image" href="./images/garden9.avif" type="image/avif" fetchpriority="high">
 
   <!-- Critical above-the-fold CSS inlined to prevent FOUC while full CSS loads async -->
   <style>
@@ -311,8 +310,9 @@
     <!-- First slide: fetchpriority=high for LCP, no lazy loading -->
     <div class="slide active">
       <picture>
+        <source srcset="./images/garden9.avif" type="image/avif">
         <source srcset="./images/garden9.webp" type="image/webp">
-        <img src="./images/garden9.webp" alt="Garden painting by Nini Mzhavia — original acrylic on canvas" width="1500" height="1875" fetchpriority="high" decoding="sync">
+        <img src="./images/garden9.webp" alt="Garden painting by Nini Mzhavia — original acrylic on canvas" width="1500" height="1875" fetchpriority="high" decoding="async" loading="eager">
       </picture>
     </div>
     <!-- Remaining slides: lazy loaded -->
@@ -818,21 +818,48 @@
     </div>
   </footer>
 
-<!-- Firebase SDK (deferred - loads after HTML parse) -->
-<script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
-<!-- Sanity & app scripts (all deferred) -->
-<script defer src="./sanity-client.min.js"></script>
-<script defer src="./data.min.js"></script>
-<script defer src="./js/homeShopPreview.min.js"></script>
-<script defer src="./js/homeArtistsPreview.min.js"></script>
-<script defer src="./auth.min.js"></script>
+<!-- Critical runtime first (menu, hero, modal, search) -->
 <script defer src="./script.min.js"></script>
-<!-- CMS-driven dynamic content modules -->
-<script defer src="./js/cms-settings.js"></script>
-<script defer src="./js/cms-news.js"></script>
-<script defer src="./js/cms-projects.js"></script>
+
+<!-- Load non-critical modules after first paint/idle -->
+<script>
+  (function () {
+    var nonCriticalScripts = [
+      "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
+      "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js",
+      "./sanity-client.min.js",
+      "./js/homeShopPreview.min.js",
+      "./js/homeArtistsPreview.min.js",
+      "./auth.min.js",
+      "./js/cms-settings.js",
+      "./js/cms-news.js",
+      "./js/cms-projects.js"
+    ];
+
+    function loadScript(src) {
+      return new Promise(function (resolve) {
+        var s = document.createElement("script");
+        s.src = src;
+        s.defer = true;
+        s.onload = resolve;
+        s.onerror = resolve;
+        document.body.appendChild(s);
+      });
+    }
+
+    function start() {
+      nonCriticalScripts.reduce(function (p, src) {
+        return p.then(function () { return loadScript(src); });
+      }, Promise.resolve());
+    }
+
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(start, { timeout: 2500 });
+    } else {
+      window.addEventListener("load", function () { setTimeout(start, 1000); }, { once: true });
+    }
+  })();
+</script>
 <div class="wa-widget">
 
   <div class="wa-popup" id="waPopup">
