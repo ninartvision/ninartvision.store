@@ -42,7 +42,7 @@ function renderAllItems(artworksData) {
   const iSet = typeof sanitySrcset === 'function' ? sanitySrcset : () => '';
 
   const normalize = a => {
-    const status  = a.status === 'published' ? 'sale' : (a.status || 'sale');
+    const status  = a.status === 'sold' ? 'sold' : (a.status === 'sale' ? 'sale' : '');
     const rawUrl  = a.image?.asset?.url;
     const imgSrc  = rawUrl ? iUrl(rawUrl, {w: 400}) : `../${ (a.img || '').toLowerCase() }`;
     const srcset  = rawUrl ? iSet(rawUrl, [400, 800]) : '';
@@ -76,6 +76,8 @@ function renderAllItems(artworksData) {
     const div = document.createElement('div');
     div.className        = `shop-item ${a.status}`;
     div.dataset.status   = a.status;
+    div.dataset.isSold   = String(a.status === 'sold');
+    div.dataset.isOnSale = String(a.status === 'sale');
     div.dataset.title    = a.title;
     div.dataset.price    = a.price;
     div.dataset.size     = a.size;

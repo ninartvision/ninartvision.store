@@ -168,10 +168,14 @@
           const allPhotos = a.images && a.images.length > 0
             ? a.images.map(img => img.asset?.url).filter(Boolean).map(u => iUrl(u, { w: 1200, q: 85 }))
             : (rawUrl ? [iUrl(rawUrl, { w: 1200, q: 85 })] : ['../images/placeholder.jpg'])
+
+          const cardStatus = a.status === 'sold' ? 'sold' : (a.status === 'sale' ? 'sale' : '')
           
           return `
-      <div class="shop-item ${a.status === 'sold' ? 'sold' : 'sale'}"
-        data-status="${a.status}"
+      <div class="shop-item ${cardStatus}"
+        data-status="${a.status || ''}"
+        data-is-sold="${String(a.status === 'sold')}"
+        data-is-on-sale="${String(a.status === 'sale')}"
         data-title="${a.title || 'Untitled'}"
         data-price="${a.price || ''}"
         data-size="${a.size || ''}"

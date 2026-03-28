@@ -54,17 +54,12 @@
     const statusEl = ensureStatusEl();
     if (!statusEl) return;
 
-    const classStatus = item.classList.contains("sold")
-      ? "sold"
-      : (item.classList.contains("sale") || item.classList.contains("published"))
-      ? "sale"
-      : "";
-    const rawStatus = String(item?.dataset?.status || classStatus).toLowerCase().trim();
+    const rawStatus = String(item?.dataset?.status || "").toLowerCase().trim();
     const isSoldFlag = String(item?.dataset?.isSold || "").toLowerCase() === "true";
     const isOnSaleFlag = String(item?.dataset?.isOnSale || "").toLowerCase() === "true";
 
-    const isSold = isSoldFlag || rawStatus === "sold" || item.classList.contains("sold");
-    const isOnSale = !isSold && (isOnSaleFlag || rawStatus === "sale" || rawStatus === "published" || item.classList.contains("sale") || item.classList.contains("published"));
+    const isSold = isSoldFlag || rawStatus === "sold";
+    const isOnSale = !isSold && (isOnSaleFlag || rawStatus === "sale");
 
     if (isSold) {
       statusEl.className = "status sold";
@@ -107,7 +102,6 @@
   }
 
   function openModal(item) {
-    console.log('[modal] openModal item:', item);
     currentItem = item;
     photos = (item.dataset.photos || "")
       .split(",")

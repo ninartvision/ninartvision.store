@@ -202,9 +202,8 @@ async function fetchFeaturedArtworks(limit = null) {
   if (_hit) return _hit;
 
   try {
-    // DEBUG: featured/status filters removed to show all artworks
     let query = `
-      *[_type == "artwork"]
+      *[_type == "artwork" && featured == true && status in ["sale", "sold"]]
       | order(coalesce(order, 999) asc, _createdAt desc)
     `;
 
@@ -237,7 +236,6 @@ async function fetchFeaturedArtworks(limit = null) {
       "seoTitle": seo.seoTitle,
       "seoDescription": seo.seoDescription,
       "keywords": seo.keywords,
-      showInShop,
       featured,
       "artist": artist->{
         _id,
@@ -252,7 +250,7 @@ async function fetchFeaturedArtworks(limit = null) {
     const data = await res.json();
 
     const result = data.result || [];
-    console.log('[featured] Sanity returned', result.length, 'artworks (debug — no filters)');
+    console.log('[featured] Sanity returned', result.length, 'featured artworks');
     cacheSet(_cKey, result);
     return result;
   } catch (err) {
@@ -276,7 +274,7 @@ async function fetchShopArtworks(limit = null) {
 
   try {
     let query = `
-      *[_type == "artwork" && status in ["published", "sold"] && artist->name == "Nini Mzhavia"]
+      *[_type == "artwork" && status in ["sale", "sold"] && artist->name == "Nini Mzhavia"]
       | order(coalesce(order, 999) asc, _createdAt desc)
     `;
 
@@ -347,7 +345,7 @@ async function fetchAllArtworks() {
 
   try {
     const query = `
-      *[_type == "artwork" && defined(image)]
+      *[_type == "artwork" && defined(image) && status in ["sale", "sold"]]
       | order(order asc, _createdAt desc) {
         _id,
         _createdAt,

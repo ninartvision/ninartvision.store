@@ -274,7 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .map(a => ({
           title: a.title || "Untitled",
           price: Number(String(a.price || '').replace(/[^\d.]/g, '')) || '',
-          status: a.status === "sold" ? "sold" : "sale",
+          status: a.status === "sold" ? "sold" : (a.status === "sale" ? "sale" : ""),
           size: a.size || "",
           medium: a.medium || "",
           year: a.year || "",
@@ -315,6 +315,8 @@ document.addEventListener("DOMContentLoaded", () => {
         data-img="${a.img}"
         data-artist="${artistSlug}"
         data-status="${a.status}"
+        data-is-sold="${String(a.status === 'sold')}"
+        data-is-on-sale="${String(a.status === 'sale')}"
         data-title="${a.title}"
         data-price="${a.price}"
         data-size="${a.size}"

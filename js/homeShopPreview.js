@@ -45,6 +45,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           : '';
 
         div.dataset.title = p.title || '';
+        div.dataset.status = p.status || '';
+        div.dataset.isSold = String(p.status === 'sold');
+        div.dataset.isOnSale = String(p.status === 'sale');
         div.dataset.price = String(p.price || '').replace(/[^\d.]/g, '');
         div.dataset.photos = (p.photos || [imgSrc]).join(',');
         div.dataset.desc = p.shortDescription || '';
@@ -85,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (featuredArtworks && featuredArtworks.length > 0) {
       // Use Sanity featured artworks with new image structure
       items = featuredArtworks.map(artwork => ({
-        status: artwork.status || 'sale',
+        status: artwork.status || '',
         title: artwork.title || 'Untitled',
         shortDescription: artwork.shortDescription || '',
         price: artwork.price || '',
