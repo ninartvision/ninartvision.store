@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ARTISTS DATA
  * 
  * To add a new artist or replace a placeholder:
@@ -13,7 +13,7 @@
  * {
  *   id: "johndoe",
  *   name: "John Doe",
- *   avatar: "images/artists/johndoe.jpg",
+ *   avatar: "images/artists/johndoe.webp",
  *   whatsapp: "995123456789",
  *   country: "georgia",
  *   style: "Contemporary Abstract",
@@ -25,7 +25,7 @@ window.ARTISTS = [
   {
     id: "nini",
     name: "Nini Mzhavia",
-    avatar: "images/artists/ninimzhavia.jpg",
+    avatar: "images/artists/ninimzhavia.webp",
     whatsapp: "995579388833",
     country: "georgia",
     style: "Contemporary Abstract & Impressionist",
@@ -34,7 +34,7 @@ window.ARTISTS = [
   {
     id: "mzia",
     name: "Mzia Kashia",
-    avatar: "images/artists/mziakashia.jpg",
+    avatar: "images/artists/mziakashia.webp",
     whatsapp: "995123456789",
     country: "georgia",
     style: "Impressionism with realism"
@@ -42,7 +42,7 @@ window.ARTISTS = [
   {
     id: "nanuli",
     name: "Nanuli Gogiberidze",
-    avatar: "images/artists/nanuligogiberidze.jpg",
+    avatar: "images/artists/nanuligogiberidze.webp",
     whatsapp: "995987654321",
     country: "georgia",
     style: "Decorative Impressionism"
@@ -50,7 +50,7 @@ window.ARTISTS = [
   {
     id: "artist4",
     name: "Artist 4",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000000",
     country: "georgia",
     style: "Impressionist painter"
@@ -58,7 +58,7 @@ window.ARTISTS = [
   {
     id: "artist5",
     name: "Artist 5",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000001",
     country: "georgia",
     style: "Impressionist painter"
@@ -66,7 +66,7 @@ window.ARTISTS = [
   {
     id: "artist6",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000002",
     country: "georgia",
     style: "Artist Style"
@@ -74,7 +74,7 @@ window.ARTISTS = [
   {
     id: "artist7",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000003",
     country: "georgia",
     style: "Artist Style"
@@ -82,7 +82,7 @@ window.ARTISTS = [
   {
     id: "artist8",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000004",
     country: "georgia",
     style: "Artist Style"
@@ -90,7 +90,7 @@ window.ARTISTS = [
   {
     id: "artist9",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000005",
     country: "georgia",
     style: "Artist Style"
@@ -98,7 +98,7 @@ window.ARTISTS = [
   {
     id: "artist10",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000006",
     country: "georgia",
     style: "Artist Style"
@@ -106,7 +106,7 @@ window.ARTISTS = [
   {
     id: "artist11",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000007",
     country: "georgia",
     style: "Artist Style"
@@ -114,7 +114,7 @@ window.ARTISTS = [
   {
     id: "artist12",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000008",
     country: "georgia",
     style: "Artist Style"
@@ -122,7 +122,7 @@ window.ARTISTS = [
   {
     id: "artist13",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000009",
     country: "georgia",
     style: "Artist Style"
@@ -130,7 +130,7 @@ window.ARTISTS = [
   {
     id: "artist14",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000010",
     country: "georgia",
     style: "Artist Style"
@@ -138,7 +138,7 @@ window.ARTISTS = [
   {
     id: "artist15",
     name: "Artist Name",
-    avatar: "images/artists/placeholder.jpg",
+    avatar: "images/artists/placeholder.webp",
     whatsapp: "995000000011",
     country: "georgia",
     style: "Artist Style"
@@ -152,23 +152,23 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 1",
-    keywords: "still life, ნატურმორტი, naturmort, flowers, floral, vase, fruits, botanical, table arrangement, colorful, acrylic on canvas, contemporary, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, interior, decorative",
+    keywords: "still life, ??????????, naturmort, flowers, floral, vase, fruits, botanical, table arrangement, colorful, acrylic on canvas, contemporary, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????, interior, decorative",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
     year: "2025",
     
-    img: "images/naturmort6.jpg",
+    img: "images/naturmort6.webp",
     photos: [
-      "images/naturmort6.jpg",
-      "images/naturmort1.jpg",
-      "images/naturmort2.jpg",
-      "images/naturmort3.jpg",
-      "images/naturmort4.jpg",
-      "images/naturmort5.jpg",
-      "images/naturmort7.png",
-      "images/naturmort8.png",
-      "images/naturmort9.png"
+      "images/naturmort6.webp",
+      "images/naturmort1.webp",
+      "images/naturmort2.webp",
+      "images/naturmort3.webp",
+      "images/naturmort4.webp",
+      "images/naturmort5.webp",
+      "images/naturmort7.webp",
+      "images/naturmort8.webp",
+      "images/naturmort9.webp"
     ],
     showInShop: true
   },
@@ -177,23 +177,23 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 2",
-    keywords: "abstract, აბსტრაქცია, abstract art, contemporary, modern, expressionism, emotion, color field, non-figurative, vibrant, bold colors, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, dynamic, energetic",
+    keywords: "abstract, ??????????, abstract art, contemporary, modern, expressionism, emotion, color field, non-figurative, vibrant, bold colors, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????, dynamic, energetic",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
     year: "2025",
     
-    img: "images/abstract3.jpg",
+    img: "images/abstract3.webp",
     photos: [
-      "images/abstract3.jpg",
-      "images/abstract7.jpg",
-      "images/abstract6.jpg",
-      "images/abstract8.jpg",
-      "images/abstract9.jpg",
-      "images/abstract10.jpg",
-      "images/abstract1.jpg",
-      "images/abstract2.jpg",
-      "images/abstract4.jpg"
+      "images/abstract3.webp",
+      "images/abstract7.webp",
+      "images/abstract6.webp",
+      "images/abstract8.webp",
+      "images/abstract9.webp",
+      "images/abstract10.webp",
+      "images/abstract1.webp",
+      "images/abstract2.webp",
+      "images/abstract4.webp"
     ],
     showInShop: true
   },
@@ -202,23 +202,23 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 3",
-    keywords: "garden, ბაღი, flowers, floral, nature, landscape, botanical, green, trees, summer, outdoor, bloom, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, impressionism, colorful, lush",
+    keywords: "garden, ????, flowers, floral, nature, landscape, botanical, green, trees, summer, outdoor, bloom, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????, impressionism, colorful, lush",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
     year: "2025",
     
-    img: "images/garden9.jpg",
+    img: "images/garden9.webp",
     photos: [
-      "images/garden9.jpg",
-      "images/garden8.jpg",
-      "images/garden7.jpg",
-      "images/garden6.jpg",
-      "images/garden5.jpg",
-      "images/garden3.jpg",
-      "images/garden2.jpg",
-      "images/garden4.jpg",
-      "images/garden1.jpg"
+      "images/garden9.webp",
+      "images/garden8.webp",
+      "images/garden7.webp",
+      "images/garden6.webp",
+      "images/garden5.webp",
+      "images/garden3.webp",
+      "images/garden2.webp",
+      "images/garden4.webp",
+      "images/garden1.webp"
     ],
     showInShop: true
   },
@@ -227,20 +227,20 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 4",
-    keywords: "sea, ზღვა, ocean, seascape, water, waves, blue, marine, coastal, Black Sea, შავი ზღვა, landscape, nature, calm, horizon, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "sea, ????, ocean, seascape, water, waves, blue, marine, coastal, Black Sea, ???? ????, landscape, nature, calm, horizon, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 250,
     size: "40 x 50 cm",
     medium: "Acrylic on canvas",
     year: "2025",
     
-    img: "images/sea4.jpg",
+    img: "images/sea4.webp",
     photos: [
-      "images/sea4.jpg",
-      "images/sea2.jpg",
-      "images/sea8.jpg",
-      "images/sea5.jpg",
-      "images/sea6.jpg",
-      "images/sea7.jpg"
+      "images/sea4.webp",
+      "images/sea2.webp",
+      "images/sea8.webp",
+      "images/sea5.webp",
+      "images/sea6.webp",
+      "images/sea7.webp"
     ],
     showInShop: true
   },
@@ -249,23 +249,23 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 5",
-    keywords: "rose, ვარდი, roses, red rose, flowers, floral, botanical, still life, bloom, blossom, romantic, oil, oil on canvas, ზეთი, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, classic, elegant",
+    keywords: "rose, ?????, roses, red rose, flowers, floral, botanical, still life, bloom, blossom, romantic, oil, oil on canvas, ????, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????, classic, elegant",
     price: 300,
     size: "40 x 50 cm",
     medium: "Oil on canvas",
     year: "2025",
     
-    img: "images/rose1.jpg",
+    img: "images/rose1.webp",
     photos: [
-      "images/rose1.jpg",
-      "images/rose6.jpg",
-      "images/rose7.jpg",
-      "images/rose8.jpg",
-      "images/rose4.jpg",
-      "images/rose3.jpg",
-      "images/rose2.jpg",
-      "images/rose9.jpg",
-      "images/rose11.png"
+      "images/rose1.webp",
+      "images/rose6.webp",
+      "images/rose7.webp",
+      "images/rose8.webp",
+      "images/rose4.webp",
+      "images/rose3.webp",
+      "images/rose2.webp",
+      "images/rose9.webp",
+      "images/rose11.webp"
     ],
     showInShop: true
   },
@@ -274,22 +274,22 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 6",
-    keywords: "sea, ზღვა, ocean, seascape, sunset, orange sunset, warm colors, dramatic sky, coastal, marine, dusk, evening, Black Sea, შავი ზღვა, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, vibrant, atmospheric",
+    keywords: "sea, ????, ocean, seascape, sunset, orange sunset, warm colors, dramatic sky, coastal, marine, dusk, evening, Black Sea, ???? ????, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????, vibrant, atmospheric",
     price: 350,
     size: "60 x 80 cm",
     medium: "Acrylic on canvas",
     year: "2025",
     
-    img: "images/seaorange8.jpg",
+    img: "images/seaorange8.webp",
     photos: [
-      "images/seaorange8.jpg",
-      "images/seaorange6.jpg",
-      "images/seaorange3.jpg",
-      "images/seaorange2.jpg",
-      "images/seaorange1.jpg",
-      "images/seaorange4.jpg",
-      "images/seaorange7.jpg",
-      "images/seaorange5.jpg"
+      "images/seaorange8.webp",
+      "images/seaorange6.webp",
+      "images/seaorange3.webp",
+      "images/seaorange2.webp",
+      "images/seaorange1.webp",
+      "images/seaorange4.webp",
+      "images/seaorange7.webp",
+      "images/seaorange5.webp"
     ],
     showInShop: true
   },
@@ -298,21 +298,21 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 7",
-    keywords: "lily, შროშანი, ლილია, lilies, lily flowers, flowers, floral, botanical, still life, pink, white, elegant, bloom, blossom, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, delicate, spring",
+    keywords: "lily, ???????, ?????, lilies, lily flowers, flowers, floral, botanical, still life, pink, white, elegant, bloom, blossom, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????, delicate, spring",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
     year: "2025",
     
-    img: "images/lily8.jpg",
+    img: "images/lily8.webp",
     photos: [
-      "images/lily8.jpg",
-      "images/lily9.jpg",
-      "images/lily14.jpg",
-      "images/lily12.jpg",
-      "images/lily15.jpg",
-      "images/lily10.jpg",
-      "images/lily11.jpg"
+      "images/lily8.webp",
+      "images/lily9.webp",
+      "images/lily14.webp",
+      "images/lily12.webp",
+      "images/lily15.webp",
+      "images/lily10.webp",
+      "images/lily11.webp"
     ],
     showInShop: true
   },
@@ -321,20 +321,20 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 8",
-    keywords: "swan, გედი, bird, wildlife, water, lake, pond, white, graceful, elegant, peaceful, nature, aquatic, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, small painting",
+    keywords: "swan, ????, bird, wildlife, water, lake, pond, white, graceful, elegant, peaceful, nature, aquatic, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????, small painting",
     price: 50,
     size: "20 x 30 cm",
     medium: "acrylic on canvas",
     year: "2025",
     
-    img: "images/swan1.jpg",
+    img: "images/swan1.webp",
     photos: [
-      "images/swan1.jpg",
-      "images/swan3.jpg",
-      "images/swan4.jpg",
-      "images/swan2.jpg",
-      "images/swan6.jpg",
-      "images/swan5.png"
+      "images/swan1.webp",
+      "images/swan3.webp",
+      "images/swan4.webp",
+      "images/swan2.webp",
+      "images/swan6.webp",
+      "images/swan5.webp"
     ],
     showInShop: true
   },
@@ -343,19 +343,19 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 9",
-    keywords: "water lily, ვარდისფერი შროშანი, lotus, ლოტოსი, waterlily, water flower, pond, aquatic, nature, pink, white, bloom, serene, peaceful, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "water lily, ?????????? ???????, lotus, ??????, waterlily, water flower, pond, aquatic, nature, pink, white, bloom, serene, peaceful, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 200,
     size: "30 x 40 cm",
     medium: "acrylic on canvas",
     year: "2025",
    
-    img: "images/waterlily1.jpg",
+    img: "images/waterlily1.webp",
     photos: [
-      "images/waterlily1.jpg",
-      "images/waterlily3.jpg",
-      "images/waterlily5.jpg",
-      "images/waterlily6.png",
-      "images/waterlily7.png"
+      "images/waterlily1.webp",
+      "images/waterlily3.webp",
+      "images/waterlily5.webp",
+      "images/waterlily6.webp",
+      "images/waterlily7.webp"
     ],
     showInShop: true
   },
@@ -364,15 +364,15 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sale",
     title: "Painting 10",
-    keywords: "boat, ნავი, sea, ზღვა, nautical, marine, water, coastal, vessel, seascape, river, sail, sailing, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, small painting",
+    keywords: "boat, ????, sea, ????, nautical, marine, water, coastal, vessel, seascape, river, sail, sailing, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????, small painting",
     price: 50,
     size: "20 x 30 cm",
     medium: "acrylic on canvas",
     year: "2025",
   
-    img: "images/boat.jpg",
+    img: "images/boat.webp",
     photos: [
-      "images/boat.jpg"
+      "images/boat.webp"
     ],
     showInShop: true
   },
@@ -381,17 +381,17 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "Sold ",
-    keywords: "deer, ირემი, stag, animal, wildlife, forest, woodland, nature, fauna, autumn, wild, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "deer, ?????, stag, animal, wildlife, forest, woodland, nature, fauna, autumn, wild, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 250,
     size: "30 x 40 cm",
     medium: "acrylic on canvas",
     year: "2025",
-    img: "images/deer5.jpg",
+    img: "images/deer5.webp",
     photos: [
-      "images/deer5.jpg",
-      "images/deer3.jpg",
-      "images/deer2.jpg",
-      "images/deer4.jpg",
+      "images/deer5.webp",
+      "images/deer3.webp",
+      "images/deer2.webp",
+      "images/deer4.webp",
       
     ],
     showInShop: true
@@ -401,20 +401,20 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
-    keywords: "Jvari, ჯვარი, Georgian cross, cross, church, Christian, religious, Georgia, Mtskheta, მცხეთა, sacred, spiritual, landmark, architecture, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია, heritage",
+    keywords: "Jvari, ?????, Georgian cross, cross, church, Christian, religious, Georgia, Mtskheta, ??????, sacred, spiritual, landmark, architecture, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????, heritage",
     price: 350,
     size: "30 x 40 cm",
     medium: "acrylic on canvas",
     year: "2025",
-    img: "images/jvari7.jpg",
+    img: "images/jvari7.webp",
     photos: [
-      "images/jvari7.jpg",
-      "images/jvari1.jpg",
-      "images/jvari3.jpg",
-      "images/jvari4.jpg",
-      "images/jvari2.jpg",
-      "images/jvari6.jpg",
-      "images/jvari5.jpg"
+      "images/jvari7.webp",
+      "images/jvari1.webp",
+      "images/jvari3.webp",
+      "images/jvari4.webp",
+      "images/jvari2.webp",
+      "images/jvari6.webp",
+      "images/jvari5.webp"
     ],
     showInShop: true
   },
@@ -423,19 +423,19 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
-    keywords: "children, ბავშვები, kids, childhood, figurative, people, portrait, group scene, narrative, playful, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "children, ????????, kids, childhood, figurative, people, portrait, group scene, narrative, playful, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 300,
     size: "30 x 40 cm",
     medium: "acrylic on canvas",
     year: "2025",
-    img: "images/kids3.jpg",
+    img: "images/kids3.webp",
     photos: [
-      "images/kids3.jpg",
-      "images/kids1.jpg",
-      "images/kids2.jpg",
-      "images/kids8.jpg",
-      "images/kids5.jpg",
-      "images/kids4.jpg"
+      "images/kids3.webp",
+      "images/kids1.webp",
+      "images/kids2.webp",
+      "images/kids8.webp",
+      "images/kids5.webp",
+      "images/kids4.webp"
     ],
     showInShop: true
   },
@@ -444,19 +444,19 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
-    keywords: "daffodil, ნარცისი, narcissus, daffodils, yellow flowers, floral, botanical, spring, still life, bloom, bright, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "daffodil, ???????, narcissus, daffodils, yellow flowers, floral, botanical, spring, still life, bloom, bright, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 250,
     size: "40 x 50 cm",
     medium: "Acrylic on canvas",
     year: "2025",
-    img: "images/daffodils6.jpg",
+    img: "images/daffodils6.webp",
     photos: [
-      "images/daffodils6.jpg",
-      "images/daffodils4.jpg",
-      "images/daffodils1.jpg",
-      "images/daffodils3.jpg",
-      "images/daffodils2.jpg",
-      "images/daffodils5.jpg"
+      "images/daffodils6.webp",
+      "images/daffodils4.webp",
+      "images/daffodils1.webp",
+      "images/daffodils3.webp",
+      "images/daffodils2.webp",
+      "images/daffodils5.webp"
     ],
     showInShop: true
   },
@@ -465,19 +465,19 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
-    keywords: "lilac, იასამანი, purple lilac, violet, flowers, floral, botanical, spring, still life, blossom, fragrant, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "lilac, ????????, purple lilac, violet, flowers, floral, botanical, spring, still life, blossom, fragrant, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 250,
     size: "40 x 50 cm",
     medium: "acrylic on canvas",
     year: "2025",
-    img: "images/lilac6.jpg",
+    img: "images/lilac6.webp",
     photos: [
-      "images/lilac6.jpg",
-      "images/lilac2.jpg",
-      "images/lilac3.jpg",
-      "images/lilac4.jpg",
-      "images/lilac5.jpg",
-      "images/lilac1.jpg",
+      "images/lilac6.webp",
+      "images/lilac2.webp",
+      "images/lilac3.webp",
+      "images/lilac4.webp",
+      "images/lilac5.webp",
+      "images/lilac1.webp",
       
     ],
     showInShop: true
@@ -487,26 +487,26 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
-    keywords: "Svaneti, სვანეთი, mountain, Georgian highlands, Caucasus, landscape, village, Svan tower, სვანური კოშკი, snow, alpine, travel, Georgia, nature, scenic, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "Svaneti, ???????, mountain, Georgian highlands, Caucasus, landscape, village, Svan tower, ??????? ?????, snow, alpine, travel, Georgia, nature, scenic, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 300,
     size: "50 x 70 cm",
     medium: "acrylic on canvas",
     year: "2026",
-    img: "images/svaneti10.jpg",
+    img: "images/svaneti10.webp",
     photos: [
-      "images/svaneti10.jpg",
-      "images/svaneti4.jpg",
-      "images/svaneti6.jpg",
-      "images/svaneti2.jpg",
-      "images/svaneti1.jpg",
-      "images/svaneti5.jpg",
-      "images/svaneti9.jpg",
-      "images/svaneti8.jpg",
-      "images/svaneti11.jpg",
-      "images/svaneti12.jpg",
-      "images/svaneti13.jpg",
-      "images/svaneti14.jpg",
-      "images/svaneti15.jpg"
+      "images/svaneti10.webp",
+      "images/svaneti4.webp",
+      "images/svaneti6.webp",
+      "images/svaneti2.webp",
+      "images/svaneti1.webp",
+      "images/svaneti5.webp",
+      "images/svaneti9.webp",
+      "images/svaneti8.webp",
+      "images/svaneti11.webp",
+      "images/svaneti12.webp",
+      "images/svaneti13.webp",
+      "images/svaneti14.webp",
+      "images/svaneti15.webp"
     ],
     showInShop: true
   },
@@ -515,20 +515,20 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold",
-    keywords: "grandfather, ბაბუა, elder, old man, figurative, portrait, Georgian figure, village life, Georgian heritage, storytelling, traditional, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "grandfather, ?????, elder, old man, figurative, portrait, Georgian figure, village life, Georgian heritage, storytelling, traditional, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 350,
     size: "60 x 80 cm",
     medium: "acrylic on canvas",
     year: "2025",
-    img: "images/babuacvera4.jpg",
+    img: "images/babuacvera4.webp",
     photos: [
-      "images/babuacvera4.jpg",
-      "images/babuacvera3.jpg",
-      "images/babuacvera2.jpg",
-      "images/babuacvera1.jpg",
-      "images/babuacvera5.jpg",
-      "images/babuacvera6.jpg",
-      "images/babuacvera7.jpg"
+      "images/babuacvera4.webp",
+      "images/babuacvera3.webp",
+      "images/babuacvera2.webp",
+      "images/babuacvera1.webp",
+      "images/babuacvera5.webp",
+      "images/babuacvera6.webp",
+      "images/babuacvera7.webp"
     ],
     showInShop: true
   },
@@ -537,18 +537,18 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold",
-    keywords: "Jvari Monastery, ჯვრის მონასტერი, monastery, church, Georgian Orthodox, architecture, Mtskheta, მცხეთა, landmark, UNESCO, heritage, sacred, spiritual, historic, Georgia, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "Jvari Monastery, ????? ?????????, monastery, church, Georgian Orthodox, architecture, Mtskheta, ??????, landmark, UNESCO, heritage, sacred, spiritual, historic, Georgia, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 400,
     size: "60 x 80 cm",
     medium: "acrylic on canvas",
     year: "2025",
-    img: "images/jvarimonastery5.jpg",
+    img: "images/jvarimonastery5.webp",
     photos: [
-      "images/jvarimonastery5.jpg",
-      "images/jvarimonastery2.jpg",
-      "images/jvarimonastery1.jpg",
-      "images/jvarimonastery4.jpg",
-      "images/jvarimonastery3.jpg"
+      "images/jvarimonastery5.webp",
+      "images/jvarimonastery2.webp",
+      "images/jvarimonastery1.webp",
+      "images/jvarimonastery4.webp",
+      "images/jvarimonastery3.webp"
     ],
     showInShop: true
   },
@@ -557,22 +557,22 @@ window.ARTWORKS = [
     artist: "nini",
     status: "sold",
     title: "sold ",
-    keywords: "dream, ოცნება, სიზმარი, fantasy, surreal, imaginative, lyrical, emotional, visionary, colorful, abstract, expressive, large format, acrylic on canvas, Georgian art, ქართული ხელოვნება, Nini Mzhavia, ნინი მჟავია",
+    keywords: "dream, ??????, ???????, fantasy, surreal, imaginative, lyrical, emotional, visionary, colorful, abstract, expressive, large format, acrylic on canvas, Georgian art, ??????? ?????????, Nini Mzhavia, ???? ??????",
     price: 500,
     size: "80 x 100 cm",
     medium: "acrylic on canvas",
     year: "2025",
-    img: "images/dream9.jpg",
+    img: "images/dream9.webp",
     photos: [
-      "images/dream9.jpg",
-      "images/dream3.jpg",
-      "images/dream4.jpg",
-      "images/dream5.jpg",
-      "images/dream6.jpg",
-      "images/dream7.jpg",
-      "images/dream8.jpg",
-      "images/dream10.jpg",
-      "images/dream2.jpg"
+      "images/dream9.webp",
+      "images/dream3.webp",
+      "images/dream4.webp",
+      "images/dream5.webp",
+      "images/dream6.webp",
+      "images/dream7.webp",
+      "images/dream8.webp",
+      "images/dream10.webp",
+      "images/dream2.webp"
     ],
     showInShop: true
   },
@@ -586,11 +586,11 @@ window.ARTWORKS = [
     medium: "Oil on canvas",
     year: "1980",
     desc: "This artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia1.jpg",
+    img: "images/artists/mziakashia/mziakashia1.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia1.jpg"
+      "images/artists/mziakashia/mziakashia1.webp"
     ],
-    keywords: "oil on canvas, ზეთი, impressionism, realism, classic, figurative, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, vintage, 1980s",
+    keywords: "oil on canvas, ????, impressionism, realism, classic, figurative, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????, vintage, 1980s",
     showInShop: false
   },
   {
@@ -603,11 +603,11 @@ window.ARTWORKS = [
     medium: "Oil on canvas",
     year: "1980",
     desc: "This artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia2.jpg",
+    img: "images/artists/mziakashia/mziakashia2.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia2.jpg"
+      "images/artists/mziakashia/mziakashia2.webp"
     ],
-    keywords: "oil on canvas, ზეთი, impressionism, realism, classic, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, vintage, 1980s",
+    keywords: "oil on canvas, ????, impressionism, realism, classic, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????, vintage, 1980s",
     showInShop: false
   },
   {
@@ -620,11 +620,11 @@ window.ARTWORKS = [
     medium: "acrylic on canvas",
     year: "2020",
     desc: "This artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia3.jpg",
+    img: "images/artists/mziakashia/mziakashia3.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia3.jpg"
+      "images/artists/mziakashia/mziakashia3.webp"
     ],
-    keywords: "acrylic on canvas, contemporary, impressionism, realism, colorful, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
+    keywords: "acrylic on canvas, contemporary, impressionism, realism, colorful, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????",
     showInShop: false
   },
   {
@@ -637,11 +637,11 @@ window.ARTWORKS = [
     medium: "oil on canvas",
     year: "2020",
     desc: "his artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia8.jpg",
+    img: "images/artists/mziakashia/mziakashia8.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia8.jpg"
+      "images/artists/mziakashia/mziakashia8.webp"
     ],
-    keywords: "oil on canvas, ზეთი, impressionism, realism, expressive, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
+    keywords: "oil on canvas, ????, impressionism, realism, expressive, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????",
     showInShop: false
   },
   {
@@ -654,11 +654,11 @@ window.ARTWORKS = [
     medium: "acrylic on canvas",
     year: "2020",
     desc: "This artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia5.jpg",
+    img: "images/artists/mziakashia/mziakashia5.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia5.jpg"
+      "images/artists/mziakashia/mziakashia5.webp"
     ],
-    keywords: "acrylic on canvas, contemporary, impressionism, realism, colorful, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
+    keywords: "acrylic on canvas, contemporary, impressionism, realism, colorful, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????",
     showInShop: false
   },
   {
@@ -671,11 +671,11 @@ window.ARTWORKS = [
     medium: "acrylic on canvas",
     year: "2020",
     desc: "This artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia7.jpg",
+    img: "images/artists/mziakashia/mziakashia7.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia7.jpg"
+      "images/artists/mziakashia/mziakashia7.webp"
     ],
-    keywords: "acrylic on canvas, contemporary, impressionism, realism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
+    keywords: "acrylic on canvas, contemporary, impressionism, realism, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????",
     showInShop: false
   },
   {
@@ -688,11 +688,11 @@ window.ARTWORKS = [
     medium: "acrylic on canvas",
     year: "2020",
     desc: "This artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia4.jpg",
+    img: "images/artists/mziakashia/mziakashia4.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia4.jpg"
+      "images/artists/mziakashia/mziakashia4.webp"
     ],
-    keywords: "acrylic on canvas, contemporary, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
+    keywords: "acrylic on canvas, contemporary, impressionism, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????",
     showInShop: false
   },
   {
@@ -705,11 +705,11 @@ window.ARTWORKS = [
     medium: "oil on canvas",
     year: "2020",
     desc: "his artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia6.jpg",
+    img: "images/artists/mziakashia/mziakashia6.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia6.jpg"
+      "images/artists/mziakashia/mziakashia6.webp"
     ],
-    keywords: "oil on canvas, ზეთი, impressionism, realism, expressive, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია",
+    keywords: "oil on canvas, ????, impressionism, realism, expressive, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????",
     showInShop: false
   },
   {
@@ -722,11 +722,11 @@ window.ARTWORKS = [
     medium: "Watercolour on paper",
     year: "1985",
     desc: "This artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia12.jpg",
+    img: "images/artists/mziakashia/mziakashia12.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia12.jpg"
+      "images/artists/mziakashia/mziakashia12.webp"
     ],
-    keywords: "watercolour, watercolor, აკვარელი, on paper, transparent, delicate, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage",
+    keywords: "watercolour, watercolor, ????????, on paper, transparent, delicate, impressionism, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????, 1985, vintage",
     showInShop: false
   },
   {
@@ -739,11 +739,11 @@ window.ARTWORKS = [
     medium: "Watercolour on paper",
     year: "1985",
     desc: "This artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia13.jpg",
+    img: "images/artists/mziakashia/mziakashia13.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia13.jpg"
+      "images/artists/mziakashia/mziakashia13.webp"
     ],
-    keywords: "watercolour, watercolor, აკვარელი, on paper, transparent, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage",
+    keywords: "watercolour, watercolor, ????????, on paper, transparent, impressionism, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????, 1985, vintage",
     showInShop: false
   },
   {
@@ -756,11 +756,11 @@ window.ARTWORKS = [
     medium: "pastel on paper",
     year: "1985",
     desc: "This artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia9.jpg",
+    img: "images/artists/mziakashia/mziakashia9.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia9.jpg"
+      "images/artists/mziakashia/mziakashia9.webp"
     ],
-    keywords: "pastel, pastel on paper, soft, delicate, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage, small",
+    keywords: "pastel, pastel on paper, soft, delicate, impressionism, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????, 1985, vintage, small",
     showInShop: false
   },
   {
@@ -773,11 +773,11 @@ window.ARTWORKS = [
     medium: " on paper",
     year: "1985",
     desc: "his artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia11.jpg",
+    img: "images/artists/mziakashia/mziakashia11.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia11.jpg"
+      "images/artists/mziakashia/mziakashia11.webp"
     ],
-    keywords: "on paper, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage, small",
+    keywords: "on paper, impressionism, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????, 1985, vintage, small",
     showInShop: false
   },
   {
@@ -790,11 +790,11 @@ window.ARTWORKS = [
     medium: "Watercolour on paper",
     year: "1985",
     desc: "his artwork has been sold.",
-    img: "images/artists/mziakashia/mziakashia10.jpg",
+    img: "images/artists/mziakashia/mziakashia10.webp",
     photos: [
-      "images/artists/mziakashia/mziakashia10.jpg"
+      "images/artists/mziakashia/mziakashia10.webp"
     ],
-    keywords: "watercolour, watercolor, აკვარელი, on paper, transparent, impressionism, Georgian art, ქართული ხელოვნება, Mzia Kashia, მზია კაშია, 1985, vintage",
+    keywords: "watercolour, watercolor, ????????, on paper, transparent, impressionism, Georgian art, ??????? ?????????, Mzia Kashia, ???? ?????, 1985, vintage",
     showInShop: false
   },
   {
@@ -802,15 +802,15 @@ window.ARTWORKS = [
     artist: "nanuli",
     status: "sale",
     title: "Nanuli Painting 1",
-    keywords: "tapestry, გობელენი, handwoven, textile art, woven, fabric art, decorative, impressionism, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, craft, traditional, handmade",
+    keywords: "tapestry, ????????, handwoven, textile art, woven, fabric art, decorative, impressionism, Georgian art, ??????? ?????????, Nanuli Gogiberidze, ?????? ??????????, craft, traditional, handmade",
     price: 300,
     size: "40 x 50 cm",
-    medium: "handwoven tapestry â€“ áƒ’áƒáƒ‘áƒ”áƒšáƒ”áƒœáƒ˜",
+    medium: "handwoven tapestry – გობელენი",
     year: "2025",
     desc: "Original artwork by Nanuli Gogiberidze.",
-    img: "images/artists/nanuligogiberidze/nanuli1.jpg",
+    img: "images/artists/nanuligogiberidze/nanuli1.webp",
     photos: [
-      "images/artists/nanuligogiberidze/nanuli1.jpg"
+      "images/artists/nanuligogiberidze/nanuli1.webp"
     ],
     showInShop: false
   },
@@ -819,15 +819,15 @@ window.ARTWORKS = [
     artist: "nanuli",
     status: "sale",
     title: "Nanuli Painting 2",
-    keywords: "acrylic, acrylic on paper, decorative impressionism, colorful, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, contemporary, expressive, large format",
+    keywords: "acrylic, acrylic on paper, decorative impressionism, colorful, Georgian art, ??????? ?????????, Nanuli Gogiberidze, ?????? ??????????, contemporary, expressive, large format",
     price: 360,
     size: "70 x 65 cm",
     medium: "acrylylic on paper",
     year: "2025",
     desc: "Original artwork by Nanuli Gogiberidze.",
-    img: "images/artists/nanuligogiberidze/nanuli2.jpg",
+    img: "images/artists/nanuligogiberidze/nanuli2.webp",
     photos: [
-      "images/artists/nanuligogiberidze/nanuli2.jpg"
+      "images/artists/nanuligogiberidze/nanuli2.webp"
     ],
     showInShop: false
   }
@@ -836,15 +836,15 @@ window.ARTWORKS = [
   artist: "nanuli",
   status: "sale",
   title: "Nanuli Painting 3",
-  keywords: "pastel, pastel on paper, soft colors, delicate, decorative, impressionism, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, small painting, intimate",
+  keywords: "pastel, pastel on paper, soft colors, delicate, decorative, impressionism, Georgian art, ??????? ?????????, Nanuli Gogiberidze, ?????? ??????????, small painting, intimate",
   price: 90,
   size: "15 x 20 cm",
   medium: "pastel on paper",
   year: "2025",
   desc: "Original artwork by Nanuli Gogiberidze.",
-  img: "images/artists/nanuligogiberidze/nanuli3.jpg",
+  img: "images/artists/nanuligogiberidze/nanuli3.webp",
   photos: [
-    "images/artists/nanuligogiberidze/nanuli3.jpg"
+    "images/artists/nanuligogiberidze/nanuli3.webp"
   ],
   showInShop: false
 },
@@ -853,15 +853,15 @@ window.ARTWORKS = [
   artist: "nanuli",
   status: "sale",
   title: "Nanuli Painting 4",
-  keywords: "pastel, pastel on paper, soft colors, decorative, impressionism, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, affordable, small format",
+  keywords: "pastel, pastel on paper, soft colors, decorative, impressionism, Georgian art, ??????? ?????????, Nanuli Gogiberidze, ?????? ??????????, affordable, small format",
   price: 150,
   size: "25 x 30 cm",
-  medium: "pastel on paper â€“",
+  medium: "pastel on paper –",
   year: "2025",
   desc: "Original artwork by Nanuli Gogiberidze.",
-  img: "images/artists/nanuligogiberidze/nanuli4.jpg",
+  img: "images/artists/nanuligogiberidze/nanuli4.webp",
   photos: [
-    "images/artists/nanuligogiberidze/nanuli4.jpg"
+    "images/artists/nanuligogiberidze/nanuli4.webp"
   ],
   showInShop: false
 },
@@ -870,15 +870,15 @@ window.ARTWORKS = [
   artist: "nanuli",
   status: "sale",
   title: "Nanuli Painting 5",
-  keywords: "oil, oil on canvas, ზეთი, decorative impressionism, colorful, Georgian art, ქართული ხელოვნება, Nanuli Gogiberidze, ნანული გოგიბერიძე, classic, expressive",
+  keywords: "oil, oil on canvas, ????, decorative impressionism, colorful, Georgian art, ??????? ?????????, Nanuli Gogiberidze, ?????? ??????????, classic, expressive",
   price: 250,
   size: "40 x 60 cm",
   medium: "oil on canvas",
   year: "2025",
   desc: "Original artwork by Nanuli Gogiberidze.",
-  img: "images/artists/nanuligogiberidze/nanuli5.jpg",
+  img: "images/artists/nanuligogiberidze/nanuli5.webp",
   photos: [
-    "images/artists/nanuligogiberidze/nanuli5.jpg"
+    "images/artists/nanuligogiberidze/nanuli5.webp"
   ],
   showInShop: false
 }

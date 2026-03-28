@@ -3079,7 +3079,7 @@ a.pill:visited{
 /* SUPPORT HERO */
 .support-hero {
   height: 75dvh;
-  background: url("./images/garden9.jpg") center / cover no-repeat;
+  background: url("./images/garden9.webp") center / cover no-repeat;
   position: relative;
   margin-top: 80px;
 }
@@ -4194,7 +4194,7 @@ a.pill:visited{
   display: block;
   width: 280px;
   height: 70px;
-  background-image: url("../images/line-hand.png");
+  background-image: url("../images/line-hand.webp");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left center;
@@ -4267,7 +4267,7 @@ a.pill:visited{
 .login-image {
   width: 340px;
   height: 240px;
-  background: url("/images/login-art.png") no-repeat center;
+  background: url("/images/login-art.webp") no-repeat center;
   background-size: contain;
   opacity: 0.9;
 }
@@ -4310,7 +4310,7 @@ a.pill:visited{
 .artists-art {
   width: 320px;
   height: 80px;
-  background-image: url("../images/artists-line.png");
+  background-image: url("../images/artists-line.webp");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;

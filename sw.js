@@ -15,7 +15,6 @@ const PRECACHE_URLS = [
   './images/logo.png',
   './images/logo.webp',
   './images/garden9.webp',
-  './images/garden9.jpg',
 ];
 
 // Install: pre-cache essential assets
