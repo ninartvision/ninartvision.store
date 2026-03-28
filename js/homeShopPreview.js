@@ -57,7 +57,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           p.title || '',
           p.keywords || ''
         ].map(s => s.trim()).filter(Boolean).join(' ').toLowerCase();
-        console.log('[homeShopPreview] rendered item:', p.title, '| searchBlob:', div.dataset.searchBlob.slice(0, 80));
 
         div.innerHTML = `
           <img src="${imgSrc}"${imgSrcset ? ` srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 350px"` : ''}
@@ -86,18 +85,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     const featuredArtworks = await fetchFeaturedArtworks();
     
     if (featuredArtworks && featuredArtworks.length > 0) {
-      // Use Sanity featured artworks with new image structure
-      items = featuredArtworks.map(artwork => ({
-        status: artwork.status || '',
-        title: artwork.title || 'Untitled',
-        shortDescription: artwork.shortDescription || '',
-        price: artwork.price || '',
-        keywords: artwork.keywords || '',
-        // Prefer explicit asset URL, fall back to older shapes
-        image: artwork.image?.asset?.url || (Array.isArray(artwork.images) && artwork.images[0]?.asset?.url) || artwork.image || 'images/placeholder.jpg',
-        photos: Array.isArray(artwork.images) ? artwork.images.map(i => i?.asset?.url).filter(Boolean) : (artwork.image?.asset?.url ? [artwork.image.asset.url] : []),
-        alt: artwork.image?.alt || artwork.title || 'Artwork'
-      }));
+      // Use Sanity featured artworks — only Nini Mzhavia, deduplicated by _id
+      const seen = new Set();
+      items = featuredArtworks
+        .filter(a => a.artist?.name === 'Nini Mzhavia')
+        .filter(a => { if (!a._id || seen.has(a._id)) return false; seen.add(a._id); return true; })
+        .map(artwork => ({
+          id: artwork._id,
+          status: artwork.status || '',
+          title: artwork.title || 'Untitled',
+          shortDescription: artwork.shortDescription || '',
+          price: artwork.price || '',
+          keywords: artwork.keywords || '',
+          // Prefer explicit asset URL, fall back to older shapes
+          image: artwork.image?.asset?.url || (Array.isArray(artwork.images) && artwork.images[0]?.asset?.url) || artwork.image || 'images/placeholder.jpg',
+          photos: Array.isArray(artwork.images) ? artwork.images.map(i => i?.asset?.url).filter(Boolean) : (artwork.image?.asset?.url ? [artwork.image.asset.url] : []),
+          alt: artwork.image?.alt || artwork.title || 'Artwork'
+        }));
     } else {
       // Fallback to legacy data with showInShop filter
       if (window.ARTWORKS) {
