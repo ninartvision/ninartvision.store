@@ -38,6 +38,53 @@
   const productYear = document.getElementById("productYear");
   const productPrice = document.getElementById("productPrice");
 
+  function ensureStatusEl() {
+    if (!productPrice || !productPrice.parentElement) return null;
+    let statusEl = document.getElementById("productStatus");
+    if (!statusEl) {
+      statusEl = document.createElement("p");
+      statusEl.id = "productStatus";
+      statusEl.className = "status";
+      productPrice.insertAdjacentElement("afterend", statusEl);
+    }
+    return statusEl;
+  }
+
+  function setDetailStatus(item) {
+    const statusEl = ensureStatusEl();
+    if (!statusEl) return;
+
+    const classStatus = item.classList.contains("sold")
+      ? "sold"
+      : (item.classList.contains("sale") || item.classList.contains("published"))
+      ? "sale"
+      : "";
+    const rawStatus = String(item?.dataset?.status || classStatus).toLowerCase().trim();
+    const isSoldFlag = String(item?.dataset?.isSold || "").toLowerCase() === "true";
+    const isOnSaleFlag = String(item?.dataset?.isOnSale || "").toLowerCase() === "true";
+
+    const isSold = isSoldFlag || rawStatus === "sold" || item.classList.contains("sold");
+    const isOnSale = !isSold && (isOnSaleFlag || rawStatus === "sale" || rawStatus === "published" || item.classList.contains("sale") || item.classList.contains("published"));
+
+    if (isSold) {
+      statusEl.className = "status sold";
+      statusEl.textContent = "Sold";
+      statusEl.style.display = "block";
+      return;
+    }
+
+    if (isOnSale) {
+      statusEl.className = "status sale";
+      statusEl.textContent = "Sale";
+      statusEl.style.display = "block";
+      return;
+    }
+
+    statusEl.className = "status";
+    statusEl.textContent = "";
+    statusEl.style.display = "none";
+  }
+
   const productThumbs = document.getElementById("productThumbs");
   const galleryPrev = document.getElementById("galleryPrev");
   const galleryNext = document.getElementById("galleryNext");
@@ -60,6 +107,7 @@
   }
 
   function openModal(item) {
+    console.log('[modal] openModal item:', item);
     currentItem = item;
     photos = (item.dataset.photos || "")
       .split(",")
@@ -100,6 +148,7 @@
     productMedium.textContent = item.dataset.medium || "";
     productYear.textContent = item.dataset.year || "";
     productPrice.textContent = fmtPrice(item.dataset.price);
+    setDetailStatus(item);
 
     if (productThumbs) {
       productThumbs.innerHTML = "";

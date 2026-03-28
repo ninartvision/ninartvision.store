@@ -1631,6 +1631,21 @@ img, video {
   font-weight: 900;
 }
 
+.product-right .status {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.product-right .status.sold {
+  color: red;
+  font-weight: 600;
+}
+
+.product-right .status.sale {
+  color: green;
+  font-weight: 600;
+}
+
 @media(max-width: 900px){
   .product-layout{
     grid-template-columns: 1fr;
@@ -2780,6 +2795,11 @@ a.pill:visited{
 .product-buy .product-price{
   flex: 0 0 auto;
   order: 1;
+}
+
+.product-buy .status{
+  order: 4;
+  width: 100%;
 }
 
 .product-buy #addToCartBtn{
