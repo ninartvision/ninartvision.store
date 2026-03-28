@@ -1,4 +1,4 @@
-(async function () {
+﻿(async function () {
   /* ---------------------------
      GET ARTIST SLUG
   --------------------------- */
@@ -188,7 +188,7 @@
         </div>
         <div class="shop-meta">
           <span>${a.title || 'Untitled'}</span>
-          ${a.price ? `<span class="price">₾${a.price}</span>` : ''}
+          ${a.price ? `<span class="price">\u20BE${a.price}</span>` : ''}
         </div>
       </div>
     `

@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+﻿document.addEventListener("DOMContentLoaded", () => {
   const grid = document.getElementById("shopGrid");
   const title = document.querySelector(".artist-name");
   const avatar = document.getElementById("artistAvatar");
@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div class="shop-meta">
           <span>${a.title}</span>
-          ${a.price ? `<span class="price">₾${a.price}</span>` : ""}
+          ${a.price ? `<span class="price">\u20BE${a.price}</span>` : ""}
         </div>
         ${a.description ? `<div class="artwork-description">${a.description}</div>` : ""}
       </div>

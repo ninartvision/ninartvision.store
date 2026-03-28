@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Shop page rendering — Nini Mzhavia artworks only.
  * No artist filter, no search, no unnecessary state.
  * NEVER falls back to window.ARTWORKS (would show all artists).
@@ -94,7 +94,7 @@ function renderAllItems(artworksData) {
       ${a.status === 'sold' ? '<div class="sold-badge"></div>' : ''}
       <div class="shop-meta">
         <span>${a.title}</span>
-        <span class="price">₾${a.price}</span>
+        <span class="price">\u20BE${a.price}</span>
       </div>
     `;
     frag.appendChild(div);

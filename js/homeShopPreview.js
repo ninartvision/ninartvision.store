@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Home Shop Preview - Artworks Section
  * Displays artworks with showInShop === true
  * Auto-rotation and SALE/SOLD filtering
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           : '';
 
         div.dataset.title = p.title || '';
-        div.dataset.price = (p.price || '').replace('₾', '');
+        div.dataset.price = (p.price || '').replace('\u20BE', '');
         div.dataset.photos = (p.photos || [imgSrc]).join(',');
         div.dataset.desc = p.shortDescription || '';
         div.dataset.keywords = p.keywords || '';
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         status: artwork.status || 'sale',
         title: artwork.title || 'Untitled',
         shortDescription: artwork.shortDescription || '',
-        price: artwork.price ? `₾${artwork.price}` : '',
+        price: artwork.price ? `\u20BE${artwork.price}` : '',
         keywords: artwork.keywords || '',
         // Prefer explicit asset URL, fall back to older shapes
         image: artwork.image?.asset?.url || (Array.isArray(artwork.images) && artwork.images[0]?.asset?.url) || artwork.image || 'images/placeholder.jpg',
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               status: a.status || 'sale',
               title: a.title || 'Untitled',
               shortDescription: a.shortDescription || a.desc || '',
-              price: a.price ? `₾${a.price}` : '',
+              price: a.price ? `\u20BE${a.price}` : '',
               keywords: a.keywords || '',
               image: (a.img || '').toLowerCase(),
               photos: a.photos || [a.img],
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           status: a.status || 'sale',
           title: a.title || 'Untitled',
           shortDescription: a.shortDescription || a.desc || '',
-          price: a.price ? `₾${a.price}` : '',
+          price: a.price ? `\u20BE${a.price}` : '',
           keywords: a.keywords || '',
           image: (a.img || '').toLowerCase(),
           photos: a.photos || [a.img],

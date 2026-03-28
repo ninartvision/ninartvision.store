@@ -1,4 +1,4 @@
-/**
+﻿/**
  * DEFENSIVE RENDERING UTILITIES
  * Production-safe helper functions for DOM manipulation
  */
@@ -156,7 +156,7 @@ function safeJoin(arr, separator = ',', fallback = '') {
  * @param {string} fallback - Fallback if price is invalid
  * @returns {string}
  */
-function formatPrice(price, currency = '₾', fallback = '') {
+function formatPrice(price, currency = '\u20BE', fallback = '') {
   if (!price || price === 0 || price === '0') return fallback;
   return `${currency}${price}`;
 }

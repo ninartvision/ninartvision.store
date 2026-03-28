@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async () => {
+﻿document.addEventListener("DOMContentLoaded", async () => {
   const grid = document.getElementById("galleryGrid");
 
   if (!grid) {
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           </p>
 
           <div class="card-row">
-            <span class="price">₾${art.price || ""}</span>
+            <span class="price">\u20BE${art.price || ""}</span>
 
             <div class="buy-row">
               ${

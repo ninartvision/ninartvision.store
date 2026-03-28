@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+﻿document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
      MOBILE MENU
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
     productSize.textContent = item.dataset.size || "";
     productMedium.textContent = item.dataset.medium || "";
     productYear.textContent = item.dataset.year || "";
-    productPrice.textContent = "₾" + (item.dataset.price || "");
+    productPrice.textContent = "\u20BE" + (item.dataset.price || "");
 
     if (productThumbs) {
       productThumbs.innerHTML = "";
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const msg = encodeURIComponent(
-      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ₾${price}`
+      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი \u20BE${price}`
     );
 
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
