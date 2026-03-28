@@ -18,8 +18,11 @@ const SANITY_CONFIG = {
    and fall through to a live fetch automatically.
 -------------------------------------------------- */
 const CACHE_TTL = 6 * 60 * 1000; // 6 minutes in ms
+// DEBUG: cache disabled — set to false to re-enable
+const CACHE_BYPASS = true;
 
 function cacheGet(key) {
+  if (CACHE_BYPASS) return null;
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return null;
@@ -30,6 +33,7 @@ function cacheGet(key) {
 }
 
 function cacheSet(key, data) {
+  if (CACHE_BYPASS) return;
   try {
     localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
   } catch (e) { /* storage quota exceeded — skip caching */ }
@@ -198,12 +202,9 @@ async function fetchFeaturedArtworks(limit = null) {
   if (_hit) return _hit;
 
   try {
+    // DEBUG: featured/status filters removed to show all artworks
     let query = `
-      *[
-        _type == "artwork" &&
-        featured == true &&
-        (!defined(status) || status in ["published", "sold"])
-      ]
+      *[_type == "artwork"]
       | order(coalesce(order, 999) asc, _createdAt desc)
     `;
 
@@ -251,6 +252,7 @@ async function fetchFeaturedArtworks(limit = null) {
     const data = await res.json();
 
     const result = data.result || [];
+    console.log('[featured] Sanity returned', result.length, 'artworks (debug — no filters)');
     cacheSet(_cKey, result);
     return result;
   } catch (err) {
@@ -265,8 +267,8 @@ async function fetchFeaturedArtworks(limit = null) {
    Falls back gracefully to static data.js if this returns empty.
 -------------------------------------------------- */
 async function fetchShopArtworks(limit = null) {
-  // v2: reference-based filter — never shows other artists even if name drifts
-  const _cKey = `nv_shop_nini_v2_${limit || 'all'}`;
+  // DEBUG: all filters removed — fetches every artwork to diagnose missing data
+  const _cKey = `nv_shop_debug_${limit || 'all'}`;
   const _hit = cacheGet(_cKey);
   if (_hit) {
     console.log('[shop] cache hit —', _hit.length, 'artworks');
@@ -275,14 +277,9 @@ async function fetchShopArtworks(limit = null) {
 
   try {
     let query = `
-      *[
-        _type == "artwork" &&
-        artist._ref in *[_type == "artist" && name == "Nini Mzhavia"]._id &&
-        (!defined(showInShop) || showInShop == true) &&
-        (!defined(status) || status in ["published", "sold", "sale"])
-      ]
+      *[_type == "artwork"]
       | order(coalesce(order, 999) asc, _createdAt desc)
-    `;
+    `;    // DEBUG: artist/showInShop/status filters temporarily removed
 
     if (limit) {
       query += `[0...${limit}]`;
@@ -327,7 +324,8 @@ async function fetchShopArtworks(limit = null) {
     const data = await res.json();
 
     const result = data.result || [];
-    console.log('[shop] Sanity returned', result.length, 'artworks for Nini Mzhavia');
+    console.log('[shop] Sanity returned', result.length, 'artworks total (debug — no filters)');
+    console.log('[shop] First 3:', result.slice(0, 3).map(a => ({ title: a.title, status: a.status, showInShop: a.showInShop, artist: a.artist?.name })));
     if (result.length) cacheSet(_cKey, result);
     return result;
   } catch (err) {

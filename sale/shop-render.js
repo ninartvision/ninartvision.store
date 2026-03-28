@@ -7,13 +7,13 @@
 // Bust any stale "all artworks" localStorage cache keys left from old code
 (function bustOldCache() {
   try {
-    ['nv_shop_all', 'nv_shop_nini_all', 'nv_shop_nini_null'].forEach(k => localStorage.removeItem(k));
-    // Also remove any nv_shop_* key that isn't the current v2 key
+    // DEBUG: clear ALL nv_shop_* and nv_artworks_* keys to force fresh fetch
     Object.keys(localStorage).forEach(k => {
-      if (k.startsWith('nv_shop_') && !k.startsWith('nv_shop_nini_v2')) {
+      if (k.startsWith('nv_shop_') || k.startsWith('nv_artworks_') || k.startsWith('nv_featured_')) {
         localStorage.removeItem(k);
       }
     });
+    console.log('[shop] All artwork caches cleared for debug');
   } catch (e) { /* ignore */ }
 })();
 
@@ -25,6 +25,8 @@ let allRenderedItems = [];
 function renderAllItems(artworksData) {
   const grid = document.getElementById('shopGrid');
   if (!grid) return;
+
+  console.log('[shop-render] renderAllItems called with', artworksData?.length ?? 0, 'items', artworksData);
 
   // STRICT: never use window.ARTWORKS — it contains all artists
   if (!artworksData || !artworksData.length) {
