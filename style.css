@@ -5362,6 +5362,10 @@ a.pill:visited{
 .nv-img-wrap { display: block; overflow: hidden; background-size: cover; background-position: center; }
 .nv-lqip { opacity: 0; transition: opacity .4s ease; will-change: opacity; }
 .nv-lqip.nv-loaded { opacity: 1; }
+/* Safe SVG defaults — prevent unstyled flash before external CSS loads */
+svg { overflow: hidden; }
+.social-icons svg { display: block; width: 18px; height: 18px; }
+.menu-social svg { display: block; width: 22px; height: 22px; }
 /* Respect user reduced-motion preference */
 @media (prefers-reduced-motion: reduce) {
   .nv-skeleton { animation: none; }
