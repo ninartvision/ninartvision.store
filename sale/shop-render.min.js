@@ -59,14 +59,12 @@ function renderAllItems(artworksData) {
       desc:   a.shortDescription || a.desc || a.description || '',
       keywords: a.keywords || '',
       imgSrc, srcset, lqip, photos,
-      showInShop: true, // always true — Sanity query already filters for showInShop
     };
   };
 
   const items = source
-    .filter(a => !a.artist || a.artist.name === 'Nini Mzhavia')
+    .filter(a => a.artist && a.artist.name === 'Nini Mzhavia')
     .map(normalize)
-    .filter(a => a.showInShop)
     .sort((a, b) =>
       a.status === 'sale' && b.status !== 'sale' ? -1 :
       a.status !== 'sale' && b.status === 'sale' ?  1 : 0

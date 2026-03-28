@@ -276,7 +276,7 @@ async function fetchShopArtworks(limit = null) {
 
   try {
     let query = `
-      *[_type == "artwork" && showInShop == true && artist->name == "Nini Mzhavia"]
+      *[_type == "artwork" && status in ["published", "sold"] && artist->name == "Nini Mzhavia"]
       | order(coalesce(order, 999) asc, _createdAt desc)
     `;
 
@@ -308,7 +308,6 @@ async function fetchShopArtworks(limit = null) {
       "seoTitle": seo.seoTitle,
       "seoDescription": seo.seoDescription,
       "keywords": seo.keywords,
-      showInShop,
       featured,
       "artist": artist->{
         _id,
@@ -323,7 +322,11 @@ async function fetchShopArtworks(limit = null) {
     const data = await res.json();
 
     const result = data.result || [];
-    console.log('[shop] Sanity returned', result.length, 'Nini Mzhavia artworks');
+    if (!result.length) {
+      console.warn('[shop] 0 results — raw Sanity response:', JSON.stringify(data));
+    } else {
+      console.log('[shop] Sanity returned', result.length, 'Nini Mzhavia artworks');
+    }
     if (result.length) cacheSet(_cKey, result);
     return result;
   } catch (err) {
