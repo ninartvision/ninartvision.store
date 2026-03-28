@@ -13,16 +13,56 @@
   const menuOverlay = document.getElementById("menuOverlay");
 
   if (openMenu && closeMenu && menuOverlay) {
-    openMenu.onclick = () => menuOverlay.classList.add("active");
-    closeMenu.onclick = () => menuOverlay.classList.remove("active");
-    
-    // Close menu when clicking on menu links
-    const menuLinks = menuOverlay.querySelectorAll(".menu-link");
-    menuLinks.forEach(link => {
-      link.addEventListener("click", () => {
+    // Prevent duplicate binding when script is loaded in different page contexts.
+    if (!menuOverlay.dataset.menuBound) {
+      menuOverlay.dataset.menuBound = "1";
+
+      let lastTouchOpenTs = 0;
+
+      const openMobileMenu = (ev) => {
+        ev?.preventDefault();
+        ev?.stopPropagation();
+        menuOverlay.classList.add("active");
+      };
+
+      const closeMobileMenu = (ev) => {
+        ev?.preventDefault();
+        ev?.stopPropagation();
         menuOverlay.classList.remove("active");
+      };
+
+      openMenu.addEventListener("touchend", (ev) => {
+        lastTouchOpenTs = Date.now();
+        openMobileMenu(ev);
+      }, { passive: false });
+
+      openMenu.addEventListener("click", (ev) => {
+        // Ignore synthetic click right after touch to avoid instant close race.
+        if (Date.now() - lastTouchOpenTs < 400) return;
+        openMobileMenu(ev);
       });
-    });
+
+      closeMenu.addEventListener("click", closeMobileMenu);
+      closeMenu.addEventListener("touchend", closeMobileMenu, { passive: false });
+
+      // Close when clicking on a menu link.
+      const menuLinks = menuOverlay.querySelectorAll(".menu-link");
+      menuLinks.forEach(link => {
+        link.addEventListener("click", () => menuOverlay.classList.remove("active"));
+      });
+
+      // Close only when tapping/clicking the backdrop itself.
+      menuOverlay.addEventListener("click", (ev) => {
+        if (ev.target === menuOverlay) {
+          closeMobileMenu(ev);
+        }
+      });
+
+      // Keep clicks inside menu content from bubbling to backdrop/document handlers.
+      menuOverlay.querySelector(".menu-links")?.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+      });
+    }
   }
 
   /* =========================

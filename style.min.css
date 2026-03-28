@@ -3760,20 +3760,20 @@ a.pill:visited{
 .news-title .title-ka{
   display: block;
   font-weight: 800;
-  color: #C8A96A;
+  color: #111;
 }
 
 .news-title .title-en{
   display: block;
   margin-top: 4px;        /* ქვემოთ ჩამოსწევს */
   font-size: 14px;
-  color: #C8A96A;         /* brand gold */
+  color: #333;
   font-weight: 500;
 }
 
 .news-item:hover .news-title .title-ka,
 .news-item:hover .news-title .title-en{
-  color: #b89555;
+  color: #111;
 }
 .news-content p{
   margin: 0 0 12px;
