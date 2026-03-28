@@ -118,8 +118,8 @@ async function fetchArtistsFromSanity(limit = null, featuredOnly = false) {
       featured,
       whatsapp,
       country,
-      seoTitle,
-      seoDescription
+      "seoTitle": seo.seoTitle,
+      "seoDescription": seo.seoDescription
     }`;
 
     const url = `https://${SANITY_CONFIG.projectId}.apicdn.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
@@ -169,9 +169,10 @@ async function fetchArtistBySlug(identifier) {
       featured,
       whatsapp,
       country,
-      seoTitle,
-      seoDescription,
-      keywords
+      "seoTitle": seo.seoTitle,
+      "seoDescription": seo.seoDescription,
+      "keywords": seo.keywords,
+      "ogImageUrl": seo.ogImage.asset->url
     }`;
 
     const url = `https://${SANITY_CONFIG.projectId}.apicdn.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
@@ -232,7 +233,9 @@ async function fetchFeaturedArtworks(limit = null) {
       description,
       price,
       status,
-      keywords,
+      "seoTitle": seo.seoTitle,
+      "seoDescription": seo.seoDescription,
+      "keywords": seo.keywords,
       showInShop,
       featured,
       "artist": artist->{
@@ -301,7 +304,9 @@ async function fetchShopArtworks(limit = null) {
       description,
       price,
       status,
-      keywords,
+      "seoTitle": seo.seoTitle,
+      "seoDescription": seo.seoDescription,
+      "keywords": seo.keywords,
       showInShop,
       featured,
       "artist": artist->{
@@ -353,7 +358,9 @@ async function fetchAllArtworks() {
         description,
         "slug": slug.current,
         featured,
-        keywords,
+        "seoTitle": seo.seoTitle,
+        "seoDescription": seo.seoDescription,
+        "keywords": seo.keywords,
         "artist": artist->{
           _id,
           name,
@@ -711,6 +718,41 @@ function injectSchema(type, data) {
 }
 
 /* --------------------------------------------------
+   FETCH SITE SETTINGS (SEO DEFAULTS + BRANDING)
+-------------------------------------------------- */
+async function fetchSiteSettings() {
+  const _cKey = 'nv_site_settings';
+  const _hit = cacheGet(_cKey);
+  if (_hit) return _hit;
+
+  try {
+    const query = `*[_type == "siteSettings"][0]{
+      siteName,
+      siteDescription,
+      "seo": seo{
+        seoTitle,
+        seoDescription,
+        "ogImageUrl": ogImage.asset->url,
+        keywords
+      }
+    }`;
+
+    const url = `https://${SANITY_CONFIG.projectId}.apicdn.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    const data = await res.json();
+
+    const result = data.result || null;
+    if (result) cacheSet(_cKey, result);
+    return result;
+  } catch (err) {
+    console.error('❌ fetchSiteSettings error:', err);
+    return null;
+  }
+}
+
+/* --------------------------------------------------
    EXPOSE GLOBAL FUNCTIONS
 -------------------------------------------------- */
 window.SANITY_CONFIG = SANITY_CONFIG;
@@ -719,6 +761,7 @@ window.fetchArtistBySlug = fetchArtistBySlug;
 window.fetchFeaturedArtworks = fetchFeaturedArtworks;
 window.fetchShopArtworks = fetchShopArtworks;
 window.fetchAllArtworks = fetchAllArtworks;
+window.fetchSiteSettings = fetchSiteSettings;
 window.updateSEO = updateSEO;
 window.applySeoMeta = updateSEO; // backward-compatible alias
 window.sanityImgUrl = sanityImgUrl;
