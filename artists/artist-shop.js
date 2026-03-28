@@ -14,15 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(location.search);
   const artistSlug = params.get("artist");
   
-  // Extract short artist ID from slug (for legacy fallback)
-  const slugToId = {
-    'nini-mzhavia': 'nini',
-    'mzia-kashia': 'mzia',
-    'nanuli-gogiberidze': 'nanuli',
-    'salome-mzhavia': 'salome'
-  };
-  const artistId = slugToId[artistSlug] || artistSlug?.split('-')[0] || artistSlug;
-
   if (!artistSlug) {
     title.textContent = "Artist not found";
     return;
@@ -33,6 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------------------------
   let artistData = null;
   let currentLang = "ka";
+  const SANITY_PROJECT = window.SANITY_CONFIG?.projectId || '8t5h923j';
+  const SANITY_DATASET = window.SANITY_CONFIG?.dataset || 'production';
+  const SANITY_API_VERSION = window.SANITY_CONFIG?.apiVersion || '2025-02-05';
+
+  function sanityQueryUrl(query) {
+    return `https://${SANITY_PROJECT}.apicdn.sanity.io/v${SANITY_API_VERSION}/data/query/${SANITY_DATASET}?query=${encodeURIComponent(query)}`;
+  }
 
   // ---------------------------
   // FETCH ARTIST FROM SANITY
@@ -54,10 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       `;
 
-      const res = await fetch(
-        "https://8t5h923j.apicdn.sanity.io/v2026-02-01/data/query/production?query=" +
-          encodeURIComponent(query)
-      );
+      const res = await fetch(sanityQueryUrl(query));
 
       if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 
@@ -74,11 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------------------------
   async function initializeArtist() {
     artistData = await fetchArtistData();
-    
-    // Fallback to legacy data if Sanity fetch fails
-    if (!artistData) {
-      artistData = (window.ARTISTS || []).find(a => a.id === artistId);
-    }
 
     // Set artist name
     title.textContent = artistData?.name || "Artist";
@@ -120,23 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Priority 3: Legacy 'about' field
     if (artistData.about?.trim()) return artistData.about;
 
-    // Priority 4: Hardcoded legacy bios
-    const legacyBios = {
-      nini: {
-        en: "Nini Mzhavia is a contemporary abstract artist whose works explore modern visual language, emotion, and form through vibrant colors and dynamic compositions.",
-        ka: "ნინი მჟავია არის თანამედროვე აბსტრაქტული მხატვარი, რომლის ნამუშევრები იკვლევს თანამედროვე ვიზუალურ ენას, ემოციას და ფორმას ცოცხალი ფერებითა და დინამიური კომპოზიციებით."
-      },
-      mzia: {
-        en: "Mzia Kashia creates impressionist works that blend reality with artistic interpretation, capturing the essence of Georgian landscapes and cultural heritage.",
-        ka: "მზია კაშია ქმნის იმპრესიონისტულ ნამუშევრებს, რომლებიც აერთიანებს რეალობას მხატვრულ ინტერპრეტაციასთან და ასახავს ქართული ლანდშაფტებისა და კულტურული მემკვიდრეობის არსს."
-      },
-      nanuli: {
-        en: "Nanuli Gogiberidze specializes in decorative impressionism, creating vivid artworks that celebrate beauty, nature, and Georgian artistic traditions.",
-        ka: "ნანული გოგიბერიძე სპეციალიზირებულია დეკორატიულ იმპრესიონიზმში და ქმნის ცოცხალ ნამუშევრებს, რომლებიც ადიდებენ სილამაზეს, ბუნებას და ქართულ მხატვრულ ტრადიციებს."
-      }
-    };
-
-    return legacyBios[artistId]?.[lang] || "No biography available.";
+    return "No biography available.";
   }
 
   // ---------------------------
@@ -223,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const query = `
-        *[_type == "artwork" && artist->slug.current == "${artistSlug}"] | order(_createdAt desc) {
+        *[_type == "artwork" && artist->slug.current == "${artistSlug}" && status in ["sale", "sold"]] | order(_createdAt desc) {
           _id,
           title,
           price,
@@ -254,10 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       `;
 
-      const res = await fetch(
-        "https://8t5h923j.apicdn.sanity.io/v2026-02-01/data/query/production?query=" +
-          encodeURIComponent(query)
-      );
+      const res = await fetch(sanityQueryUrl(query));
 
       if (!res.ok) {
         throw new Error(`HTTP error: ${res.status}`);
@@ -269,8 +240,15 @@ document.addEventListener("DOMContentLoaded", () => {
         ? (u, w) => window.sanityImgUrl(u, { w: w || 600, q: 80 })
         : (u) => u;
 
+      const seenIds = new Set();
       allArtworks = (result || [])
         .filter(a => a.img)
+        .filter(a => {
+          const id = a._id || '';
+          if (!id || seenIds.has(id)) return false;
+          seenIds.add(id);
+          return true;
+        })
         .map(a => ({
           title: a.title || "Untitled",
           price: Number(String(a.price || '').replace(/[^\d.]/g, '')) || '',
@@ -289,8 +267,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ? a.photos.map(u => imgOpt(u, 1200))
             : [imgOpt(a.img, 1200)]
         }));
-
-      console.log(`✅ Loaded ${allArtworks.length} artworks from Sanity`);
 
       render("all");
     } catch (err) {

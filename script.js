@@ -756,8 +756,6 @@ document.addEventListener("click", e => {
     const rawVal = input.value;
     const shopGrid = document.getElementById('homeShopGrid');
     const artistGrid = document.getElementById('homeArtistsGrid');
-    console.log('[applyHomeSearch] query:', JSON.stringify(rawVal),
-      '| shopItems:', shopGrid ? shopGrid.querySelectorAll('.shop-item').length : 'no grid');
     // Batch all DOM writes into a single animation frame
     if (rafId) cancelAnimationFrame(rafId);
     rafId = requestAnimationFrame(() => {

@@ -5,19 +5,6 @@
  */
 const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
 
-// Bust any stale "all artworks" localStorage cache keys left from old code
-(function bustOldCache() {
-  try {
-    // DEBUG: clear ALL nv_shop_* and nv_artworks_* keys to force fresh fetch
-    Object.keys(localStorage).forEach(k => {
-      if (k.startsWith('nv_shop_') || k.startsWith('nv_artworks_') || k.startsWith('nv_featured_')) {
-        localStorage.removeItem(k);
-      }
-    });
-    console.log('[shop] All artwork caches cleared for debug');
-  } catch (e) { /* ignore */ }
-})();
-
 let allRenderedItems = [];
 
 // ========================================
@@ -26,8 +13,6 @@ let allRenderedItems = [];
 function renderAllItems(artworksData) {
   const grid = document.getElementById('shopGrid');
   if (!grid) return;
-
-  console.log('[shop-render] renderAllItems called with', artworksData?.length ?? 0, 'items', artworksData);
 
   // STRICT: never use window.ARTWORKS — it contains all artists
   if (!artworksData || !artworksData.length) {
@@ -51,6 +36,7 @@ function renderAllItems(artworksData) {
       ? a.images.map(i => i?.asset?.url).filter(Boolean).map(u => iUrl(u, {w: 800}))
       : (Array.isArray(a.photos) ? a.photos : [imgSrc]);
     return {
+      id: a._id || '',
       status,
       title:  a.title || '',
       price:  String(a.price || ''),
@@ -63,8 +49,15 @@ function renderAllItems(artworksData) {
     };
   };
 
+  const seenIds = new Set();
   const items = source
     .filter(a => a.artist && a.artist.name === 'Nini Mzhavia')
+    .filter(a => {
+      const id = a._id || '';
+      if (!id || seenIds.has(id)) return false;
+      seenIds.add(id);
+      return true;
+    })
     .map(normalize)
     .sort((a, b) =>
       a.status === 'sale' && b.status !== 'sale' ? -1 :
@@ -146,7 +139,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (typeof window.fetchShopArtworks === 'function') {
     try {
       artworks = await window.fetchShopArtworks();
-      console.log('[shop-render] artworks received:', artworks?.length, artworks);
     } catch (e) {
       console.error('[shop-render] Sanity fetch failed:', e);
     }

@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (window.applyHomeSearch) window.applyHomeSearch();
   }
 
-  // Load artworks - prioritize Sanity featured, fallback to showInShop artworks
+  // Load artworks from Sanity only (production source of truth)
   try {
     const featuredArtworks = await fetchFeaturedArtworks();
     
@@ -94,7 +94,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           id: artwork._id,
           status: artwork.status || '',
           title: artwork.title || 'Untitled',
-          shortDescription: artwork.shortDescription || '',
+          shortDescription: (artwork.shortDescription || '').trim().toLowerCase() === (artwork.title || '').trim().toLowerCase()
+            ? ''
+            : (artwork.shortDescription || ''),
           price: artwork.price || '',
           keywords: artwork.keywords || '',
           // Prefer explicit asset URL, fall back to older shapes
@@ -103,40 +105,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           alt: artwork.image?.alt || artwork.title || 'Artwork'
         }));
     } else {
-      // Fallback to legacy data with showInShop filter
-      if (window.ARTWORKS) {
-          items = window.ARTWORKS
-            .filter(a => a.showInShop === true) // Only show artworks marked for shop
-            .map(a => ({
-              status: a.status || 'sale',
-              title: a.title || 'Untitled',
-              shortDescription: a.shortDescription || a.desc || '',
-              price: a.price || '',
-              keywords: a.keywords || '',
-              image: (a.img || '').toLowerCase(),
-              photos: a.photos || [a.img],
-              alt: a.alt || a.title || 'Artwork'
-            }));
-        }
+      items = [];
     }
   } catch (error) {
     console.error('❌ Error loading featured artworks:', error);
-    
-    // Fallback to legacy data with showInShop filter
-    if (window.ARTWORKS) {
-      items = window.ARTWORKS
-        .filter(a => a.showInShop === true) // Only show artworks marked for shop
-        .map(a => ({
-          status: a.status || 'sale',
-          title: a.title || 'Untitled',
-          shortDescription: a.shortDescription || a.desc || '',
-          price: a.price || '',
-          keywords: a.keywords || '',
-          image: (a.img || '').toLowerCase(),
-          photos: a.photos || [a.img],
-          alt: a.alt || a.title || 'Artwork'
-        }));
-    }
+    items = [];
   }
 
   // Always show section if we have data

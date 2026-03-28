@@ -31,7 +31,7 @@
   --------------------------- */
   async function fetchArtworks() {
     const query = `
-      *[_type == "artwork" && artist->slug.current == "${artistSlug}" && (!defined(status) || status in ["published", "sold"])] | order(_createdAt desc){
+      *[_type == "artwork" && artist->slug.current == "${artistSlug}" && status in ["sale", "sold"]] | order(_createdAt desc){
         _id,
         title,
         "slug": slug.current,
@@ -145,14 +145,22 @@
   function renderArtworks(artworks) {
     if (!grid) return
 
-    if (!artworks.length) {
+    const seen = new Set()
+    const uniqueArtworks = artworks.filter(a => {
+      const id = a?._id || ''
+      if (!id || seen.has(id)) return false
+      seen.add(id)
+      return true
+    })
+
+    if (!uniqueArtworks.length) {
       window.nvEmpty
         ? window.nvEmpty(grid, 'No artworks available')
         : (grid.innerHTML = `<p class="muted">No artworks found.</p>`)
       return
     }
 
-    grid.innerHTML = artworks
+    grid.innerHTML = uniqueArtworks
       .map(
         (a) => {
           const iUrl = typeof window.sanityImgUrl === 'function' ? window.sanityImgUrl : u => u
