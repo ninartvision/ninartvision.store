@@ -2412,7 +2412,7 @@ a.pill:visited{
 }
 /* ===== CLOTH BANNER under header ===== */
 .cloth-banner{
-  margin-top: 76px; /* header fixed height */
+  margin-top: 0;
   width: 100%;
   min-height: 120px;
   height: auto;
@@ -2525,7 +2525,6 @@ a.pill:visited{
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px){
   .cloth-banner{
-    margin-top: 70px;
     min-height: 140px;
     padding: 14px 10px;
   }
@@ -2533,7 +2532,6 @@ a.pill:visited{
 
 @media (max-width: 600px){
   .cloth-banner{
-    margin-top: 65px;
     min-height: 160px;
     padding: 14px 8px;
   }
