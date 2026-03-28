@@ -5,7 +5,8 @@
  */
 const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
 
-document.addEventListener("DOMContentLoaded", async () => {
+async function initHomeShopPreview() {
+  console.log('[homeShopPreview] init — readyState:', document.readyState);
   const grid = document.getElementById("homeShopGrid");
   const buttons = document.querySelectorAll(".preview-btn");
   const section = document.querySelector(".home-shop-preview");
@@ -80,37 +81,61 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (window.applyHomeSearch) window.applyHomeSearch();
   }
 
-  // Load artworks from Sanity only (production source of truth)
+  // Load artworks — use fetchShopArtworks (no featured constraint, GROQ already
+  // filters to Nini Mzhavia). Falls back to fetchFeaturedArtworks if unavailable.
   try {
-    const featuredArtworks = await fetchFeaturedArtworks();
-    
-    if (featuredArtworks && featuredArtworks.length > 0) {
-      // Use Sanity featured artworks — only Nini Mzhavia, deduplicated by _id
+    let raw = null;
+    if (typeof window.fetchShopArtworks === 'function') {
+      raw = await window.fetchShopArtworks();
+    } else if (typeof window.fetchFeaturedArtworks === 'function') {
+      raw = await window.fetchFeaturedArtworks();
+    }
+
+    console.log('[homeShopPreview] raw Sanity response:', raw?.length ?? 'null', 'items');
+    if (raw && raw.length > 0) {
+      console.log('[homeShopPreview] sample item:', JSON.stringify({
+        _id: raw[0]._id,
+        title: raw[0].title,
+        status: raw[0].status,
+        artist: raw[0].artist,
+        hasImage: !!(raw[0].image?.asset?.url)
+      }));
+    }
+
+    if (raw && raw.length > 0) {
+      // Deduplicate by _id, limit to 6 for homepage grid
       const seen = new Set();
-      items = featuredArtworks
-        .filter(a => a.artist?.name === 'Nini Mzhavia')
-        .filter(a => { if (!a._id || seen.has(a._id)) return false; seen.add(a._id); return true; })
-        .map(artwork => ({
-          id: artwork._id,
-          status: artwork.status || '',
-          title: artwork.title || 'Untitled',
-          shortDescription: (artwork.shortDescription || '').trim().toLowerCase() === (artwork.title || '').trim().toLowerCase()
-            ? ''
-            : (artwork.shortDescription || ''),
-          price: artwork.price || '',
-          keywords: artwork.keywords || '',
-          // Prefer explicit asset URL, fall back to older shapes
-          image: artwork.image?.asset?.url || (Array.isArray(artwork.images) && artwork.images[0]?.asset?.url) || artwork.image || 'images/placeholder.jpg',
-          photos: Array.isArray(artwork.images) ? artwork.images.map(i => i?.asset?.url).filter(Boolean) : (artwork.image?.asset?.url ? [artwork.image.asset.url] : []),
-          alt: artwork.image?.alt || artwork.title || 'Artwork'
-        }));
+      const deduped = raw.filter(a => {
+        if (!a._id || seen.has(a._id)) return false;
+        seen.add(a._id);
+        return true;
+      }).slice(0, 6);
+
+      console.log('[homeShopPreview] after dedup/limit:', deduped.length, 'items');
+
+      items = deduped.map(artwork => ({
+        id: artwork._id,
+        status: artwork.status || '',
+        title: artwork.title || 'Untitled',
+        shortDescription: (artwork.shortDescription || '').trim().toLowerCase() === (artwork.title || '').trim().toLowerCase()
+          ? ''
+          : (artwork.shortDescription || ''),
+        price: artwork.price || '',
+        keywords: artwork.keywords || '',
+        // Prefer explicit asset URL, fall back to older shapes
+        image: artwork.image?.asset?.url || (Array.isArray(artwork.images) && artwork.images[0]?.asset?.url) || 'images/placeholder.jpg',
+        photos: Array.isArray(artwork.images) ? artwork.images.map(i => i?.asset?.url).filter(Boolean) : (artwork.image?.asset?.url ? [artwork.image.asset.url] : []),
+        alt: artwork.image?.alt || artwork.title || 'Artwork'
+      }));
     } else {
       items = [];
     }
   } catch (error) {
-    console.error('❌ Error loading featured artworks:', error);
+    console.error('❌ Error loading artworks:', error);
     items = [];
   }
+
+  console.log('[homeShopPreview] data loaded —', items.length, 'artworks');
 
   // Always show section if we have data
   if (section && items.length > 0) {
@@ -118,6 +143,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Initial render and auto-rotation
+  console.log('[homeShopPreview] render artworks');
   render();
 
   // Pause rotation when the page tab is not visible (saves CPU/battery)
@@ -140,4 +166,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       render();
     });
   });
-});
+}
+
+// Runs immediately when loaded because DOMContentLoaded has already fired
+// (this script is injected via requestIdleCallback, after page is interactive).
+// The readyState guard ensures it still works if somehow loaded before DCL.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHomeShopPreview);
+} else {
+  initHomeShopPreview();
+}

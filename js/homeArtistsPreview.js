@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", async () => {
+async function initHomeArtistsPreview() {
+  console.log('[homeArtistsPreview] init — readyState:', document.readyState);
   const grid = document.getElementById("homeArtistsGrid");
   if (!grid) return;
 
@@ -8,11 +9,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 🔑 Sanity-დან წამოვიღოთ 3 არტისტი
     const artists = await fetchArtistsFromSanity(3);
 
+    console.log('[homeArtistsPreview] data loaded —', (artists || []).length, 'artists');
+    if (artists && artists.length > 0) {
+      console.log('[homeArtistsPreview] sample artist:', JSON.stringify({
+        _id: artists[0]._id,
+        name: artists[0].name,
+        slug: artists[0].slug,
+        hasImage: !!(artists[0].image?.asset?.url),
+        style: artists[0].style
+      }));
+    }
+
     if (!artists || !artists.length) {
       grid.innerHTML = `<p class="muted">No artists available.</p>`;
       return;
     }
 
+    console.log('[homeArtistsPreview] render artists');
     grid.innerHTML = artists.map(artist => {
       const slug = artist.slug || artist._id;
 
@@ -44,4 +57,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("❌ Failed to load artists on home page", err);
     grid.innerHTML = `<p class="muted">Failed to load artists.</p>`;
   }
-});
+}
+
+// Same readyState guard — idle-loaded scripts must not rely on DOMContentLoaded.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHomeArtistsPreview);
+} else {
+  initHomeArtistsPreview();
+}
