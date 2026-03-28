@@ -64,6 +64,7 @@ function renderAllItems(artworksData) {
   };
 
   const items = source
+    .filter(a => !a.artist || a.artist.name === 'Nini Mzhavia')
     .map(normalize)
     .filter(a => a.showInShop)
     .sort((a, b) =>
