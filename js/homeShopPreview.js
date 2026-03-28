@@ -3,6 +3,7 @@
  * Displays artworks with showInShop === true
  * Auto-rotation and SALE/SOLD filtering
  */
+const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
 
 document.addEventListener("DOMContentLoaded", async () => {
   const grid = document.getElementById("homeShopGrid");
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           : '';
 
         div.dataset.title = p.title || '';
-        div.dataset.price = (p.price || '').replace('\u20BE', '');
+        div.dataset.price = String(p.price || '').replace(/[^\d.]/g, '');
         div.dataset.photos = (p.photos || [imgSrc]).join(',');
         div.dataset.desc = p.shortDescription || '';
         div.dataset.keywords = p.keywords || '';
@@ -61,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                width="600" height="750" onerror="this.src='images/placeholder.jpg'">
           <div class="shop-meta">
             <span>${p.title}</span>
-            ${p.price ? `<span class="price">${p.price}</span>` : ''}
+            ${p.price ? `<span class="price">${fmtPrice(p.price)}</span>` : ''}
           </div>
           ${p.shortDescription ? `<p class="short-desc">${p.shortDescription}</p>` : ''}
         `;
@@ -87,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         status: artwork.status || 'sale',
         title: artwork.title || 'Untitled',
         shortDescription: artwork.shortDescription || '',
-        price: artwork.price ? `\u20BE${artwork.price}` : '',
+        price: artwork.price || '',
         keywords: artwork.keywords || '',
         // Prefer explicit asset URL, fall back to older shapes
         image: artwork.image?.asset?.url || (Array.isArray(artwork.images) && artwork.images[0]?.asset?.url) || artwork.image || 'images/placeholder.jpg',
@@ -103,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               status: a.status || 'sale',
               title: a.title || 'Untitled',
               shortDescription: a.shortDescription || a.desc || '',
-              price: a.price ? `\u20BE${a.price}` : '',
+              price: a.price || '',
               keywords: a.keywords || '',
               image: (a.img || '').toLowerCase(),
               photos: a.photos || [a.img],
@@ -122,7 +123,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           status: a.status || 'sale',
           title: a.title || 'Untitled',
           shortDescription: a.shortDescription || a.desc || '',
-          price: a.price ? `\u20BE${a.price}` : '',
+          price: a.price || '',
           keywords: a.keywords || '',
           image: (a.img || '').toLowerCase(),
           photos: a.photos || [a.img],

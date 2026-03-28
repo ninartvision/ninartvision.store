@@ -3,6 +3,7 @@
  * No artist filter, no search, no unnecessary state.
  * NEVER falls back to window.ARTWORKS (would show all artists).
  */
+const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
 
 // Bust any stale "all artworks" localStorage cache keys left from old code
 (function bustOldCache() {
@@ -94,7 +95,7 @@ function renderAllItems(artworksData) {
       ${a.status === 'sold' ? '<div class="sold-badge"></div>' : ''}
       <div class="shop-meta">
         <span>${a.title}</span>
-        <span class="price">\u20BE${a.price}</span>
+        <span class="price">${fmtPrice(a.price)}</span>
       </div>
     `;
     frag.appendChild(div);

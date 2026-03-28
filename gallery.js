@@ -1,4 +1,5 @@
-﻿document.addEventListener("DOMContentLoaded", async () => {
+﻿const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
+document.addEventListener("DOMContentLoaded", async () => {
   const grid = document.getElementById("galleryGrid");
 
   if (!grid) {
@@ -81,7 +82,7 @@
           </p>
 
           <div class="card-row">
-            <span class="price">\u20BE${art.price || ""}</span>
+            <span class="price">${fmtPrice(art.price)}</span>
 
             <div class="buy-row">
               ${

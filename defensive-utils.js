@@ -157,8 +157,9 @@ function safeJoin(arr, separator = ',', fallback = '') {
  * @returns {string}
  */
 function formatPrice(price, currency = '\u20BE', fallback = '') {
-  if (!price || price === 0 || price === '0') return fallback;
-  return `${currency}${price}`;
+  const n = Number(String(price || '').replace(/[^\d.]/g, ''));
+  if (!n) return fallback;
+  return currency + n.toLocaleString('en-US');
 }
 
 /**

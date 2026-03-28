@@ -1,5 +1,10 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
 
+  const fmtPrice = p => {
+    const n = Number(String(p || "").replace(/[^\d.]/g, ""));
+    return n ? "\u20BE" + n.toLocaleString("en-US") : "";
+  };
+
   /* =========================
      MOBILE MENU
   ========================= */
@@ -94,7 +99,7 @@
     productSize.textContent = item.dataset.size || "";
     productMedium.textContent = item.dataset.medium || "";
     productYear.textContent = item.dataset.year || "";
-    productPrice.textContent = "\u20BE" + (item.dataset.price || "");
+    productPrice.textContent = fmtPrice(item.dataset.price);
 
     if (productThumbs) {
       productThumbs.innerHTML = "";
@@ -176,7 +181,7 @@
   addToCartBtn?.addEventListener("click", () => {
     if (!currentItem) return;
     const title = currentItem.dataset.title || "";
-    const price = currentItem.dataset.price || "";
+    const price = fmtPrice(currentItem.dataset.price);
     const artistId = currentItem.dataset.artist || "";
     // Use current artist from Sanity if available, otherwise fallback to legacy data
     const artist = window.CURRENT_ARTIST || window.ARTISTS?.find(a => a.id === artistId);
@@ -189,7 +194,7 @@
     }
 
     const msg = encodeURIComponent(
-      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი \u20BE${price}`
+      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}`
     );
 
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");

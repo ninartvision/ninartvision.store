@@ -1,4 +1,6 @@
-﻿document.addEventListener("DOMContentLoaded", () => {
+﻿const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
+
+document.addEventListener("DOMContentLoaded", () => {
   const grid = document.getElementById("shopGrid");
   const title = document.querySelector(".artist-name");
   const avatar = document.getElementById("artistAvatar");
@@ -271,7 +273,7 @@
         .filter(a => a.img)
         .map(a => ({
           title: a.title || "Untitled",
-          price: a.price || "",
+          price: Number(String(a.price || '').replace(/[^\d.]/g, '')) || '',
           status: a.status === "sold" ? "sold" : "sale",
           size: a.size || "",
           medium: a.medium || "",
@@ -331,7 +333,7 @@
 
         <div class="shop-meta">
           <span>${a.title}</span>
-          ${a.price ? `<span class="price">\u20BE${a.price}</span>` : ""}
+          ${a.price ? `<span class="price">${fmtPrice(a.price)}</span>` : ""}
         </div>
         ${a.description ? `<div class="artwork-description">${a.description}</div>` : ""}
       </div>
