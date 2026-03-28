@@ -265,7 +265,7 @@ async function fetchFeaturedArtworks(limit = null) {
    Falls back gracefully to static data.js if this returns empty.
 -------------------------------------------------- */
 async function fetchShopArtworks(limit = null) {
-  const _cKey = `nv_shop_${limit || 'all'}`;
+  const _cKey = `nv_shop_nini_${limit || 'all'}`;
   const _hit = cacheGet(_cKey);
   if (_hit) return _hit;
 
@@ -273,6 +273,7 @@ async function fetchShopArtworks(limit = null) {
     let query = `
       *[
         _type == "artwork" &&
+        artist->name == "Nini Mzhavia" &&
         (!defined(showInShop) || showInShop == true) &&
         (!defined(status) || status in ["published", "sold", "sale"])
       ]

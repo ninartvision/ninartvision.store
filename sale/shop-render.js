@@ -90,11 +90,15 @@ function renderAllItems(artworksData) {
       : (a.artist || '');
     // Status: Sanity uses "published" for for-sale items — map to "sale"
     const status = a.status === 'published' ? 'sale' : (a.status || 'sale');
-    // Image src: Sanity CDN full URL vs relative path (shop page is in /sale/)
-    const imgSrc = a.image?.asset?.url || `../${ (a.img || '').toLowerCase() }`;
-    // Photos array
+    // Image src: optimised width for thumbnails; fallback for static data
+    const rawUrl = a.image?.asset?.url;
+    const iUrl = typeof sanityImgUrl === 'function' ? sanityImgUrl : u => u;
+    const iSet = typeof sanitySrcset === 'function' ? sanitySrcset : () => '';
+    const imgSrc = rawUrl ? iUrl(rawUrl, {w: 400}) : `../${ (a.img || '').toLowerCase() }`;
+    const srcset = rawUrl ? iSet(rawUrl, [400, 800]) : '';
+    // Photos array — medium width for modal view
     const photos = (Array.isArray(a.images) && a.images.length)
-      ? a.images.map(i => i?.asset?.url).filter(Boolean)
+      ? a.images.map(i => i?.asset?.url).filter(Boolean).map(u => iUrl(u, {w: 800}))
       : (Array.isArray(a.photos) ? a.photos : [imgSrc]);
     const title    = a.title    || '';
     const keywords = a.keywords || '';
@@ -105,6 +109,7 @@ function renderAllItems(artworksData) {
       title,
       keywords,
       lqip,
+      srcset,
       price:  String(a.price  || ''),
       size:   a.size || a.dimensions || '',
       medium: a.medium || '',
@@ -146,7 +151,9 @@ function renderAllItems(artworksData) {
     div.dataset.photos   = a.photos.join(',');
     div.innerHTML = `
       <div class="nv-img-wrap"${a.lqip ? ` style="background-image:url(${a.lqip})"` : ''}>
-        <img class="nv-lqip" src="${a.imgSrc}" alt="${a.title}" loading="lazy"
+        <img class="nv-lqip" src="${a.imgSrc}"
+          ${a.srcset ? `srcset="${a.srcset}" sizes="(max-width:600px) 100vw, 400px"` : ''}
+          alt="${a.title}" loading="lazy"
           onload="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage=''"
           onerror="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage=''">
       </div>
