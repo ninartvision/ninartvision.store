@@ -84,8 +84,9 @@
     <span class="news-content">
       ${kaBody}
       ${enBody}
-    </span>
-  </span>
+    </span>    <span class="news-related" aria-label="Explore artworks by our artists">
+      Browse artists &rarr;
+    </span>  </span>
   <span class="arrow">→</span>
 </a>`;
   }
@@ -104,6 +105,12 @@
 
   const posts = await fetchPosts();
   if (!posts || !posts.length) return; // keep static fallback
+
+  // Inject BlogPosting schema on the dedicated news page only (skip homepage preview)
+  const _isNewsPage = !document.getElementById('homeShopGrid');
+  if (_isNewsPage && typeof window.injectSchema === 'function') {
+    window.injectSchema('article', posts);
+  }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => renderToPage(posts));

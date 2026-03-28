@@ -12,55 +12,14 @@
 
   const grid = document.getElementById('shopGrid')
 
-  /* ---------------------------
-     FETCH ARTIST FROM SANITY
-  --------------------------- */
-  async function fetchArtist() {
-    const query = `
-      *[_type == "artist" && slug.current == "${artistSlug}"][0]{
-        _id,
-        name,
-        "slug": slug.current,
-        shortDescription,
-        subtitle,
-        image{
-          asset->{
-            _id,
-            url,
-            metadata{lqip, dimensions}
-          },
-          alt
-        },
-        gallery[]{
-          asset->{
-            _id,
-            url,
-            metadata{lqip, dimensions}
-          },
-          alt,
-          _key
-        },
-        bio,
-        style,
-        status,
-        featured,
-        seoTitle,
-        seoDescription
-      }
-    `
-
-    const res = await fetch(
-      'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production?query=' +
-        encodeURIComponent(query)
-    )
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`)
-    }
-
-    const { result } = await res.json()
-    return result
-  }
+  // --- Show skeletons immediately (synchronous, runs before any await) ---
+  if (grid && window.nvSkeleton) window.nvSkeleton(grid, 4);
+  (function() {
+    var _a = document.getElementById('artistAvatar');
+    var _n = document.querySelector('.artist-name');
+    if (_a) { _a.className += ' nv-skeleton nv-skel-circle'; _a.style.cssText = 'width:120px;height:120px;display:block'; }
+    if (_n) { _n.className += ' nv-skeleton nv-skel-text'; _n.style.cssText = 'width:160px;height:20px;display:inline-block;min-height:0'; }
+  })();
 
   /* ---------------------------
      FETCH ARTWORKS FROM SANITY
@@ -100,10 +59,8 @@
       }
     `
 
-    const res = await fetch(
-      'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production?query=' +
-        encodeURIComponent(query)
-    )
+    const _url = `https://${window.SANITY_CONFIG.projectId}.apicdn.sanity.io/v${window.SANITY_CONFIG.apiVersion}/data/query/${window.SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`
+    const res = await fetch(_url)
 
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`)
@@ -111,46 +68,6 @@
 
     const { result } = await res.json()
     return result || []
-  }
-
-  /* ---------------------------
-     UPDATE SEO META TAGS
-  --------------------------- */
-  function updateSEOTags(artist) {
-    if (!artist) return
-
-    const pageTitle = artist.seoTitle || `${artist.name} | Ninart Vision`
-    const pageDesc = artist.seoDescription || artist.shortDescription || `Discover artworks by ${artist.name}, a contemporary Georgian artist.`
-    const ogImageUrl = artist.image?.asset?.url || ''
-
-    // Update title
-    document.title = pageTitle
-    const titleTag = document.getElementById('pageTitle')
-    if (titleTag) titleTag.setAttribute('content', pageTitle)
-
-    // Update meta description
-    const descTag = document.getElementById('pageDescription')
-    if (descTag) descTag.setAttribute('content', pageDesc)
-
-    // Update Open Graph
-    const ogTitle = document.getElementById('ogTitle')
-    const ogDesc = document.getElementById('ogDescription')
-    const ogImage = document.getElementById('ogImage')
-    const ogUrl = document.getElementById('ogUrl')
-
-    if (ogTitle) ogTitle.setAttribute('content', pageTitle)
-    if (ogDesc) ogDesc.setAttribute('content', pageDesc)
-    if (ogImage && ogImageUrl) ogImage.setAttribute('content', ogImageUrl)
-    if (ogUrl) ogUrl.setAttribute('content', window.location.href)
-
-    // Update Twitter Card
-    const twitterTitle = document.getElementById('twitterTitle')
-    const twitterDesc = document.getElementById('twitterDescription')
-    const twitterImage = document.getElementById('twitterImage')
-
-    if (twitterTitle) twitterTitle.setAttribute('content', pageTitle)
-    if (twitterDesc) twitterDesc.setAttribute('content', pageDesc)
-    if (twitterImage && ogImageUrl) twitterImage.setAttribute('content', ogImageUrl)
   }
 
   /* ---------------------------
@@ -224,7 +141,9 @@
     if (!grid) return
 
     if (!artworks.length) {
-      grid.innerHTML = `<p class="muted">No artworks found.</p>`
+      window.nvEmpty
+        ? window.nvEmpty(grid, 'No artworks available')
+        : (grid.innerHTML = `<p class="muted">No artworks found.</p>`)
       return
     }
 
@@ -238,6 +157,7 @@
           const rawUrl = a.image?.asset?.url || null
           const imgUrl = rawUrl ? iUrl(rawUrl, { w: 600, q: 80 }) : '../images/placeholder.jpg'
           const imgSrcset = rawUrl ? iSet(rawUrl, [400, 600, 800]) : ''
+          const lqip = a.image?.asset?.metadata?.lqip || ''
 
           // Get all photos at 1200px for the lightbox
           const allPhotos = a.images && a.images.length > 0
@@ -255,12 +175,17 @@
         data-desc="${a.desc || a.shortDescription || ''}"
         data-photos="${allPhotos.join(',')}">  
 
-        <img src="${imgUrl}"
-             ${imgSrcset ? `srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 300px"` : ''}
-             alt="${a.image?.alt || a.title || 'Artwork'}" 
-             loading="lazy"
-             decoding="async"
-             width="600" height="750">
+        <div class="nv-img-wrap"${lqip ? ` style="background-image:url(${lqip})"` : ''}>
+          <img class="nv-lqip"
+               src="${imgUrl}"
+               ${imgSrcset ? `srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 300px"` : ''}
+               alt="${a.image?.alt || a.title || 'Artwork'}"
+               loading="lazy"
+               decoding="async"
+               width="600" height="750"
+               onload="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage=''"
+               onerror="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage='';this.src='../images/placeholder.jpg'" />
+        </div>
         <div class="shop-meta">
           <span>${a.title || 'Untitled'}</span>
           ${a.price ? `<span class="price">₾${a.price}</span>` : ''}
@@ -278,13 +203,16 @@
      INIT PAGE
   --------------------------- */
   try {
-    const artist = await fetchArtist()
+    const artist = await window.fetchArtistBySlug(artistSlug)
     const artworks = await fetchArtworks()
 
     if (artist) {
       // Update artist header
       const nameEl = document.querySelector('.artist-name')
       const avatarEl = document.getElementById('artistAvatar')
+      // Remove skeleton states before rendering real content
+      if (nameEl) { nameEl.classList.remove('nv-skeleton', 'nv-skel-text'); nameEl.style.cssText = ''; }
+      if (avatarEl) { avatarEl.classList.remove('nv-skeleton', 'nv-skel-circle'); avatarEl.style.cssText = ''; }
 const statusEl = document.querySelector('.artist-status')
 
 if (statusEl) {
@@ -322,7 +250,10 @@ if (statusEl) {
       renderBio(artist)
 
       // Update SEO meta tags
-      updateSEOTags(artist)
+      window.updateSEO(Object.assign({}, artist, {
+        canonicalUrl: 'https://ninartvision.store/artists/artist.html?artist=' + encodeURIComponent(artistSlug)
+      }))
+      window.injectSchema('person', artist)
 
       // Store globally for compatibility
       window.CURRENT_ARTIST = artist
@@ -331,6 +262,10 @@ if (statusEl) {
     renderArtworks(artworks)
   } catch (err) {
     console.error('❌ Artist page error:', err)
-    if (grid) grid.innerHTML = `<p class="muted">Failed to load content.</p>`
+    if (grid && window.nvError) {
+      window.nvError(grid, 'Could not load artworks. Please try again.', function() { location.reload(); });
+    } else if (grid) {
+      grid.innerHTML = `<p class="muted">Failed to load content.</p>`
+    }
   }
 })()

@@ -77,7 +77,8 @@ function renderAllItems(artworksData) {
 
   const source = artworksData || window.ARTWORKS;
   if (!source || !source.length) {
-    grid.innerHTML = '❌ ARTWORKS not loaded';
+    if (window.nvEmpty) window.nvEmpty(grid, 'No artworks available');
+    else grid.innerHTML = '<p class="muted">No artworks available.</p>';
     return;
   }
 
@@ -97,11 +98,13 @@ function renderAllItems(artworksData) {
       : (Array.isArray(a.photos) ? a.photos : [imgSrc]);
     const title    = a.title    || '';
     const keywords = a.keywords || '';
+    const lqip = a.image?.asset?.metadata?.lqip || '';
     return {
       artist,
       status,
       title,
       keywords,
+      lqip,
       price:  String(a.price  || ''),
       size:   a.size || a.dimensions || '',
       medium: a.medium || '',
@@ -142,7 +145,11 @@ function renderAllItems(artworksData) {
     div.dataset.desc     = a.desc;
     div.dataset.photos   = a.photos.join(',');
     div.innerHTML = `
-      <img src="${a.imgSrc}" alt="${a.title}" loading="lazy">
+      <div class="nv-img-wrap"${a.lqip ? ` style="background-image:url(${a.lqip})"` : ''}>
+        <img class="nv-lqip" src="${a.imgSrc}" alt="${a.title}" loading="lazy"
+          onload="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage=''"
+          onerror="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage=''">
+      </div>
       ${a.status === 'sold' ? '<div class="sold-badge"></div>' : ''}
       <div class="shop-meta">
         <span>${a.title}</span>
@@ -153,6 +160,8 @@ function renderAllItems(artworksData) {
     return div;
   });
 
+  // Clear any previous content (skeleton or stale results) before appending
+  grid.innerHTML = '';
   // Single DOM mutation — append all items at once
   grid.appendChild(frag);
 
@@ -199,6 +208,10 @@ function applyFilters() {
 // ========================================
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Show skeleton immediately — before any async work
+  const _skGrid = document.getElementById("shopGrid");
+  if (_skGrid && window.nvSkeleton) window.nvSkeleton(_skGrid, 8);
+
   await populateArtistFilter();
 
   // Artist filter change

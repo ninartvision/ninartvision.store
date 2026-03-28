@@ -5327,3 +5327,44 @@ a.pill:visited{
 }
 
 
+
+
+/* ============================================
+   SKELETON LOADERS & UX STATES
+   ============================================ */
+@keyframes nv-shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+.nv-skeleton {
+  background: linear-gradient(90deg, #ececec 25%, #d8d8d8 50%, #ececec 75%);
+  background-size: 1200px 100%;
+  animation: nv-shimmer 1.4s infinite linear;
+  border-radius: 3px;
+}
+.nv-skel-card { border-radius: 6px; overflow: hidden; }
+.nv-skel-card .nv-skel-img  { display: block; width: 100%; padding-top: 75%; }
+.nv-skel-card .nv-skel-body { padding: 10px; display: flex; flex-direction: column; gap: 7px; }
+.nv-skel-card .nv-skel-line { height: 13px; }
+.nv-skel-card .nv-skel-line.s  { width: 55%; }
+.nv-skel-card .nv-skel-line.xs { width: 35%; }
+.nv-skel-circle { border-radius: 50% !important; }
+.nv-skel-text   { border-radius: 3px; }
+.nv-empty { grid-column: 1 / -1; text-align: center; padding: 56px 20px; color: #aaa; }
+.nv-empty p { margin: 12px 0 0; font-size: 15px; }
+.nv-error { grid-column: 1 / -1; text-align: center; padding: 40px 20px; }
+.nv-error p { margin: 0 0 14px; color: #c0392b; font-size: 15px; }
+.nv-retry { cursor: pointer; background: none; border: 1px solid #c0392b; color: #c0392b; padding: 7px 18px; border-radius: 4px; font-size: 14px; transition: background .2s, color .2s; }
+.nv-retry:hover { background: #c0392b; color: #fff; }
+@keyframes nv-fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.card { animation: nv-fadein .25s ease; }
+/* LQIP blur-up — wrapper holds the blurred placeholder; img fades in on top */
+.nv-img-wrap { display: block; overflow: hidden; background-size: cover; background-position: center; }
+.nv-lqip { opacity: 0; transition: opacity .4s ease; will-change: opacity; }
+.nv-lqip.nv-loaded { opacity: 1; }
+/* Respect user reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .nv-skeleton { animation: none; }
+  .nv-lqip { transition: none; }
+  .card { animation: none; }
+}

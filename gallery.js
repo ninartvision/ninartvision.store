@@ -6,72 +6,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  /* ---- Sanity image helpers (inline so gallery.html stays self-contained) ---- */
-  function sanityImgUrl(url, opts) {
-    if (!url || typeof url !== 'string' || !url.includes('cdn.sanity.io')) return url || '';
-    opts = opts || {};
-    var w = opts.w, h = opts.h, q = opts.q !== undefined ? opts.q : 80;
-    var fit = opts.fit || 'max';
-    var auto = opts.auto !== false;
-    var base = url.split('?')[0];
-    var p = new URLSearchParams();
-    if (auto) p.set('auto', 'format');
-    if (w) p.set('w', String(w));
-    if (h) p.set('h', String(h));
-    p.set('q', String(q));
-    if ((w || h) && fit !== 'max') p.set('fit', fit);
-    return base + '?' + p.toString();
-  }
-  function sanitySrcset(url, widths, opts) {
-    if (!url || !url.includes('cdn.sanity.io')) return '';
-    widths = widths || [400, 800, 1200];
-    opts = opts || {};
-    return widths.map(function(w) {
-      return sanityImgUrl(url, Object.assign({}, opts, { w: w })) + ' ' + w + 'w';
-    }).join(', ');
+  // Guard: sanity-client.js must be loaded before gallery.js
+  if (!window.sanityImgUrl || !window.fetchAllArtworks) {
+    console.error('❌ sanity-client.js not loaded — gallery.js requires it');
+    grid.innerHTML = "<p class='muted'>Failed to load artworks.</p>";
+    return;
   }
 
-  grid.innerHTML = "<p class='muted'>Loading artworks...</p>";
+  // Show skeleton cards while data loads (nvSkeleton from sanity-client.js)
+  if (window.nvSkeleton) {
+    window.nvSkeleton(grid, 8);
+  } else {
+    grid.innerHTML = "<p class='muted'>Loading artworks…</p>";
+  }
 
   try {
-  const query = `
-  *[_type == "artwork" && defined(image)]
-  | order(order asc, _createdAt desc) {
-    _id,
-    _createdAt,
-    title,
-    "img": image.asset->url,
-    "photos": images[].asset->url,
-    medium,
-    "size": dimensions,
-    price,
-    status,
-    order,
-    description,
-    "slug": slug.current,
-    featured,
-    "artist": artist->{
-      _id,
-      name,
-      "slug": slug.current
-    }
-  }
-`;
+    const artworks = await window.fetchAllArtworks();
 
-
-    const res = await fetch(
-      "https://8t5h923j.apicdn.sanity.io/v2026-02-01/data/query/production?query=" +
-        encodeURIComponent(query)
-    );
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-    }
-
-    const { result: artworks } = await res.json();
-
-    if (!artworks.length) {
-      grid.innerHTML = "<p class='muted'>No artworks found.</p>";
+    if (!artworks || !artworks.length) {
+      window.nvEmpty
+        ? window.nvEmpty(grid, 'No artworks available')
+        : (grid.innerHTML = "<p class='muted'>No artworks found.</p>");
       return;
     }
 
@@ -101,17 +56,25 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.className = "card";
 
       card.innerHTML = `
-        <img class="thumb-img"
-          src="${sanityImgUrl(art.img, {w: 600, q: 80})}"
-          srcset="${sanitySrcset(art.img, [400, 600, 800])}"
-          sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 400px"
-          alt="${art.title}"
-          loading="lazy"
-          decoding="async"
-          width="600" height="450" />
+        <div class="nv-img-wrap"${art.lqip ? ` style="background-image:url(${art.lqip})"` : ''}>
+          <img class="thumb-img nv-lqip"
+            src="${window.sanityImgUrl(art.img, {w: 600, q: 80})}"
+            srcset="${window.sanitySrcset(art.img, [400, 600, 800])}"
+            sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 400px"
+            alt="${art.title}"
+            loading="lazy"
+            decoding="async"
+            width="600" height="450"
+            onload="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage=''"
+            onerror="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage='';this.src='./images/placeholder.jpg'" />
+        </div>
 
         <div class="card-body">
           <h3>${art.title}</h3>
+
+          ${art.artist && art.artist.slug
+            ? `<a class="artist-credit" href="./artists/artist.html?artist=${art.artist.slug}" aria-label="View artworks by ${art.artist.name || 'artist'}">${art.artist.name}</a>`
+            : ''}
 
           <p class="muted">
             ${art.medium || ""}${art.size ? " | " + art.size : ""}
@@ -143,8 +106,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       grid.appendChild(card);
     });
+
+    // Inject VisualArtwork schema for the primary (first available) artwork
+    var _schemaArt = sortedArtworks.find(function(a) {
+      return (a.status || '').toLowerCase() !== 'sold';
+    }) || sortedArtworks[0];
+    if (_schemaArt && typeof window.injectSchema === 'function') {
+      window.injectSchema('artwork', _schemaArt);
+    }
   } catch (err) {
     console.error(err);
-    grid.innerHTML = "<p class='muted'>Failed to load artworks.</p>";
+    window.nvError
+      ? window.nvError(grid, 'Could not load artworks. Please try again.', function() { location.reload(); })
+      : (grid.innerHTML = "<p class='muted'>Failed to load artworks.</p>");
   }
 });
