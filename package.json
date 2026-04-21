@@ -9,7 +9,9 @@
     "generate-products:clean": "node scripts/generate-product-pages.mjs --clean",
     "audit-slugs":             "node scripts/audit-slugs.mjs",
     "fix-slugs":               "node scripts/audit-slugs.mjs --fix",
-    "fix-slugs:dry":           "node scripts/audit-slugs.mjs --dry-run"
+    "fix-slugs:dry":           "node scripts/audit-slugs.mjs --dry-run",
+    "fix-collisions":          "node scripts/fix-slug-collisions.mjs",
+    "fix-collisions:dry":      "node scripts/fix-slug-collisions.mjs --dry-run"
   },
   "dependencies": {
     "@sanity/client": "^6.15.7"
