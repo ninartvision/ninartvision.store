@@ -154,11 +154,11 @@
 
 
 
-<!-- ✅ SCRIPT ყოველთვის ბოლოს -->
-<script src="../sanity-client.min.js"></script>
-<script src="../data.min.js"></script>
+<!-- Scripts — defer keeps execution order; sanity-client must be first -->
+<script defer src="../sanity-client.min.js"></script>
+<script defer src="../data.min.js"></script>
 <script defer src="shop-render.min.js"></script>
-<script src="../script.min.js"></script>
+<script defer src="../script.min.js"></script>
 
 </body>
 </html>
