@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting… | Ninart Vision</title>
+
+  <!--
+    Legacy redirect page — product.html?slug=X → /products/{slug}/
+
+    Crawlers (WhatsApp, Facebook, Googlebot) that do NOT execute JS will see
+    the shop page Open Graph tags via the canonical tag below.
+    Human visitors are redirected by the script at the bottom.
+
+    No <meta http-equiv="refresh"> is used: that would confuse crawlers.
+  -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://ninartvision.store/sale/shop.html">
+
+  <!-- Default OG so any cached social preview still looks reasonable -->
+  <meta property="og:type"    content="website">
+  <meta property="og:title"   content="Shop Original Paintings | Ninart Vision">
+  <meta property="og:image"   content="https://ninartvision.store/images/og-image.png">
+  <meta property="og:url"     content="https://ninartvision.store/sale/shop.html">
+</head>
+<body>
+<script>
+  // JS-only redirect — invisible to crawlers
+  (function () {
+    var slug = new URLSearchParams(location.search).get('slug') || '';
+    // Strip any stray quote chars that older links may have encoded
+    slug = slug.replace(/[\"%27]/g, '');
+    if (slug) {
+      location.replace('/products/' + slug + '/');
+    } else {
+      location.replace('/sale/shop.html');
+    }
+  }());
+</script>
+<noscript>
+  <p>JavaScript is required. <a href="/sale/shop.html">Browse the shop →</a></p>
+</noscript>
+</body>
+</html>
+
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container header-row">
+    <a class="brand" href="index.html">
+      <img src="images/logo.webp" alt="Ninart Vision Logo">
+    </a>
+    <nav class="nav desktop-nav">
+      <a href="index.html">Home</a>
+      <a href="support.html">Support a Project</a>
+      <a href="sale/shop.html">Shop</a>
+      <a href="artists/">Artists</a>
+      <a href="news.html">News</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="header-actions">
+      <button class="hamburger" id="openMenu" aria-label="Open menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="menu-overlay" id="menuOverlay">
+  <div class="menu-links">
+    <button class="menu-close" id="closeMenu" aria-label="Close">&#10005;</button>
+    <a class="menu-link" href="index.html">Home</a>
+    <a class="menu-link" href="support.html">Support a Project</a>
+    <a class="menu-link" href="sale/shop.html">Shop</a>
+    <a class="menu-link" href="artists/">Artists</a>
+    <a class="menu-link" href="news.html">News</a>
+    <a class="menu-link" href="about.html">About</a>
+  </div>
+</div>
+
+<!-- PRODUCT DETAIL -->
+<section class="section" style="padding-top:100px; min-height:70vh;">
+  <div class="container">
+
+    <a href="sale/shop.html" class="btn btn-dark" style="margin-bottom:2rem;">← Back to Shop</a>
+
+    <!-- Loading state -->
+    <div id="productLoading" style="text-align:center; padding:4rem 0;">
+      <p class="muted">Loading artwork…</p>
+    </div>
+
+    <!-- Error state -->
+    <div id="productError" style="display:none; text-align:center; padding:4rem 0;">
+      <p class="muted">Artwork not found. <a href="sale/shop.html">Browse the shop →</a></p>
+    </div>
+
+    <!-- Product content (populated by JS) -->
+    <div id="productDetail" style="display:none;">
+      <div class="product-layout">
+
+        <!-- LEFT: image -->
+        <div class="product-left">
+          <div class="product-gallery" style="position:relative;">
+            <img id="pdImg" src="" alt="" decoding="async"
+                 style="width:100%; max-width:600px; display:block; border-radius:8px;">
+          </div>
+          <!-- Extra photos -->
+          <div id="pdThumbs" class="product-thumbs" style="margin-top:1rem; display:none; flex-wrap:wrap; gap:8px;"></div>
+          <button id="pdMoreBtn" class="morePhotosBtn" type="button" style="display:none; margin-top:.75rem;">
+            More photos <span class="arrow">↓</span>
+          </button>
+        </div>
+
+        <!-- RIGHT: details -->
+        <div class="product-right">
+          <h1 id="pdTitle" style="margin-bottom:.5rem;"></h1>
+          <p id="pdArtist" class="muted" style="margin-bottom:1rem;"></p>
+          <p id="pdDesc"   class="muted"></p>
+
+          <ul class="product-info" style="margin:1.25rem 0;">
+            <li id="pdSizeLi"   style="display:none;"><b>Size:</b>   <span id="pdSize"></span></li>
+            <li id="pdMediumLi" style="display:none;"><b>Medium:</b> <span id="pdMedium"></span></li>
+            <li id="pdYearLi"   style="display:none;"><b>Year:</b>   <span id="pdYear"></span></li>
+          </ul>
+
+          <div class="product-buy">
+            <div class="product-price" id="pdPrice"></div>
+            <p id="pdStatus" class="status" style="display:none;"></p>
+
+            <!-- WhatsApp buy button -->
+            <button class="btn btn-dark" id="pdBuyBtn" style="margin-top:1rem; display:none;">
+              Add to Cart (WhatsApp)
+            </button>
+
+            <!-- Share / copy link -->
+            <button class="btn" id="pdShareBtn"
+                    style="margin-top:.75rem; background:transparent; border:1px solid currentColor;">
+              Share this artwork
+            </button>
+            <p id="pdShareMsg" class="muted" style="font-size:.8rem; margin-top:.5rem; display:none;">
+              Link copied to clipboard!
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER (minimal) -->
+<footer class="footer" style="margin-top:4rem;">
+  <div class="container footer-bottom">
+    <p>&copy; <span id="footerYear"></span> Ninart Vision. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="sanity-client.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ── Slug generator (mirrors script.js — no dependency on script.js here) ── */
+  function generateSlug(str) {
+    return String(str || '')
+      .toLowerCase()
+      .replace(/['"«»""''„"]/g, '')
+      .replace(/[^\w\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+  }
+
+  /* ── Price formatter ── */
+  function fmtPrice(p) {
+    const n = Number(String(p || '').replace(/[^\d.]/g, ''));
+    return n ? '\u20BE' + n.toLocaleString('en-US') : '';
+  }
+
+  /* ── Update <head> OG tags ── */
+  function setOg(property, content) {
+    if (!content) return;
+    let el = document.querySelector(`meta[property="${property}"]`);
+    if (!el) { el = document.createElement('meta'); el.setAttribute('property', property); document.head.appendChild(el); }
+    el.setAttribute('content', content);
+  }
+  function setTw(name, content) {
+    if (!content) return;
+    let el = document.querySelector(`meta[name="${name}"]`);
+    if (!el) { el = document.createElement('meta'); el.setAttribute('name', name); document.head.appendChild(el); }
+    el.setAttribute('content', content);
+  }
+  function setCanonical(url) {
+    let el = document.querySelector('link[rel="canonical"]');
+    if (!el) { el = document.createElement('link'); el.rel = 'canonical'; document.head.appendChild(el); }
+    el.href = url;
+  }
+
+  /* ── Fetch artwork by slug from Sanity ── */
+  async function fetchArtworkBySlug(slug) {
+    const cfg = window.SANITY_CONFIG || { projectId: '8t5h923j', dataset: 'production', apiVersion: '2025-02-05' };
+    const query = `*[_type == "artwork" && slug.current == $slug][0]{
+      _id,
+      title,
+      "slug": slug.current,
+      shortDescription,
+      description,
+      image{ asset->{ _id, url, metadata{ lqip, dimensions } }, alt },
+      images[]{ asset->{ _id, url }, alt, _key },
+      year,
+      medium,
+      dimensions,
+      price,
+      status,
+      "seoTitle": seo.seoTitle,
+      "seoDescription": seo.seoDescription,
+      "artist": artist->{ _id, name, "slug": slug.current, whatsapp }
+    }`;
+    const params = encodeURIComponent(JSON.stringify({ slug }));
+    const url = `https://${cfg.projectId}.apicdn.sanity.io/v${cfg.apiVersion}/data/query/${cfg.dataset}?query=${encodeURIComponent(query)}&$slug=${encodeURIComponent('"' + slug + '"')}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Sanity fetch failed: ' + res.status);
+    const json = await res.json();
+    return json.result || null;
+  }
+
+  /* ── Render ── */
+  function renderProduct(a) {
+    const title      = a.seoTitle || a.title || 'Artwork';
+    const desc       = a.seoDescription || a.shortDescription || a.description || '';
+    const artistName = a.artist?.name || '';
+    const rawImgUrl  = a.image?.asset?.url || '';
+    const ogImgUrl   = rawImgUrl
+      ? (typeof sanityImgUrl === 'function'
+          ? sanityImgUrl(rawImgUrl, { w: 1200, h: 630, fit: 'crop', q: 85 })
+          : rawImgUrl)
+      : 'https://ninartvision.store/images/og-image.png';
+    const slug       = a.slug || generateSlug(a.title || '');
+    const pageUrl    = `https://ninartvision.store/product.html?slug=${encodeURIComponent(slug)}`;
+    const isSold     = String(a.status || '').toLowerCase() === 'sold';
+
+    /* Update OG/Twitter in <head> */
+    document.title = title + ' | Ninart Vision';
+    setOg('og:title',       title);
+    setOg('og:description', desc || 'Original artwork available at Ninart Vision.');
+    setOg('og:image',       ogImgUrl);
+    setOg('og:image:width', '1200');
+    setOg('og:image:height','630');
+    setOg('og:url',         pageUrl);
+    setTw('twitter:title',  title);
+    setTw('twitter:description', desc || 'Original artwork available at Ninart Vision.');
+    setTw('twitter:image',  ogImgUrl);
+    setCanonical(pageUrl);
+
+    /* DOM */
+    document.getElementById('pdTitle').textContent  = a.title || '';
+    document.getElementById('pdArtist').textContent = artistName ? 'by ' + artistName : '';
+    document.getElementById('pdDesc').textContent   = desc;
+
+    const imgEl = document.getElementById('pdImg');
+    const displayImg = typeof sanityImgUrl === 'function'
+      ? sanityImgUrl(rawImgUrl, { w: 800, q: 80 })
+      : rawImgUrl;
+    if (displayImg) { imgEl.src = displayImg; imgEl.alt = a.image?.alt || title; }
+
+    const price = fmtPrice(a.price);
+    document.getElementById('pdPrice').textContent = price;
+
+    const statusEl = document.getElementById('pdStatus');
+    if (isSold) {
+      statusEl.textContent = 'Sold'; statusEl.className = 'status sold'; statusEl.style.display = 'block';
+    } else if (price) {
+      statusEl.textContent = 'Available'; statusEl.className = 'status sale'; statusEl.style.display = 'block';
+    }
+
+    const setInfo = (liId, spanId, val) => {
+      if (val) { document.getElementById(spanId).textContent = val; document.getElementById(liId).style.display = ''; }
+    };
+    setInfo('pdSizeLi',   'pdSize',   a.dimensions || '');
+    setInfo('pdMediumLi', 'pdMedium', a.medium || '');
+    setInfo('pdYearLi',   'pdYear',   String(a.year || ''));
+
+    /* Extra photos thumbnail strip */
+    const extraPhotos = (a.images || []).map(i => i?.asset?.url).filter(Boolean);
+    if (extraPhotos.length > 1) {
+      const thumbsEl = document.getElementById('pdThumbs');
+      extraPhotos.forEach((url, idx) => {
+        const img = document.createElement('img');
+        img.src = typeof sanityImgUrl === 'function' ? sanityImgUrl(url, { w: 200, q: 75 }) : url;
+        img.className = 'product-thumb';
+        img.alt = title + ' photo ' + (idx + 1);
+        img.onclick = () => { document.getElementById('pdImg').src = (typeof sanityImgUrl === 'function' ? sanityImgUrl(url, { w: 800, q: 80 }) : url); };
+        thumbsEl.appendChild(img);
+      });
+      const moreBtn = document.getElementById('pdMoreBtn');
+      moreBtn.style.display = 'block';
+      moreBtn.addEventListener('click', () => {
+        const d = thumbsEl.style.display;
+        thumbsEl.style.display = (d === 'flex' || d === '') ? 'none' : 'flex';
+        moreBtn.querySelector('.arrow').textContent = (thumbsEl.style.display === 'flex') ? '↑' : '↓';
+      });
+    }
+
+    /* WhatsApp buy button */
+    if (!isSold) {
+      const buyBtn = document.getElementById('pdBuyBtn');
+      buyBtn.style.display = 'block';
+      buyBtn.addEventListener('click', () => {
+        const phone = a.artist?.whatsapp || '995579388833';
+        const msg = encodeURIComponent(
+          `გამარჯობა, მაინტერესებს ნახატი: ${a.title || title}, ავტორი ${artistName}, ფასი ${price}\n${pageUrl}`
+        );
+        window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+      });
+    }
+
+    /* Share / copy link */
+    document.getElementById('pdShareBtn').addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({ title, text: desc, url: pageUrl }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(pageUrl).then(() => {
+          const msg = document.getElementById('pdShareMsg');
+          msg.style.display = 'block';
+          setTimeout(() => { msg.style.display = 'none'; }, 3000);
+        });
+      }
+    });
+
+    /* Show product, hide loading */
+    document.getElementById('productLoading').style.display = 'none';
+    document.getElementById('productDetail').style.display  = 'block';
+  }
+
+  /* ── Boot ── */
+  document.addEventListener('DOMContentLoaded', async () => {
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+    const params = new URLSearchParams(location.search);
+    const slug   = (params.get('slug') || '').replace(/"/g, '').trim(); // strip stray quotes
+
+    if (!slug) {
+      document.getElementById('productLoading').style.display = 'none';
+      document.getElementById('productError').style.display   = 'block';
+      return;
+    }
+
+    try {
+      const artwork = await fetchArtworkBySlug(slug);
+      if (!artwork) throw new Error('not found');
+      renderProduct(artwork);
+    } catch (err) {
+      console.error('[product.html]', err);
+      document.getElementById('productLoading').style.display = 'none';
+      document.getElementById('productError').style.display   = 'block';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

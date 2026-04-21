@@ -1,4 +1,56 @@
-﻿document.addEventListener("DOMContentLoaded", () => {
+﻿/**
+ * Convert any string to a URL-safe slug.
+ * "Pomegranate Emotion" → "pomegranate-emotion"
+ * '"My Artwork"'        → "my-artwork"
+ */
+function generateSlug(str) {
+  return String(str || '')
+    .toLowerCase()
+    .replace(/['"«»""''„"]/g, '')       // remove all quote variants
+    .replace(/[^\w\s-]/g, '')            // remove non-word chars except spaces/hyphens
+    .trim()
+    .replace(/\s+/g, '-')               // spaces → hyphens
+    .replace(/-+/g, '-');               // collapse multiple hyphens
+}
+window.generateSlug = generateSlug;
+
+/**
+ * Update OG / Twitter meta tags in <head> dynamically.
+ * Called when a product modal opens so that if a user copies the
+ * product URL from the address bar the tags are already set correctly.
+ */
+function updateOgTags({ title, description, imageUrl, pageUrl }) {
+  const setMeta = (attr, val, content) => {
+    if (!content) return;
+    let el = document.querySelector(`meta[${attr}="${val}"]`);
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute(attr, val);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', content);
+  };
+  if (title) {
+    document.title = title + ' | Ninart Vision';
+    setMeta('property', 'og:title', title);
+    setMeta('name', 'twitter:title', title);
+  }
+  if (description) {
+    setMeta('property', 'og:description', description);
+    setMeta('name', 'twitter:description', description);
+  }
+  if (imageUrl) {
+    setMeta('property', 'og:image', imageUrl);
+    setMeta('property', 'og:image:width', '1200');
+    setMeta('property', 'og:image:height', '630');
+    setMeta('name', 'twitter:image', imageUrl);
+  }
+  if (pageUrl) {
+    setMeta('property', 'og:url', pageUrl);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
 
   const fmtPrice = p => {
     const n = Number(String(p || "").replace(/[^\d.]/g, ""));
@@ -196,6 +248,25 @@
       productThumbs.style.display = "none";
     }
 
+    // ── Build shareable product URL using slug ──────────────────────────────
+    const rawSlug = item.dataset.slug
+      || generateSlug(item.dataset.title || '');
+    const productUrl = rawSlug
+      ? `https://ninartvision.store/products/${rawSlug}/`
+      : window.location.href;
+
+    // Store on the item so the cart handler can reference it
+    item._productUrl = productUrl;
+
+    // Update OG tags in <head> for browsers (crawlers still see static defaults)
+    const ogImage = photos[0] && photos[0].startsWith('http') ? photos[0] : '';
+    updateOgTags({
+      title: item.dataset.title || '',
+      description: item.dataset.desc || '',
+      imageUrl: ogImage,
+      pageUrl: productUrl,
+    });
+
     modal.classList.add("open");
   }
 
@@ -276,8 +347,12 @@
       trackWhatsAppClick(artistName, 'cart');
     }
 
+    // Include the shareable product URL so WhatsApp generates a preview
+    const productUrl = currentItem._productUrl
+      || `https://ninartvision.store/products/${generateSlug(title)}/`;
+
     const msg = encodeURIComponent(
-      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}`
+      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}\n${productUrl}`
     );
 
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");

@@ -35,8 +35,15 @@ function renderAllItems(artworksData) {
     const photos  = (Array.isArray(a.images) && a.images.length)
       ? a.images.map(i => i?.asset?.url).filter(Boolean).map(u => iUrl(u, {w: 800}))
       : (Array.isArray(a.photos) ? a.photos : [imgSrc]);
+    // Build a slug: prefer Sanity slug, fall back to generated one
+    const slug = a.slug
+      || (typeof generateSlug === 'function' ? generateSlug(a.title || '') : '');
+    // Full-resolution image URL for OG tags (no resizing param)
+    const ogImageUrl = rawUrl || '';
     return {
       id: a._id || '',
+      slug,
+      ogImageUrl,
       status,
       title:  a.title || '',
       price:  String(a.price || ''),
@@ -78,6 +85,8 @@ function renderAllItems(artworksData) {
     div.dataset.year     = a.year;
     div.dataset.desc     = a.desc;
     div.dataset.keywords = a.keywords;
+    div.dataset.slug     = a.slug;
+    div.dataset.ogImage  = a.ogImageUrl;
     div.dataset.photos   = a.photos.join(',');
     div.innerHTML = `
       <div class="nv-img-wrap"${a.lqip ? ` style="background-image:url(${a.lqip})"` : ''}>

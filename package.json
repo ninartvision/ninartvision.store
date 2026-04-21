@@ -4,7 +4,12 @@
   "description": "Image migration script for Ninart Vision",
   "type": "module",
   "scripts": {
-    "migrate-images": "node migrate-images.js"
+    "migrate-images":          "node migrate-images.js",
+    "generate-products":       "node scripts/generate-product-pages.mjs",
+    "generate-products:clean": "node scripts/generate-product-pages.mjs --clean",
+    "audit-slugs":             "node scripts/audit-slugs.mjs",
+    "fix-slugs":               "node scripts/audit-slugs.mjs --fix",
+    "fix-slugs:dry":           "node scripts/audit-slugs.mjs --dry-run"
   },
   "dependencies": {
     "@sanity/client": "^6.15.7"

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ka">
 <head>
   <meta charset="UTF-8" />
@@ -912,6 +912,85 @@
         navigator.serviceWorker.register('./sw.js').catch(function(){});
       });
     }
+  </script>
+
+  <!-- Hero cinematic: dots, click-nav, autoplay -->
+  <script>
+  (function () {
+    function initHero() {
+      var slides    = document.querySelectorAll('.hero-slides .slide');
+      var container = document.getElementById('heroDots');
+      var prevBtn   = document.getElementById('prevSlide');
+      var nextBtn   = document.getElementById('nextSlide');
+      if (!slides.length || !container || !nextBtn || !prevBtn) return;
+
+      /* Build dot buttons */
+      slides.forEach(function (_, i) {
+        var d = document.createElement('button');
+        d.className  = 'hero-dot' + (i === 0 ? ' active' : '');
+        d.type       = 'button';
+        d.setAttribute('aria-label', 'Slide ' + (i + 1));
+        container.appendChild(d);
+      });
+
+      /* Keep dots in sync with the slider active class */
+      if ('MutationObserver' in window) {
+        var obs = new MutationObserver(function () {
+          var dots = container.querySelectorAll('.hero-dot');
+          slides.forEach(function (s, i) {
+            dots[i].classList.toggle('active', s.classList.contains('active'));
+          });
+        });
+        slides.forEach(function (s) {
+          obs.observe(s, { attributes: true, attributeFilter: ['class'] });
+        });
+      }
+
+      /* Dot click: navigate via arrow buttons */
+      var dots = container.querySelectorAll('.hero-dot');
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () {
+          var current = 0;
+          slides.forEach(function (s, idx) {
+            if (s.classList.contains('active')) current = idx;
+          });
+          var diff = i - current;
+          if (diff === 0) return;
+          var btn = diff > 0 ? nextBtn : prevBtn;
+          for (var x = 0; x < Math.abs(diff); x++) btn.click();
+        });
+      });
+
+      /* Autoplay — 5 s, pauses on hover and touch */
+      var INTERVAL = 5000;
+      var timer    = null;
+      var paused   = false;
+
+      function tick()  { if (!paused) nextBtn.click(); }
+      function start() { if (!timer) timer = setInterval(tick, INTERVAL); }
+      function reset() { clearInterval(timer); timer = null; start(); }
+
+      start();
+
+      var slider = document.querySelector('.hero-slider');
+      if (slider) {
+        slider.addEventListener('mouseenter', function () { paused = true; });
+        slider.addEventListener('mouseleave', function () { paused = false; });
+        slider.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+        slider.addEventListener('touchend',   function () { paused = false; });
+      }
+
+      [prevBtn, nextBtn].forEach(function (btn) {
+        btn.addEventListener('click', reset);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHero);
+    } else {
+      initHero();
+    }
+  }());
   </script>
 </body>
 </html>
