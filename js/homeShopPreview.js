@@ -157,10 +157,20 @@ async function initHomeShopPreview() {
           p.keywords || ''
         ].map(s => s.trim()).filter(Boolean).join(' ').toLowerCase();
 
+        div.dataset.slug = p.slug || '';
+        div.dataset.artist = 'nini';
+
+        const cartBtn = p.status === 'sale'
+          ? `<button type="button" class="shop-item__cart-btn" aria-label="Add to cart — inquire via WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></button>`
+          : '';
+
         div.innerHTML = `
+          <div class="nv-img-wrap shop-item__visual">
           <img src="${imgSrc}"${imgSrcset ? ` srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 350px"` : ''}
                alt="${p.alt || p.title}" loading="lazy" decoding="async"
                width="600" height="750" onerror="this.src='images/placeholder.jpg'">
+          ${cartBtn}
+          </div>
           <div class="shop-meta">
             <span>${p.title}</span>
             ${p.price ? `<span class="price">${fmtPrice(p.price)}</span>` : ''}
@@ -275,6 +285,7 @@ async function initHomeShopPreview() {
         id: artwork._id,
         status: homeNormStatus(artwork.status),
         title: artwork.title || 'Untitled',
+        slug: artwork.slug?.current || artwork.slug || '',
         shortDescription: (artwork.shortDescription || '').trim().toLowerCase() === (artwork.title || '').trim().toLowerCase()
           ? ''
           : (artwork.shortDescription || ''),

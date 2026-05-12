@@ -153,6 +153,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const isSold = isSoldFlag || rawStatus === "sold";
     const isOnSale = !isSold && (isOnSaleFlag || rawStatus === "sale");
 
+    const cartBtnModal = document.getElementById("addToCartBtn");
+    if (cartBtnModal) {
+      cartBtnModal.hidden = isSold;
+      cartBtnModal.setAttribute("aria-hidden", isSold ? "true" : "false");
+    }
+
     if (isSold) {
       statusEl.className = "status sold";
       statusEl.textContent = "Sold";
@@ -171,6 +177,40 @@ document.addEventListener("DOMContentLoaded", () => {
     statusEl.textContent = "";
     statusEl.style.display = "none";
   }
+
+  /** WhatsApp inquiry — same payload from modal or from in-card cart control */
+  function nvWhatsAppCartFromShopItem(item) {
+    if (!item) return;
+    const sold =
+      String(item.dataset?.isSold || "").toLowerCase() === "true" ||
+      String(item.dataset?.status || "").toLowerCase().trim() === "sold";
+    if (sold) return;
+
+    const title = item.dataset.title || "";
+    const price = fmtPrice(item.dataset.price);
+    const artistId = item.dataset.artist || "";
+    const artist =
+      window.CURRENT_ARTIST || window.ARTISTS?.find(a => a.id === artistId);
+    const artistName = artist?.name || "";
+    const phone = artist?.whatsapp || "995579388833";
+
+    if (typeof trackWhatsAppClick === "function") {
+      trackWhatsAppClick(artistName, "cart");
+    }
+
+    const rawSlug =
+      item.dataset.slug || generateSlug(title);
+    const productUrl = rawSlug
+      ? `https://ninartvision.store/products/${rawSlug}/`
+      : window.location.href;
+
+    const msg = encodeURIComponent(
+      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}\n${productUrl}`
+    );
+
+    window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+  }
+  window.nvWhatsAppCartFromShopItem = nvWhatsAppCartFromShopItem;
 
   const productThumbs = document.getElementById("productThumbs");
   const galleryPrev = document.getElementById("galleryPrev");
@@ -311,6 +351,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (container.dataset.shopDelegated) return;
         container.dataset.shopDelegated = '1';
         container.addEventListener('click', e => {
+          const cartHit = e.target.closest(".shop-item__cart-btn");
+          if (cartHit) {
+            e.preventDefault();
+            e.stopPropagation();
+            const item = cartHit.closest(".shop-item");
+            if (item) nvWhatsAppCartFromShopItem(item);
+            return;
+          }
           if (e.target.closest('a, button')) return;
           const item = e.target.closest('.shop-item');
           if (!item) return;
@@ -359,30 +407,11 @@ document.addEventListener("DOMContentLoaded", () => {
       productThumbs.style.display === "flex" ? "none" : "flex";
   });
 
-  addToCartBtn?.addEventListener("click", () => {
+  addToCartBtn?.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!currentItem) return;
-    const title = currentItem.dataset.title || "";
-    const price = fmtPrice(currentItem.dataset.price);
-    const artistId = currentItem.dataset.artist || "";
-    // Use current artist from Sanity if available, otherwise fallback to legacy data
-    const artist = window.CURRENT_ARTIST || window.ARTISTS?.find(a => a.id === artistId);
-    const artistName = artist?.name || "";
-    const phone = artist?.whatsapp || "995579388833";
-
-    // Track WhatsApp contact
-    if (typeof trackWhatsAppClick === 'function') {
-      trackWhatsAppClick(artistName, 'cart');
-    }
-
-    // Include the shareable product URL so WhatsApp generates a preview
-    const productUrl = currentItem._productUrl
-      || `https://ninartvision.store/products/${generateSlug(title)}/`;
-
-    const msg = encodeURIComponent(
-      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}\n${productUrl}`
-    );
-
-    window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+    nvWhatsAppCartFromShopItem(currentItem);
   });
 
   /* =========================

@@ -274,6 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
           description: a.description || "",
           alt: a.image?.alt || a.title || "Artwork image",
           // Lightbox photos at higher resolution
+          slug: a.slug?.current || a.slug || "",
           photos: a.photos?.length
             ? a.photos.map(u => imgOpt(u, 1200))
             : [imgOpt(a.img, 1200)]
@@ -301,6 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="shop-item ${a.status}"
         data-img="${a.img}"
         data-artist="${artistSlug}"
+        data-slug="${(a.slug || '').replace(/"/g, '&quot;')}"
         data-status="${a.status}"
         data-is-sold="${String(a.status === 'sold')}"
         data-is-on-sale="${String(a.status === 'sale')}"
@@ -313,10 +315,13 @@ document.addEventListener("DOMContentLoaded", () => {
         data-alt="${a.alt}"
         data-photos="${a.photos.join(",")}">
 
+        <div class="nv-img-wrap shop-item__visual">
         <img src="${a.img}"
              ${a.imgSrcset ? `srcset="${a.imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 300px"` : ''}
              alt="${a.alt}" loading="lazy" decoding="async"
              width="600" height="750" onerror="this.src='../images/placeholder.jpg'">
+        ${a.status !== 'sold' ? `<button type="button" class="shop-item__cart-btn" aria-label="Add to cart — inquire via WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></button>` : ''}
+        </div>
 
         ${a.status === 'sold' ? '<div class="sold-badge"></div>' : ''}
 
