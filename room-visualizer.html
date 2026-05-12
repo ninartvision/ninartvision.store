@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Preview Art on Your Wall | Ninart Vision</title>
+  <meta name="description" content="Upload a photo of your room and preview how original paintings from Ninart Vision would look on your wall. Browse the full collection.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ninartvision.store/room-visualizer.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Preview Art on Your Wall | Ninart Vision">
+  <meta property="og:description" content="Upload your room photo and try any artwork from our collection on your wall.">
+  <meta property="og:url" content="https://ninartvision.store/room-visualizer.html">
+  <meta property="og:image" content="https://ninartvision.store/images/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Preview Art on Your Wall | Ninart Vision">
+  <meta name="twitter:image" content="https://ninartvision.store/images/og-image.png">
+
+  <link rel="stylesheet" href="./style.min.css" />
+  <link rel="stylesheet" href="./css/room-visualizer.css" />
+  <link rel="icon" href="./images/favicon.png">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID', {
+    anonymize_ip: true,
+    allow_google_signals: false,
+    allow_ad_personalization_signals: false
+  });
+</script>
+<script defer src="./analytics.min.js"></script>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container header-row">
+    <a class="brand" href="./index.html">
+      <img src="./images/logo.webp" alt="Ninart Vision Logo">
+    </a>
+    <nav class="nav desktop-nav">
+      <a href="./index.html">Home</a>
+      <a href="./support.html">Support a Project</a>
+      <a href="./sale/shop.html">Shop</a>
+      <a href="./room-visualizer.html" class="active">Room preview</a>
+      <a href="./artists/">Artists</a>
+      <a href="./news.html">News</a>
+      <a href="./about.html">About</a>
+    </nav>
+    <button class="hamburger" id="openMenu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu-overlay" id="menuOverlay">
+  <button class="menu-close" id="closeMenu" aria-label="Close menu">✕</button>
+  <nav class="menu-links">
+    <a href="./index.html" class="menu-link">HOME</a>
+    <a href="./support.html" class="menu-link">SUPPORT A PROJECT</a>
+    <a href="./sale/shop.html" class="menu-link">SHOP</a>
+    <a href="./room-visualizer.html" class="menu-link">ROOM PREVIEW</a>
+    <a href="./artists/" class="menu-link">ARTISTS</a>
+    <a href="./news.html" class="menu-link">NEWS</a>
+    <a href="./about.html" class="menu-link">ABOUT</a>
+  </nav>
+</div>
+
+<main>
+  <div class="container" style="margin-top:100px;">
+    <section class="section" style="padding-top:0;">
+      <div class="section-top" style="margin-bottom:12px;">
+        <h2>Preview in your space</h2>
+      </div>
+      <div class="nvr-page-intro muted">
+        Upload a photo of your wall or room, then choose any piece from the collection. Drag the painting to position it, use the corner handle or slider to resize, and adjust rotation to match your space. Your photo stays in your browser — it is not uploaded to our servers.
+      </div>
+
+      <div class="nvr-upload-row">
+        <input type="file" id="nvrFile" accept="image/*" aria-label="Upload room or wall photo" />
+        <label for="nvrFile" class="btn btn-dark">Upload your room photo</label>
+        <button type="button" class="btn nvr-reset-btn" id="nvrResetRoom" data-visible="0">Remove photo</button>
+        <button type="button" class="btn" id="nvrExpand" aria-pressed="false" title="Larger preview area">Larger preview</button>
+      </div>
+
+      <div class="nvr-placeholder" id="nvrPlaceholder" role="status">
+        <p class="muted" style="max-width:28rem;">Your wall preview will appear here after you choose a photo (JPEG, PNG, or WebP).</p>
+      </div>
+
+      <div id="nvrStageWrap" class="nvr-stage-wrap" hidden>
+        <p class="nvr-hint">Drag the artwork to move it. Drag the dark corner handle to resize, or use the controls below.</p>
+        <div class="nvr-toolbar" aria-label="Artwork adjustments">
+          <label>Size <span class="muted" style="font-weight:400;">(<span id="nvrScaleVal">32%</span>)</span>
+            <input type="range" id="nvrScale" min="12" max="78" step="1" value="32" aria-label="Artwork width in frame" />
+          </label>
+          <label>Tilt <span class="muted" style="font-weight:400;">(<span id="nvrRotateVal">0°</span>)</span>
+            <input type="range" id="nvrRotate" min="-35" max="35" step="1" value="0" aria-label="Artwork rotation degrees" />
+          </label>
+        </div>
+
+        <div class="nvr-stage" id="nvrStage" aria-label="Room preview compose area">
+          <img class="nvr-room" id="nvrRoom" alt="" draggable="false" />
+          <div class="nvr-art-wrap" id="nvrArtWrap" hidden>
+            <img id="nvrArtImg" alt="" draggable="false" />
+            <div class="nvr-resize-corner" id="nvrCorner" aria-label="Resize artwork" role="presentation" hidden></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-top nvr-catalog-head">
+        <h2>Choose an artwork</h2>
+      </div>
+      <p class="muted" style="margin-bottom:1rem;">Full catalogue — same works as the gallery. Tap a piece to place it on your wall.</p>
+      <div id="nvrCatalog" class="nvr-catalog" aria-live="polite"></div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer-row">
+    <p>© <span id="nvrYear"></span> Ninart Vision</p>
+    <p class="muted"><a href="./sale/shop.html">Shop</a> · <a href="./gallery.html">Gallery</a></p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('nvrYear').textContent = new Date().getFullYear();
+</script>
+<script defer src="./sanity-client.min.js?v=nv20260213"></script>
+<script defer src="./js/room-visualizer.min.js?v=nv20260213"></script>
+<script defer src="./script.min.js?v=nv20260213"></script>
+</body>
+</html>
