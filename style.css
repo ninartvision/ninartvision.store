@@ -453,6 +453,169 @@ img, video {
   background:#f4f4f4;
 }
 
+/* ─── Featured Projects: editorial luxury heading ─── */
+@keyframes nv-editorial-rise{
+  from{
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nv-editorial-rule-sweep{
+  0%{
+    background-position: 22% 50%;
+  }
+  100%{
+    background-position: 78% 50%;
+  }
+}
+
+.section.section-featured-projects{
+  padding-top: clamp(56px, 8vw, 92px);
+  padding-bottom: clamp(48px, 7vw, 80px);
+}
+
+.section-featured-projects{
+  --fp-ink: #1a1514;
+  --fp-ink-muted: rgba(72, 64, 58, 0.76);
+  --fp-accent: rgba(154, 96, 74, 0.88);
+  --fp-accent-soft: rgba(198, 148, 122, 0.42);
+  --fp-eyebrow: rgba(148, 108, 90, 0.82);
+  --fp-eyebrow-rule: rgba(198, 165, 142, 0.48);
+  --fp-lede-subtle: rgba(58, 52, 46, 0.58);
+  --fp-rule-base-a: rgba(232, 218, 196, 0.52);
+  --fp-rule-base-b: rgba(244, 235, 220, 0.92);
+  --fp-rule-base-c: rgba(236, 224, 206, 0.72);
+}
+
+.section-featured-projects .editorial-heading{
+  max-width: min(52rem, 100%);
+  margin: 0 0 clamp(32px, 5vw, 48px);
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  opacity: 0;
+  animation: nv-editorial-rise 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
+}
+
+.section-featured-projects .editorial-heading__eyebrow{
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 0 clamp(7px, 1vw, 11px);
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  font-size: clamp(11px, 1.05vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--fp-eyebrow);
+}
+
+.section-featured-projects .editorial-heading__eyebrow::before{
+  content: "";
+  flex: 0 0 clamp(24px, 4vw, 40px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--fp-eyebrow-rule) 45%, var(--fp-accent-soft));
+}
+
+.section-featured-projects .editorial-heading__title{
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5.35vw, 3.35rem);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  color: var(--fp-ink);
+  margin: 0 0 clamp(7px, 1vw, 11px);
+  transition: text-shadow 0.55s ease, color 0.35s ease;
+}
+
+.section-featured-projects .editorial-heading:hover .editorial-heading__title,
+.section-featured-projects .editorial-heading:focus-within .editorial-heading__title{
+  text-shadow:
+    0 0 28px rgba(255, 247, 240, 0.35),
+    0 1px 14px rgba(52, 42, 36, 0.04);
+}
+
+.section-featured-projects .editorial-heading__lede{
+  font-family: "FiraGO", "Fira Sans", system-ui, -apple-system, sans-serif;
+  font-size: clamp(12px, 1.18vw, 15px);
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  color: var(--fp-lede-subtle);
+  max-width: 100%;
+  margin: 0;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.section-featured-projects .editorial-heading__lede.muted{
+  color: var(--fp-lede-subtle);
+}
+
+.section-featured-projects .editorial-heading__rule{
+  position: relative;
+  height: 1px;
+  margin-top: clamp(14px, 2vw, 22px);
+  border-radius: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    var(--fp-rule-base-a) 0%,
+    var(--fp-rule-base-b) 42%,
+    var(--fp-rule-base-c) 50%,
+    var(--fp-rule-base-b) 58%,
+    var(--fp-rule-base-a) 100%
+  );
+}
+
+.section-featured-projects .editorial-heading__rule::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.58;
+  background: linear-gradient(
+    90deg,
+    hsla(38, 28%, 96%, 0) 0%,
+    hsla(36, 32%, 94%, 0) 40%,
+    hsla(34, 38%, 91%, 0.38) 48%,
+    hsla(32, 28%, 88%, 0.24) 50%,
+    hsla(34, 36%, 93%, 0.34) 52%,
+    hsla(36, 28%, 95%, 0) 60%,
+    hsla(38, 26%, 97%, 0) 100%
+  );
+  background-size: 320% 100%;
+  animation: nv-editorial-rule-sweep 44s ease-in-out infinite alternate;
+}
+
+@media (max-width: 768px){
+  .section-featured-projects .editorial-heading{
+    margin-bottom: clamp(26px, 6vw, 38px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .section-featured-projects .editorial-heading{
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .section-featured-projects .editorial-heading__rule::after{
+    animation: none;
+    opacity: 0.28;
+    background-position: 50% 50%;
+  }
+}
+
 .section-top{
   margin-bottom: 22px;
 }
