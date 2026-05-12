@@ -58,6 +58,48 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /* =========================
+     HOME — Gallery entrance arrow (viewport intro + idle drift)
+  ========================= */
+  const nvGalleryEntrance = document.querySelector(".home-shop-preview .nv-gallery-entrance");
+  const nvGalleryArrow = nvGalleryEntrance?.querySelector(".nv-gallery-entrance__arrow");
+  if (nvGalleryEntrance && nvGalleryArrow && !nvGalleryEntrance.dataset.nvGalleryMotionBound && "IntersectionObserver" in window) {
+    nvGalleryEntrance.dataset.nvGalleryMotionBound = "1";
+    const motionOk = () =>
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let playedIntro = false;
+    let ambientScheduled = false;
+    const INTRO_MS = 2750;
+
+    const scheduleAmbient = () => {
+      nvGalleryEntrance.classList.remove("nv-gallery-entrance--motion-intro");
+      nvGalleryEntrance.classList.add("nv-gallery-entrance--motion-ambient");
+    };
+
+    const finishIntro = () => {
+      if (ambientScheduled) return;
+      ambientScheduled = true;
+      nvGalleryArrow.removeEventListener("animationend", finishIntro);
+      scheduleAmbient();
+    };
+
+    const io = new IntersectionObserver(
+      entries => {
+        for (const en of entries) {
+          if (!en.isIntersecting || playedIntro) continue;
+          playedIntro = true;
+          io.disconnect();
+          if (!motionOk()) return;
+          nvGalleryEntrance.classList.add("nv-gallery-entrance--motion-intro");
+          nvGalleryArrow.addEventListener("animationend", finishIntro);
+          window.setTimeout(finishIntro, INTRO_MS + 120);
+        }
+      },
+      { threshold: 0.26, rootMargin: "0px 0px -6% 0px" }
+    );
+    io.observe(nvGalleryEntrance);
+  }
+
+  /* =========================
      MOBILE MENU
   ========================= */
   const openMenu = document.getElementById("openMenu");

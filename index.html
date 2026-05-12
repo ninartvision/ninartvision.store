@@ -227,7 +227,7 @@
         <!-- Search / room preview bar (left-aligned pill) -->
         <div class="search-wrapper">
           <a class="search-icon" href="room-visualizer.html" aria-label="Room preview — upload your room photo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L8 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-1.5-3z"/><circle cx="12" cy="14" r="3.5"/></svg></a>
-          <input type="text" id="siteSearch" class="search-input" placeholder="ატვირთე შენი ინტერიერის ფოტო და მოარგე ნამუშევარი..." autocomplete="off" aria-label="Search artworks and artists; room photo preview opens from the Room preview link in the menu">
+          <input type="text" id="siteSearch" class="search-input" placeholder="ატვირთეთ ინტერიერის ფოტო და მოარგეთ ნამუშევარი..." autocomplete="off" aria-label="Search artworks and artists; room photo preview opens from the Room preview link in the menu">
         </div>
 
         <!-- Social Icons on right -->
@@ -614,8 +614,8 @@
     </header>
 
     <div class="preview-tabs">
-      <button class="preview-btn active" data-filter="sale">SALE</button>
-      <button class="preview-btn" data-filter="sold">SOLD</button>
+      <button type="button" class="preview-btn active" data-filter="sale">SALE</button>
+      <button type="button" class="preview-btn" data-filter="sold">SOLD</button>
     </div>
 
     <!-- აქ უნდა იყოს ცარიელი grid -->
@@ -629,10 +629,9 @@
         <span class="nv-gallery-entrance__title">
           Gallery
           <span class="nv-gallery-entrance__arrow" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 18" fill="none" focusable="false">
-              <circle cx="5" cy="9" r="2.25" fill="currentColor" opacity="0.2"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="14 0 38 18" fill="none" focusable="false">
               <path d="M14 9h27.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" opacity="0.88"/>
-              <path d="M38 4l9 5-9 5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M38 4l9 5-9 5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" opacity="0.88"/>
             </svg>
           </span>
         </span>
@@ -933,7 +932,7 @@
   </footer>
 
 <!-- Critical runtime first (menu, hero, modal, search) -->
-<script defer src="./script.min.js?v=nv20260213"></script>
+<script defer src="./script.min.js?v=nv20260513"></script>
 <script defer src="./js/editorial-rule.min.js?v=nv20260215"></script>
 
 <!-- Load non-critical modules after first paint/idle -->
