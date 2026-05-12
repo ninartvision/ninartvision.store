@@ -148,11 +148,36 @@
         </ul>
 
         <div class="product-buy">
-          <div class="product-price" id="productPrice">₾250</div>
+          <div class="product-buy__price-row">
+            <div class="product-price" id="productPrice">₾250</div>
+          </div>
 
           <button class="morePhotosBtn" id="morePhotosBtn" type="button" aria-expanded="false">
             More photos <span class="arrow">↓</span>
           </button>
+
+          <div class="product-thumbs-shell" id="productThumbsShell" aria-hidden="true">
+            <div class="product-thumbs-shell__inner">
+              <div class="product-thumbs" id="productThumbs"></div>
+            </div>
+          </div>
+
+          <div class="product-modal-gift-card" id="giftPackagingCard" role="group" aria-labelledby="giftPackagingLabel">
+            <div class="product-modal-gift-card__main">
+              <span class="product-modal-gift-card__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+              </span>
+              <div class="product-modal-gift-card__text">
+                <span class="product-modal-gift-card__title" id="giftPackagingLabel">სასაჩუქრე შეფუთვა</span>
+                <span class="product-modal-gift-card__meta">+ €5</span>
+              </div>
+            </div>
+            <label class="product-modal-gift-switch">
+              <span class="product-modal-gift-switch__sr-only">სასაჩუქრე შეფუთვა (+ €5)</span>
+              <input type="checkbox" id="giftPackagingToggle" class="product-modal-gift-switch__input">
+              <span class="product-modal-gift-switch__track"><span class="product-modal-gift-switch__thumb"></span></span>
+            </label>
+          </div>
 
           <button type="button" id="addToCartBtn" class="product-modal-add-cart" aria-label="Add to cart — inquire via WhatsApp">
             Add to Cart
@@ -160,7 +185,6 @@
 
         </div>
 
-        <div class="product-thumbs" id="productThumbs" style="display:none;"></div>
       </div>
 
     </div>

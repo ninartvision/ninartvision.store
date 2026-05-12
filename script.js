@@ -129,14 +129,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const productMedium = document.getElementById("productMedium");
   const productYear = document.getElementById("productYear");
   const productPrice = document.getElementById("productPrice");
+  const giftPackagingCard = document.getElementById("giftPackagingCard");
+  const giftPackagingToggle = document.getElementById("giftPackagingToggle");
 
   function ensureStatusEl() {
     if (!productPrice || !productPrice.parentElement) return null;
     let statusEl = document.getElementById("productStatus");
     if (!statusEl) {
-      statusEl = document.createElement("p");
+      statusEl = document.createElement("span");
       statusEl.id = "productStatus";
       statusEl.className = "status";
+      statusEl.setAttribute("role", "status");
+      statusEl.hidden = true;
       productPrice.insertAdjacentElement("afterend", statusEl);
     }
     return statusEl;
@@ -159,32 +163,40 @@ document.addEventListener("DOMContentLoaded", () => {
       cartBtnModal.setAttribute("aria-hidden", isSold ? "true" : "false");
     }
 
+    if (giftPackagingCard) {
+      giftPackagingCard.hidden = isSold;
+      giftPackagingCard.setAttribute("aria-hidden", isSold ? "true" : "false");
+    }
+    if (giftPackagingToggle && isSold) giftPackagingToggle.checked = false;
+
     if (isSold) {
       statusEl.className = "status sold";
       statusEl.textContent = "Sold";
-      statusEl.style.display = "block";
+      statusEl.hidden = false;
       return;
     }
 
     if (isOnSale) {
       statusEl.className = "status sale";
       statusEl.textContent = "Sale";
-      statusEl.style.display = "block";
+      statusEl.hidden = false;
       return;
     }
 
     statusEl.className = "status";
     statusEl.textContent = "";
-    statusEl.style.display = "none";
+    statusEl.hidden = true;
   }
 
   /** WhatsApp inquiry — same payload from modal or from in-card cart control */
-  function nvWhatsAppCartFromShopItem(item) {
+  function nvWhatsAppCartFromShopItem(item, options = {}) {
     if (!item) return;
     const sold =
       String(item.dataset?.isSold || "").toLowerCase() === "true" ||
       String(item.dataset?.status || "").toLowerCase().trim() === "sold";
     if (sold) return;
+
+    const giftPackaging = Boolean(options.giftPackaging);
 
     const title = item.dataset.title || "";
     const price = fmtPrice(item.dataset.price);
@@ -204,8 +216,12 @@ document.addEventListener("DOMContentLoaded", () => {
       ? `https://ninartvision.store/products/${rawSlug}/`
       : window.location.href;
 
+    const giftLine = giftPackaging
+      ? "\nსასაჩუქრე შეფუთვა: დიახ (+ €5)"
+      : "";
+
     const msg = encodeURIComponent(
-      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}\n${productUrl}`
+      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}${giftLine}\n${productUrl}`
     );
 
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
@@ -213,10 +229,26 @@ document.addEventListener("DOMContentLoaded", () => {
   window.nvWhatsAppCartFromShopItem = nvWhatsAppCartFromShopItem;
 
   const productThumbs = document.getElementById("productThumbs");
+  const productThumbsShell = document.getElementById("productThumbsShell");
   const galleryPrev = document.getElementById("galleryPrev");
   const galleryNext = document.getElementById("galleryNext");
   const morePhotosBtn = document.getElementById("morePhotosBtn");
   const addToCartBtn = document.getElementById("addToCartBtn");
+
+  function closeProductThumbsAccordion() {
+    productThumbsShell?.classList.remove("is-open");
+    morePhotosBtn?.classList.remove("open");
+    morePhotosBtn?.setAttribute("aria-expanded", "false");
+    productThumbsShell?.setAttribute("aria-hidden", "true");
+  }
+
+  function toggleProductThumbsAccordion() {
+    const open = !productThumbsShell?.classList?.contains("is-open");
+    productThumbsShell?.classList.toggle("is-open", open);
+    morePhotosBtn?.classList.toggle("open", open);
+    morePhotosBtn?.setAttribute("aria-expanded", open ? "true" : "false");
+    productThumbsShell?.setAttribute("aria-hidden", open ? "false" : "true");
+  }
 
   let photos = [];
   let index = 0;
@@ -274,9 +306,11 @@ document.addEventListener("DOMContentLoaded", () => {
     productMedium.textContent = item.dataset.medium || "";
     productYear.textContent = item.dataset.year || "";
     productPrice.textContent = fmtPrice(item.dataset.price);
+    if (giftPackagingToggle) giftPackagingToggle.checked = false;
     setDetailStatus(item);
 
     if (productThumbs) {
+      closeProductThumbsAccordion();
       productThumbs.innerHTML = "";
       photos.forEach((src, i) => {
         const img = document.createElement("img");
@@ -285,7 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
         img.onclick = () => showPhoto(i);
         productThumbs.appendChild(img);
       });
-      productThumbs.style.display = "none";
     }
 
     // ── Build shareable product URL using slug ──────────────────────────────
@@ -403,15 +436,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   morePhotosBtn?.addEventListener("click", e => {
     e.stopPropagation();
-    productThumbs.style.display =
-      productThumbs.style.display === "flex" ? "none" : "flex";
+    toggleProductThumbsAccordion();
   });
 
   addToCartBtn?.addEventListener("click", e => {
     e.preventDefault();
     e.stopPropagation();
     if (!currentItem) return;
-    nvWhatsAppCartFromShopItem(currentItem);
+    nvWhatsAppCartFromShopItem(currentItem, {
+      giftPackaging: Boolean(giftPackagingToggle?.checked),
+    });
   });
 
   /* =========================
