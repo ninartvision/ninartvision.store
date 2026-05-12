@@ -466,9 +466,21 @@
   <div class="container">
     <header class="editorial-heading">
       <p class="editorial-heading__eyebrow" data-en="Projects" data-ka="პროექტები">პროექტები</p>
-      <h2 class="editorial-heading__title" data-en="Featured Projects" data-ka="რჩეული პროექტები">რჩეული პროექტები</h2>
+      <h2 class="editorial-heading__title" data-en="Featured Projects" data-ka="Featured Projects">Featured Projects</h2>
       <p class="editorial-heading__lede muted" title="Explore new releases, limited editions, and exclusive original artworks." data-en="Explore new releases, limited editions, and exclusive original artworks." data-ka="Explore new releases, limited editions, and exclusive original artworks.">Explore new releases, limited editions, and exclusive original artworks.</p>
-      <div class="editorial-heading__rule" aria-hidden="true"></div>
+      <div
+        class="editorial-heading__rule editorial-rule"
+        data-editorial-rule
+        aria-hidden="true"
+      >
+        <span class="editorial-rule__sensor"></span>
+        <span class="editorial-rule__lines">
+          <span class="editorial-rule__base"></span>
+          <span class="editorial-rule__grow"></span>
+          <span class="editorial-rule__halo"></span>
+          <span class="editorial-rule__shimmer"></span>
+        </span>
+      </div>
     </header>
 
     <!-- Slider Wrapper -->
@@ -585,7 +597,24 @@
     <!-- HOME SHOP PREVIEW -->
 <section class="home-shop-preview section">
   <div class="container">
-    <h2>Original Artworks</h2>
+    <header class="editorial-heading">
+      <p class="editorial-heading__eyebrow" data-en="Artworks" data-ka="ნამუშევრები">ნამუშევრები</p>
+      <h2 class="editorial-heading__title" data-en="Original Artworks" data-ka="Original Artworks">Original Artworks</h2>
+      <p class="editorial-heading__lede muted" title="Curated originals and editions — hand-painted works selected for collectors." data-en="Curated originals and editions — hand-painted works selected for collectors." data-ka="Curated originals and editions — hand-painted works selected for collectors.">Curated originals and editions — hand-painted works selected for collectors.</p>
+      <div
+        class="editorial-heading__rule editorial-rule"
+        data-editorial-rule
+        aria-hidden="true"
+      >
+        <span class="editorial-rule__sensor"></span>
+        <span class="editorial-rule__lines">
+          <span class="editorial-rule__base"></span>
+          <span class="editorial-rule__grow"></span>
+          <span class="editorial-rule__halo"></span>
+          <span class="editorial-rule__shimmer"></span>
+        </span>
+      </div>
+    </header>
 
     <div class="preview-tabs">
       <button class="preview-btn active" data-filter="sale">SALE</button>
@@ -605,12 +634,26 @@
      <!-- ARTISTS -->
 <section id="artists" class="section">
   <div class="container">
-    <div class="section-top">
-      <h2>Our Artists</h2>
-      <p class="muted">Meet the creators behind the canvas and explore their unique works.</p>
-    </div>
+    <header class="editorial-heading">
+      <p class="editorial-heading__eyebrow" data-en="Creators" data-ka="შემოქმედები">შემოქმედები</p>
+      <h2 class="editorial-heading__title" data-en="Our Artists" data-ka="Our Artists">Our Artists</h2>
+      <p class="editorial-heading__lede muted" title="Meet the painters behind each canvas — distinctive voices in contemporary Georgian art." data-en="Meet the painters behind each canvas — distinctive voices in contemporary Georgian art." data-ka="Meet the painters behind each canvas — distinctive voices in contemporary Georgian art.">Meet the painters behind each canvas — distinctive voices in contemporary Georgian art.</p>
+      <div
+        class="editorial-heading__rule editorial-rule"
+        data-editorial-rule
+        aria-hidden="true"
+      >
+        <span class="editorial-rule__sensor"></span>
+        <span class="editorial-rule__lines">
+          <span class="editorial-rule__base"></span>
+          <span class="editorial-rule__grow"></span>
+          <span class="editorial-rule__halo"></span>
+          <span class="editorial-rule__shimmer"></span>
+        </span>
+      </div>
+    </header>
 
-    <div class="artists-grid" id="homeArtistsGrid"></div>
+    <div class="artists-grid artists-grid--showcase" id="homeArtistsGrid"></div>
 
     <a href="artists/" class="btn">View All Artists →</a>
   </div>
@@ -830,6 +873,7 @@
 
 <!-- Critical runtime first (menu, hero, modal, search) -->
 <script defer src="./script.min.js?v=nv20260213"></script>
+<script defer src="./js/editorial-rule.min.js?v=nv20260213"></script>
 
 <!-- Load non-critical modules after first paint/idle -->
 <script>

@@ -1,47 +1,72 @@
+function observeHomeArtistReveal(grid) {
+  const cards = grid.querySelectorAll(".artist-card");
+  const reduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!cards.length) return;
+  if (reduced || !("IntersectionObserver" in window)) {
+    cards.forEach(function (c) {
+      c.classList.add("artist-card--visible");
+    });
+    return;
+  }
+  const io = new IntersectionObserver(
+    function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const idx = Number(el.dataset.revealIdx || 0);
+        el.style.transitionDelay = Math.min(idx * 70, 280) + "ms";
+        el.classList.add("artist-card--visible");
+        obs.unobserve(el);
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+  );
+  cards.forEach(function (el, i) {
+    el.dataset.revealIdx = String(i);
+    io.observe(el);
+  });
+}
+
 async function initHomeArtistsPreview() {
-  console.log('[homeArtistsPreview] init — readyState:', document.readyState);
   const grid = document.getElementById("homeArtistsGrid");
   if (!grid) return;
 
   grid.innerHTML = `<p class="muted">Loading artists...</p>`;
 
   try {
-    // 🔑 Sanity-დან წამოვიღოთ 3 არტისტი
     const artists = await fetchArtistsFromSanity(3);
-
-    console.log('[homeArtistsPreview] data loaded —', (artists || []).length, 'artists');
-    if (artists && artists.length > 0) {
-      console.log('[homeArtistsPreview] sample artist:', JSON.stringify({
-        _id: artists[0]._id,
-        name: artists[0].name,
-        slug: artists[0].slug,
-        hasImage: !!(artists[0].image?.asset?.url),
-        style: artists[0].style
-      }));
-    }
 
     if (!artists || !artists.length) {
       grid.innerHTML = `<p class="muted">No artists available.</p>`;
       return;
     }
 
-    console.log('[homeArtistsPreview] render artists');
-    grid.innerHTML = artists.map(artist => {
-      const slug = artist.slug || artist._id;
+    grid.innerHTML = artists
+      .map((artist) => {
+        const slug = artist.slug || artist._id;
 
-      const avatarRaw = artist.image?.asset?.url || null;
-      const avatar = avatarRaw
-        ? (typeof window.sanityImgUrl === 'function'
-            ? window.sanityImgUrl(avatarRaw, { w: 300, h: 300, fit: 'crop', q: 80 })
-            : avatarRaw)
-        : "images/artists/placeholder.jpg";
+        const avatarRaw = artist.image?.asset?.url || null;
+        const avatar = avatarRaw
+          ? typeof window.sanityImgUrl === "function"
+            ? window.sanityImgUrl(avatarRaw, {
+                w: 560,
+                h: 700,
+                fit: "crop",
+                q: 82,
+              })
+            : avatarRaw
+          : "images/artists/placeholder.jpg";
 
-      return `
+        return `
         <a class="artist-card"
            href="artists/artist.html?artist=${encodeURIComponent(slug)}">
 
-          <div class="artist-avatar"
-               style="background-image:url('${avatar}')"></div>
+          <div class="artist-showcase-media">
+            <div class="artist-avatar"
+                 style="background-image:url('${avatar}')"></div>
+          </div>
 
           <h3 class="artist-name">
             <img src="images/icon.jpg" class="flag-icon" alt="">
@@ -51,17 +76,18 @@ async function initHomeArtistsPreview() {
           ${artist.style ? `<p class="artist-style">${artist.style}</p>` : ""}
         </a>
       `;
-    }).join("");
+      })
+      .join("");
 
+    observeHomeArtistReveal(grid);
   } catch (err) {
-    console.error("❌ Failed to load artists on home page", err);
+    console.error("Failed to load artists on home page", err);
     grid.innerHTML = `<p class="muted">Failed to load artists.</p>`;
   }
 }
 
-// Same readyState guard — idle-loaded scripts must not rely on DOMContentLoaded.
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initHomeArtistsPreview);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initHomeArtistsPreview);
 } else {
   initHomeArtistsPreview();
 }
