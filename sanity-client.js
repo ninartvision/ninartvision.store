@@ -82,6 +82,17 @@ function sanitySrcset(url, widths, opts) {
   }).join(', ');
 }
 
+/**
+ * Map Sanity artwork listing status to shop UI buckets: "sale" | "sold" | "".
+ * Canonical Studio values are sale | sold; production still has legacy "published" (= for sale).
+ */
+function normalizeArtworkListingStatus(raw) {
+  const s = String(raw == null ? '' : raw).trim().toLowerCase();
+  if (s === 'sold') return 'sold';
+  if (s === 'sale' || s === 'published') return 'sale';
+  return '';
+}
+
 /* --------------------------------------------------
    FETCH ARTISTS
 -------------------------------------------------- */
@@ -203,7 +214,7 @@ async function fetchFeaturedArtworks(limit = null) {
 
   try {
     let query = `
-      *[_type == "artwork" && featured == true && status in ["sale", "sold"]]
+      *[_type == "artwork" && featured == true && status in ["sale", "sold", "published"]]
       | order(coalesce(order, 999) asc, _createdAt desc)
     `;
 
@@ -274,7 +285,7 @@ async function fetchShopArtworks(limit = null) {
 
   try {
     let query = `
-      *[_type == "artwork" && status in ["sale", "sold"] && artist->name == "Nini Mzhavia"]
+      *[_type == "artwork" && status in ["sale", "sold", "published"] && artist->name == "Nini Mzhavia"]
       | order(coalesce(order, 999) asc, _createdAt desc)
     `;
 
@@ -324,6 +335,13 @@ async function fetchShopArtworks(limit = null) {
       console.warn('[shop] 0 results — raw Sanity response:', JSON.stringify(data));
     } else {
       console.log('[shop] Sanity returned', result.length, 'Nini Mzhavia artworks');
+      const _h = {};
+      result.forEach(x => {
+        const k = String(x.status == null ? '(missing)' : x.status);
+        _h[k] = (_h[k] || 0) + 1;
+      });
+      console.log('[shop] fetchShopArtworks status histogram (CDN raw):', _h);
+      console.log('[shop] Expected GROQ statuses: sale, sold, published. If histogram is only sold, load is likely a cached sanity-client without published in the query.');
     }
     if (result.length) cacheSet(_cKey, result);
     return result;
@@ -345,7 +363,7 @@ async function fetchAllArtworks() {
 
   try {
     const query = `
-      *[_type == "artwork" && defined(image) && status in ["sale", "sold"]]
+      *[_type == "artwork" && defined(image) && status in ["sale", "sold", "published"]]
       | order(order asc, _createdAt desc) {
         _id,
         _createdAt,
@@ -769,6 +787,7 @@ window.updateSEO = updateSEO;
 window.applySeoMeta = updateSEO; // backward-compatible alias
 window.sanityImgUrl = sanityImgUrl;
 window.sanitySrcset = sanitySrcset;
+window.normalizeArtworkListingStatus = normalizeArtworkListingStatus;
 window.injectSchema = injectSchema;
 window.nvSkeleton = nvSkeleton;
 window.nvEmpty = nvEmpty;

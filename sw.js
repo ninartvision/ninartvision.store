@@ -4,8 +4,15 @@
  * Strategy: Cache-first for assets, Network-first for HTML pages.
  */
 
-const CACHE_NAME = 'ninart-v2';
-const ASSET_CACHE = 'ninart-assets-v2';
+const CACHE_NAME = 'ninart-v6';
+const ASSET_CACHE = 'ninart-assets-v6';
+
+/** Sanity + home shop bundles must hit network first so SALE/published fixes are not masked by stale cache-first assets. */
+function isCriticalEditableBundle(url) {
+  const p = url.pathname || '';
+  return /sanity-client\.min\.js$/i.test(p) ||
+    /\/js\/homeShopPreview\.min\.js$/i.test(p);
+}
 
 // Static assets to pre-cache on install
 const PRECACHE_URLS = [
@@ -60,7 +67,22 @@ self.addEventListener('fetch', event => {
         .catch(() => caches.match(request))
     );
   } else if (isAsset) {
-    // Cache-first for assets: serve cached version instantly
+    // Editable bundles: network-first → update immediately after deploy (then refresh cache copy)
+    if (isCriticalEditableBundle(url)) {
+      event.respondWith(
+        fetch(request)
+          .then(res => {
+            const clone = res.clone();
+            if (res.ok) {
+              caches.open(ASSET_CACHE).then(c => c.put(request, clone));
+            }
+            return res;
+          })
+          .catch(() => caches.match(request))
+      );
+      return;
+    }
+    // Cache-first for other static assets (images, most JS/CSS)
     event.respondWith(
       caches.match(request).then(cached => {
         if (cached) return cached;
