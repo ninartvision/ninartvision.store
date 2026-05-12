@@ -126,12 +126,26 @@
   <main>
 
     <!-- NEWS -->
-    <section id="news" class="section section-gray" style="padding-top:110px;">
+    <section id="news" class="section" style="padding-top:110px;">
       <div class="container">
-        <div class="section-top">
-          <h1>News &amp; Stories</h1>
-          <p class="muted">Thoughts on art, creativity, and what inspires us.</p>
-        </div>
+        <header class="editorial-heading">
+          <p class="editorial-heading__eyebrow" data-en="Journal" data-ka="ჟურნალი">ჟურნალი</p>
+          <h1 class="editorial-heading__title" data-en="News & Stories" data-ka="სიახლეები და ისტორიები">News & Stories</h1>
+          <p class="editorial-heading__lede muted" title="Thoughts on art, creativity, and the inspiration behind every canvas." data-en="Thoughts on art, creativity, and the inspiration behind every canvas." data-ka="აზრები ხელოვნებაზე, შემოქმედებასა და შთაგონებაზე, რომელიც ყოველი ტილოს უკან არის.">Thoughts on art, creativity, and the inspiration behind every canvas.</p>
+          <div
+            class="editorial-heading__rule editorial-rule"
+            data-editorial-rule
+            aria-hidden="true"
+          >
+            <span class="editorial-rule__sensor"></span>
+            <span class="editorial-rule__lines">
+              <span class="editorial-rule__base"></span>
+              <span class="editorial-rule__grow"></span>
+              <span class="editorial-rule__halo"></span>
+              <span class="editorial-rule__shimmer"></span>
+            </span>
+          </div>
+        </header>
 
         <div class="news-list">
 
@@ -289,8 +303,10 @@
   </main>
 
   <script defer src="./script.min.js?v=nv20260213"></script>
+  <script defer src="./js/editorial-rule.min.js?v=nv20260213"></script>
   <!-- CMS-driven dynamic content modules -->
   <script defer src="./js/cms-settings.js"></script>
+  <script defer src="./js/news-cards.min.js?v=nv20260213"></script>
   <script defer src="./js/cms-news.js"></script>
 
 </body>

@@ -101,6 +101,9 @@
         container.innerHTML = show.map(renderPost).join('\n');
       }
     });
+    if (typeof window.initNewsCardReveal === 'function') {
+      window.initNewsCardReveal();
+    }
   }
 
   const posts = await fetchPosts();
