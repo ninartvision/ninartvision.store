@@ -335,6 +335,13 @@ async function fetchShopArtworks(limit = null) {
       console.warn('[shop] 0 results — raw Sanity response:', JSON.stringify(data));
     } else {
       console.log('[shop] Sanity returned', result.length, 'Nini Mzhavia artworks');
+      const _h = {};
+      result.forEach(x => {
+        const k = String(x.status == null ? '(missing)' : x.status);
+        _h[k] = (_h[k] || 0) + 1;
+      });
+      console.log('[shop] fetchShopArtworks status histogram (CDN raw):', _h);
+      console.log('[shop] Expected GROQ statuses: sale, sold, published. If histogram is only sold, load is likely a cached sanity-client without published in the query.');
     }
     if (result.length) cacheSet(_cKey, result);
     return result;

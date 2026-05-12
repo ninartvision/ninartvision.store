@@ -34,6 +34,20 @@ async function initHomeShopPreview() {
     const filtered = items.filter(item => item.status === currentFilter);
     const show = shuffle(filtered).slice(0, LIMIT);
 
+    if (!(window).__nvDbgHomeShop) window.__nvDbgHomeShop = { renders: 0 };
+    window.__nvDbgHomeShop.renders += 1;
+    const noisy = Boolean(window.__nvDbgHomeVerbose);
+    if (noisy || window.__nvDbgHomeShop.renders <= 3 || (filtered.length === 0 && currentFilter === 'sale')) {
+      console.log('[homeShopPreview] pre-render:', {
+        tab: currentFilter,
+        itemsTotal: items.length,
+        filteredLen: filtered.length,
+        displayLen: show.length,
+        filteredPreview: filtered.slice(0, 12).map(i => ({ title: i.title, normStatus: i.status })),
+        note: noisy ? '(verbose)' : '(first 3 rotations or empty SALE pool only; set window.__nvDbgHomeVerbose=true for all)'
+      });
+    }
+
     // Build all nodes in a detached fragment — zero reflows during construction
     const frag = document.createDocumentFragment();
 
@@ -94,13 +108,30 @@ async function initHomeShopPreview() {
   // filters to Nini Mzhavia). Falls back to fetchFeaturedArtworks if unavailable.
   try {
     let raw = null;
+    let fetchSource = '(none)';
     if (typeof window.fetchShopArtworks === 'function') {
+      fetchSource = 'fetchShopArtworks';
       raw = await window.fetchShopArtworks();
     } else if (typeof window.fetchFeaturedArtworks === 'function') {
+      fetchSource = 'fetchFeaturedArtworks';
       raw = await window.fetchFeaturedArtworks();
     }
 
+    console.log('[homeShopPreview] bundle check — normalizeArtworkListingStatus:',
+      typeof window.normalizeArtworkListingStatus,
+      '| fetch:', fetchSource);
     console.log('[homeShopPreview] raw Sanity response:', raw?.length ?? 'null', 'items');
+
+    try {
+      if (Array.isArray(raw) && raw.length) {
+        const serialRaw = JSON.parse(JSON.stringify(raw));
+        console.log('[homeShopPreview] raw artworks FULL (serialized):', serialRaw);
+      } else {
+        console.log('[homeShopPreview] raw artworks FULL: (empty or not an array)');
+      }
+    } catch (serErr) {
+      console.warn('[homeShopPreview] could not serialize raw artworks:', serErr);
+    }
     if (raw && raw.length > 0) {
       console.log('[homeShopPreview] sample item:', JSON.stringify({
         _id: raw[0]._id,
@@ -124,15 +155,24 @@ async function initHomeShopPreview() {
     }
 
     if (raw && raw.length > 0) {
-      // Deduplicate by _id, limit to 6 for homepage grid
+      // Dedupe full list — then prefer for-sale/listing listings before slicing (avoids OLD GROQ
+      // bundles that only returned sold: first rows were exclusively sold → empty SALE tab).
       const seen = new Set();
-      const deduped = raw.filter(a => {
+      const dedupedAll = raw.filter(a => {
         if (!a._id || seen.has(a._id)) return false;
         seen.add(a._id);
         return true;
-      }).slice(0, 6);
+      });
+      dedupedAll.sort((a, b) => {
+        const sa = homeNormStatus(a.status);
+        const sb = homeNormStatus(b.status);
+        if (sa === 'sale' && sb !== 'sale') return -1;
+        if (sa !== 'sale' && sb === 'sale') return 1;
+        return 0;
+      });
+      const deduped = dedupedAll.slice(0, 48);
 
-      console.log('[homeShopPreview] after dedup/limit:', deduped.length, 'items');
+      console.log('[homeShopPreview] after dedup/sort SALE-first:', deduped.length, '/', dedupedAll.length, 'items');
 
       items = deduped.map(artwork => ({
         id: artwork._id,
