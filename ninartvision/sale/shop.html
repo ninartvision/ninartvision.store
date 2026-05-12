@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Shop Original Paintings | Ninart Vision</title>
+  <meta name="description" content="Browse and purchase original acrylic paintings by contemporary Georgian artists. Filter by artist, view available and sold artworks. Direct purchase via WhatsApp.">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Shop Original Paintings | Ninart Vision">
+  <meta property="og:description" content="Browse and purchase original acrylic paintings by contemporary Georgian artists. Filter by artist, explore available works.">
+  <meta property="og:url" content="https://ninartvision.store/sale/shop.html">
+  <meta property="og:image" content="https://ninartvision.store/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shop Original Paintings | Ninart Vision">
+  <meta name="twitter:description" content="Browse and purchase original acrylic paintings by contemporary Georgian artists.">
+  <meta name="twitter:image" content="https://ninartvision.store/images/og-image.png">
+
+  <link rel="stylesheet" href="../style.min.css" />
+  <link rel="icon" href="../images/favicon.png">
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID', {
+    'anonymize_ip': true,
+    'allow_google_signals': false,
+    'allow_ad_personalization_signals': false
+  });
+</script>
+<script defer src="../analytics.min.js"></script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container header-row">
+
+    <!-- Logo -->
+    <a class="brand" href="../index.html">
+      <img src="../images/logo.webp" alt="Ninart Vision Logo">
+    </a>
+
+    <!-- Desktop menu -->
+    <nav class="nav desktop-nav">
+      <a href="../index.html">Home</a>
+      <a href="../support.html">Support a Project</a>
+      <a href="shop.html" class="active">Shop</a>
+
+
+      <a href="../room-visualizer.html">Room preview</a>
+      <a href="../artists/">Artists</a>
+      <a href="../news.html">News</a>
+      <a href="../about.html">About</a>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger" id="openMenu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+</header>
+
+<!-- Mobile menu overlay -->
+<div class="menu-overlay" id="menuOverlay">
+  <button class="menu-close" id="closeMenu" aria-label="Close menu">✕</button>
+
+  <nav class="menu-links">
+    <a href="../index.html" class="menu-link">HOME</a>
+    <a href="../support.html" class="menu-link">SUPPORT A PROJECT</a>
+    <a href="shop.html" class="menu-link">SHOP</a>
+    <a href="../room-visualizer.html" class="menu-link">ROOM PREVIEW</a>
+    <a href="../artists/" class="menu-link">ARTISTS</a>
+    <a href="../news.html" class="menu-link">NEWS</a>
+    <a href="../about.html" class="menu-link">ABOUT</a>
+  </nav>
+</div>
+
+<div class="container">
+  <div class="shop-header" style="margin-top:100px;">
+    <div class="section-top">
+      <h2>Shop</h2>
+    </div>
+
+    <div class="filter-tabs with-art">
+      <button class="pill" data-filter="all">ALL</button>
+      <button class="pill" data-filter="sale" id="shopSaleFilter">SALE</button>
+      <button class="pill" data-filter="sold">SOLD</button>
+
+      <span class="shop-line-art"></span>
+    </div>
+    <p class="muted small" style="text-align:center;margin-top:14px;">
+      See a painting on your wall — <a href="../room-visualizer.html">Room preview →</a>
+    </p>
+  </div>
+
+  <div class="shop-grid shop-grid-small" id="shopGrid">
+  </div>
+</div>
+
+
+<!-- ✅ PRODUCT MODAL -->
+<div class="product-modal" id="productModal">
+  <div class="product-modal-box">
+
+    <button class="product-close" id="productClose" aria-label="Close">✕</button>
+
+    <div class="product-layout">
+
+      <!-- LEFT -->
+      <div class="product-left">
+        <div class="product-gallery">
+          <button class="gallery-arrow left" id="galleryPrev" aria-label="Previous photo">‹</button>
+          <img id="productImg" src="" alt="Artwork" decoding="async" loading="lazy">
+          <button class="gallery-arrow right" id="galleryNext" aria-label="Next photo">›</button>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="product-right">
+        <h2 id="productTitle"></h2>
+        <p class="muted" id="productDesc"></p>
+
+        <ul class="product-info">
+          <li><b>Size:</b> <span id="productSize"></span></li>
+          <li><b>Medium:</b> <span id="productMedium"></span></li>
+          <li><b>Year:</b> <span id="productYear"></span></li>
+        </ul>
+
+        <div class="product-buy">
+          <div class="product-price" id="productPrice">₾250</div>
+
+          <button class="morePhotosBtn" id="morePhotosBtn" type="button" aria-expanded="false">
+            More photos <span class="arrow">↓</span>
+          </button>
+
+          <button class="btn btn-dark" id="addToCartBtn">
+            Add to Cart
+          </button>
+        </div>
+
+        <!-- thumbnails -->
+        <div class="product-thumbs" id="productThumbs" style="display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Scripts — defer keeps execution order; sanity-client must be first -->
+<script defer src="../sanity-client.min.js?v=nv20260213"></script>
+<script defer src="../data.min.js?v=nv20260213"></script>
+<script defer src="shop-render.min.js?v=nv20260213"></script>
+<script defer src="../script.min.js?v=nv20260213"></script>
+
+</body>
+</html>

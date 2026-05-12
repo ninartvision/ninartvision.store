@@ -1,0 +1,63 @@
+[33m338f039[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m ubdate commit message for georgian language support
+[33m9c6eac2[m ubdate changesin artist pages
+[33m2355a34[m ubdate changes
+[33m71b18a5[m Restore artist pages (nini, mzia, nanuli)
+[33m0a4869e[m ubdate changes
+[33m03ee7e8[m ubdate changes
+[33m1af9218[m Update mobile menu and layout
+[33m2b0a44e[m Update homepage layout
+[33m3dbae09[m Update homepage layout
+[33mf2471ba[m Add full search functionality with artist and artwork search, highlighting, and keyboard navigation
+[33m65a6a1f[m Fix mobile hamburger menu on Support page - add missing hamburger button and mobile menu overlay
+[33m1371d13[m Remove visual highlighting from Mzia Kashia on Artists page for consistency
+[33me727fc8[m Fix mobile layout: Improve founder section spacing, tap feedback, and visual balance on small screens
+[33mb1148fd[m Make founder photo and name clickable: Link Nini Mzhavia's image and name to Shop page with hover effects
+[33m996cb8b[m Fix HTML rendering: Change textContent to innerHTML for language switcher, fix Mzia Kashia link path, add enhanced artist-link styling
+[33mb2f25d5[m Highlight Mzia Kashia's name on Artists page with soft beige color and hover effects
+[33ma036e26[m Redesign About page: Add desktop 2-column layout, circular founder photo (Nini Mzhavia), and flag-based language switcher (KA/EN)
+[33md230295[m Create fully responsive About page with circular avatar and KA/EN language switcher
+[33ma61b801[m Create comprehensive About page with founder info, platform details, and mission/vision sections
+[33m63a83d6[m Update homepage layout
+[33ma5eba9b[m Update artists section and navigation
+[33m5275b76[m Update homepage layout
+[33m114671a[m Update homepage layout
+[33mf37422a[m Update homepage layout
+[33mb490a9f[m Update homepage layout
+[33m34c3365[m Update homepage layout
+[33m0917e84[m Update homepage layout
+[33me127bd6[m Fix: Update CSS image paths for GitHub Pages compatibility
+[33m004e9cb[m Update homepage layout
+[33m35ffe99[m Update homepage layout
+[33m18f6bf7[m Update homepage layout
+[33mc373b67[m Update homepage layout
+[33m6bbc764[m Update homepage layout
+[33m8f2a6c4[m Update homepage layout
+[33md8d3cf0[m Update homepage layout
+[33m27ce82f[m Update homepage layout
+[33ma09396f[m Update homepage layout
+[33m30bf9cd[m Update homepage layout
+[33m7d07f9d[m resolve merge conflicts, keep local version
+[33mc04f8e0[m fix image paths and optimize photos
+[33me5d28bc[m fix image paths and optimize photos
+[33ma24f29b[m fix image paths and optimize photos
+[33m713d2b7[m fix image paths and optimize photos
+[33m3a1978f[m Update homepage layout
+[33mfd43233[m Fix artists folder navigation
+[33m7921dcf[m Add files via upload
+[33m729ffc7[m Delete nini.html
+[33m3a76b52[m Delete nanuli.html
+[33mc0b7514[m Delete mzia.html
+[33mf4bd23b[m Delete index.html
+[33ma575acc[m Delete artist.js
+[33m2c9093c[m Delete artist.html
+[33m49a86c3[m Delete artist-shop.js
+[33m9a1eed6[m Delete artists.js
+[33m786c518[m artist
+[33m7c83191[m artists
+[33md51b49e[m Delete ninart vision site - Copy (2) directory
+[33mddf9dda[m Fix artists navigation and artist page links
+[33mf3e405f[m Update artists pages and site structure
+[33mdedc914[m Add artists pages and scripts
+[33m32749c9[m Remove duplicate project folder and clean up files
+[33m503dfe7[m Create CNAME
+[33mde30b7a[m Initial commit - stable version

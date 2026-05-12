@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Amber Glow – Original Acrylic Painting | Ninart Vision</title>
+  <link rel="stylesheet" href="./style.min.css" />
+</head>
+
+<body>
+
+  <main class="project-page">
+
+    <section class="project-hero">
+      <div class="project-text">
+        <h1>„Amber Glow“ – „ქარვისფერი ნათება“</h1>
+        <p class="muted">A vibrant sunset seascape filled with warmth and freedom.</p>
+
+        <p class="project-paragraph geo">
+  ნამუშევარი ასახავს ზღვის ჰორიზონტს მზის ჩასვლისას, სადაც თბილი ოქროსფერი სხივები წყლის ზედაპირზე ირეკლება.
+</p>
+
+
+<p class="project-paragraph eng">
+  This artwork captures the sea horizon at sunset, where warm golden light reflects across the water and fills the space with a luminous glow. The composition is built through energetic brushstrokes, giving the waves movement and a vivid rhythm. Cool blue and turquoise tones blend harmoniously with warm orange and rosy shades in the sky, creating an emotional contrast and a strong sense of depth. The painting conveys a feeling of freedom and serenity.
+</p>
+
+        <ul class="project-details">
+          <li><strong>Technique:</strong> Acrylic </li>
+          <li><strong>Size:</strong> 60x80 cm</li>
+          <li><strong>Year:</strong> 2025</li>
+        </ul>
+
+        <a class="link back-link" href="index.html">← Back</a>
+      </div>
+
+      <div class="project-image">
+        <img src="./images/me7.webp" alt="Amber Glow original acrylic painting by Nini Mzhavia" decoding="async" loading="lazy">
+      </div>
+    </section>
+
+    <section class="project-gallery">
+      <h2>More photos</h2>
+
+      <div class="gallery-list">
+        <img src="./images/seaorange8.webp" alt="" loading="lazy">
+        <img src="./images/seaorange6.webp" alt="" loading="lazy">
+        <img src="./images/seaorange3.webp" alt="" loading="lazy">
+        <img src="./images/seaorange4.webp" alt="" loading="lazy">
+        <img src="./images/seaorange2.webp" alt="" loading="lazy">
+        <img src="./images/seaorange1.webp" alt="" loading="lazy">
+        <img src="./images/seaorange7.webp" alt="" loading="lazy">
+        <img src="./images/seaorange5.webp" alt="" loading="lazy">
+        
+      
+        
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ✅ LIGHTBOX (აქ უნდა იყოს ერთხელ და მხოლოდ body-ში) -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <span class="close" id="lightboxClose" aria-label="Close lightbox">&times;</span>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
+  </div>
+
+  <!-- ✅ SCRIPT (უნდა იყოს ბოლოში) -->
+  <script>
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImg");
+    const closeBtn = document.getElementById("lightboxClose");
+
+    // Open lightbox
+    function openLightbox(imgSrc) {
+      lightbox.classList.add("open");
+      lightboxImg.src = imgSrc;
+      document.body.style.overflow = "hidden"; // Prevent body scroll
+      lightbox.setAttribute("aria-hidden", "false");
+      closeBtn.focus(); // Focus on close button for accessibility
+    }
+
+    // Close lightbox
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      document.body.style.overflow = ""; // Restore body scroll
+      lightbox.setAttribute("aria-hidden", "true");
+    }
+
+    // Add click event to all gallery images
+    document.querySelectorAll(".gallery-list img").forEach(img => {
+      img.addEventListener("click", () => {
+        openLightbox(img.src);
+      });
+    });
+
+    // Close button click
+    closeBtn.addEventListener("click", closeLightbox);
+
+    // Click outside image to close
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    // Escape key to close
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && lightbox.classList.contains("open")) {
+        closeLightbox();
+      }
+    });
+  </script>
+
+</body>
+</html>

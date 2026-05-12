@@ -1,0 +1,184 @@
+═══════════════════════════════════════════════════════════════
+  📧 EMAILJS SETUP GUIDE FOR NINART VISION CONTACT FORM
+═══════════════════════════════════════════════════════════════
+
+This guide will help you connect your contact form to ninimzhavia9@gmail.com
+using EmailJS (100% free for up to 200 emails/month).
+
+═══════════════════════════════════════════════════════════════
+STEP 1: CREATE EMAILJS ACCOUNT
+═══════════════════════════════════════════════════════════════
+
+1. Go to: https://www.emailjs.com/
+2. Click "Sign Up" (top right)
+3. Sign up using your Gmail account: ninimzhavia9@gmail.com
+4. Verify your email address
+
+═══════════════════════════════════════════════════════════════
+STEP 2: ADD EMAIL SERVICE
+═══════════════════════════════════════════════════════════════
+
+1. After logging in, go to "Email Services" (left sidebar)
+2. Click "Add New Service"
+3. Select "Gmail"
+4. Click "Connect Account"
+5. Choose: ninimzhavia9@gmail.com
+6. Allow EmailJS to send emails on your behalf
+7. Your Service ID will be shown (looks like: service_xxxxxxx)
+8. ✅ COPY THIS SERVICE ID - you'll need it later
+
+═══════════════════════════════════════════════════════════════
+STEP 3: CREATE EMAIL TEMPLATE
+═══════════════════════════════════════════════════════════════
+
+1. Go to "Email Templates" (left sidebar)
+2. Click "Create New Template"
+3. Use this template configuration:
+
+   Template Name: Ninart Vision Contact Form
+   
+   Subject:
+   New message from {{from_name}}
+   
+   Content:
+   You received a new message from your Ninart Vision website:
+
+   From: {{from_name}}
+   Email: {{from_email}}
+   
+   Message:
+   {{message}}
+   
+   ---
+   This email was sent from the Ninart Vision contact form.
+   Reply directly to: {{from_email}}
+
+4. In the "To Email" field, enter: ninimzhavia9@gmail.com
+5. In the "From Email" field, use: noreply@emailjs.com
+6. In the "Reply To" field, use: {{from_email}}
+7. Click "Save"
+8. Your Template ID will be shown (looks like: template_xxxxxxx)
+9. ✅ COPY THIS TEMPLATE ID - you'll need it later
+
+═══════════════════════════════════════════════════════════════
+STEP 4: GET YOUR PUBLIC KEY
+═══════════════════════════════════════════════════════════════
+
+1. Go to "Account" → "General" (left sidebar)
+2. Find "Public Key" section
+3. Your Public Key will be shown (looks like: a1b2c3d4e5f6g7h8i9)
+4. ✅ COPY THIS PUBLIC KEY
+
+═══════════════════════════════════════════════════════════════
+STEP 5: UPDATE support.html FILE
+═══════════════════════════════════════════════════════════════
+
+Open: n:\ninartvision\support.html
+
+Find these lines (near the bottom of the file):
+
+    emailjs.init({
+      publicKey: "YOUR_PUBLIC_KEY_HERE",  ← REPLACE THIS
+    });
+
+And:
+
+    emailjs.send(
+      'YOUR_SERVICE_ID',     ← REPLACE THIS
+      'YOUR_TEMPLATE_ID',    ← REPLACE THIS
+      templateParams
+
+Replace them with YOUR actual values from EmailJS:
+
+    emailjs.init({
+      publicKey: "your_actual_public_key_here",
+    });
+
+And:
+
+    emailjs.send(
+      'service_xxxxxxx',    ← Your Service ID from Step 2
+      'template_xxxxxxx',   ← Your Template ID from Step 3
+      templateParams
+
+═══════════════════════════════════════════════════════════════
+STEP 6: TEST THE FORM
+═══════════════════════════════════════════════════════════════
+
+1. Open support.html in your browser (or on GitHub Pages)
+2. Scroll down to "Get in Touch" section
+3. Fill out the form with test data:
+   - Name: Test User
+   - Email: your-test-email@gmail.com
+   - Message: This is a test message from my contact form!
+4. Click "Send Message"
+5. You should see: "✓ Message sent successfully!"
+6. Check ninimzhavia9@gmail.com inbox
+7. You should receive the test email within 1 minute
+
+═══════════════════════════════════════════════════════════════
+TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+❌ Error: "Failed to send message"
+   → Check if Public Key, Service ID, and Template ID are correct
+   → Make sure you're connected to the internet
+   → Check browser console (F12) for error details
+
+❌ Email not received
+   → Check Gmail spam/junk folder
+   → Verify "To Email" in template is: ninimzhavia9@gmail.com
+   → Check EmailJS dashboard for delivery status
+
+❌ Form doesn't submit
+   → Make sure all fields are filled out
+   → Check browser console (F12) for JavaScript errors
+
+═══════════════════════════════════════════════════════════════
+FREE TIER LIMITS
+═══════════════════════════════════════════════════════════════
+
+EmailJS Free Plan includes:
+✅ 200 emails per month
+✅ Unlimited email templates
+✅ Email delivery tracking
+✅ No credit card required
+
+If you exceed 200 emails/month, you can upgrade or the form will
+temporarily stop working until the next month.
+
+═══════════════════════════════════════════════════════════════
+SECURITY NOTE
+═══════════════════════════════════════════════════════════════
+
+✅ Your Public Key is safe to expose in client-side code
+✅ EmailJS has built-in spam protection
+✅ No backend server needed
+✅ Form data is encrypted during transmission
+
+═══════════════════════════════════════════════════════════════
+SUPPORT
+═══════════════════════════════════════════════════════════════
+
+EmailJS Documentation: https://www.emailjs.com/docs/
+EmailJS Support: support@emailjs.com
+
+═══════════════════════════════════════════════════════════════
+IMPLEMENTATION SUMMARY
+═══════════════════════════════════════════════════════════════
+
+✅ EmailJS SDK added to support.html
+✅ Form fields configured with proper names and IDs
+✅ Success/error messages styled in style.css
+✅ Bilingual support for Georgian and English
+✅ Mobile and desktop responsive
+✅ Email sent to: ninimzhavia9@gmail.com
+✅ Form resets after successful submission
+✅ Loading state during submission
+✅ Fallback mailto link on error
+
+═══════════════════════════════════════════════════════════════
+
+🎉 Once you complete Steps 1-5, your contact form will be live!
+
+═══════════════════════════════════════════════════════════════

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title id="pageTitle">Artist Profile | Ninart Vision</title>
+  <meta name="description" id="pageDescription" content="Explore original paintings and artworks by contemporary Georgian artists at Ninart Vision. View available and sold pieces.">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="profile">
+  <meta property="og:title" id="ogTitle" content="Artist Profile | Ninart Vision">
+  <meta property="og:description" id="ogDescription" content="Explore original paintings and artworks by contemporary Georgian artists at Ninart Vision.">
+  <meta property="og:image" id="ogImage" content="">
+  <meta property="og:url" id="ogUrl" content="">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" id="twitterTitle" content="Artist Profile | Ninart Vision">
+  <meta name="twitter:description" id="twitterDescription" content="Explore original paintings and artworks by contemporary Georgian artists at Ninart Vision.">
+  <meta name="twitter:image" id="twitterImage" content="">
+
+  <link rel="stylesheet" href="../style.min.css" />
+  <link rel="stylesheet" href="../css/artist-gallery.min.css" />
+  <link rel="icon" href="../images/favicon.png">
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID', {
+    'anonymize_ip': true,
+    'allow_google_signals': false,
+    'allow_ad_personalization_signals': false
+  });
+</script>
+<script src="../analytics.min.js"></script>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container header-row">
+
+    <!-- Logo -->
+    <a class="brand" href="../index.html">
+      <img src="../images/logo.webp" alt="Ninart Vision Logo">
+    </a>
+
+    <!-- Desktop menu -->
+    <nav class="nav desktop-nav">
+      <a href="../index.html">Home</a>
+      <a href="../support.html">Support a Project</a>
+      <a href="../sale/shop.html">Shop</a>
+      <a href="../room-visualizer.html">Room preview</a>
+      <a href="./" class="active">Artists</a>
+      <a href="../news.html">News</a>
+      <a href="../about.html">About</a>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger" id="openMenu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+</header>
+
+<!-- Mobile menu overlay -->
+<div class="menu-overlay" id="menuOverlay">
+  <button class="menu-close" id="closeMenu" aria-label="Close menu">✕</button>
+
+  <nav class="menu-links">
+  <a href="../index.html" class="menu-link">HOME</a>
+  <a href="../support.html" class="menu-link">SUPPORT A PROJECT</a>
+  <a href="../sale/shop.html" class="menu-link">SHOP</a>
+  <a href="../room-visualizer.html" class="menu-link">ROOM PREVIEW</a>
+  <a href="./" class="menu-link">ARTISTS</a>
+  <a href="../news.html" class="menu-link">NEWS</a>
+  <a href="../about.html" class="menu-link">ABOUT</a>
+</nav>
+
+</div>
+
+<!-- PAGE -->
+<section class="section" style="padding-top:90px;">
+  <div class="container">
+
+    <!-- BACK -->
+    <a href="./" class="btn btn-dark">← Back</a>
+
+    <!-- ARTIST HEADER -->
+    <div class="artist-header">
+      <div class="artist-info">
+        <img id="artistAvatar" class="artist-avatar" src="" alt="Artist Avatar" decoding="async" loading="lazy">
+        
+        <div class="artist-title-row">
+          <h1 class="artist-name"></h1>
+          <button class="about-toggle" id="aboutToggle">About &#9660;</button>
+        </div>
+        
+        <!-- ABOUT ARTIST CONTENT -->
+        <div id="aboutArtist" class="about-artist">
+          <p id="aboutText" class="about-text"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-tabs">
+      <button class="pill" data-filter="all">ALL</button>
+      <button class="pill" data-filter="sale">SALE</button>
+      <button class="pill" data-filter="sold">SOLD</button>
+    </div>
+
+    <!-- GRID -->
+    <div class="shop-grid shop-grid-small" id="shopGrid"></div>
+
+  </div>
+</section>
+
+<!-- PRODUCT MODAL -->
+<div class="product-modal" id="productModal">
+  <div class="product-modal-box">
+
+    <button class="product-close" id="productClose" aria-label="Close">✕</button>
+
+    <div class="product-layout">
+
+      <div class="product-left">
+        <div class="product-gallery">
+          <button class="gallery-arrow left" id="galleryPrev" aria-label="Previous">‹</button>
+          <img id="productImg" src="" alt="Artwork" decoding="async" loading="lazy">
+          <button class="gallery-arrow right" id="galleryNext" aria-label="Next">›</button>
+        </div>
+      </div>
+
+      <div class="product-right">
+        <h2 id="productTitle"></h2>
+        <p class="muted" id="productDesc"></p>
+
+        <ul class="product-info">
+          <li><b>Size:</b> <span id="productSize"></span></li>
+          <li><b>Medium:</b> <span id="productMedium"></span></li>
+          <li><b>Year:</b> <span id="productYear"></span></li>
+        </ul>
+
+        <div class="product-buy">
+          <div class="product-price" id="productPrice"></div>
+
+          <button class="morePhotosBtn" id="morePhotosBtn" type="button">
+            More photos <span class="arrow">↓</span>
+          </button>
+
+          <button class="btn btn-dark" id="addToCartBtn">Add to Cart</button>
+        </div>
+
+        <div class="product-thumbs" id="productThumbs" style="display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="../script.min.js?v=nv20260213"></script>
+<script src="../sanity-client.min.js?v=nv20260213"></script>
+<script src="artist.min.js?v=nv20260213"></script>
+
+</body>
+</html>

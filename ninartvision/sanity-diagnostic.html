@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanity Sync Diagnostic Tool</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .results {
+      margin-top: 2rem;
+    }
+
+    .test-item {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      background: #fafafa;
+    }
+
+    .test-item h3 {
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .status.pass {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status.fail {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .status.warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status.running {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .detail {
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+
+    .detail code {
+      background: #f4f4f4;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: #d63384;
+    }
+
+    .json-output {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .recommendation {
+      background: #e7f3ff;
+      border-left: 4px solid #2196F3;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 4px;
+    }
+
+    .recommendation h4 {
+      color: #1976D2;
+      margin-bottom: 0.5rem;
+    }
+
+    .recommendation p, .recommendation ul {
+      color: #333;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .recommendation ul {
+      margin-left: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .summary {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+      border: 2px solid #dee2e6;
+    }
+
+    .summary h2 {
+      color: #333;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .summary-stats {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      flex: 1;
+      min-width: 150px;
+      text-align: center;
+      padding: 1rem;
+      background: white;
+      border-radius: 6px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 Sanity Sync Diagnostic Tool</h1>
+    <p class="subtitle">Diagnose why Sanity changes aren't appearing on your site</p>
+
+    <button id="runTests" onclick="runAllTests()">Run Diagnostic Tests</button>
+
+    <div id="results" class="results"></div>
+  </div>
+
+  <script>
+    const SANITY_CONFIG = {
+      projectId: '8t5h923j',
+      dataset: 'production',
+      apiVersion: '2024-01-01'
+    };
+
+    let testResults = [];
+
+    async function runAllTests() {
+      const btn = document.getElementById('runTests');
+      const resultsDiv = document.getElementById('results');
+      
+      btn.disabled = true;
+      btn.innerHTML = 'Running Tests <span class="spinner"></span>';
+      resultsDiv.innerHTML = '';
+      testResults = [];
+
+      // Run all tests
+      await testPublishedData();
+      await testCDNCaching();
+      await testAPIResponse();
+      await testBrowserCache();
+      await testDataFreshness();
+
+      // Show summary
+      showSummary();
+
+      btn.disabled = false;
+      btn.textContent = 'Run Diagnostic Tests Again';
+    }
+
+    function addResult(title, status, message, details = null, recommendation = null) {
+      const result = { title, status, message, details, recommendation };
+      testResults.push(result);
+      
+      const resultsDiv = document.getElementById('results');
+      const testItem = document.createElement('div');
+      testItem.className = 'test-item';
+      
+      let html = `
+        <h3>${title}</h3>
+        <span class="status ${status}">${status.toUpperCase()}</span>
+        <p class="detail">${message}</p>
+      `;
+
+      if (details) {
+        html += `<div class="json-output">${escapeHtml(details)}</div>`;
+      }
+
+      if (recommendation) {
+        html += `
+          <div class="recommendation">
+            <h4>💡 Recommendation</h4>
+            ${recommendation}
+          </div>
+        `;
+      }
+
+      testItem.innerHTML = html;
+      resultsDiv.appendChild(testItem);
+    }
+
+    async function testPublishedData() {
+      try {
+        const query = '*[_type == "artist"][0]{_id, name, _updatedAt, _rev}';
+        const url = `https://${SANITY_CONFIG.projectId}.api.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.result) {
+          const lastUpdate = new Date(data.result._updatedAt);
+          const minutesAgo = Math.floor((Date.now() - lastUpdate.getTime()) / 60000);
+          
+          addResult(
+            '✅ Test 1: Sanity API Connection',
+            'pass',
+            `Successfully connected to Sanity API. Latest artist updated ${minutesAgo} minutes ago.`,
+            JSON.stringify(data.result, null, 2),
+            `<p>Your Sanity API is responding correctly. Document ID: <code>${data.result._id}</code></p>`
+          );
+        } else {
+          addResult(
+            '❌ Test 1: Sanity API Connection',
+            'fail',
+            'No artists found in Sanity database.',
+            null,
+            '<p>Make sure you have published artist documents in Sanity Studio.</p>'
+          );
+        }
+      } catch (error) {
+        addResult(
+          '❌ Test 1: Sanity API Connection',
+          'fail',
+          `Failed to connect to Sanity API: ${error.message}`,
+          null,
+          `<p>Check your project ID and dataset name in <code>SANITY_CONFIG</code>.</p>`
+        );
+      }
+    }
+
+    async function testCDNCaching() {
+      try {
+        const query = '*[_type == "artist"][0]{_id, _updatedAt}';
+        
+        // Test CDN
+        const cdnUrl = `https://${SANITY_CONFIG.projectId}.apicdn.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+        const cdnResponse = await fetch(cdnUrl);
+        const cdnData = await cdnResponse.json();
+        
+        // Test direct API
+        const apiUrl = `https://${SANITY_CONFIG.projectId}.api.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+        const apiResponse = await fetch(apiUrl);
+        const apiData = await apiResponse.json();
+
+        const cdnTime = cdnData.result?._updatedAt;
+        const apiTime = apiData.result?._updatedAt;
+
+        if (cdnTime === apiTime) {
+          addResult(
+            '✅ Test 2: CDN Cache Status',
+            'pass',
+            'CDN and API are in sync. No caching issues detected.',
+            `CDN timestamp: ${cdnTime}\nAPI timestamp: ${apiTime}`,
+            '<p>Your CDN is serving fresh data. If you just published changes, they should appear within 30 minutes.</p>'
+          );
+        } else {
+          const cdnDate = new Date(cdnTime);
+          const apiDate = new Date(apiTime);
+          const staleness = Math.floor((apiDate - cdnDate) / 60000);
+
+          addResult(
+            '⚠️ Test 2: CDN Cache Status',
+            'warning',
+            `CDN is ${staleness} minutes behind the API. This is normal for CDN caching.`,
+            `CDN timestamp: ${cdnTime} (${staleness}min old)\nAPI timestamp: ${apiTime} (latest)`,
+            `
+              <p>The Sanity CDN caches responses for up to 30 minutes.</p>
+              <ul>
+                <li>Set <code>useCdn: false</code> in sanity-client.js for real-time updates</li>
+                <li>OR wait ${30 - staleness} more minutes for cache to expire</li>
+                <li>OR set up webhooks for instant updates</li>
+              </ul>
+            `
+          );
+        }
+      } catch (error) {
+        addResult(
+          '❌ Test 2: CDN Cache Status',
+          'fail',
+          `Failed to test CDN caching: ${error.message}`
+        );
+      }
+    }
+
+    async function testAPIResponse() {
+      try {
+        const query = '*[_type == "artist"]{name, "slug": slug.current}[0...3]';
+        const url = `https://${SANITY_CONFIG.projectId}.api.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+        
+        const start = performance.now();
+        const response = await fetch(url);
+        const duration = Math.round(performance.now() - start);
+        const data = await response.json();
+
+        if (data.result && data.result.length > 0) {
+          addResult(
+            '✅ Test 3: API Response Time',
+            'pass',
+            `API responded in ${duration}ms. Found ${data.result.length} artists.`,
+            JSON.stringify(data.result, null, 2),
+            duration > 1000 
+              ? '<p>⚠️ Response time is slow. Consider enabling CDN (<code>useCdn: true</code>) for better performance.</p>'
+              : '<p>Response time is good! Your API is performing well.</p>'
+          );
+        } else {
+          addResult(
+            '⚠️ Test 3: API Response Time',
+            'warning',
+            'API responded successfully but returned no artists.',
+            null,
+            '<p>Make sure you have published artist documents in Sanity Studio.</p>'
+          );
+        }
+      } catch (error) {
+        addResult(
+          '❌ Test 3: API Response Time',
+          'fail',
+          `API request failed: ${error.message}`
+        );
+      }
+    }
+
+    function testBrowserCache() {
+      const cacheStatus = localStorage.getItem('sanity-test-timestamp');
+      const now = Date.now();
+      
+      if (cacheStatus) {
+        const lastCheck = parseInt(cacheStatus);
+        const minutesAgo = Math.floor((now - lastCheck) / 60000);
+        
+        addResult(
+          '✅ Test 4: Browser Cache',
+          'pass',
+          `Browser last loaded this diagnostic ${minutesAgo} minutes ago.`,
+          null,
+          `
+            <p>To clear browser cache and force fresh data:</p>
+            <ul>
+              <li>Windows/Linux: Press <code>Ctrl + Shift + R</code></li>
+              <li>Mac: Press <code>Cmd + Shift + R</code></li>
+              <li>Or open site in Incognito/Private mode</li>
+            </ul>
+          `
+        );
+      } else {
+        addResult(
+          'ℹ️ Test 4: Browser Cache',
+          'pass',
+          'First time running this diagnostic (no cache detected).',
+          null,
+          '<p>Your browser cache is fresh. No issues detected.</p>'
+        );
+      }
+
+      localStorage.setItem('sanity-test-timestamp', now.toString());
+    }
+
+    async function testDataFreshness() {
+      try {
+        const query = '*[_type == "artist"] | order(_updatedAt desc)[0]{_updatedAt, name}';
+        const url = `https://${SANITY_CONFIG.projectId}.api.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.result) {
+          const lastUpdate = new Date(data.result._updatedAt);
+          const now = new Date();
+          const hoursAgo = Math.floor((now - lastUpdate) / 3600000);
+          const minutesAgo = Math.floor((now - lastUpdate) / 60000);
+
+          let status = 'pass';
+          let message = '';
+          let recommendation = '';
+
+          if (minutesAgo < 5) {
+            status = 'pass';
+            message = `Latest artist "${data.result.name}" was updated ${minutesAgo} minutes ago. Very fresh! ✨`;
+            recommendation = '<p>Your data is extremely fresh. Changes should be visible now (if CDN cache has cleared).</p>';
+          } else if (hoursAgo < 1) {
+            status = 'pass';
+            message = `Latest artist "${data.result.name}" was updated ${minutesAgo} minutes ago.`;
+            recommendation = '<p>Data is recent. If you just made changes, make sure you clicked "Publish" in Sanity Studio.</p>';
+          } else if (hoursAgo < 24) {
+            status = 'warning';
+            message = `Latest artist "${data.result.name}" was updated ${hoursAgo} hours ago.`;
+            recommendation = '<p>⚠️ No recent updates detected. If you made changes today, verify they were published in Sanity Studio.</p>';
+          } else {
+            status = 'warning';
+            message = `Latest artist "${data.result.name}" was last updated ${Math.floor(hoursAgo / 24)} days ago.`;
+            recommendation = '<p>⚠️ Content hasn\'t been updated recently. This might be normal if you haven\'t made changes.</p>';
+          }
+
+          addResult(
+            '📅 Test 5: Data Freshness',
+            status,
+            message,
+            `Last update: ${lastUpdate.toLocaleString()}\nArtist: ${data.result.name}`,
+            recommendation
+          );
+        } else {
+          addResult(
+            '❌ Test 5: Data Freshness',
+            'fail',
+            'No artist data found to check freshness.'
+          );
+        }
+      } catch (error) {
+        addResult(
+          '❌ Test 5: Data Freshness',
+          'fail',
+          `Failed to check data freshness: ${error.message}`
+        );
+      }
+    }
+
+    function showSummary() {
+      const resultsDiv = document.getElementById('results');
+      const summary = document.createElement('div');
+      summary.className = 'summary';
+
+      const passed = testResults.filter(r => r.status === 'pass').length;
+      const failed = testResults.filter(r => r.status === 'fail').length;
+      const warnings = testResults.filter(r => r.status === 'warning').length;
+
+      let recommendations = '<h4>📋 Action Items:</h4><ul>';
+      
+      if (failed > 0) {
+        recommendations += '<li><strong>Fix critical issues first</strong> (tests marked as FAIL)</li>';
+      }
+      
+      if (warnings > 0) {
+        recommendations += '<li><strong>Check warnings</strong> - these might explain why changes aren\'t appearing</li>';
+      }
+
+      if (testResults.some(r => r.message.includes('CDN is') && r.message.includes('behind'))) {
+        recommendations += '<li>Consider setting <code>useCdn: false</code> in sanity-client.js for real-time updates</li>';
+      }
+
+      recommendations += '<li>Always click <strong>Publish</strong> in Sanity Studio after editing</li>';
+      recommendations += '<li>Force refresh your browser: <code>Ctrl + Shift + R</code></li>';
+      recommendations += '<li>Set up Sanity webhooks for automatic rebuilds (see SANITY_SYNC_TROUBLESHOOTING.md)</li>';
+      recommendations += '</ul>';
+
+      summary.innerHTML = `
+        <h2>📊 Test Summary</h2>
+        <div class="summary-stats">
+          <div class="stat">
+            <div class="stat-value" style="color: #28a745;">${passed}</div>
+            <div class="stat-label">Passed</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" style="color: #ffc107;">${warnings}</div>
+            <div class="stat-label">Warnings</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" style="color: #dc3545;">${failed}</div>
+            <div class="stat-label">Failed</div>
+          </div>
+        </div>
+        ${recommendations}
+      `;
+
+      resultsDiv.appendChild(summary);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+/**
+ * Artist Gallery Styles
+ * 
+ * Styling for the artist gallery section that displays
+ * additional images from the artist.gallery field in Sanity
+ */
+
+.artist-gallery {
+  margin: 3rem 0;
+  padding: 2rem 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.artist-gallery .gallery-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.artist-gallery .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.artist-gallery .gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f5f5f5;
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.artist-gallery .gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.artist-gallery .gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .artist-gallery {
+    margin: 2rem 0;
+    padding: 1.5rem 0;
+  }
+  
+  .artist-gallery .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+  
+  .artist-gallery .gallery-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .artist-gallery .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}

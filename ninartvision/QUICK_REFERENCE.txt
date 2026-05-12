@@ -1,0 +1,183 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║              SANITY CMS - PRODUCTION QUICK REFERENCE                 ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 1. STANDARD ARTIST QUERY (Copy-Paste Ready)                         │
+└─────────────────────────────────────────────────────────────────────┘
+
+*[_type == "artist" && slug.current == "${artistSlug}"][0]{
+  _id,
+  name,
+  "avatar": image.asset->url,
+  bio_en,
+  bio_ka,
+  about,
+  style,
+  seoTitle,
+  seoDescription,
+  "slug": slug.current
+}
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 2. STANDARD ARTWORK QUERY (Copy-Paste Ready)                        │
+└─────────────────────────────────────────────────────────────────────┘
+
+*[_type == "artwork" && artist->slug.current == "${artistSlug}"] | order(_createdAt desc){
+  _id,
+  title,
+  price,
+  "size": dimensions,
+  medium,
+  year,
+  status,
+  "desc": description,
+  "img": image.asset->url,
+  "photos": images[].asset->url
+}
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 3. DEFENSIVE RENDERING PATTERNS                                     │
+└─────────────────────────────────────────────────────────────────────┘
+
+// ✅ Safe text
+safeSetText('.artist-name', artist?.name, 'Unknown Artist');
+
+// ✅ Safe image
+safeSetImage('#avatar', artist?.avatar, 'images/placeholder.jpg');
+
+// ✅ Safe array join
+const photos = safeJoin(artwork?.photos, ',', '');
+
+// ✅ Safe array map
+const items = safeMap(artworks, a => `<div>${a.title}</div>`, []);
+
+// ✅ Inline fallback
+const bioText = artist?.bio_en || artist?.bio_ka || 'No bio available';
+
+// ✅ Image with error handler
+<img src="${img}" alt="${title}" onerror="this.src='images/placeholder.jpg'">
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 4. ERROR HANDLING PATTERN                                           │
+└─────────────────────────────────────────────────────────────────────┘
+
+try {
+  const artist = await fetchArtist();
+  
+  if (!artist) {
+    showError('#container', 'Artist not found');
+    return;
+  }
+  
+  // Render artist...
+  
+} catch (err) {
+  console.error('❌ Error:', err);
+  showError('#container', 'Failed to load content');
+}
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 5. SEO META TAG UPDATE                                              │
+└─────────────────────────────────────────────────────────────────────┘
+
+function updateSEOTags(artist) {
+  document.title = artist.seoTitle || `${artist.name} | Ninart Vision`;
+  
+  safeSetAttr('meta[name="description"]', 'content', 
+    artist.seoDescription || `Discover artworks by ${artist.name}`);
+  
+  safeSetAttr('#ogTitle', 'content', artist.seoTitle);
+  safeSetAttr('#ogImage', 'content', artist.avatar);
+  safeSetAttr('#ogUrl', 'content', window.location.href);
+}
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 6. BEFORE EACH DEPLOY - RUN THIS IN CONSOLE                         │
+└─────────────────────────────────────────────────────────────────────┘
+
+// Artist data
+console.log('Artist:', window.CURRENT_ARTIST);
+
+// Bio text
+console.log('Bio:', document.getElementById('aboutText')?.textContent);
+
+// Artworks count
+console.log('Artworks:', document.querySelectorAll('.shop-item').length);
+
+// Broken images
+console.log('Broken:', Array.from(document.querySelectorAll('img'))
+  .filter(i => !i.complete).length);
+
+// SEO tags
+console.log('Title:', document.title);
+console.log('OG Image:', document.querySelector('#ogImage')?.content);
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 7. CRITICAL RULES (NEVER BREAK THESE)                               │
+└─────────────────────────────────────────────────────────────────────┘
+
+❌ NEVER: artist.avatar (can be undefined)
+✅ ALWAYS: artist?.avatar || 'fallback.jpg'
+
+❌ NEVER: photos.join(',') (can crash if undefined)
+✅ ALWAYS: photos?.length ? photos.join(',') : ''
+
+❌ NEVER: Write bio to DOM in multiple places
+✅ ALWAYS: Single function updateBioText(lang)
+
+❌ NEVER: Hardcode API URLs everywhere
+✅ ALWAYS: Use config const SANITY_API_BASE
+
+❌ NEVER: Skip error handling in async functions
+✅ ALWAYS: try-catch with user-friendly error message
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 8. GROQ QUERY DOS AND DON'TS                                        │
+└─────────────────────────────────────────────────────────────────────┘
+
+✅ DO use parameterized queries:
+   *[_type == "artist" && slug.current == $slug][0]
+
+❌ DON'T concatenate user input:
+   *[_type == "artist" && slug.current == "${userInput}"][0]
+
+✅ DO use [0] for single document (faster)
+   *[_type == "artist" && slug.current == "nini"][0]
+
+❌ DON'T use [0...1] for single document (slower)
+   *[_type == "artist" && slug.current == "nini"][0...1]
+
+✅ DO use field aliasing:
+   "img": image.asset->url
+
+❌ DON'T fetch unused fields (bandwidth waste)
+   *[_type == "artist"]{...}
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 9. EMERGENCY ROLLBACK                                               │
+└─────────────────────────────────────────────────────────────────────┘
+
+# View recent commits
+git log --oneline -5
+
+# Rollback to previous commit
+git revert HEAD
+
+# Force rollback (destructive - use carefully)
+git reset --hard HEAD~1
+git push origin main --force
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 10. USEFUL LINKS                                                    │
+└─────────────────────────────────────────────────────────────────────┘
+
+Sanity Dashboard: https://sanity.io/manage
+GROQ Cheat Sheet: https://www.sanity.io/docs/query-cheat-sheet
+Vision Tool: https://www.sanity.io/manage (under "Vision" tab)
+Facebook Debugger: https://developers.facebook.com/tools/debug/
+Twitter Card Validator: https://cards-dev.twitter.com/validator
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  Print this and keep it near your desk for quick reference! 📌       ║
+╚══════════════════════════════════════════════════════════════════════╝
