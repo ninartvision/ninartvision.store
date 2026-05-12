@@ -376,6 +376,7 @@ async function fetchAllArtworks() {
         price,
         status,
         order,
+        shortDescription,
         description,
         "slug": slug.current,
         featured,

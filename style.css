@@ -3167,6 +3167,7 @@ a.pill:visited{
   background: rgba(0,0,0,0.55);
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .support-hero-content {
@@ -3392,6 +3393,45 @@ a.pill:visited{
 .lang-item.active .arrow {
   opacity: 1;
 }
+
+/* Site header lang pills stay in toolbar markup elsewhere; floated copy uses .main-lang-anchor */
+.main-lang-anchor {
+  position: relative;
+}
+
+.main-lang-anchor > .lang-switch {
+  position: absolute;
+  top: clamp(-2px, calc(-1vw + 24px), 24px);
+  right: clamp(2px, 0.65vw, 10px);
+  z-index: 20;
+  margin-left: 0;
+  pointer-events: none;
+}
+
+.main-lang-anchor > .lang-switch .lang-item {
+  pointer-events: auto;
+}
+
+/* When pills sit in the header flex row (desktop nav visible), nudge down to match nav text rhythm */
+@media (min-width: 901px) {
+  .header-row .lang-switch {
+    transform: translateY(22px);
+  }
+}
+
+/* About page only: tighter to nav band + right gutter — avoids overlap with founder heading */
+.page-about .main-lang-anchor > .lang-switch {
+  top: clamp(-18px, calc(-1vw + 4px), 6px);
+  right: clamp(0px, 0.35vw, 6px);
+}
+
+@media (max-width: 768px) {
+  .page-about .main-lang-anchor > .lang-switch {
+    top: clamp(-8px, calc(-0.85vw + 6px), 12px);
+    right: clamp(0px, 0.85vw, 6px);
+  }
+}
+
 /* ===== MOBILE FULLSCREEN IMAGE VIEWER ===== */
 .mobile-image-viewer{
   position: fixed;
@@ -3633,15 +3673,22 @@ a.pill:visited{
     padding: 16px;
   }
 
-  /* FIX: Language switcher mobile positioning */
-  .lang-switch {
+  /* FIX: Language switcher mobile positioning — header row only */
+  .header-row .lang-switch {
     position: absolute;
     top: 50%;
     right: 70px; /* Space for hamburger button */
-    transform: translateY(-50%);
+    transform: translateY(calc(-50% + 14px));
     margin-left: 0;
     gap: 6px;
     z-index: 100; /* Above nav elements but below modal */
+  }
+
+  .main-lang-anchor > .lang-switch {
+    top: clamp(2px, calc(-0.85vw + 20px), 22px);
+    right: clamp(2px, 1.4vw, 10px);
+    transform: none;
+    gap: 6px;
   }
 
   .lang-item {
@@ -3716,7 +3763,7 @@ a.pill:visited{
     height: 15px;
   }
 
-  .lang-switch {
+  .header-row .lang-switch {
     margin-left: auto;
     gap: 6px;
   }

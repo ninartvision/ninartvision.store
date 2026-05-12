@@ -40,25 +40,11 @@
       <a href="./">Home</a>
       <a href="support.html" class="active">Support a Project</a>
       <a href="sale/shop.html">Shop</a>
+      <a href="room-visualizer.html">Room preview</a>
       <a href="artists/">Artists</a>
       <a href="news.html">News</a>
       <a href="about.html">About</a>
     </nav>
-
-    <!-- LANGUAGE SWITCH (outside nav to stay visible on mobile) -->
-    <div class="lang-switch">
-      <button onclick="setLang('ka')" class="lang-item active">
-        <img src="./images/icon.webp" alt="KA" decoding="async" loading="lazy">
-        <span>KA</span>
-        <i class="arrow">›</i>
-      </button>
-
-      <button onclick="setLang('en')" class="lang-item">
-        <img src="./images/america.webp" alt="EN" decoding="async" loading="lazy">
-        <span>EN</span>
-        <i class="arrow">›</i>
-      </button>
-    </div>
 
     <button class="hamburger" id="openMenu" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -75,6 +61,7 @@
     <a href="./" class="menu-link">HOME</a>
     <a href="support.html" class="menu-link active">SUPPORT A PROJECT</a>
     <a href="sale/shop.html" class="menu-link">SHOP</a>
+    <a href="room-visualizer.html" class="menu-link">ROOM PREVIEW</a>
     <a href="artists/" class="menu-link">ARTISTS</a>
     <a href="news.html" class="menu-link">NEWS</a>
     <a href="about.html" class="menu-link">ABOUT</a>
@@ -83,7 +70,21 @@
 
 <!-- HERO -->
 <section class="support-hero">
-  <div class="support-hero-overlay">
+  <div class="support-hero-overlay main-lang-anchor">
+    <div class="lang-switch">
+      <button onclick="setLang('ka')" class="lang-item active">
+        <img src="./images/icon.webp" alt="KA" decoding="async" loading="lazy">
+        <span>KA</span>
+        <i class="arrow">›</i>
+      </button>
+
+      <button onclick="setLang('en')" class="lang-item">
+        <img src="./images/america.webp" alt="EN" decoding="async" loading="lazy">
+        <span>EN</span>
+        <i class="arrow">›</i>
+      </button>
+    </div>
+
     <div class="support-hero-content container">
       <h1
         data-en="Support Independent Art"

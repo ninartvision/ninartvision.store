@@ -18,7 +18,7 @@
   <meta name="twitter:image" content="https://ninartvision.store/images/og-image.png">
 
   <link rel="stylesheet" href="./style.min.css" />
-  <link rel="stylesheet" href="./css/room-visualizer.css" />
+  <link rel="stylesheet" href="./css/room-visualizer.css?v=nv20260531" />
   <link rel="icon" href="./images/favicon.png">
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -35,7 +35,7 @@
 <script defer src="./analytics.min.js"></script>
 </head>
 
-<body>
+<body class="page-room-visualizer">
 
 <header class="header">
   <div class="container header-row">
@@ -71,12 +71,14 @@
 </div>
 
 <main>
-  <div class="container" style="margin-top:100px;">
-    <section class="section" style="padding-top:0;">
-      <div class="section-top" style="margin-bottom:12px;">
-        <h2>Preview in your space</h2>
+  <div class="container nvr-main">
+    <section class="section nvr-section">
+      <div class="section-top nvr-hero-head">
+        <h2 data-en="Preview in your space" data-ka="ნახეთ ნამუშევარი თქვენს სივრცეში">Preview in your space</h2>
       </div>
-      <div class="nvr-page-intro muted">
+      <div class="nvr-page-intro muted"
+        data-en="Upload a photo of your wall or room, then choose any piece from the collection. Drag the painting to position it, use the corner handle or slider to resize, and adjust rotation to match your space. Your photo stays in your browser — it is not uploaded to our servers."
+        data-ka="ატვირთეთ თქვენი კედლის ან ოთახის ფოტო, შემდეგ კოლექციიდან აირჩიეთ სასურველი ნახატი. გადაადგილებისთვის გადაათრიეთ ნახატი; ზომის შესაცვლელად გადაათრიეთ მუქი კუთხის სახელური ან გამოიყენეთ სლაიდერი; დახრილობას კი მოარგეთ თქვენს სივრცეს. ფოტო ინახება მხოლოდ თქვენს ბრაუზერში და არ იტვირთება ჩვენს სერვერზე.">
         Upload a photo of your wall or room, then choose any piece from the collection. Drag the painting to position it, use the corner handle or slider to resize, and adjust rotation to match your space. Your photo stays in your browser — it is not uploaded to our servers.
       </div>
 
@@ -87,17 +89,41 @@
         <button type="button" class="btn" id="nvrExpand" aria-pressed="false" title="Larger preview area">Larger preview</button>
       </div>
 
+      <div class="nvr-hero-visual">
+        <div class="nvr-lang-bar">
+          <div class="nvr-lang-switch" role="group" aria-label="Choose language">
+            <button type="button" class="lang-item" data-lang="ka">
+              <span class="nvr-lang-flag"><img src="./images/icon.webp" alt="" width="20" height="16" decoding="async" /></span>
+              <span class="nvr-lang-code">KA</span>
+              <i class="arrow nvr-lang-arrow" aria-hidden="true">›</i>
+            </button>
+            <button type="button" class="lang-item" data-lang="en">
+              <span class="nvr-lang-flag"><img src="./images/america.webp" alt="" width="20" height="16" decoding="async" /></span>
+              <span class="nvr-lang-code">EN</span>
+              <i class="arrow nvr-lang-arrow" aria-hidden="true">›</i>
+            </button>
+          </div>
+        </div>
+
       <div class="nvr-placeholder" id="nvrPlaceholder" role="status">
-        <p class="muted" style="max-width:28rem;">Your wall preview will appear here after you choose a photo (JPEG, PNG, or WebP).</p>
+        <p class="muted nvr-placeholder-copy"
+          data-en="Your wall preview will appear here after you choose a photo (JPEG, PNG, or WebP)."
+          data-ka="ფოტოს არჩევის შემდეგ აქ გამოჩნდება თქვენი კედლის პრევიუ (JPEG, PNG ან WebP).">
+          Your wall preview will appear here after you choose a photo (JPEG, PNG, or WebP).
+        </p>
       </div>
 
       <div id="nvrStageWrap" class="nvr-stage-wrap" hidden>
-        <p class="nvr-hint">Drag the artwork to move it. Drag the dark corner handle to resize, or use the controls below.</p>
+        <p class="nvr-hint"
+          data-en="Drag the artwork to move it. Drag the dark corner handle to resize, or use the controls below."
+          data-ka="ნახატის გადაადგილებისთვის გადაათრიეთ იგი. ზომის შესაცვლელად გადაათრიეთ მუქი კუთხის სახელური ან გამოიყენეთ ქვემოთ განთავსებული სლაიდერები.">
+          Drag the artwork to move it. Drag the dark corner handle to resize, or use the controls below.
+        </p>
         <div class="nvr-toolbar" aria-label="Artwork adjustments">
-          <label>Size <span class="muted" style="font-weight:400;">(<span id="nvrScaleVal">32%</span>)</span>
+          <label class="nvr-slider-field"><span class="nvr-slider-label-text"><span data-en="Size" data-ka="ზომა">Size</span> <span class="muted nvr-slider-meta">(<span id="nvrScaleVal">32%</span>)</span></span>
             <input type="range" id="nvrScale" min="12" max="78" step="1" value="32" aria-label="Artwork width in frame" />
           </label>
-          <label>Tilt <span class="muted" style="font-weight:400;">(<span id="nvrRotateVal">0°</span>)</span>
+          <label class="nvr-slider-field"><span class="nvr-slider-label-text"><span data-en="Tilt" data-ka="დახრილება">Tilt</span> <span class="muted nvr-slider-meta">(<span id="nvrRotateVal">0°</span>)</span></span>
             <input type="range" id="nvrRotate" min="-35" max="35" step="1" value="0" aria-label="Artwork rotation degrees" />
           </label>
         </div>
@@ -110,11 +136,16 @@
           </div>
         </div>
       </div>
+      </div>
 
       <div class="section-top nvr-catalog-head">
-        <h2>Choose an artwork</h2>
+        <h2 data-en="Choose an artwork" data-ka="აირჩიეთ ნახატი">Choose an artwork</h2>
       </div>
-      <p class="muted" style="margin-bottom:1rem;">Full catalogue — same works as the gallery. Tap a piece to place it on your wall.</p>
+      <p class="muted nvr-catalog-lead"
+        data-en="Full catalogue — same works as the gallery. Tap a piece to place it on your wall."
+        data-ka="სრული კატალოგი — იგივე ნამუშევრები, რაც გალერეაში. ნახატზე შეეხეთ, რომ იგი თქვენს კედელზე გამოჩნდეს.">
+        Full catalogue — same works as the gallery. Tap a piece to place it on your wall.
+      </p>
       <div id="nvrCatalog" class="nvr-catalog" aria-live="polite"></div>
     </section>
   </div>
@@ -130,8 +161,9 @@
 <script>
   document.getElementById('nvrYear').textContent = new Date().getFullYear();
 </script>
-<script defer src="./sanity-client.min.js?v=nv20260213"></script>
-<script defer src="./js/room-visualizer.min.js?v=nv20260213"></script>
+<script defer src="./lang.js"></script>
+<script defer src="./sanity-client.min.js?v=nv20260517"></script>
+<script defer src="./js/room-visualizer.min.js?v=nv20260529"></script>
 <script defer src="./script.min.js?v=nv20260213"></script>
 </body>
 </html>
