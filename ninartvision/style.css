@@ -492,10 +492,10 @@ img, video {
     background-position: 8% 50%;
   }
   42%{
-    opacity: 0.46;
+    opacity: 0.52;
   }
   100%{
-    opacity: 0.2;
+    opacity: 0.26;
     background-position: 92% 50%;
   }
 }
@@ -503,11 +503,11 @@ img, video {
 @keyframes nv-news-hover-glide{
   0%{
     background-position: 18% 48%;
-    opacity: 0.22;
+    opacity: 0.28;
   }
   100%{
     background-position: 82% 52%;
-    opacity: 0.38;
+    opacity: 0.46;
   }
 }
 
@@ -529,7 +529,8 @@ img, video {
 .section-featured-projects,
 .home-shop-preview,
 #artists.section,
-#news.section{
+#news.section,
+#about.section{
   --fp-ink: #1a1514;
   --fp-ink-muted: rgba(72, 64, 58, 0.76);
   --fp-accent: rgba(154, 96, 74, 0.88);
@@ -569,7 +570,8 @@ img, video {
 .section-featured-projects .editorial-heading,
 .home-shop-preview .editorial-heading,
 #artists .editorial-heading,
-#news .editorial-heading{
+#news .editorial-heading,
+#about .editorial-heading{
   max-width: min(52rem, 100%);
   margin: 0 0 clamp(32px, 5vw, 48px);
   padding: 0;
@@ -583,10 +585,21 @@ img, video {
   animation: nv-editorial-rise 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
 }
 
+#about .editorial-heading[data-editorial-reveal]{
+  opacity: 0;
+  transform: translateY(18px);
+  animation: none !important;
+}
+
+#about .editorial-heading[data-editorial-reveal].editorial-heading--inview{
+  animation: nv-editorial-rise 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards !important;
+}
+
 .section-featured-projects .editorial-heading__eyebrow,
 .home-shop-preview .editorial-heading__eyebrow,
 #artists .editorial-heading__eyebrow,
-#news .editorial-heading__eyebrow{
+#news .editorial-heading__eyebrow,
+#about .editorial-heading__eyebrow{
   display: flex;
   align-items: center;
   gap: 0.65rem;
@@ -602,7 +615,8 @@ img, video {
 .section-featured-projects .editorial-heading__eyebrow::before,
 .home-shop-preview .editorial-heading__eyebrow::before,
 #artists .editorial-heading__eyebrow::before,
-#news .editorial-heading__eyebrow::before{
+#news .editorial-heading__eyebrow::before,
+#about .editorial-heading__eyebrow::before{
   content: "";
   flex: 0 0 clamp(24px, 4vw, 40px);
   height: 1px;
@@ -612,7 +626,8 @@ img, video {
 .section-featured-projects .editorial-heading__title,
 .home-shop-preview .editorial-heading__title,
 #artists .editorial-heading__title,
-#news .editorial-heading__title{
+#news .editorial-heading__title,
+#about .editorial-heading__title{
   font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   font-weight: 600;
   font-size: clamp(2.2rem, 5.35vw, 3.35rem);
@@ -630,7 +645,9 @@ img, video {
 #artists .editorial-heading:hover .editorial-heading__title,
 #artists .editorial-heading:focus-within .editorial-heading__title,
 #news .editorial-heading:hover .editorial-heading__title,
-#news .editorial-heading:focus-within .editorial-heading__title{
+#news .editorial-heading:focus-within .editorial-heading__title,
+#about .editorial-heading:hover .editorial-heading__title,
+#about .editorial-heading:focus-within .editorial-heading__title{
   text-shadow:
     0 0 18px rgba(255, 247, 240, 0.26),
     0 1px 10px rgba(52, 42, 36, 0.035);
@@ -639,7 +656,8 @@ img, video {
 .section-featured-projects .editorial-heading__lede,
 .home-shop-preview .editorial-heading__lede,
 #artists .editorial-heading__lede,
-#news .editorial-heading__lede{
+#news .editorial-heading__lede,
+#about .editorial-heading__lede{
   font-family: "FiraGO", "Fira Sans", system-ui, -apple-system, sans-serif;
   font-size: clamp(12px, 1.18vw, 15px);
   line-height: 1.35;
@@ -656,7 +674,8 @@ img, video {
 .section-featured-projects .editorial-heading__lede.muted,
 .home-shop-preview .editorial-heading__lede.muted,
 #artists .editorial-heading__lede.muted,
-#news .editorial-heading__lede.muted{
+#news .editorial-heading__lede.muted,
+#about .editorial-heading__lede.muted{
   color: var(--fp-lede-subtle);
 }
 
@@ -674,7 +693,8 @@ img, video {
 .section-featured-projects .editorial-heading__rule.editorial-rule,
 .home-shop-preview .editorial-heading__rule.editorial-rule,
 #artists .editorial-heading__rule.editorial-rule,
-#news .editorial-heading__rule.editorial-rule{
+#news .editorial-heading__rule.editorial-rule,
+#about .editorial-heading__rule.editorial-rule{
   margin-top: clamp(14px, 2vw, 22px);
 }
 
@@ -818,7 +838,8 @@ img, video {
   .section-featured-projects .editorial-heading,
   .home-shop-preview .editorial-heading,
   #artists .editorial-heading,
-  #news .editorial-heading{
+  #news .editorial-heading,
+  #about .editorial-heading{
     margin-bottom: clamp(26px, 6vw, 38px);
   }
 }
@@ -827,7 +848,8 @@ img, video {
   .section-featured-projects .editorial-heading,
   .home-shop-preview .editorial-heading,
   #artists .editorial-heading,
-  #news .editorial-heading{
+  #news .editorial-heading,
+  #about .editorial-heading{
     animation: none;
     opacity: 1;
     transform: none;
@@ -967,9 +989,54 @@ img, video {
   padding-bottom: clamp(44px, 7vw, 72px);
   margin-top: 0;
   margin-bottom: 0;
-  background: linear-gradient(180deg, #fdfcfa 0%, #faf8f5 42%, #ffffff 100%);
+  background: linear-gradient(180deg, #fcf9f5 0%, #f6f1e8 36%, #faf7f2 72%, #fefdfc 100%);
   border: none;
   box-shadow: none;
+}
+
+
+
+/* Mission — ivory editorial band */
+#about.section{
+  padding-top: clamp(44px, 7vw, 72px);
+  padding-bottom: clamp(44px, 7vw, 72px);
+  margin-top: 0;
+  margin-bottom: 0;
+  background: linear-gradient(180deg, #fdfcfa 0%, #faf7f2 38%, #ffffff 100%);
+  border: none;
+  box-shadow: none;
+}
+
+#about .editorial-heading{
+  margin-bottom: clamp(26px, 4vw, 40px);
+}
+
+#about .editorial-heading__lede{
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  max-width: min(42rem, 100%);
+  line-height: 1.42;
+}
+
+#about .about-mission-body{
+  margin-top: clamp(4px, 1vw, 12px);
+  max-width: min(52rem, 100%);
+}
+
+#about .about-mission-body__text{
+  margin: 0;
+  font-family: "FiraGO", "Fira Sans", system-ui, -apple-system, sans-serif;
+  font-size: clamp(14px, 1.18vw, 17px);
+  line-height: 1.74;
+  letter-spacing: 0.012em;
+  color: rgba(58, 52, 46, 0.84);
+}
+
+#about .about-mission-body__text .brand-highlight{
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(138, 88, 68, 0.94);
 }
 
 
@@ -1018,24 +1085,24 @@ img, video {
   color: var(--fp-ink, #1a1514);
   overflow: hidden;
   background:
-    radial-gradient(ellipse 92% 72% at 100% -4%, rgba(214, 172, 142, 0.16), transparent 54%),
-    radial-gradient(ellipse 78% 68% at -6% 104%, rgba(232, 216, 192, 0.18), transparent 52%),
-    radial-gradient(ellipse 52% 44% at 92% 78%, rgba(252, 242, 228, 0.42), transparent 64%),
+    radial-gradient(ellipse 92% 72% at 100% -4%, rgba(200, 152, 118, 0.24), transparent 54%),
+    radial-gradient(ellipse 78% 68% at -6% 104%, rgba(226, 198, 168, 0.28), transparent 52%),
+    radial-gradient(ellipse 52% 44% at 92% 78%, rgba(248, 232, 208, 0.54), transparent 64%),
     linear-gradient(
       158deg,
-      rgba(255, 254, 251, 0.56) 0%,
-      rgba(246, 238, 226, 0.4) 46%,
-      rgba(252, 247, 240, 0.52) 100%
+      rgba(255, 252, 246, 0.7) 0%,
+      rgba(242, 228, 210, 0.54) 46%,
+      rgba(252, 244, 232, 0.66) 100%
     );
-  border: 1px solid rgba(198, 168, 142, 0.24);
+  border: 1px solid rgba(178, 142, 112, 0.34);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.58),
-    inset 0 -1px 0 rgba(228, 210, 188, 0.16),
-    0 4px 22px rgba(42, 34, 28, 0.028),
-    0 1px 4px rgba(42, 34, 28, 0.02),
-    0 0 0 1px rgba(252, 244, 232, 0.38);
-  -webkit-backdrop-filter: blur(8px) saturate(1.07);
-  backdrop-filter: blur(8px) saturate(1.07);
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 0 rgba(218, 192, 164, 0.22),
+    0 5px 26px rgba(38, 30, 24, 0.036),
+    0 2px 6px rgba(38, 30, 24, 0.028),
+    0 0 0 1px rgba(238, 224, 204, 0.46);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  backdrop-filter: blur(8px) saturate(1.1);
   opacity: 0;
   transform: translateY(16px);
   transition:
@@ -1065,11 +1132,11 @@ img, video {
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E") repeat,
     linear-gradient(
       188deg,
-      rgba(255, 255, 255, 0.42) 0%,
-      rgba(255, 255, 255, 0.07) 40%,
+      rgba(255, 252, 246, 0.48) 0%,
+      rgba(244, 228, 208, 0.14) 42%,
       transparent 68%
     );
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+  box-shadow: inset 0 0 0 1px rgba(255, 248, 238, 0.38);
 }
 
 #news .news-item::after{
@@ -1083,8 +1150,8 @@ img, video {
   background: linear-gradient(
     122deg,
     transparent 30%,
-    rgba(252, 242, 228, 0.72) 48%,
-    rgba(248, 232, 212, 0.38) 52%,
+    rgba(246, 228, 206, 0.82) 48%,
+    rgba(236, 204, 172, 0.42) 52%,
     transparent 70%
   );
   background-size: 260% 100%;
@@ -1102,25 +1169,25 @@ img, video {
 @media (hover: hover) and (pointer: fine){
   #news .news-item:hover{
     transform: translateY(-4px);
-    border-color: rgba(182, 148, 122, 0.34);
+    border-color: rgba(164, 126, 98, 0.42);
     background:
-      radial-gradient(ellipse 92% 72% at 100% -4%, rgba(214, 172, 142, 0.22), transparent 54%),
-      radial-gradient(ellipse 78% 68% at -6% 104%, rgba(232, 216, 192, 0.22), transparent 52%),
-      radial-gradient(ellipse 52% 44% at 92% 78%, rgba(252, 242, 228, 0.48), transparent 64%),
+      radial-gradient(ellipse 92% 72% at 100% -4%, rgba(196, 146, 112, 0.3), transparent 54%),
+      radial-gradient(ellipse 78% 68% at -6% 104%, rgba(222, 192, 162, 0.32), transparent 52%),
+      radial-gradient(ellipse 52% 44% at 92% 78%, rgba(246, 226, 198, 0.58), transparent 64%),
       linear-gradient(
         158deg,
-        rgba(255, 254, 252, 0.68) 0%,
-        rgba(248, 240, 228, 0.52) 48%,
-        rgba(253, 248, 241, 0.62) 100%
+        rgba(255, 253, 248, 0.82) 0%,
+        rgba(244, 232, 214, 0.62) 48%,
+        rgba(252, 242, 228, 0.74) 100%
       );
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.68),
-      inset 0 -1px 0 rgba(224, 206, 182, 0.22),
-      0 14px 38px rgba(42, 34, 28, 0.042),
-      0 6px 16px rgba(42, 34, 28, 0.032),
-      0 0 0 1px rgba(236, 224, 206, 0.48),
-      0 0 40px rgba(248, 236, 218, 0.42),
-      0 0 64px rgba(252, 242, 228, 0.22);
+      inset 0 1px 0 rgba(255, 255, 255, 0.72),
+      inset 0 -1px 0 rgba(212, 184, 154, 0.28),
+      0 16px 42px rgba(38, 30, 24, 0.048),
+      0 7px 18px rgba(38, 30, 24, 0.038),
+      0 0 0 1px rgba(228, 210, 182, 0.52),
+      0 0 44px rgba(236, 212, 182, 0.48),
+      0 0 72px rgba(248, 228, 198, 0.28);
   }
 
   #news .news-item.news-item--visible:hover{
@@ -1133,19 +1200,19 @@ img, video {
   }
 
   #news .news-item.news-item--inview:hover::after{
-    opacity: 0.42;
+    opacity: 0.48;
     animation: nv-news-hover-glide 5s ease-in-out infinite alternate;
   }
 
   #news .news-item:not(.open):hover .arrow{
     transform: translateX(5px);
-    border-color: rgba(176, 142, 118, 0.38);
-    color: rgba(124, 78, 58, 0.95);
+    border-color: rgba(168, 118, 88, 0.46);
+    color: rgba(112, 72, 54, 0.96);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.78),
-      0 8px 26px rgba(42, 34, 28, 0.078),
-      0 0 0 1px rgba(238, 224, 206, 0.38),
-      0 0 28px rgba(248, 228, 206, 0.48);
+      inset 0 1px 0 rgba(255, 255, 255, 0.82),
+      0 9px 28px rgba(38, 30, 24, 0.088),
+      0 0 0 1px rgba(228, 204, 176, 0.46),
+      0 0 32px rgba(232, 196, 164, 0.52);
   }
 
   #news .news-item:not(.open):hover .arrow::before{
@@ -1154,7 +1221,7 @@ img, video {
 
   #news .news-item.open:hover .arrow{
     transform: rotate(90deg) translateY(3px);
-    border-color: rgba(176, 142, 118, 0.34);
+    border-color: rgba(168, 118, 88, 0.42);
   }
 
   #news .news-item.open:hover .arrow::before{
@@ -1169,7 +1236,7 @@ img, video {
   font-size: clamp(10px, 0.82vw, 11px);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(92, 82, 74, 0.52);
+  color: rgba(72, 62, 54, 0.62);
 }
 
 #news .news-item .text{
@@ -1195,7 +1262,7 @@ img, video {
   font-size: clamp(1.12rem, 2.05vw, 1.42rem);
   line-height: 1.26;
   letter-spacing: 0.015em;
-  color: rgba(26, 21, 20, 0.93);
+  color: rgba(22, 18, 17, 0.96);
   max-width: min(42rem, 100%);
 }
 
@@ -1207,7 +1274,7 @@ img, video {
   font-size: clamp(12px, 1.08vw, 14px);
   line-height: 1.42;
   letter-spacing: 0.035em;
-  color: rgba(76, 68, 62, 0.56);
+  color: rgba(58, 52, 46, 0.68);
   max-width: min(40rem, 100%);
 }
 
@@ -1221,11 +1288,11 @@ img, video {
 }
 
 #news .news-item .news-content .para-ka{
-  color: rgba(34, 30, 28, 0.88);
+  color: rgba(28, 24, 22, 0.92);
 }
 
 #news .news-item .news-content .para-en{
-  color: rgba(76, 68, 62, 0.62);
+  color: rgba(62, 56, 50, 0.72);
   font-size: clamp(13px, 1.05vw, 14px);
 }
 
@@ -1246,15 +1313,15 @@ img, video {
   font-size: clamp(16px, 1.75vw, 19px);
   line-height: 1;
   letter-spacing: 0;
-  color: rgba(148, 96, 74, 0.82);
+  color: rgba(132, 86, 64, 0.9);
   opacity: 1;
   background:
-    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.62), transparent 52%),
-    rgba(255, 251, 246, 0.42);
-  border: 1px solid rgba(196, 168, 142, 0.26);
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.66), transparent 52%),
+    rgba(255, 248, 240, 0.52);
+  border: 1px solid rgba(188, 152, 124, 0.36);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    0 6px 18px rgba(42, 34, 28, 0.06);
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    0 7px 20px rgba(38, 30, 24, 0.072);
   transition:
     transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
@@ -1268,7 +1335,7 @@ img, video {
   position: absolute;
   inset: -10px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(248, 232, 212, 0.55), transparent 72%);
+  background: radial-gradient(circle, rgba(242, 210, 180, 0.58), transparent 72%);
   opacity: 0;
   transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: -1;
