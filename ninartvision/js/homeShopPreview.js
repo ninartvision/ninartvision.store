@@ -175,7 +175,6 @@ async function initHomeShopPreview() {
             <span>${p.title}</span>
             ${p.price ? `<span class="price">${fmtPrice(p.price)}</span>` : ''}
           </div>
-          ${p.shortDescription ? `<p class="short-desc">${p.shortDescription}</p>` : ''}
         `;
 
         frag.appendChild(div);

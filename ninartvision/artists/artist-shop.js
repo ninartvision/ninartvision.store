@@ -311,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
         data-size="${a.size}"
         data-medium="${a.medium}"
         data-year="${a.year}"
-        data-description="${a.description}"
+        data-desc="${String(a.description || '').replace(/"/g, '&quot;')}"
         data-alt="${a.alt}"
         data-photos="${a.photos.join(",")}">
 
@@ -329,7 +329,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <span>${a.title}</span>
           ${a.price ? `<span class="price">${fmtPrice(a.price)}</span>` : ""}
         </div>
-        ${a.description ? `<div class="artwork-description">${a.description}</div>` : ""}
       </div>
     `).join("");
 
