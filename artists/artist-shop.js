@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const query = `
-        *[_type == "artwork" && artist->slug.current == "${artistSlug}" && status in ["sale", "sold"]] | order(_createdAt desc) {
+        *[_type == "artwork" && artist->slug.current == "${artistSlug}" && status in ["sale", "sold", "published"]] | order(_createdAt desc) {
           _id,
           title,
           price,
@@ -240,6 +240,17 @@ document.addEventListener("DOMContentLoaded", () => {
         ? (u, w) => window.sanityImgUrl(u, { w: w || 600, q: 80 })
         : (u) => u;
 
+      const norm =
+        typeof window.normalizeArtworkListingStatus === 'function'
+          ? window.normalizeArtworkListingStatus
+          : (s =>
+              String(s || '').trim().toLowerCase() === 'sold'
+                ? 'sold'
+                : (String(s || '').trim().toLowerCase() === 'sale' ||
+                    String(s || '').trim().toLowerCase() === 'published'
+                    ? 'sale'
+                    : ''));
+
       const seenIds = new Set();
       allArtworks = (result || [])
         .filter(a => a.img)
@@ -252,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .map(a => ({
           title: a.title || "Untitled",
           price: Number(String(a.price || '').replace(/[^\d.]/g, '')) || '',
-          status: a.status === "sold" ? "sold" : (a.status === "sale" ? "sale" : ""),
+          status: norm(a.status),
           size: a.size || "",
           medium: a.medium || "",
           year: a.year || "",

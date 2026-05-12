@@ -31,7 +31,7 @@
   --------------------------- */
   async function fetchArtworks() {
     const query = `
-      *[_type == "artwork" && artist->slug.current == "${artistSlug}" && status in ["sale", "sold"]] | order(_createdAt desc){
+      *[_type == "artwork" && artist->slug.current == "${artistSlug}" && status in ["sale", "sold", "published"]] | order(_createdAt desc){
         _id,
         title,
         "slug": slug.current,
@@ -177,13 +177,16 @@
             ? a.images.map(img => img.asset?.url).filter(Boolean).map(u => iUrl(u, { w: 1200, q: 85 }))
             : (rawUrl ? [iUrl(rawUrl, { w: 1200, q: 85 })] : ['../images/placeholder.jpg'])
 
-          const cardStatus = a.status === 'sold' ? 'sold' : (a.status === 'sale' ? 'sale' : '')
+          const cardStatus =
+            typeof window.normalizeArtworkListingStatus === 'function'
+              ? window.normalizeArtworkListingStatus(a.status)
+              : (a.status === 'sold' ? 'sold' : (a.status === 'sale' ? 'sale' : (String(a.status || '').trim().toLowerCase() === 'published' ? 'sale' : '')))
           
           return `
       <div class="shop-item ${cardStatus}"
-        data-status="${a.status || ''}"
-        data-is-sold="${String(a.status === 'sold')}"
-        data-is-on-sale="${String(a.status === 'sale')}"
+        data-status="${cardStatus}"
+        data-is-sold="${String(cardStatus === 'sold')}"
+        data-is-on-sale="${String(cardStatus === 'sale')}"
         data-title="${a.title || 'Untitled'}"
         data-price="${a.price || ''}"
         data-size="${a.size || ''}"

@@ -1,9 +1,18 @@
 ﻿/**
  * Home Shop Preview - Artworks Section
- * Displays artworks with showInShop === true
- * Auto-rotation and SALE/SOLD filtering
+ * Loads shop artworks from Sanity (fetchShopArtworks) and SALE/SOLD tabs.
  */
 const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
+
+function homeNormStatus(raw) {
+  if (typeof window.normalizeArtworkListingStatus === 'function') {
+    return window.normalizeArtworkListingStatus(raw);
+  }
+  const s = String(raw == null ? '' : raw).trim().toLowerCase();
+  if (s === 'sold') return 'sold';
+  if (s === 'sale' || s === 'published') return 'sale';
+  return '';
+}
 
 async function initHomeShopPreview() {
   console.log('[homeShopPreview] init — readyState:', document.readyState);
@@ -100,6 +109,18 @@ async function initHomeShopPreview() {
         artist: raw[0].artist,
         hasImage: !!(raw[0].image?.asset?.url)
       }));
+      const hist = {};
+      raw.forEach(a => {
+        const k = a.status === undefined || a.status === null || a.status === ''
+          ? '(missing)'
+          : String(a.status);
+        hist[k] = (hist[k] || 0) + 1;
+      });
+      console.log('[homeShopPreview] raw status histogram:', hist);
+      console.log('[homeShopPreview] raw preview (first 25 title+status):', raw.slice(0, 25).map(a => ({
+        title: a.title,
+        status: a.status
+      })));
     }
 
     if (raw && raw.length > 0) {
@@ -115,7 +136,7 @@ async function initHomeShopPreview() {
 
       items = deduped.map(artwork => ({
         id: artwork._id,
-        status: artwork.status || '',
+        status: homeNormStatus(artwork.status),
         title: artwork.title || 'Untitled',
         shortDescription: (artwork.shortDescription || '').trim().toLowerCase() === (artwork.title || '').trim().toLowerCase()
           ? ''
@@ -127,6 +148,14 @@ async function initHomeShopPreview() {
         photos: Array.isArray(artwork.images) ? artwork.images.map(i => i?.asset?.url).filter(Boolean) : (artwork.image?.asset?.url ? [artwork.image.asset.url] : []),
         alt: artwork.image?.alt || artwork.title || 'Artwork'
       }));
+      const normalizedHist = {};
+      items.forEach(i => {
+        const k = i.status || '(empty)';
+        normalizedHist[k] = (normalizedHist[k] || 0) + 1;
+      });
+      console.log('[homeShopPreview] normalized status histogram:', normalizedHist);
+      console.log('[homeShopPreview] SALE pool size:', items.filter(i => i.status === 'sale').length,
+        '| SOLD pool size:', items.filter(i => i.status === 'sold').length);
     } else {
       items = [];
     }
@@ -143,7 +172,7 @@ async function initHomeShopPreview() {
   }
 
   // Initial render and auto-rotation
-  console.log('[homeShopPreview] render artworks');
+  console.log('[homeShopPreview] initial paint (tab default:', currentFilter + ')');
   render();
 
   // Pause rotation when the page tab is not visible (saves CPU/battery)
@@ -163,6 +192,8 @@ async function initHomeShopPreview() {
       buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       currentFilter = btn.dataset.filter;
+      const f = items.filter(item => item.status === currentFilter);
+      console.log('[homeShopPreview] tab switched →', currentFilter, '| filtered:', f.length + '/' + items.length);
       render();
     });
   });

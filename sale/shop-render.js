@@ -26,8 +26,18 @@ function renderAllItems(artworksData) {
   const iUrl = typeof sanityImgUrl === 'function' ? sanityImgUrl : u => u;
   const iSet = typeof sanitySrcset === 'function' ? sanitySrcset : () => '';
 
+  const normListing =
+    typeof window.normalizeArtworkListingStatus === 'function'
+      ? window.normalizeArtworkListingStatus
+      : function (raw) {
+        const s = String(raw == null ? '' : raw).trim().toLowerCase();
+        if (s === 'sold') return 'sold';
+        if (s === 'sale' || s === 'published') return 'sale';
+        return '';
+      };
+
   const normalize = a => {
-    const status  = a.status === 'sold' ? 'sold' : (a.status === 'sale' ? 'sale' : '');
+    const status  = normListing(a.status);
     const rawUrl  = a.image?.asset?.url;
     const imgSrc  = rawUrl ? iUrl(rawUrl, {w: 400}) : `../${ (a.img || '').toLowerCase() }`;
     const srcset  = rawUrl ? iSet(rawUrl, [400, 800]) : '';
