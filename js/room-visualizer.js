@@ -107,13 +107,14 @@
   }
 
   /**
-   * Remove typical JPEG scan-white matte only near image edges (preserves canvas whites / saturated frame wood).
-   * Returns PNG data URL or '' on failure.
+   * Exterior matte: edge flood + iterative halo; triple color refs from corners, border, cleared median.
+   * Residual peel + shave; skips pixels anchored to inward opaque color vs matte (protects light wood corners).
    */
-  function knockOutEdgeMatteFromImage(im) {
+  function knockOutMatteFromImage(im) {
     var w = im.naturalWidth;
     var h = im.naturalHeight;
     if (!w || !h) return '';
+
     var canvas = document.createElement('canvas');
     canvas.width = w;
     canvas.height = h;
@@ -121,53 +122,574 @@
     ctx.drawImage(im, 0, 0);
     var id = ctx.getImageData(0, 0, w, h);
     var d = id.data;
-    var edgeBand = Math.max(6, Math.round(Math.min(w, h) * 0.13));
-    var x;
-    var y;
-    var i;
-    var r;
-    var g;
-    var b;
-    var a;
-    var lum;
-    var maxc;
-    var minc;
-    var sat;
-    var dist;
-    var edgeF;
-    var matteW;
-    var invA;
 
-    for (y = 0; y < h; y++) {
-      for (x = 0; x < w; x++) {
-        dist = Math.min(x, y, w - 1 - x, h - 1 - y);
-        if (dist >= edgeBand) continue;
+    var patch = Math.max(6, Math.min(18, Math.round(Math.min(w, h) * 0.022)));
 
-        i = (y * w + x) * 4;
-        r = d[i];
-        g = d[i + 1];
-        b = d[i + 2];
-        a = d[i + 3];
-        if (a === 0) continue;
+    function sampleCornerMedianColor() {
+      var arr = [];
+      var corners = [
+        [0, 0],
+        [w - patch, 0],
+        [0, h - patch],
+        [w - patch, h - patch]
+      ];
+      var c;
+      var ox;
+      var oy;
+      var dx;
+      var dy;
+      var x;
+      var y;
+      var i;
+      for (c = 0; c < 4; c++) {
+        ox = corners[c][0];
+        oy = corners[c][1];
+        for (dy = 0; dy < patch; dy++) {
+          for (dx = 0; dx < patch; dx++) {
+            x = ox + dx;
+            y = oy + dy;
+            if (x >= w || y >= h) continue;
+            i = (y * w + x) * 4;
+            arr.push({ r: d[i], g: d[i + 1], b: d[i + 2] });
+          }
+        }
+      }
+      arr.sort(function (u, v) {
+        return u.r + u.g + u.b - (v.r + v.g + v.b);
+      });
+      var m = arr[Math.floor(arr.length / 2)];
+      return { r: m.r, g: m.g, b: m.b };
+    }
 
-        lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        maxc = r > g ? r : g;
-        maxc = maxc > b ? maxc : b;
-        minc = r < g ? r : g;
-        minc = minc < b ? minc : b;
-        sat = maxc === 0 ? 0 : (maxc - minc) / maxc;
+    /** Full-edge neutrals — catches gray studio matte when corners show wood frame. */
+    function sampleBorderNeutralMedian(borderPx, satMax, lumMin, lumMax) {
+      var bw = Math.max(1, Math.min(borderPx, Math.round(Math.min(w, h) * 0.025)));
+      var samp = [];
+      var bx;
+      var by;
+      var bi;
+      var br;
+      var bg;
+      var bb;
+      var ls;
+      for (by = 0; by < h; by++) {
+        for (bx = 0; bx < w; bx++) {
+          if (
+            bx >= bw &&
+            bx < w - bw &&
+            by >= bw &&
+            by < h - bw
+          ) {
+            continue;
+          }
+          bi = (by * w + bx) * 4;
+          br = d[bi];
+          bg = d[bi + 1];
+          bb = d[bi + 2];
+          ls = lumSatRGB(br, bg, bb);
+          if (ls.lum >= lumMin && ls.lum <= lumMax && ls.sat <= satMax) {
+            samp.push({ r: br, g: bg, b: bb });
+          }
+        }
+      }
+      if (samp.length < Math.max(48, Math.floor((w + h) * 2 * bw * 0.08))) {
+        return null;
+      }
+      samp.sort(function (u, v) {
+        return u.r + u.g + u.b - (v.r + v.g + v.b);
+      });
+      var mm = samp[Math.floor(samp.length / 2)];
+      return { r: mm.r, g: mm.g, b: mm.b };
+    }
 
-        edgeF = 1 - dist / edgeBand;
-        edgeF *= edgeF;
+    function matteDistDual(cornerRef, borderRef, r, g, b) {
+      var dc = colorDist(cornerRef, r, g, b);
+      if (!borderRef) return dc;
+      var db = colorDist(borderRef, r, g, b);
+      return dc < db ? dc : db;
+    }
 
-        matteW =
-          Math.max(0, Math.min(1, (lum - 0.68) / 0.32)) *
-          Math.max(0, Math.min(1, (0.48 - sat) / 0.48));
+    /** Median RGB of flood-cleared pixels — tracks actual matte/halo color on this asset. */
+    function sampleClearedMatteMedian(minPts) {
+      var arr = [];
+      var cx;
+      var cy;
+      var cii;
+      var ci;
+      for (cy = 0; cy < h; cy++) {
+        for (cx = 0; cx < w; cx++) {
+          cii = ix(cx, cy);
+          ci = cii * 4;
+          if (d[ci + 3] !== 0) continue;
+          arr.push({ r: d[ci], g: d[ci + 1], b: d[ci + 2] });
+        }
+      }
+      if (arr.length < minPts) return null;
+      arr.sort(function (u, v) {
+        return u.r + u.g + u.b - (v.r + v.g + v.b);
+      });
+      var cm = arr[Math.floor(arr.length / 2)];
+      return { r: cm.r, g: cm.g, b: cm.b };
+    }
 
-        invA = 1 - matteW * edgeF;
-        d[i + 3] = Math.round(a * invA);
+    function matteDistTriple(cornerRef, borderRef, clearedRef, r, g, b) {
+      var m = matteDistDual(cornerRef, borderRef, r, g, b);
+      if (!clearedRef) return m;
+      var dk = colorDist(clearedRef, r, g, b);
+      return m < dk ? m : dk;
+    }
+
+    /** Halo / snap / shave — uses cleared matte median when available. */
+    function matteLikePeel(cornerRef, borderRef, clearedRef, r, g, b, tol, lumFloor, satCeil) {
+      var ls = lumSatRGB(r, g, b);
+      if (ls.lum < lumFloor || ls.sat > satCeil) return false;
+      return matteDistTriple(cornerRef, borderRef, clearedRef, r, g, b) <= tol;
+    }
+
+    function lumSatRGB(r, g, b) {
+      var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      var maxc = r > g ? r : g;
+      maxc = maxc > b ? maxc : b;
+      var minc = r < g ? r : g;
+      minc = minc < b ? minc : b;
+      var sat = maxc === 0 ? 0 : (maxc - minc) / maxc;
+      return { lum: lum, sat: sat };
+    }
+
+    function colorDist(ref, r, g, b) {
+      var dr = ref.r - r;
+      var dg = ref.g - g;
+      var db = ref.b - b;
+      return Math.sqrt(dr * dr + dg * dg + db * db);
+    }
+
+    function matteLikeSeed(cornerRef, borderRef, r, g, b, tol, lumFloor, satCeil) {
+      var ls = lumSatRGB(r, g, b);
+      if (ls.lum < lumFloor || ls.sat > satCeil) return false;
+      return matteDistDual(cornerRef, borderRef, r, g, b) <= tol;
+    }
+
+    function matteLikeFlood(cornerRef, borderRef, r, g, b, tol, lumFloor, satCeil) {
+      var ls = lumSatRGB(r, g, b);
+      if (ls.lum < lumFloor || ls.sat > satCeil) return false;
+      return matteDistDual(cornerRef, borderRef, r, g, b) <= tol;
+    }
+
+    var cornerRef = sampleCornerMedianColor();
+    var borderRef = sampleBorderNeutralMedian(3, 0.58, 0.22, 0.99);
+    var tolSeed = 46;
+    var tolFlood = 86;
+    var lumSeed = 0.48;
+    var satSeed = 0.46;
+    var lumFlood = 0.22;
+    var satFlood = 0.66;
+
+    var visited = new Uint8Array(w * h);
+    var queue = [];
+    var qi = 0;
+
+    function ix(x, y) {
+      return y * w + x;
+    }
+
+    function enqueue(x, y) {
+      var ii = ix(x, y);
+      if (visited[ii]) return;
+      var i = ii * 4;
+      var r = d[i];
+      var g = d[i + 1];
+      var b = d[i + 2];
+      if (!matteLikeSeed(cornerRef, borderRef, r, g, b, tolSeed, lumSeed, satSeed)) return;
+      visited[ii] = 1;
+      queue.push(x);
+      queue.push(y);
+    }
+
+    function enqueueLoose(x, y) {
+      var ii = ix(x, y);
+      if (visited[ii]) return;
+      var i = ii * 4;
+      var r = d[i];
+      var g = d[i + 1];
+      var b = d[i + 2];
+      if (!matteLikeSeed(cornerRef, borderRef, r, g, b, 82, 0.22, 0.62)) return;
+      visited[ii] = 1;
+      queue.push(x);
+      queue.push(y);
+    }
+
+    var xx;
+    var yy;
+    for (xx = 0; xx < w; xx++) {
+      enqueue(xx, 0);
+      enqueue(xx, h - 1);
+    }
+    for (yy = 0; yy < h; yy++) {
+      enqueue(0, yy);
+      enqueue(w - 1, yy);
+    }
+
+    if (queue.length === 0) {
+      for (xx = 0; xx < w; xx++) {
+        enqueueLoose(xx, 0);
+        enqueueLoose(xx, h - 1);
+      }
+      for (yy = 0; yy < h; yy++) {
+        enqueueLoose(0, yy);
+        enqueueLoose(w - 1, yy);
       }
     }
+
+    var dirs = [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1]
+    ];
+    var di;
+    var nx;
+    var ny;
+    var nii;
+    var ni;
+    var nr;
+    var ng;
+    var nb;
+
+    while (qi < queue.length) {
+      xx = queue[qi++];
+      yy = queue[qi++];
+      ni = ix(xx, yy) * 4;
+      d[ni + 3] = 0;
+
+      for (di = 0; di < 8; di++) {
+        nx = xx + dirs[di][0];
+        ny = yy + dirs[di][1];
+        if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+        nii = ix(nx, ny);
+        if (visited[nii]) continue;
+        ni = nii * 4;
+        nr = d[ni];
+        ng = d[ni + 1];
+        nb = d[ni + 2];
+        if (!matteLikeFlood(cornerRef, borderRef, nr, ng, nb, tolFlood, lumFlood, satFlood)) continue;
+        visited[nii] = 1;
+        queue.push(nx);
+        queue.push(ny);
+      }
+    }
+
+    var clearedMatteRef = sampleClearedMatteMedian(64);
+
+    /** True when pixel is anchored to chromatic inward neighbors (wood), not gray backing band. */
+    function pixelAnchoredToOpaqueInterior(alphaBuf, px, py, pr, pg, pb) {
+      var rs = [];
+      var gs = [];
+      var bs = [];
+      var kk;
+      var qx;
+      var qy;
+      var qi2;
+      var qo;
+      var rr;
+      var gg;
+      var bb;
+      var nls;
+      var woodish = 0;
+      for (kk = 0; kk < 8; kk++) {
+        qx = px + dirs[kk][0];
+        qy = py + dirs[kk][1];
+        if (qx < 0 || qy < 0 || qx >= w || qy >= h) continue;
+        qi2 = ix(qx, qy);
+        if (alphaBuf[qi2] === 0) continue;
+        qo = qi2 * 4;
+        rr = d[qo];
+        gg = d[qo + 1];
+        bb = d[qo + 2];
+        rs.push(rr);
+        gs.push(gg);
+        bs.push(bb);
+        nls = lumSatRGB(rr, gg, bb);
+        if (nls.sat >= 0.11) woodish++;
+      }
+      if (rs.length < 3 || woodish < 3) return false;
+      rs.sort(function (a, b) {
+        return a - b;
+      });
+      gs.sort(function (a, b) {
+        return a - b;
+      });
+      bs.sort(function (a, b) {
+        return a - b;
+      });
+      var mid = rs.length >> 1;
+      var med = { r: rs[mid], g: gs[mid], b: bs[mid] };
+      var medLs = lumSatRGB(med.r, med.g, med.b);
+      if (medLs.sat < 0.108) return false;
+
+      var pixLs = lumSatRGB(pr, pg, pb);
+      var dMatte = clearedMatteRef ? colorDist(clearedMatteRef, pr, pg, pb) : 220;
+      if (clearedMatteRef && dMatte < 54 && pixLs.sat < 0.34) return false;
+
+      var dSolid = colorDist(med, pr, pg, pb);
+      return dSolid + 12 < dMatte && dSolid < dMatte * 0.88;
+    }
+
+    var alphaPrev = new Uint8Array(w * h);
+    var xi;
+    var yi;
+    var ii;
+    var pass;
+    var touchesClear;
+    var dd;
+    var maxHaloPasses = 36;
+    var haloStableCap = 4;
+    var minPassesBeforeHaloExit = 22;
+    var stableRun = 0;
+    var tolH;
+    var lumH;
+    var satH;
+    var haloChanged;
+
+    for (pass = 0; pass < maxHaloPasses; pass++) {
+      tolH = tolFlood + 10 + Math.min(pass, 20) * 8;
+      lumH = Math.max(0.12, lumFlood - 0.02 - pass * 0.024);
+      satH = Math.min(0.8, satFlood + 0.02 + pass * 0.028);
+      if (pass === 8 || pass === 14 || pass === 20 || pass === 26 || pass === 32) {
+        var refreshedRef = sampleClearedMatteMedian(96);
+        if (refreshedRef) clearedMatteRef = refreshedRef;
+      }
+      haloChanged = false;
+
+      for (yi = 0; yi < h; yi++) {
+        for (xi = 0; xi < w; xi++) {
+          alphaPrev[ix(xi, yi)] = d[ix(xi, yi) * 4 + 3];
+        }
+      }
+      for (yi = 0; yi < h; yi++) {
+        for (xi = 0; xi < w; xi++) {
+          ii = ix(xi, yi);
+          if (alphaPrev[ii] === 0) continue;
+          touchesClear = false;
+          for (dd = 0; dd < 8; dd++) {
+            nx = xi + dirs[dd][0];
+            ny = yi + dirs[dd][1];
+            if (nx < 0 || ny < 0 || nx >= w || ny >= h) {
+              touchesClear = true;
+              break;
+            }
+            if (alphaPrev[ix(nx, ny)] === 0) {
+              touchesClear = true;
+              break;
+            }
+          }
+          if (!touchesClear) continue;
+          ni = ii * 4;
+          nr = d[ni];
+          ng = d[ni + 1];
+          nb = d[ni + 2];
+          if (
+            matteLikePeel(cornerRef, borderRef, clearedMatteRef, nr, ng, nb, tolH + 42, lumH, satH) &&
+            !pixelAnchoredToOpaqueInterior(alphaPrev, xi, yi, nr, ng, nb)
+          ) {
+            d[ni + 3] = 0;
+            haloChanged = true;
+          }
+        }
+      }
+      if (!haloChanged) {
+        stableRun++;
+        if (pass >= minPassesBeforeHaloExit && stableRun >= haloStableCap) break;
+      } else {
+        stableRun = 0;
+      }
+    }
+
+    function snapSemiTransparentFringe() {
+      var px;
+      var py;
+      var ip;
+      var ap;
+      var rp;
+      var gp;
+      var bp;
+      for (py = 0; py < h; py++) {
+        for (px = 0; px < w; px++) {
+          alphaPrev[ix(px, py)] = d[ix(px, py) * 4 + 3];
+        }
+      }
+      for (py = 0; py < h; py++) {
+        for (px = 0; px < w; px++) {
+          ip = ix(px, py) * 4;
+          ap = d[ip + 3];
+          if (ap === 0 || ap === 255) continue;
+          rp = d[ip];
+          gp = d[ip + 1];
+          bp = d[ip + 2];
+          if (
+            matteLikePeel(
+              cornerRef,
+              borderRef,
+              clearedMatteRef,
+              rp,
+              gp,
+              bp,
+              tolFlood + 74,
+              lumFlood - 0.26,
+              satFlood + 0.22
+            ) &&
+            !pixelAnchoredToOpaqueInterior(alphaPrev, px, py, rp, gp, bp)
+          ) {
+            d[ip + 3] = 0;
+          } else {
+            d[ip + 3] = 255;
+          }
+        }
+      }
+    }
+
+    function shaveOpaqueMatteBoundary() {
+      var px;
+      var py;
+      var iix;
+      var iip;
+      var d2;
+      var clearCt;
+      var iter;
+      for (iter = 0; iter < 3; iter++) {
+        for (py = 0; py < h; py++) {
+          for (px = 0; px < w; px++) {
+            alphaPrev[ix(px, py)] = d[ix(px, py) * 4 + 3];
+          }
+        }
+        for (py = 0; py < h; py++) {
+          for (px = 0; px < w; px++) {
+            iix = ix(px, py);
+            if (alphaPrev[iix] === 0) continue;
+            clearCt = 0;
+            for (d2 = 0; d2 < 8; d2++) {
+              nx = px + dirs[d2][0];
+              ny = py + dirs[d2][1];
+              if (nx < 0 || ny < 0 || nx >= w || ny >= h) {
+                clearCt++;
+              } else if (alphaPrev[ix(nx, ny)] === 0) {
+                clearCt++;
+              }
+            }
+            if (clearCt < 3) continue;
+            iip = iix * 4;
+            nr = d[iip];
+            ng = d[iip + 1];
+            nb = d[iip + 2];
+            if (
+              matteLikePeel(
+                cornerRef,
+                borderRef,
+                clearedMatteRef,
+                nr,
+                ng,
+                nb,
+                tolFlood + 52,
+                lumFlood - 0.16,
+                satFlood + 0.18
+              ) &&
+              !pixelAnchoredToOpaqueInterior(alphaPrev, px, py, nr, ng, nb)
+            ) {
+              d[iip + 3] = 0;
+            }
+          }
+        }
+      }
+    }
+
+    /** Near-neutral JPEG fringe hugging transparency after main halo/shave. */
+    function peelResidualStudioFringe(rounds) {
+      var rnd;
+      var px;
+      var py;
+      var ls;
+      var hit;
+      var distK;
+      var postRef;
+      for (rnd = 0; rnd < rounds; rnd++) {
+        postRef = sampleClearedMatteMedian(160);
+        if (postRef) clearedMatteRef = postRef;
+        for (py = 0; py < h; py++) {
+          for (px = 0; px < w; px++) {
+            alphaPrev[ix(px, py)] = d[ix(px, py) * 4 + 3];
+          }
+        }
+        for (py = 0; py < h; py++) {
+          for (px = 0; px < w; px++) {
+            ii = ix(px, py);
+            if (alphaPrev[ii] === 0) continue;
+            touchesClear = false;
+            for (dd = 0; dd < 8; dd++) {
+              nx = px + dirs[dd][0];
+              ny = py + dirs[dd][1];
+              if (nx < 0 || ny < 0 || nx >= w || ny >= h) {
+                touchesClear = true;
+                break;
+              }
+              if (alphaPrev[ix(nx, ny)] === 0) {
+                touchesClear = true;
+                break;
+              }
+            }
+            if (!touchesClear) continue;
+            ni = ii * 4;
+            nr = d[ni];
+            ng = d[ni + 1];
+            nb = d[ni + 2];
+            ls = lumSatRGB(nr, ng, nb);
+            if (ls.lum < 0.26 || ls.lum > 0.996) continue;
+            if (ls.sat > 0.55) continue;
+            hit = false;
+            distK = clearedMatteRef ? colorDist(clearedMatteRef, nr, ng, nb) : 999;
+            if (clearedMatteRef && distK <= 72 + rnd * 11) hit = true;
+            if (
+              !hit &&
+              matteLikePeel(
+                cornerRef,
+                borderRef,
+                clearedMatteRef,
+                nr,
+                ng,
+                nb,
+                tolFlood + 94 + rnd * 14,
+                0.095,
+                0.79
+              )
+            ) {
+              hit = true;
+            }
+            if (
+              !hit &&
+              clearedMatteRef &&
+              ls.sat < 0.24 &&
+              ls.lum >= 0.34 &&
+              distK <= 112 + rnd * 12
+            ) {
+              hit = true;
+            }
+            if (
+              hit &&
+              !pixelAnchoredToOpaqueInterior(alphaPrev, px, py, nr, ng, nb)
+            ) {
+              d[ni + 3] = 0;
+            }
+          }
+        }
+      }
+    }
+
+    snapSemiTransparentFringe();
+    shaveOpaqueMatteBoundary();
+    peelResidualStudioFringe(6);
+    snapSemiTransparentFringe();
 
     ctx.putImageData(id, 0, 0);
     return canvas.toDataURL('image/png');
@@ -188,7 +710,7 @@
         var im = new Image();
         im.onload = function () {
           try {
-            var png = knockOutEdgeMatteFromImage(im);
+            var png = knockOutMatteFromImage(im);
             URL.revokeObjectURL(objUrl);
             callback(png && png.indexOf('data:image/png') === 0 ? png : null);
           } catch (err) {
