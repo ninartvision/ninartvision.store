@@ -52,6 +52,50 @@ function updateOgTags({ title, description, imageUrl, pageUrl }) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  const NV_CART_STORAGE_KEY = "nv_cart_inquiries";
+
+  function nvReadCartCount() {
+    try {
+      const n = parseInt(localStorage.getItem(NV_CART_STORAGE_KEY) || "0", 10);
+      return Number.isFinite(n) && n >= 0 ? n : 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  function nvSyncCartBadges() {
+    const count = nvReadCartCount();
+    const label =
+      count === 0 ? "" : `${count} ${count === 1 ? "item" : "items"} in inquiry cart`;
+    document.querySelectorAll("[data-cart-badge]").forEach(el => {
+      el.textContent = count > 99 ? "99+" : String(count);
+      el.classList.toggle("is-empty", count === 0);
+      el.setAttribute("aria-hidden", count === 0 ? "true" : "false");
+      if (label) el.setAttribute("aria-label", label);
+      else el.removeAttribute("aria-label");
+    });
+  }
+
+  function nvWriteCartCount(n) {
+    try {
+      localStorage.setItem(NV_CART_STORAGE_KEY, String(Math.max(0, Math.floor(n))));
+    } catch {}
+    nvSyncCartBadges();
+  }
+
+  function nvIncrementCartCount(amount) {
+    const add = Number(amount);
+    nvWriteCartCount(nvReadCartCount() + (Number.isFinite(add) && add > 0 ? add : 1));
+  }
+
+  window.nvIncrementCartCount = nvIncrementCartCount;
+  window.nvSyncCartBadges = nvSyncCartBadges;
+
+  nvSyncCartBadges();
+  window.addEventListener("storage", e => {
+    if (e.key === NV_CART_STORAGE_KEY) nvSyncCartBadges();
+  });
+
   const fmtPrice = p => {
     const n = Number(String(p || "").replace(/[^\d.]/g, ""));
     return n ? "\u20BE" + n.toLocaleString("en-US") : "";
@@ -293,6 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+    nvIncrementCartCount(1);
   }
   window.nvWhatsAppCartFromShopItem = nvWhatsAppCartFromShopItem;
 

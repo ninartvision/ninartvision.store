@@ -60,7 +60,6 @@
         <a href="news.html" class="active">News</a>
         <a href="about.html">About</a>
         <button id="loginBtn" class="nav-btn" style="display:none;">Log In</button>
-        <button id="signInBtn" class="nav-btn signin">Sign In</button>
         <div id="userInfo" class="user-info" style="display:none;">
           <img id="userAvatar" class="user-avatar" src="" alt="User">
           <span id="userName" class="user-name"></span>
@@ -68,9 +67,18 @@
         </div>
       </nav>
 
+      <div class="header-tools">
+      <a href="sale/shop.html" class="header-cart" aria-label="Shopping cart">
+        <span class="header-cart__surface">
+          <svg class="header-cart__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="18" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.73L23 6H6"/></svg>
+        </span>
+        <span class="header-cart__badge is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span>
+      </a>
+
       <button class="hamburger" id="openMenu" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
+      </div>
 
     </div>
   </header>
@@ -87,7 +95,7 @@
       <a href="artists/" class="menu-link">ARTISTS</a>
       <a href="news.html" class="menu-link active">NEWS</a>
       <a href="about.html" class="menu-link">ABOUT</a>
-      <a href="#login" class="menu-link">LOG IN</a>
+      <a href="sale/shop.html" class="menu-link menu-link-cart">Cart <span class="header-cart__badge header-cart__badge--menu is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span></a>
 
       <div class="menu-social">
         <!-- FACEBOOK -->
@@ -302,7 +310,7 @@
     </footer>
   </main>
 
-  <script defer src="./script.min.js?v=nv20260515"></script>
+  <script defer src="./script.min.js?v=nv20260516"></script>
   <script defer src="./js/editorial-rule.min.js?v=nv20260215"></script>
   <!-- CMS-driven dynamic content modules -->
   <script defer src="./js/cms-settings.js"></script>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ka">
 <head>
   <meta charset="UTF-8" />
@@ -97,7 +97,6 @@
     .desktop-nav a{text-decoration:none;font-size:14px;font-weight:600;color:#111}
     .desktop-nav a.active{text-decoration:underline}
     .nav-btn{padding:10px 14px;border:1px solid rgba(0,0,0,.2);border-radius:12px;background:transparent;color:#111;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s ease;text-decoration:none}
-    .nav-btn.signin{background:#111;color:#fff;border-color:#111}
     .hamburger{width:44px;height:44px;background:transparent;border:none;cursor:pointer;display:none;flex-direction:column;justify-content:center;gap:6px}
     .hamburger span{width:26px;height:2px;background:#111;border-radius:6px}
     .hero-slider{position:relative;width:100%;height:70dvh;min-height:500px;max-height:750px;overflow:hidden;background:#f5f5f5;margin-top:0}
@@ -113,24 +112,30 @@
     .as-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;border:none;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);width:44px;height:44px;border-radius:50%;font-size:28px;font-weight:300;color:#fff;cursor:pointer;opacity:.85;display:flex;align-items:center;justify-content:center;transition:all .3s ease}
     .as-arrow.left{left:12px}
     .as-arrow.right{right:12px}
-    .search-section{background:#f9f9f9;border-bottom:1px solid rgba(0,0,0,.06);padding:16px 0;margin-top:76px}
+    .search-section{background:linear-gradient(180deg,#faf8f5 0%,#f5f1eb 100%);border-bottom:1px solid rgba(42,38,34,.06);padding:16px 0;margin-top:76px}
     .search-social-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:nowrap}
-    .search-wrapper{display:flex;align-items:center;gap:14px;flex:0 1 auto;width:min(940px,calc(100% - 148px));max-width:min(940px,calc(100% - 148px));min-width:min(260px,calc(100% - 148px));height:48px;padding:0 24px 0 18px;box-sizing:border-box;background:#fff;border:1px solid #e9eaeb;border-radius:999px;box-shadow:0 5px 24px rgba(0,0,0,.068),0 1px 2px rgba(0,0,0,.045);transition:box-shadow .2s ease,border-color .2s ease}
-    .search-wrapper:focus-within{border-color:rgba(0,0,0,.11);box-shadow:0 6px 30px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.05)}
-    .search-icon,.search-icon:visited{flex-shrink:0;display:flex;align-items:center;justify-content:center;color:rgba(85,93,103,.55);text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
-    .search-icon svg{width:22px;height:22px;display:block;flex-shrink:0}
-    .search-input{flex:1 1 auto;min-width:0;width:100%;height:100%;border:none;background:transparent;font-size:15px;font-weight:400;color:#171717;-webkit-appearance:none;appearance:none;box-shadow:none;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0;margin:0;line-height:1.2}
-    .search-input::placeholder{color:rgba(115,123,132,.78);opacity:1}
-    .search-input::-webkit-input-placeholder{color:rgba(115,123,132,.78)}
-    .search-input::-moz-placeholder{color:rgba(115,123,132,.78);opacity:1}
+    .search-wrapper{display:flex;align-items:center;gap:14px;flex:0 1 auto;width:min(940px,calc(100% - 148px));max-width:min(940px,calc(100% - 148px));min-width:min(260px,calc(100% - 148px));min-height:48px;height:auto;padding:11px 24px 11px 18px;box-sizing:border-box;background:linear-gradient(165deg,#fdfcfa 0%,#f7f3ec 52%,#f0e9df 100%);border:1px solid rgba(58,48,40,.09);border-radius:999px;box-shadow:0 4px 22px rgba(42,38,34,.055),0 1px 3px rgba(42,38,34,.04),inset 0 1px 0 rgba(255,255,255,.88);transition:box-shadow .38s cubic-bezier(.22,1,.36,1),border-color .35s ease,transform .38s cubic-bezier(.22,1,.36,1),background .35s ease}
+    .search-wrapper:hover{transform:translateY(-1px);border-color:rgba(58,48,40,.12);box-shadow:0 8px 30px rgba(42,38,34,.075),0 2px 8px rgba(42,38,34,.045),inset 0 1px 0 rgba(255,255,255,.92)}
+    .search-wrapper:focus-within{border-color:rgba(139,115,85,.32);box-shadow:0 10px 36px rgba(42,38,34,.08),0 0 0 3px rgba(212,196,176,.32),inset 0 1px 0 rgba(255,255,255,.9);transform:translateY(-1px)}
+    .search-icon,.search-icon:visited{flex-shrink:0;display:flex;align-items:center;justify-content:center;color:rgba(92,82,72,.52);text-decoration:none;cursor:pointer;transition:color .3s ease;border-radius:10px;-webkit-tap-highlight-color:transparent}
+    .search-wrapper:hover .search-icon,.search-wrapper:focus-within .search-icon{color:rgba(74,62,52,.62)}
+    .search-icon:hover,.search-icon:focus-visible{color:rgba(58,48,40,.78)}
+    .search-icon:focus-visible{outline:2px solid rgba(139,115,85,.35);outline-offset:3px}
+    .search-icon svg{width:22px;height:22px;display:block;flex-shrink:0;transition:transform .35s cubic-bezier(.22,1,.36,1)}
+    .search-wrapper:hover .search-icon svg{transform:scale(1.04)}
+    .search-input{flex:1 1 auto;min-width:0;width:100%;min-height:1.45em;border:none;background:transparent;font-family:FiraGO,"DejaVu Sans",system-ui,sans-serif;font-size:15px;font-weight:400;letter-spacing:.01em;color:#2a2620;-webkit-appearance:none;appearance:none;box-shadow:none;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0;margin:0;line-height:1.45}
+    .search-input::placeholder{color:rgba(98,88,78,.52);opacity:1;transition:opacity .45s cubic-bezier(.22,1,.36,1),color .35s ease}
+    .search-input:focus::placeholder{opacity:.38;color:rgba(98,88,78,.42)}
+    .search-input::-webkit-input-placeholder{color:rgba(98,88,78,.52)}
+    .search-input::-moz-placeholder{color:rgba(98,88,78,.52);opacity:1}
     .social-icons{display:flex;align-items:center;gap:12px;margin:0;flex-shrink:0}
     .social-icons .soc{width:38px;height:38px;border-radius:50%;border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.6);display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:#111;position:relative;overflow:visible}
     .social-icons .soc svg{width:18px;height:18px;position:relative;z-index:1}
     .social-icons .soc[aria-label="Facebook"] svg{fill:#1877F2}
     .social-icons .soc[aria-label="Instagram"] svg{fill:#E4405F}
     .social-icons .soc[aria-label="WhatsApp"] svg{fill:#25D366}
-    @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{width:min(880px,calc(100% - 132px));max-width:min(880px,calc(100% - 132px));min-width:min(220px,calc(100% - 132px));padding:0 20px 0 16px;gap:12px}.search-icon svg{width:20px;height:20px}.search-input{font-size:14px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
-    @media(max-width:600px){.header-row{min-height:64px;padding:10px 0}.brand img{height:36px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{width:min(100%,calc(100% - 118px));max-width:min(100%,calc(100% - 118px));min-width:min(140px,calc(100% - 118px));height:48px;padding:0 16px 0 14px;gap:11px}.search-icon svg{width:19px;height:19px}.search-input{font-size:13px}.search-social-row{gap:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
+    @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{width:min(880px,calc(100% - 132px));max-width:min(880px,calc(100% - 132px));min-width:min(220px,calc(100% - 132px));padding:10px 20px 10px 16px;gap:12px;min-height:46px}.search-icon svg{width:20px;height:20px}.search-input{font-size:14px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
+    @media(max-width:600px){.header-row{min-height:64px;padding:10px 0}.brand img{height:36px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{width:min(100%,calc(100% - 118px));max-width:min(100%,calc(100% - 118px));min-width:min(140px,calc(100% - 118px));min-height:46px;padding:10px 16px 10px 14px;gap:11px}.search-icon svg{width:19px;height:19px}.search-input{font-size:13px}.search-social-row{gap:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
     @media(min-width:900px){.hero-slider{height:82dvh;min-height:600px;max-height:950px}.hero-slider .slide{background-color:#fff}.hero-slider .slide img{object-fit:contain}.as-arrow{width:56px;height:56px;font-size:36px;background:rgba(255,255,255,.12)}.as-arrow.left{left:32px}.as-arrow.right{right:32px}}
     .site-footer{background:#111;color:#aaa;text-align:center;padding:28px 20px;font-size:13px;line-height:1.8}
     .site-footer a{color:#ccc;text-decoration:none}.site-footer a:hover{color:#fff;text-decoration:underline}
@@ -204,7 +209,6 @@
         <a href="news.html">News</a>
         <a href="about.html">About</a>
         <button id="loginBtn" class="nav-btn" style="display:none;">Log In</button>
-        <button id="signInBtn" class="nav-btn signin">Sign In</button>
         <div id="userInfo" class="user-info" style="display:none;">
           <img id="userAvatar" class="user-avatar" src="" alt="User">
           <span id="userName" class="user-name"></span>
@@ -212,9 +216,18 @@
         </div>
       </nav>
 
+      <div class="header-tools">
+      <a href="sale/shop.html" class="header-cart" aria-label="Shopping cart">
+        <span class="header-cart__surface">
+          <svg class="header-cart__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="18" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.73L23 6H6"/></svg>
+        </span>
+        <span class="header-cart__badge is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span>
+      </a>
+
       <button class="hamburger" id="openMenu" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
+      </div>
 
     </div>
   </header>
@@ -227,7 +240,7 @@
         <!-- Search / room preview bar (left-aligned pill) -->
         <div class="search-wrapper">
           <a class="search-icon" href="room-visualizer.html" aria-label="Room preview — upload your room photo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L8 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-1.5-3z"/><circle cx="12" cy="14" r="3.5"/></svg></a>
-          <input type="text" id="siteSearch" class="search-input" placeholder="ატვირთეთ ინტერიერის ფოტო და მოარგეთ ნამუშევარი..." autocomplete="off" aria-label="Search artworks and artists; room photo preview opens from the Room preview link in the menu">
+          <input type="text" id="siteSearch" class="search-input" placeholder="ატვირთეთ თქვენი ინტერიერის ფოტო და მოარგეთ ნამუშევარი..." autocomplete="off" aria-label="ატვირთეთ ინტერიერის ფოტო და მოარგეთ ნამუშევარი ოთახის გადახედვის გვერდზე">
         </div>
 
         <!-- Social Icons on right -->
@@ -270,7 +283,7 @@
 
     <a href="news.html" class="menu-link">NEWS</a>
     <a href="about.html" class="menu-link">ABOUT</a>
-    <a href="#login" class="menu-link">LOG IN</a>
+    <a href="sale/shop.html" class="menu-link menu-link-cart">Cart <span class="header-cart__badge header-cart__badge--menu is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span></a>
     
 
     <div class="menu-social">
@@ -932,7 +945,7 @@
   </footer>
 
 <!-- Critical runtime first (menu, hero, modal, search) -->
-<script defer src="./script.min.js?v=nv20260515"></script>
+<script defer src="./script.min.js?v=nv20260516"></script>
 <script defer src="./js/editorial-rule.min.js?v=nv20260215"></script>
 
 <!-- Load non-critical modules after first paint/idle -->
