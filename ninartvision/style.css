@@ -1019,6 +1019,14 @@ img, video {
   line-height: 1.42;
 }
 
+#artists .editorial-heading__lede{
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  max-width: min(42rem, 100%);
+  line-height: 1.42;
+}
+
 #about .about-mission-body{
   margin-top: clamp(4px, 1vw, 12px);
   max-width: min(52rem, 100%);
@@ -1034,9 +1042,36 @@ img, video {
 }
 
 #about .about-mission-body__text .brand-highlight{
+  position: relative;
+  display: inline;
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  color: rgba(138, 88, 68, 0.94);
+  font-style: italic;
+  font-size: clamp(1.06em, 1.02em + 0.42vw, 1.22em);
+  letter-spacing: 0.048em;
+  color: rgba(154, 92, 72, 0.97);
+  text-shadow:
+    0 0 24px rgba(244, 222, 196, 0.45),
+    0 1px 1px rgba(255, 252, 246, 0.55);
+}
+
+#about .about-mission-body__text .brand-highlight::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.07em;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 168, 138, 0.55) 22%,
+    rgba(178, 124, 96, 0.72) 50%,
+    rgba(212, 168, 138, 0.52) 78%,
+    transparent 100%
+  );
+  opacity: 0.88;
+  pointer-events: none;
 }
 
 
