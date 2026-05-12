@@ -241,7 +241,7 @@ ${JSON.stringify(jsonLd, null, 2)}
   </script>
 
   <link rel="stylesheet" href="../../style.min.css" />
-  <link rel="icon"       href="../../images/favicon.png">
+  <link rel="icon"       href="../../images/favicon.webp">
 </head>
 <body>
 

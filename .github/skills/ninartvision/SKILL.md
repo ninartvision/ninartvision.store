@@ -256,7 +256,7 @@ Two caches:
 - `ninart-v2` — **network-first** for HTML pages
 - `ninart-assets-v2` — **cache-first** for CSS/JS/images/fonts
 
-Pre-cached on install: `./`, `style.min.css`, `script.min.js`, `logo.png`, `logo.webp`, `garden9.webp`.
+Pre-cached on install: `./`, `style.min.css`, `script.min.js`, `favicon.webp`, `logo.webp`, `garden9.webp`.
 Bump the cache name string when deploying breaking asset changes.
 
 ---

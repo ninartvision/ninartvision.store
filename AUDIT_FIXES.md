@@ -138,7 +138,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Project Name | Ninart Vision</title>
   <link rel="stylesheet" href="./style.css" />
-  <link rel="icon" href="./images/favicon.png">
+  <link rel="icon" href="./images/favicon.webp">
 </head>
 <body>
 
