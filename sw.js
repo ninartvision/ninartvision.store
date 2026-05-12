@@ -4,8 +4,8 @@
  * Strategy: Cache-first for assets, Network-first for HTML pages.
  */
 
-const CACHE_NAME = 'ninart-v5';
-const ASSET_CACHE = 'ninart-assets-v5';
+const CACHE_NAME = 'ninart-v6';
+const ASSET_CACHE = 'ninart-assets-v6';
 
 /** Sanity + home shop bundles must hit network first so SALE/published fixes are not masked by stale cache-first assets. */
 function isCriticalEditableBundle(url) {

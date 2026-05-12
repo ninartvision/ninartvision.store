@@ -14,7 +14,82 @@ function homeNormStatus(raw) {
   return '';
 }
 
+/** Same projection as sanity-client fetchShopArtworks — inlined so home works when OLD cached sanity excludes `published`. */
+const NV_DIRECT_SHOP_QUERY = `
+*[_type == "artwork" && status in ["sale", "sold", "published"] && artist->name == "Nini Mzhavia"]
+| order(coalesce(order, 999) asc, _createdAt desc){
+  _id,
+  title,
+  "slug": slug.current,
+  shortDescription,
+  image{
+    asset->{_id, url, metadata{lqip, dimensions}},
+    alt
+  },
+  images[]{
+    asset->{_id, url, metadata{lqip, dimensions}},
+    alt,
+    _key
+  },
+  year,
+  medium,
+  dimensions,
+  category,
+  description,
+  price,
+  status,
+  "seoTitle": seo.seoTitle,
+  "seoDescription": seo.seoDescription,
+  "keywords": seo.keywords,
+  featured,
+  "artist": artist->{
+    _id,
+    name,
+    "slug": slug.current
+  }
+}`;
+
+const NV_EMBEDDED_SANITY = { projectId: '8t5h923j', dataset: 'production', apiVersion: '2025-02-05' };
+
+function nvDistinctNormalizedSalePoolCount(rows) {
+  if (!Array.isArray(rows) || !rows.length) return 0;
+  const seen = new Set();
+  let saleN = 0;
+  rows.forEach(a => {
+    const id = a && a._id;
+    if (!id || seen.has(id)) return;
+    seen.add(id);
+    if (homeNormStatus(a.status) === 'sale') saleN++;
+  });
+  return saleN;
+}
+
+async function nvDirectFetchPublishedInclusiveShopRows() {
+  const cfg = Object.assign({}, NV_EMBEDDED_SANITY, window.SANITY_CONFIG || {});
+  try {
+    const url = `https://${cfg.projectId}.apicdn.sanity.io/v${cfg.apiVersion}/data/query/${cfg.dataset}?query=${encodeURIComponent(NV_DIRECT_SHOP_QUERY.trim())}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const result = data.result || [];
+    const h = {};
+    result.forEach(x => {
+      const k = String(x.status == null ? '(missing)' : x.status);
+      h[k] = (h[k] || 0) + 1;
+    });
+    console.log('[homeShopPreview][direct Sanity] histogram:', h, '| count:', result.length);
+    return result;
+  } catch (e) {
+    console.warn('[homeShopPreview][direct Sanity] fetch failed:', e);
+    return null;
+  }
+}
+
 async function initHomeShopPreview() {
+  /** Old cached sanity-client bundles skip this — keep home filters consistent. */
+  if (typeof window.normalizeArtworkListingStatus !== 'function') {
+    window.normalizeArtworkListingStatus = homeNormStatus;
+  }
+
   console.log('[homeShopPreview] init — readyState:', document.readyState);
   const grid = document.getElementById("homeShopGrid");
   const buttons = document.querySelectorAll(".preview-btn");
@@ -115,6 +190,28 @@ async function initHomeShopPreview() {
     } else if (typeof window.fetchFeaturedArtworks === 'function') {
       fetchSource = 'fetchFeaturedArtworks';
       raw = await window.fetchFeaturedArtworks();
+    }
+
+    const salePrimary =
+      nvDistinctNormalizedSalePoolCount(Array.isArray(raw) ? raw : []);
+    const primaryEmptyOrNoSale =
+      !Array.isArray(raw) || raw.length === 0 || salePrimary === 0;
+    /** When primary returns no SALE pool (legacy GROQ or empty), merge from direct published-inclusive CDN query. */
+    if (primaryEmptyOrNoSale) {
+      console.warn('[homeShopPreview] Direct Sanity fetch (sale|sold|published):',
+        !Array.isArray(raw) || !raw.length
+          ? 'primary_empty_or_invalid'
+          : 'zero_SALE_after_normalize');
+      const alt = await nvDirectFetchPublishedInclusiveShopRows();
+      const altLen = Array.isArray(alt) ? alt.length : 0;
+      const saleAlt =
+        nvDistinctNormalizedSalePoolCount(Array.isArray(alt) ? alt : []);
+      const primaryVacant =
+        !Array.isArray(raw) || raw.length === 0;
+      if (altLen && (saleAlt > 0 || primaryVacant)) {
+        raw = alt;
+        fetchSource += '→nvDirect';
+      }
     }
 
     console.log('[homeShopPreview] bundle check — normalizeArtworkListingStatus:',
