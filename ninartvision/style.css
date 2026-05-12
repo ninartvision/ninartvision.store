@@ -3404,19 +3404,93 @@ a.pill:visited{
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   cursor: pointer;
-  background: rgba(0,0,0,0.55);
-  color: #fff;
+  background:
+    linear-gradient(
+      165deg,
+      rgba(42, 38, 36, 0.78) 0%,
+      rgba(18, 16, 15, 0.82) 100%
+    );
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #fafafa;
   font-size: 26px;
+  font-weight: 300;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 5;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.11);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.36s ease,
+    border-color 0.36s ease,
+    box-shadow 0.36s ease,
+    color 0.28s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .gallery-arrow.left{ left: 12px; }
 .gallery-arrow.right{ right: 12px; }
+
+.gallery-arrow:focus-visible{
+  outline: 2px solid rgba(255, 248, 240, 0.48);
+  outline-offset: 3px;
+}
+
+.gallery-arrow:hover,
+.gallery-arrow:focus-visible{
+  background:
+    linear-gradient(
+      165deg,
+      rgba(54, 48, 44, 0.88) 0%,
+      rgba(24, 22, 20, 0.9) 100%
+    );
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.gallery-arrow.right:hover,
+.gallery-arrow.right:focus-visible{
+  transform: translateY(-50%) translateX(3px);
+}
+
+.gallery-arrow.left:hover,
+.gallery-arrow.left:focus-visible{
+  transform: translateY(-50%) translateX(-3px);
+}
+
+.gallery-arrow:active{
+  transition-duration: 0.22s;
+}
+
+.gallery-arrow.right:active{
+  transform: translateY(-50%) translateX(5px) scale(0.97);
+}
+
+.gallery-arrow.left:active{
+  transform: translateY(-50%) translateX(-5px) scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .gallery-arrow{
+    transition-duration: 0.01ms !important;
+  }
+
+  .gallery-arrow:hover,
+  .gallery-arrow:focus-visible,
+  .gallery-arrow:active{
+    transform: translateY(-50%) !important;
+  }
+}
 
 /* Shop grids — cart on image (flat stroke; fade-in like gallery arrows on desktop) */
 .shop-item .nv-img-wrap{
@@ -4444,11 +4518,23 @@ a.pill:visited{
   box-shadow: 0 4px 14px rgba(38, 28, 22, 0.07);
 }
 
-/* Modal — gift packaging */
-.product-buy #giftPackagingCard{
+/* Modal — purchase option rows (frame, gift packaging, courier) */
+.product-buy #frameSelectionCard{
   order: 5;
   width: 100%;
   margin-top: 12px;
+}
+
+.product-buy #giftPackagingCard{
+  order: 6;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.product-buy #courierDeliveryCard{
+  order: 7;
+  width: 100%;
+  margin-top: 8px;
 }
 
 .product-modal-gift-card[hidden]{
@@ -4641,7 +4727,7 @@ a.pill:visited{
 
 /* Modal — full-width Add to Cart (ivory gallery bar, pairs with More photos row) */
 .product-buy #addToCartBtn.product-modal-add-cart{
-  order: 6;
+  order: 8;
   width: 100%;
   margin-top: 12px;
   box-sizing: border-box;
@@ -6409,9 +6495,9 @@ a.pill:visited{
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 11px 14px;
-  max-width: min(640px, 100%);
-  padding: 12px 20px;
+  gap: 8px 10px;
+  max-width: min(520px, 100%);
+  padding: 7px 15px;
   border-radius: 999px;
   text-decoration: none;
   color: rgba(26, 21, 18, 0.94);
@@ -6420,8 +6506,8 @@ a.pill:visited{
   border: 1px solid rgba(198, 172, 148, 0.42);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.88),
-    0 4px 16px rgba(38, 28, 22, 0.06),
-    0 12px 34px rgba(34, 26, 20, 0.05);
+    0 3px 12px rgba(38, 28, 22, 0.052),
+    0 10px 26px rgba(34, 26, 20, 0.042);
   font-family: "FiraGO", "Fira Sans", system-ui, -apple-system, sans-serif;
   transition:
     transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
@@ -6452,9 +6538,10 @@ a.pill:visited{
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
+  order: 0;
   color: rgba(88, 68, 52, 0.9);
   background:
     radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.78), transparent 58%),
@@ -6477,25 +6564,29 @@ a.pill:visited{
 
 .nv-room-preview-cta__icon svg{
   display: block;
+  width: 16px;
+  height: 16px;
 }
 
 .nv-room-preview-cta__text{
   flex: 1 1 auto;
-  min-width: min(260px, 100%);
-  font-size: clamp(13px, 3.25vw, 15px);
+  order: 1;
+  min-width: min(200px, 100%);
+  font-size: clamp(12px, 3vw, 14px);
   font-weight: 600;
   letter-spacing: 0.015em;
-  line-height: 1.38;
+  line-height: 1.32;
   color: rgba(20, 16, 13, 0.94);
   text-align: center;
 }
 
 .nv-room-preview-cta__arrow{
+  order: 2;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.12em;
+  font-size: 1.02em;
   line-height: 1;
   font-weight: 500;
   color: rgba(34, 28, 22, 0.76);

@@ -173,6 +173,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const productPrice = document.getElementById("productPrice");
   const giftPackagingCard = document.getElementById("giftPackagingCard");
   const giftPackagingToggle = document.getElementById("giftPackagingToggle");
+  const frameSelectionCard = document.getElementById("frameSelectionCard");
+  const frameSelectionToggle = document.getElementById("frameSelectionToggle");
+  const courierDeliveryCard = document.getElementById("courierDeliveryCard");
+  const courierDeliveryToggle = document.getElementById("courierDeliveryToggle");
 
   function ensureStatusEl() {
     if (!productPrice || !productPrice.parentElement) return null;
@@ -211,6 +215,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (giftPackagingToggle && isSold) giftPackagingToggle.checked = false;
 
+    if (frameSelectionCard) {
+      frameSelectionCard.hidden = isSold;
+      frameSelectionCard.setAttribute("aria-hidden", isSold ? "true" : "false");
+    }
+    if (frameSelectionToggle && isSold) frameSelectionToggle.checked = false;
+
+    if (courierDeliveryCard) {
+      courierDeliveryCard.hidden = isSold;
+      courierDeliveryCard.setAttribute("aria-hidden", isSold ? "true" : "false");
+    }
+    if (courierDeliveryToggle && isSold) courierDeliveryToggle.checked = false;
+
     if (isSold) {
       statusEl.className = "status sold";
       statusEl.textContent = "Sold";
@@ -239,6 +255,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (sold) return;
 
     const giftPackaging = Boolean(options.giftPackaging);
+    const frameSelection = Boolean(options.frameSelection);
+    const courierDelivery = Boolean(options.courierDelivery);
 
     const title = item.dataset.title || "";
     const price = fmtPrice(item.dataset.price);
@@ -258,12 +276,20 @@ document.addEventListener("DOMContentLoaded", () => {
       ? `https://ninartvision.store/products/${rawSlug}/`
       : window.location.href;
 
+    const frameLine = frameSelection
+      ? "\nჩარჩო: დიახ (+ €15)"
+      : "";
+
     const giftLine = giftPackaging
       ? "\nსასაჩუქრე შეფუთვა: დიახ (+ €5)"
       : "";
 
+    const courierLine = courierDelivery
+      ? "\nსაკურიერო მომსახურება: დიახ (+ €10)"
+      : "";
+
     const msg = encodeURIComponent(
-      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}${giftLine}\n${productUrl}`
+      `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}${frameLine}${giftLine}${courierLine}\n${productUrl}`
     );
 
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
@@ -349,6 +375,8 @@ document.addEventListener("DOMContentLoaded", () => {
     productYear.textContent = item.dataset.year || "";
     productPrice.textContent = fmtPrice(item.dataset.price);
     if (giftPackagingToggle) giftPackagingToggle.checked = false;
+    if (frameSelectionToggle) frameSelectionToggle.checked = false;
+    if (courierDeliveryToggle) courierDeliveryToggle.checked = false;
     setDetailStatus(item);
 
     if (productThumbs) {
@@ -486,7 +514,9 @@ document.addEventListener("DOMContentLoaded", () => {
     e.stopPropagation();
     if (!currentItem) return;
     nvWhatsAppCartFromShopItem(currentItem, {
+      frameSelection: Boolean(frameSelectionToggle?.checked),
       giftPackaging: Boolean(giftPackagingToggle?.checked),
+      courierDelivery: Boolean(courierDeliveryToggle?.checked),
     });
   });
 
