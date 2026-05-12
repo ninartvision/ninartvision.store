@@ -273,6 +273,32 @@ document.addEventListener("DOMContentLoaded", () => {
   // Expose openModal for external use (e.g. delegation handlers)
   window.openProductModal = openModal;
 
+  /**
+   * LQIP cards use `.nv-lqip { opacity: 0 }` until `.nv-loaded` is applied.
+   * Inline `onload` often misses cache hits — `complete` is already true → image stayed invisible.
+   */
+  window.nvRevealLqipImages = function(root) {
+    const scope =
+      root && typeof root.querySelectorAll === 'function' ? root : document;
+    scope.querySelectorAll('img.nv-lqip').forEach(img => {
+      if (img.dataset.nvRevealBound) return;
+      img.dataset.nvRevealBound = '1';
+
+      function reveal() {
+        img.classList.add('nv-loaded');
+        const p = img.parentNode;
+        if (p && p.style) p.style.backgroundImage = '';
+      }
+
+      if (img.complete) {
+        reveal();
+      } else {
+        img.addEventListener('load', reveal, { once: true });
+        img.addEventListener('error', reveal, { once: true });
+      }
+    });
+  };
+
   // Event delegation — one listener per container instead of N per item.
   // Safe to call multiple times; skips containers already delegated.
   window.initShopItems = function() {
@@ -298,6 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
     });
+    if (window.nvRevealLqipImages) window.nvRevealLqipImages(document);
   };
 
   // Initial call for static items

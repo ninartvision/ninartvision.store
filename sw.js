@@ -4,8 +4,8 @@
  * Strategy: Cache-first for assets, Network-first for HTML pages.
  */
 
-const CACHE_NAME = 'ninart-v2';
-const ASSET_CACHE = 'ninart-assets-v2';
+const CACHE_NAME = 'ninart-v3';
+const ASSET_CACHE = 'ninart-assets-v3';
 
 // Static assets to pre-cache on install
 const PRECACHE_URLS = [
