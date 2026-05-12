@@ -691,12 +691,125 @@ img, video {
 }
 
 .section-featured-projects .editorial-heading__rule.editorial-rule,
-.home-shop-preview .editorial-heading__rule.editorial-rule,
 #artists .editorial-heading__rule.editorial-rule,
 #news .editorial-heading__rule.editorial-rule,
 #about .editorial-heading__rule.editorial-rule{
   margin-top: clamp(14px, 2vw, 22px);
 }
+
+.home-shop-preview .home-shop-expand-rule{
+  margin-top: clamp(14px, 2vw, 22px);
+  --hs-rule-scale: 0.14;
+  position: relative;
+  width: 100%;
+  max-width: min(52rem, 100%);
+  overflow: visible;
+}
+
+.home-shop-preview .home-shop-expand-rule__lines{
+  position: relative;
+  width: 100%;
+  height: 1px;
+  overflow: visible;
+}
+
+.home-shop-preview .home-shop-expand-rule__base{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1px;
+  transform-origin: left center;
+  transform: scaleX(var(--hs-rule-scale));
+  opacity: 0.52;
+  background: linear-gradient(
+    90deg,
+    rgba(228, 212, 188, 0.42) 0%,
+    rgba(238, 224, 206, 0.72) 52%,
+    rgba(232, 212, 188, 0.46) 100%
+  );
+  transition:
+    transform 1.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-shop-preview .home-shop-expand-rule__shimmer{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1px;
+  transform-origin: left center;
+  transform: scaleX(var(--hs-rule-scale));
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    hsla(38, 28%, 98%, 0) 0%,
+    hsla(34, 38%, 94%, 0.24) 44%,
+    hsla(32, 34%, 92%, 0.2) 50%,
+    hsla(34, 38%, 94%, 0.24) 56%,
+    hsla(38, 28%, 98%, 0) 100%
+  );
+  background-size: 260% 100%;
+  animation: none;
+  transition:
+    transform 1.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-shop-preview.home-shop-preview--expand-rule-hover .home-shop-expand-rule,
+.home-shop-preview.home-shop-preview--expand-rule-inview .home-shop-expand-rule{
+  --hs-rule-scale: 1;
+}
+
+.home-shop-preview.home-shop-preview--expand-rule-hover .home-shop-expand-rule__base{
+  opacity: 0.82;
+}
+
+.home-shop-preview.home-shop-preview--expand-rule-hover .home-shop-expand-rule__shimmer{
+  opacity: 0.44;
+  animation: nv-home-shop-expand-shimmer 4.9s ease-in-out infinite alternate;
+}
+
+.home-shop-preview.home-shop-preview--expand-rule-inview .home-shop-expand-rule__base{
+  opacity: 0.76;
+}
+
+.home-shop-preview.home-shop-preview--expand-rule-inview .home-shop-expand-rule__shimmer{
+  opacity: 0.36;
+  animation: nv-home-shop-expand-shimmer 6.2s ease-in-out infinite alternate;
+}
+
+@keyframes nv-home-shop-expand-shimmer{
+  0%{
+    background-position: 16% 50%;
+  }
+  100%{
+    background-position: 84% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .home-shop-preview .home-shop-expand-rule{
+    --hs-rule-scale: 1;
+  }
+
+  .home-shop-preview .home-shop-expand-rule__base,
+  .home-shop-preview .home-shop-expand-rule__shimmer{
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .home-shop-preview .home-shop-expand-rule__base{
+    opacity: 0.8 !important;
+  }
+
+  .home-shop-preview .home-shop-expand-rule__shimmer{
+    opacity: 0.26 !important;
+  }
+}
+
 .editorial-rule__sensor{
   position: absolute;
   inset: -52px -18px -52px -18px;
@@ -1071,6 +1184,26 @@ img, video {
   );
   opacity: 0.88;
   pointer-events: none;
+}
+
+#about .about-mission-rule.editorial-rule{
+  margin-top: clamp(28px, 4.5vw, 48px);
+  max-width: min(52rem, 100%);
+}
+
+.editorial-heading[data-editorial-reveal]:not(.editorial-heading--inview) .editorial-rule .editorial-rule__base{
+  transform: scaleX(0) !important;
+  transition: transform 1.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.editorial-heading[data-editorial-reveal]:not(.editorial-heading--inview) .editorial-rule .editorial-rule__shimmer{
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+.editorial-heading[data-editorial-reveal].editorial-heading--inview .editorial-rule .editorial-rule__base{
+  transform: scaleX(1) !important;
+  transition: transform 1.42s cubic-bezier(0.22, 1, 0.36, 1) 0.14s !important;
 }
 
 
