@@ -680,21 +680,14 @@ img, video {
   flex-wrap: nowrap;
 }
 
-.search-cell{
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 0;
-}
-
 .search-wrapper{
   display: flex;
   align-items: center;
   gap: 14px;
-  width: 100%;
-  max-width: min(880px, calc(100% - 12px));
-  min-width: min(260px, calc(100% - 8px));
+  flex: 0 1 auto;
+  width: min(940px, calc(100% - 148px));
+  max-width: min(940px, calc(100% - 148px));
+  min-width: min(260px, calc(100% - 148px));
   height: 48px;
   padding: 0 24px 0 18px;
   box-sizing: border-box;
@@ -910,7 +903,9 @@ img, video {
   }
 
   .search-wrapper{
-    max-width: min(720px, calc(100% - 8px));
+    width: min(880px, calc(100% - 132px));
+    max-width: min(880px, calc(100% - 132px));
+    min-width: min(220px, calc(100% - 132px));
     padding: 0 20px 0 16px;
     gap: 12px;
   }
@@ -1065,7 +1060,9 @@ img, video {
   }
 
   .search-wrapper{
-    max-width: 100%;
+    width: min(100%, calc(100% - 118px));
+    max-width: min(100%, calc(100% - 118px));
+    min-width: min(140px, calc(100% - 118px));
     height: 48px;
     padding: 0 16px 0 14px;
     gap: 11px;
@@ -3682,7 +3679,9 @@ a.pill:visited{
   }
 
   .search-wrapper{
-    max-width: 100%;
+    width: min(100%, calc(100% - 118px));
+    max-width: min(100%, calc(100% - 118px));
+    min-width: min(140px, calc(100% - 118px));
     height: 48px;
     padding: 0 16px 0 14px;
     gap: 11px;

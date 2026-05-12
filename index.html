@@ -115,8 +115,7 @@
     .as-arrow.right{right:12px}
     .search-section{background:#f9f9f9;border-bottom:1px solid rgba(0,0,0,.06);padding:16px 0;margin-top:76px}
     .search-social-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:nowrap}
-    .search-cell{flex:1 1 auto;display:flex;justify-content:center;align-items:center;min-width:0}
-    .search-wrapper{display:flex;align-items:center;gap:14px;width:100%;max-width:min(880px,calc(100% - 12px));min-width:min(260px,calc(100% - 8px));height:48px;padding:0 24px 0 18px;box-sizing:border-box;background:#fff;border:1px solid #e9eaeb;border-radius:999px;box-shadow:0 5px 24px rgba(0,0,0,.068),0 1px 2px rgba(0,0,0,.045);transition:box-shadow .2s ease,border-color .2s ease}
+    .search-wrapper{display:flex;align-items:center;gap:14px;flex:0 1 auto;width:min(940px,calc(100% - 148px));max-width:min(940px,calc(100% - 148px));min-width:min(260px,calc(100% - 148px));height:48px;padding:0 24px 0 18px;box-sizing:border-box;background:#fff;border:1px solid #e9eaeb;border-radius:999px;box-shadow:0 5px 24px rgba(0,0,0,.068),0 1px 2px rgba(0,0,0,.045);transition:box-shadow .2s ease,border-color .2s ease}
     .search-wrapper:focus-within{border-color:rgba(0,0,0,.11);box-shadow:0 6px 30px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.05)}
     .search-icon{flex-shrink:0;display:flex;align-items:center;justify-content:center;color:rgba(85,93,103,.55);pointer-events:none}
     .search-icon svg{width:22px;height:22px;display:block;flex-shrink:0}
@@ -130,8 +129,8 @@
     .social-icons .soc[aria-label="Facebook"] svg{fill:#1877F2}
     .social-icons .soc[aria-label="Instagram"] svg{fill:#E4405F}
     .social-icons .soc[aria-label="WhatsApp"] svg{fill:#25D366}
-    @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{max-width:min(720px,calc(100% - 8px));padding:0 20px 0 16px;gap:12px}.search-icon svg{width:20px;height:20px}.search-input{font-size:14px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
-    @media(max-width:600px){.header-row{min-height:64px;padding:10px 0}.brand img{height:36px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{max-width:100%;height:48px;padding:0 16px 0 14px;gap:11px}.search-icon svg{width:19px;height:19px}.search-input{font-size:13px}.search-social-row{gap:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
+    @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{width:min(880px,calc(100% - 132px));max-width:min(880px,calc(100% - 132px));min-width:min(220px,calc(100% - 132px));padding:0 20px 0 16px;gap:12px}.search-icon svg{width:20px;height:20px}.search-input{font-size:14px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
+    @media(max-width:600px){.header-row{min-height:64px;padding:10px 0}.brand img{height:36px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{width:min(100%,calc(100% - 118px));max-width:min(100%,calc(100% - 118px));min-width:min(140px,calc(100% - 118px));height:48px;padding:0 16px 0 14px;gap:11px}.search-icon svg{width:19px;height:19px}.search-input{font-size:13px}.search-social-row{gap:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
     @media(min-width:900px){.hero-slider{height:82dvh;min-height:600px;max-height:950px}.hero-slider .slide{background-color:#fff}.hero-slider .slide img{object-fit:contain}.as-arrow{width:56px;height:56px;font-size:36px;background:rgba(255,255,255,.12)}.as-arrow.left{left:32px}.as-arrow.right{right:32px}}
     .site-footer{background:#111;color:#aaa;text-align:center;padding:28px 20px;font-size:13px;line-height:1.8}
     .site-footer a{color:#ccc;text-decoration:none}.site-footer a:hover{color:#fff;text-decoration:underline}
@@ -224,12 +223,10 @@
   <section class="search-section" aria-label="Search artworks" role="search">
     <div class="container">
       <div class="search-social-row">
-        <!-- Search / room preview bar (centered pill) -->
-        <div class="search-cell">
-          <div class="search-wrapper">
-            <span class="search-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M14.5 4h-5L8 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-1.5-3z"/><circle cx="12" cy="14" r="3.5"/></svg></span>
-            <input type="text" id="siteSearch" class="search-input" placeholder="ატვირთე შენი ინტერიერის ფოტო და მოარგე ნამუშევარი..." autocomplete="off" aria-label="Search artworks and artists; room photo preview opens from the Room preview link in the menu">
-          </div>
+        <!-- Search / room preview bar (left-aligned pill) -->
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M14.5 4h-5L8 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-1.5-3z"/><circle cx="12" cy="14" r="3.5"/></svg></span>
+          <input type="text" id="siteSearch" class="search-input" placeholder="ატვირთე შენი ინტერიერის ფოტო და მოარგე ნამუშევარი..." autocomplete="off" aria-label="Search artworks and artists; room photo preview opens from the Room preview link in the menu">
         </div>
 
         <!-- Social Icons on right -->
