@@ -87,16 +87,8 @@ async function nvDirectFetchPublishedInclusiveShopRows() {
     const url = `https://${cfg.projectId}.apicdn.sanity.io/v${cfg.apiVersion}/data/query/${cfg.dataset}?query=${encodeURIComponent(NV_DIRECT_SHOP_QUERY.trim())}`;
     const res = await fetch(url);
     const data = await res.json();
-    const result = data.result || [];
-    const h = {};
-    result.forEach(x => {
-      const k = String(x.status == null ? '(missing)' : x.status);
-      h[k] = (h[k] || 0) + 1;
-    });
-    console.log('[homeShopPreview][direct Sanity] histogram:', h, '| count:', result.length);
-    return result;
+    return data.result || [];
   } catch (e) {
-    console.warn('[homeShopPreview][direct Sanity] fetch failed:', e);
     return null;
   }
 }
@@ -107,7 +99,6 @@ async function initHomeShopPreview() {
     window.normalizeArtworkListingStatus = homeNormStatus;
   }
 
-  console.log('[homeShopPreview] init — readyState:', document.readyState);
   const grid = document.getElementById("homeShopGrid");
   const buttons = document.querySelectorAll(".preview-btn");
   const section = document.querySelector(".home-shop-preview");
@@ -125,20 +116,6 @@ async function initHomeShopPreview() {
   function render() {
     const filtered = items.filter(item => item.status === currentFilter);
     const show = shuffle(filtered).slice(0, LIMIT);
-
-    if (!(window).__nvDbgHomeShop) window.__nvDbgHomeShop = { renders: 0 };
-    window.__nvDbgHomeShop.renders += 1;
-    const noisy = Boolean(window.__nvDbgHomeVerbose);
-    if (noisy || window.__nvDbgHomeShop.renders <= 3 || (filtered.length === 0 && currentFilter === 'sale')) {
-      console.log('[homeShopPreview] pre-render:', {
-        tab: currentFilter,
-        itemsTotal: items.length,
-        filteredLen: filtered.length,
-        displayLen: show.length,
-        filteredPreview: filtered.slice(0, 12).map(i => ({ title: i.title, normStatus: i.status })),
-        note: noisy ? '(verbose)' : '(first 3 rotations or empty SALE pool only; set window.__nvDbgHomeVerbose=true for all)'
-      });
-    }
 
     // Build all nodes in a detached fragment — zero reflows during construction
     const frag = document.createDocumentFragment();
@@ -210,12 +187,9 @@ async function initHomeShopPreview() {
   // filters to Nini Mzhavia). Falls back to fetchFeaturedArtworks if unavailable.
   try {
     let raw = null;
-    let fetchSource = '(none)';
     if (typeof window.fetchShopArtworks === 'function') {
-      fetchSource = 'fetchShopArtworks';
       raw = await window.fetchShopArtworks();
     } else if (typeof window.fetchFeaturedArtworks === 'function') {
-      fetchSource = 'fetchFeaturedArtworks';
       raw = await window.fetchFeaturedArtworks();
     }
 
@@ -225,10 +199,6 @@ async function initHomeShopPreview() {
       !Array.isArray(raw) || raw.length === 0 || salePrimary === 0;
     /** When primary returns no SALE pool (legacy GROQ or empty), merge from direct published-inclusive CDN query. */
     if (primaryEmptyOrNoSale) {
-      console.warn('[homeShopPreview] Direct Sanity fetch (sale|sold|published):',
-        !Array.isArray(raw) || !raw.length
-          ? 'primary_empty_or_invalid'
-          : 'zero_SALE_after_normalize');
       const alt = await nvDirectFetchPublishedInclusiveShopRows();
       const altLen = Array.isArray(alt) ? alt.length : 0;
       const saleAlt =
@@ -237,45 +207,7 @@ async function initHomeShopPreview() {
         !Array.isArray(raw) || raw.length === 0;
       if (altLen && (saleAlt > 0 || primaryVacant)) {
         raw = alt;
-        fetchSource += '→nvDirect';
       }
-    }
-
-    console.log('[homeShopPreview] bundle check — normalizeArtworkListingStatus:',
-      typeof window.normalizeArtworkListingStatus,
-      '| fetch:', fetchSource);
-    console.log('[homeShopPreview] raw Sanity response:', raw?.length ?? 'null', 'items');
-
-    try {
-      if (Array.isArray(raw) && raw.length) {
-        const serialRaw = JSON.parse(JSON.stringify(raw));
-        console.log('[homeShopPreview] raw artworks FULL (serialized):', serialRaw);
-      } else {
-        console.log('[homeShopPreview] raw artworks FULL: (empty or not an array)');
-      }
-    } catch (serErr) {
-      console.warn('[homeShopPreview] could not serialize raw artworks:', serErr);
-    }
-    if (raw && raw.length > 0) {
-      console.log('[homeShopPreview] sample item:', JSON.stringify({
-        _id: raw[0]._id,
-        title: raw[0].title,
-        status: raw[0].status,
-        artist: raw[0].artist,
-        hasImage: !!(raw[0].image?.asset?.url)
-      }));
-      const hist = {};
-      raw.forEach(a => {
-        const k = a.status === undefined || a.status === null || a.status === ''
-          ? '(missing)'
-          : String(a.status);
-        hist[k] = (hist[k] || 0) + 1;
-      });
-      console.log('[homeShopPreview] raw status histogram:', hist);
-      console.log('[homeShopPreview] raw preview (first 25 title+status):', raw.slice(0, 25).map(a => ({
-        title: a.title,
-        status: a.status
-      })));
     }
 
     if (raw && raw.length > 0) {
@@ -296,8 +228,6 @@ async function initHomeShopPreview() {
       });
       const deduped = dedupedAll.slice(0, 48);
 
-      console.log('[homeShopPreview] after dedup/sort SALE-first:', deduped.length, '/', dedupedAll.length, 'items');
-
       items = deduped.map(artwork => ({
         id: artwork._id,
         status: homeNormStatus(artwork.status),
@@ -313,14 +243,6 @@ async function initHomeShopPreview() {
         photos: Array.isArray(artwork.images) ? artwork.images.map(i => i?.asset?.url).filter(Boolean) : (artwork.image?.asset?.url ? [artwork.image.asset.url] : []),
         alt: artwork.image?.alt || artwork.title || 'Artwork'
       }));
-      const normalizedHist = {};
-      items.forEach(i => {
-        const k = i.status || '(empty)';
-        normalizedHist[k] = (normalizedHist[k] || 0) + 1;
-      });
-      console.log('[homeShopPreview] normalized status histogram:', normalizedHist);
-      console.log('[homeShopPreview] SALE pool size:', items.filter(i => i.status === 'sale').length,
-        '| SOLD pool size:', items.filter(i => i.status === 'sold').length);
     } else {
       items = [];
     }
@@ -329,15 +251,12 @@ async function initHomeShopPreview() {
     items = [];
   }
 
-  console.log('[homeShopPreview] data loaded —', items.length, 'artworks');
-
   // Always show section if we have data
   if (section && items.length > 0) {
     section.style.display = 'block';
   }
 
   // Initial render and auto-rotation
-  console.log('[homeShopPreview] initial paint (tab default:', currentFilter + ')');
   render();
 
   // Pause rotation when the page tab is not visible (saves CPU/battery)
@@ -357,8 +276,6 @@ async function initHomeShopPreview() {
       buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       currentFilter = btn.dataset.filter;
-      const f = items.filter(item => item.status === currentFilter);
-      console.log('[homeShopPreview] tab switched →', currentFilter, '| filtered:', f.length + '/' + items.length);
       render();
     });
   });
