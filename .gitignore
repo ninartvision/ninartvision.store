@@ -9,6 +9,14 @@ node_modules/
 # Build output
 dist/
 
+# Sanity Studio dev workspaces — kept locally for development, never published.
+# Already-tracked files inside these folders stay tracked until `git rm -r --cached`
+# is run explicitly; the CI workflow strips them from the Pages artifact regardless.
+/8t5h923j/
+/ninart-vision/
+/ninartvision/8t5h923j/
+/ninartvision/ninart-vision/
+
 # OS
 .DS_Store
 Thumbs.db

@@ -26,8 +26,15 @@ jobs:
           submodules: false
 
       - name: Drop bulky folders from artifact
+        # Strip local-only dev artifacts before publishing. The repo on disk is
+        # untouched — this only runs in the CI workspace. Keeps Sanity Studio
+        # source (8t5h923j/, ninart-vision/) and all node_modules off Pages.
         run: |
-          rm -rf node_modules ninartvision/node_modules ninart-vision/node_modules \
+          rm -rf 8t5h923j ninart-vision \
+            ninartvision/8t5h923j ninartvision/ninart-vision 2>/dev/null || true
+          rm -rf node_modules \
+            ninartvision/node_modules \
+            ninart-vision/node_modules \
             8t5h923j/node_modules 2>/dev/null || true
 
       - uses: actions/configure-pages@v5
