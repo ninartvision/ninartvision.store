@@ -2869,6 +2869,44 @@ img, video {
     height: 120px;
   }
 }
+
+/* Shop / artist #shopGrid only — phones: 2-up grid, even image band (tablet/desktop rules above unchanged) */
+@media (max-width: 600px) {
+  #shopGrid.shop-grid-small {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  #shopGrid.shop-grid-small .shop-item .nv-img-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: clamp(152px, 48vw, 204px);
+    min-height: 0;
+  }
+
+  #shopGrid.shop-grid-small .shop-item img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    min-height: 0;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+}
+
+@media (max-width: 420px) {
+  #shopGrid.shop-grid-small {
+    gap: 10px;
+  }
+
+  #shopGrid.shop-grid-small .shop-item .nv-img-wrap {
+    height: clamp(146px, 54vw, 188px);
+  }
+}
+
 .product-modal{
   position: fixed;
   inset: 0;
