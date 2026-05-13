@@ -4,7 +4,7 @@
  */
 const fs = require('fs');
 const files = ['artists/mzia.html', 'artists/nanuli.html', 'artists/nini.html', 'artists/artist.html'];
-const names = ['artist-shop', 'artists', 'artist'];
+const names = ['artist-shop', 'artist'];
 for (const f of files) {
   let c = fs.readFileSync(f, 'utf8');
   const orig = c;

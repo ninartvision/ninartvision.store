@@ -18,11 +18,13 @@ Three combined roles: **Portfolio** · **Store** · **Editorial**
 
 ---
 
-## Tech Stack (No Build Pipeline)
+## Tech Stack (vanilla + JS minify)
 
 | Layer | Technology | Notes |
 |---|---|---|
-| HTML/CSS/JS | Vanilla — no framework | Pre-minified `.min.*` files committed directly |
+| HTML/CSS/JS | Vanilla — no framework | Sources: `*.js` / `style.css`; **site JS** ships as committed **`*.min.js`** (HTML references `.min.js` + cache-bust `?v=` where used). |
+| Build (JS) | **`npm run build:js`** | Runs **`scripts/minify-js.mjs`** (**Terser**) over the manifest of source → min pairs. Run locally after editing listed `*.js` files. |
+| Deploy | **GitHub Actions → GitHub Pages** | On push to **`main`**, `.github/workflows/github-pages.yml` runs **`npm ci`**, **`npm run build:js`**, strips **`node_modules`**, then uploads the site root as the Pages artifact. |
 | CMS | **Sanity** | Project `8t5h923j`, dataset `production`, API `2025-02-05` |
 | Fonts | **FiraGO** (Georgian) + Arial (base) | FiraGO only on `about.html` |
 | Auth | Firebase (stub) | All config placeholder — non-functional |
@@ -30,7 +32,7 @@ Three combined roles: **Portfolio** · **Store** · **Editorial**
 | Caching | Service Worker (`sw.js`) | Two caches: **`ninart-v8`** (HTML + precache shell), **`ninart-assets-v8`** (static assets). HTML **network-first**; most assets **cache-first**; **`sanity-client.min.js`** and **`/js/homeShopPreview.min.js`** **network-first**. Bump **`v8`** strings in `sw.js` when you need to invalidate all SW caches after a breaking deploy. |
 | Image CDN | Sanity CDN | WebP auto-format via `?auto=format&w=X&q=80` |
 
-**Important**: There is no npm build step. Edit `.js`/`.css` source files. Minified files are separate copies; update both or just instruct the user to re-minify.
+**Important**: There **is** an automated **JS** minify step (`npm run build:js` + CI). Edit the **source** `*.js` files, then run **`npm run build:js`** before commit if you are not relying on the next **push** to `main` to regenerate **`*.min.js`**. Global **CSS** is still maintained as committed **`style.min.css`** (no CSS minify in that npm script unless added later).
 
 ---
 
@@ -296,7 +298,7 @@ Bump the **`v8`** suffix in both cache name strings (and optionally adjust `isCr
 Use grep/replace across all `.html` files to update the duplicated nav block.
 
 ### Deploy
-Push to the `main` branch of the GitHub repo — GitHub Pages auto-deploys from root.
+Push to the **`main`** branch — **GitHub Actions** runs **`npm ci`** + **`npm run build:js`**, then publishes the static artifact to **GitHub Pages** (see `.github/workflows/github-pages.yml`).
 Custom domain is set via `CNAME` file (do not delete it).
 
 ---

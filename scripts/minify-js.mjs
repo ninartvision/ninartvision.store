@@ -21,7 +21,6 @@ const PAIRS = [
   ['script.js', 'script.min.js'],
   ['artists/artist-shop.js', 'artists/artist-shop.min.js'],
   ['artists/artist.js', 'artists/artist.min.js'],
-  ['artists/artists.js', 'artists/artists.min.js'],
   ['js/editorial-rule.js', 'js/editorial-rule.min.js'],
   ['js/homeArtistsPreview.js', 'js/homeArtistsPreview.min.js'],
   ['js/homeShopPreview.js', 'js/homeShopPreview.min.js'],

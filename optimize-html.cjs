@@ -72,7 +72,6 @@ function processFile(relPath) {
     [/src="\.\/shopFilter\.js"/g, 'src="./shopFilter.min.js"'],
     [/src="(\.\/)?artist-shop\.js(\?[^"]*)?"/g, 'src="$1artist-shop.min.js$2"'],
     [/src="(\.\/)?artist\.js(\?[^"]*)?"/g, 'src="$1artist.min.js$2"'],
-    [/src="(\.\/)?artists\.js(\?[^"]*)?"/g, 'src="$1artists.min.js$2"'],
   ];
   for (const [re, rep] of jsReplacements) {
     html = html.replace(re, rep);
