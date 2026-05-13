@@ -4,8 +4,7 @@
  * - Adds loading="lazy" to <img> tags that don't already have it
  * - Adds decoding="async" to lazy images
  * - Defers Firebase/sanity scripts (where not already deferred)
- * - Switches shared root/sale scripts to minified .min.js references
- *   (artist/artist-shop/artists scripts stay as plain .js — no min builds in repo)
+ * - Switches site script refs to .min.js (sources remain *.js; run npm run build:js / CI)
  */
 
 const fs = require('fs');
@@ -53,7 +52,7 @@ function processFile(relPath) {
     .replace(/href="\.\/style\.css"/g, 'href="./style.min.css"')
     .replace(/href="\.\.\/style\.css"/g, 'href="../style.min.css"');
 
-  // 2. Replace unminified site script refs with .min.js (artist/*.js excluded — source only)
+  // 2. Replace unminified *.js refs with *.min.js (sources edited separately; npm run build:js / CI regenerates min files)
   const jsReplacements = [
     [/src="\.\/script\.js"/g, 'src="./script.min.js"'],
     [/src="\.\.\/script\.js"/g, 'src="../script.min.js"'],
@@ -71,6 +70,9 @@ function processFile(relPath) {
     [/src="\.\.\/js\/homeArtistsPreview\.js"/g, 'src="../js/homeArtistsPreview.min.js"'],
     [/src="\.\/shop-render\.js"/g, 'src="./shop-render.min.js"'],
     [/src="\.\/shopFilter\.js"/g, 'src="./shopFilter.min.js"'],
+    [/src="(\.\/)?artist-shop\.js(\?[^"]*)?"/g, 'src="$1artist-shop.min.js$2"'],
+    [/src="(\.\/)?artist\.js(\?[^"]*)?"/g, 'src="$1artist.min.js$2"'],
+    [/src="(\.\/)?artists\.js(\?[^"]*)?"/g, 'src="$1artists.min.js$2"'],
   ];
   for (const [re, rep] of jsReplacements) {
     html = html.replace(re, rep);

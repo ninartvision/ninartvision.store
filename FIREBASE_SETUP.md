@@ -78,25 +78,41 @@ This guide will help you set up Google Sign-In on your GitHub Pages website usin
 
 ---
 
-## 📝 Step 5: Update Your Code
+## 📝 Step 5: Add your Firebase config (safe flow)
 
-1. **Open `auth.js`**
-   - Find the `firebaseConfig` object at the top
+The site loads **`auth.min.js`**, which reads config from **`window.__NV_FIREBASE_CONFIG__`**.  
+You set that in a **local-only** file so you never paste real keys into `auth.js` (which stays in Git).
 
-2. **Replace with Your Config**
-   - Replace the placeholder values:
+1. **Copy the example file** (in the **site root**, next to `index.html`):
+   ```bash
+   cp auth.config.example.js auth.config.js
+   ```
+   On Windows (PowerShell), you can copy-paste in File Explorer instead.
+
+2. **Open `auth.config.js`** and replace the **empty strings** with the values from Firebase (Project settings → Your apps → Web app → `firebaseConfig`).
+
+   The file should look like this shape (use **your** values from the console — the example below is not real):
+
    ```javascript
-   const firebaseConfig = {
-     apiKey: "YOUR_API_KEY",           // ← Replace this
-     authDomain: "YOUR_PROJECT_ID.firebaseapp.com",  // ← Replace this
-     projectId: "YOUR_PROJECT_ID",     // ← Replace this
-     storageBucket: "YOUR_PROJECT_ID.appspot.com",  // ← Replace this
-     messagingSenderId: "YOUR_MESSAGING_SENDER_ID", // ← Replace this
-     appId: "YOUR_APP_ID"              // ← Replace this
+   window.__NV_FIREBASE_CONFIG__ = {
+     apiKey: '…',
+     authDomain: '…',
+     projectId: '…',
+     storageBucket: '…',
+     messagingSenderId: '…',
+     appId: '…',
    };
    ```
 
-3. **Save the File**
+3. **Keep `auth.config.js` out of Git**  
+   It is already listed in **`.gitignore`**. Do not `git add` it.  
+   If you open `auth.config.example.js`, you’ll see the same structure with empty placeholders — that file **is** safe to commit.
+
+4. **Reload the site**  
+   `index.html` loads `auth.config.js` **before** `auth.min.js`. If the file is missing or any field is left empty, sign-in stays disabled (no crash).
+
+5. **Optional: minified auth bundle**  
+   After changing **`auth.js`** (logic only), run **`npm run build:js`** so **`auth.min.js`** stays in sync (CI does this on deploy too).
 
 ---
 
@@ -161,12 +177,19 @@ This guide will help you set up Google Sign-In on your GitHub Pages website usin
 - Wait 1-2 minutes for changes to propagate
 
 ### ❌ Firebase Not Initialized
-**Problem:** Console shows "Firebase is not configured"
+**Problem:** Alert or console shows that Firebase is not configured
 
 **Solution:**
-- Check that you replaced ALL placeholder values in `auth.js`
-- Ensure Firebase config matches your project exactly
-- Check browser console for specific errors
+- Confirm **`auth.config.js`** exists in the **project root** (copied from **`auth.config.example.js`**).
+- Fill **every** field in **`window.__NV_FIREBASE_CONFIG__`** (no empty strings).
+- Hard-refresh the page. Check the browser **Network** tab: `auth.config.js` should load **before** `auth.min.js` (HTTP 200 on your machine; a 404 is OK on GitHub until you add the file locally and deploy, or use a private deploy secret — for Pages, keep config in `auth.config.js` only on machines that need sign-in, or document your team’s approach).
+
+### ❌ Wrong file edited
+**Problem:** Keys were pasted into **`auth.js`** and committed
+
+**Solution:**
+- Remove secrets from Git history if they were committed (rotate keys in Firebase Console).
+- Move values into **`auth.config.js`** only; restore **`auth.js`** from the repo.
 
 ### ❌ Network Error
 **Problem:** `auth/network-request-failed`
@@ -190,13 +213,13 @@ Edit `style.css`:
 ```
 
 ### Show Both Login and Sign In Buttons
-Edit `auth.js` - in `showSignInUI()` function:
+Edit **`auth.js`** (then run **`npm run build:js`** to refresh **`auth.min.js`**) — in **`showSignInUI()`**:
 ```javascript
 if (loginBtn) loginBtn.style.display = 'inline-block'; // Change to inline-block
 ```
 
 ### Change User Name Display
-Edit `auth.js` - in `showUserUI()` function:
+Edit **`auth.js`** — in **`showUserUI()`**:
 ```javascript
 // Show only first name
 userName.textContent = user.displayName?.split(' ')[0] || 'User';
@@ -231,16 +254,18 @@ To customize mobile view, edit `style.css`:
 
 ## 🔒 Security Best Practices
 
-1. **API Key is Public**
-   - ✅ It's safe to commit `apiKey` to GitHub
-   - Firebase API keys are restricted by domain
-   - Only authorized domains can use your Firebase
+1. **Keep Firebase web config out of Git**  
+   - Use **`auth.config.js`** (gitignored) for `apiKey`, `projectId`, etc.  
+   - **`auth.config.example.js`** shows the shape with **empty** strings — safe to commit.
 
-2. **Set Up Security Rules** (if using Firestore/Database later)
+2. **API Key still appears in the browser**  
+   - That is normal for client-side Firebase. Restrict with **Authorized domains** in Firebase Console.
+
+3. **Set Up Security Rules** (if using Firestore/Database later)
    - Ensure only authenticated users can access data
    - Configure in Firebase Console
 
-3. **Monitor Usage**
+4. **Monitor Usage**
    - Check Firebase Console > Usage tab
    - Free tier includes:
      - 50,000 MAU (Monthly Active Users)
@@ -259,7 +284,7 @@ If you want to save user info to Firestore:
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 ```
 
-3. In `auth.js`, add:
+3. In **`auth.js`** (then rebuild **`auth.min.js`** with **`npm run build:js`**), add:
 ```javascript
 const db = firebase.firestore();
 
@@ -279,10 +304,12 @@ function saveUserData(user) {
 
 ## 🎯 Quick Reference
 
-**Files Modified:**
-- ✅ `index.html` - Added Firebase SDK and updated nav buttons
-- ✅ `style.css` - Added auth UI styles
-- ✅ `auth.js` - Firebase authentication logic (NEW)
+**Files involved:**
+- ✅ `index.html` - Loads Firebase SDKs, optional **`auth.config.js`**, then **`auth.min.js`**
+- ✅ `style.css` - Auth UI styles
+- ✅ `auth.js` / **`auth.min.js`** - Sign-in logic (no secrets in repo)
+- ✅ **`auth.config.example.js`** - Committed template (empty values)
+- ✅ **`auth.config.js`** - **Local only** (gitignored) — paste your Firebase web config here
 
 **Firebase Console URLs:**
 - Project Console: https://console.firebase.google.com/
@@ -300,9 +327,10 @@ function saveUserData(user) {
 Your website now has professional Google Sign-In authentication, completely free and working on GitHub Pages!
 
 **Next Steps:**
-1. Replace Firebase config in `auth.js`
-2. Push to GitHub
-3. Test on your live site
-4. Customize styling as needed
+1. Create **`auth.config.js`** from **`auth.config.example.js`** and add your Firebase web app values
+2. Run **`npm run build:js`** locally if you edited **`auth.js`**
+3. Push to GitHub (**never** commit **`auth.config.js`** — it stays gitignored)
+4. Test sign-in in an environment that actually has **`auth.config.js`** (e.g. local preview). A fresh clone from GitHub will not include that file
+5. Customize styling as needed
 
 Questions? Check the troubleshooting section above or Firebase documentation.

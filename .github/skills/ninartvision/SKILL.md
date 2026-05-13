@@ -27,7 +27,7 @@ Three combined roles: **Portfolio** · **Store** · **Editorial**
 | Fonts | **FiraGO** (Georgian) + Arial (base) | FiraGO only on `about.html` |
 | Auth | Firebase (stub) | All config placeholder — non-functional |
 | Analytics | GA4 | `GA_MEASUREMENT_ID` placeholder — not yet active |
-| Caching | Service Worker (`sw.js`) | PWA-lite, cache name `ninart-v2` |
+| Caching | Service Worker (`sw.js`) | Two caches: **`ninart-v8`** (HTML + precache shell), **`ninart-assets-v8`** (static assets). HTML **network-first**; most assets **cache-first**; **`sanity-client.min.js`** and **`/js/homeShopPreview.min.js`** **network-first**. Bump **`v8`** strings in `sw.js` when you need to invalidate all SW caches after a breaking deploy. |
 | Image CDN | Sanity CDN | WebP auto-format via `?auto=format&w=X&q=80` |
 
 **Important**: There is no npm build step. Edit `.js`/`.css` source files. Minified files are separate copies; update both or just instruct the user to re-minify.
@@ -252,12 +252,14 @@ All events include `anonymize_ip: true`.
 
 ## Service Worker (`sw.js`)
 
-Two caches:
-- `ninart-v2` — **network-first** for HTML pages
-- `ninart-assets-v2` — **cache-first** for CSS/JS/images/fonts
+Caches (must stay in sync with `const CACHE_NAME` / `const ASSET_CACHE` in `sw.js`):
 
-Pre-cached on install: `./`, `style.min.css`, `script.min.js`, `favicon.webp`, `logo.webp`, `garden9.webp`.
-Bump the cache name string when deploying breaking asset changes.
+- **`ninart-v8`** — HTML: **network-first** (then update cache copy). Install precache also uses this cache for `./`, `./style.min.css`, `./script.min.js`, `./images/favicon.webp`, `./images/logo.webp`, `./images/garden9.webp`.
+- **`ninart-assets-v8`** — Other static assets (CSS/JS/images/fonts matching fetch handler): **cache-first**, except **`sanity-client.min.js`** and **`/js/homeShopPreview.min.js`**, which are **network-first** so Sanity/shop updates are not stuck behind old bundles.
+
+On **activate**, any cache whose name is **not** `ninart-v8` or `ninart-assets-v8` is deleted.
+
+Bump the **`v8`** suffix in both cache name strings (and optionally adjust `isCriticalEditableBundle`) when you need a full client-side cache bust after breaking asset changes.
 
 ---
 

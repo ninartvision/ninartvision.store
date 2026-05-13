@@ -37,6 +37,20 @@ jobs:
             ninart-vision/node_modules \
             8t5h923j/node_modules 2>/dev/null || true
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies and minify JS
+        run: |
+          npm ci
+          npm run build:js
+
+      - name: Remove node_modules from artifact
+        run: rm -rf node_modules
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3

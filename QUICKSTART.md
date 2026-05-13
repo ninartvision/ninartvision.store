@@ -6,18 +6,30 @@
 1. Go to https://console.firebase.google.com/
 2. Create a new project or select existing
 3. Click **</>** (Web) icon
-4. Copy the `firebaseConfig` object
+4. Copy the `firebaseConfig` object from the Firebase snippet (you will paste the values in Step 2)
 
-### Step 2: Update auth.js (1 minute)
-Open `auth.js` and replace:
+### Step 2: Add a local config file (1 minute)
+Do **not** put secrets in **`auth.js`** (that file is tracked in Git).
+
+1. In the **project root** (next to `index.html`), copy the template:
+   ```bash
+   cp auth.config.example.js auth.config.js
+   ```
+   (On Windows you can copy the file in Explorer and rename it.)
+
+2. Open **`auth.config.js`** and paste your Firebase values into **`window.__NV_FIREBASE_CONFIG__`** (replace each empty `''` with the matching string from the Firebase console).
+
+3. Save. **`auth.config.js` is gitignored** — do not `git add` it.
+
+The shape matches what Firebase shows, for example:
 ```javascript
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",           // ← Paste from Firebase
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+window.__NV_FIREBASE_CONFIG__ = {
+  apiKey: '…',
+  authDomain: '…',
+  projectId: '…',
+  storageBucket: '…',
+  messagingSenderId: '…',
+  appId: '…',
 };
 ```
 
@@ -38,7 +50,7 @@ git commit -m "Add Firebase auth"
 git push
 ```
 
-**Done!** Visit your site and click "Sign In" 🎉
+**Done!** Open the site where **`auth.config.js`** exists (e.g. your machine after copying that file), hard-refresh, and click **Sign In**.
 
 ---
 
@@ -54,12 +66,14 @@ git push
 
 ---
 
-## 🔧 Files Modified
+## 🔧 Files involved
 
-- ✅ `index.html` - Firebase SDK + updated nav
+- ✅ `index.html` - Firebase SDKs, **`auth.config.js`** (optional), then **`auth.min.js`**
 - ✅ `style.css` - Auth UI styles
-- ✅ `auth.js` - Authentication logic (NEW)
-- ✅ `FIREBASE_SETUP.md` - Full documentation (NEW)
+- ✅ `auth.js` / **`auth.min.js`** - Sign-in logic (no Firebase secrets in repo)
+- ✅ **`auth.config.example.js`** - Safe template (committed)
+- ✅ **`auth.config.js`** - Your real config (**local only**, gitignored)
+- ✅ `FIREBASE_SETUP.md` - Full documentation
 
 ---
 
@@ -71,8 +85,11 @@ git push
 **Problem:** "Unauthorized domain"
 **Fix:** Add your exact domain to Firebase authorized domains
 
-**Problem:** "Firebase is not configured"
-**Fix:** Replace ALL values in firebaseConfig (Step 2)
+**Problem:** "Firebase is not configured" (alert)
+**Fix:** Ensure **`auth.config.js`** exists next to `index.html`, every field is filled, then hard-refresh. Check Network: **`auth.config.js`** should load before **`auth.min.js`**.
+
+**Problem:** Sign-in works locally but not after `git clone`
+**Fix:** Expected — **`auth.config.js`** is not in the repo. Copy it again on that machine (or use your team’s secure distribution process).
 
 ---
 
@@ -100,16 +117,17 @@ http-server
 # Visit http://localhost:8080
 ```
 
-Note: `localhost` is pre-authorized in Firebase
+Note: `localhost` is pre-authorized in Firebase. Keep **`auth.config.js`** in the project root while testing.
 
 ---
 
 ## 💡 Pro Tips
 
-1. **Keep your config public** - API keys are safe on client-side
-2. **Monitor usage** - Firebase Console → Usage tab
-3. **Add custom styling** - Edit `.nav-btn.signin` in style.css
-4. **Store user data** - Use Firestore (see full docs)
+1. **Never commit `auth.config.js`** — it contains your Firebase web config; `.gitignore` already excludes it
+2. **After editing `auth.js`**, run **`npm run build:js`** so **`auth.min.js`** matches (CI also runs this on deploy)
+3. **Monitor usage** - Firebase Console → Usage tab
+4. **Add custom styling** - Edit `.nav-btn.signin` in style.css
+5. **Store user data** - Use Firestore (see full docs)
 
 ---
 

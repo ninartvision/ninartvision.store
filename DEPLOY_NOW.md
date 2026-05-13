@@ -51,4 +51,6 @@ Or use Incognito mode to test
 
 ---
 
+**Hosting (Apache vs Netlify vs GitHub Pages):** see **`HOSTING.md`** for which of **`.htaccess`** and **`_headers`** actually apply on your host.
+
 **Need help?** Check `SANITY_SYNC_FIX_COMPLETE.md` for full troubleshooting guide.

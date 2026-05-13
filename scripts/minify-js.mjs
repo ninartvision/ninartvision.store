@@ -10,7 +10,7 @@ import { minify } from 'terser';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
 
-/** [sourceRelative, outputRelative] — keep in sync with HTML / optimize-html.cjs */
+/** [sourceRelative, outputRelative] — HTML references .min.js; CI runs `npm run build:js` to regenerate outputs from these sources. */
 const PAIRS = [
   ['analytics.js', 'analytics.min.js'],
   ['auth.js', 'auth.min.js'],
