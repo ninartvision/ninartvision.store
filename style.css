@@ -20,6 +20,8 @@ body{
   overflow-x: hidden;
   width: 100%;
   position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Prevent images/videos from causing horizontal overflow */
@@ -41,6 +43,7 @@ img, video {
   width:100%;
   z-index:9999;
   background: rgba(255,255,255,0.9);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
@@ -2651,6 +2654,7 @@ img, video {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
 }
 
@@ -3117,6 +3121,7 @@ a.pill:visited{
   border-radius: 50%;
   border: 1px solid rgba(0,0,0,0.25);
   background: rgba(255,255,255,0.55);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 
   display: inline-flex;
@@ -3469,6 +3474,7 @@ a.pill:visited{
   border-radius: 50%;
   border: 2px solid rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   cursor: pointer;
   font-size: 20px;
@@ -6461,8 +6467,9 @@ a.pill:visited{
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
-  z-index: 10000;
+  z-index: 10060;
   padding: 20px;
   overflow-y: auto;
   align-items: center;
@@ -7413,6 +7420,7 @@ a.pill:visited{
   display: flex;
   gap: 8px;
   background: rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   padding: 8px;
   border-radius: 20px;

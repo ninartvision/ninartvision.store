@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Shop Original Paintings | Ninart Vision</title>
   <meta name="description" content="Browse and purchase original acrylic paintings by contemporary Georgian artists. Filter by artist, view available and sold artworks. Direct purchase via WhatsApp.">
   
@@ -25,12 +25,12 @@
   <link rel="icon" href="../images/favicon.webp">
 
 <!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1H7SY0J2EB"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'GA_MEASUREMENT_ID', {
+  gtag('config', 'G-1H7SY0J2EB', {
     'anonymize_ip': true,
     'allow_google_signals': false,
     'allow_ad_personalization_signals': false
@@ -84,7 +84,7 @@
 <div class="menu-overlay" id="menuOverlay">
   <button class="menu-close" id="closeMenu" aria-label="Close menu">✕</button>
 
-  <nav class="menu-links">
+  <nav class="menu-links" aria-label="Mobile navigation">
     <a href="../index.html" class="menu-link">HOME</a>
     <a href="../support.html" class="menu-link">SUPPORT A PROJECT</a>
     <a href="shop.html" class="menu-link">SHOP</a>
@@ -92,11 +92,12 @@
     <a href="../artists/" class="menu-link">ARTISTS</a>
     <a href="../news.html" class="menu-link">NEWS</a>
     <a href="../about.html" class="menu-link">ABOUT</a>
+    <a href="shop.html" class="menu-link menu-link-cart">CART <span class="header-cart__badge header-cart__badge--menu is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span></a>
   </nav>
 </div>
 
 <div class="container">
-  <div class="shop-header" style="margin-top:100px;">
+  <div class="shop-header" style="margin-top: clamp(88px, 18vw, 108px);">
     <div class="section-top">
       <h2>Shop</h2>
     </div>
@@ -237,7 +238,7 @@
 <script defer src="../sanity-client.min.js?v=nv20260213"></script>
 <script defer src="../data.min.js?v=nv20260213"></script>
 <script defer src="shop-render.min.js?v=nv20260213"></script>
-<script defer src="../script.min.js?v=nv20260516"></script>
+<script defer src="../script.min.js?v=nv20260518"></script>
 
 </body>
 </html>

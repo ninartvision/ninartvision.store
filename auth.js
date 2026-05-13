@@ -18,7 +18,6 @@ let auth;
 try {
   firebase.initializeApp(firebaseConfig);
   auth = firebase.auth();
-  console.log('✅ Firebase initialized successfully');
 } catch (error) {
   console.error('❌ Firebase initialization error:', error);
 }
@@ -74,9 +73,8 @@ function signInWithGoogle() {
   });
 
   auth.signInWithPopup(provider)
-    .then((result) => {
-      console.log('✅ Sign in successful:', result.user.displayName);
-      // User is signed in, onAuthStateChanged will handle UI update
+    .then(() => {
+      /* onAuthStateChanged updates UI */
     })
     .catch((error) => {
       console.error('❌ Sign in error:', error);
@@ -105,9 +103,7 @@ function logout() {
   if (!auth) return;
 
   auth.signOut()
-    .then(() => {
-      console.log('✅ Sign out successful');
-    })
+    .then(() => {})
     .catch((error) => {
       console.error('❌ Sign out error:', error);
       alert('Sign out failed. Please try again.');
@@ -119,12 +115,8 @@ function logout() {
  */
 function handleAuthStateChange(user) {
   if (user) {
-    // User is signed in
-    console.log('👤 User signed in:', user.displayName);
     showUserUI(user);
   } else {
-    // User is signed out
-    console.log('👤 User signed out');
     showSignInUI();
   }
 }

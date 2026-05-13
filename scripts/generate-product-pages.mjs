@@ -158,6 +158,11 @@ function buildPage(a) {
   // Display image: full-width on the page
   const displayImg = rawImgUrl ? sanityImg(rawImgUrl, { w: 900, q: 85 }) : '';
 
+  const iw = a.image?.asset?.metadata?.dimensions?.width;
+  const ih = a.image?.asset?.metadata?.dimensions?.height;
+  const imgDimAttr =
+    iw && ih ? ` width="${Number(iw)}" height="${Number(ih)}"` : '';
+
   const pageUrl  = `https://ninartvision.store/products/${slug}/`;
   const price    = fmtPrice(a.price);
   const isSold   = String(a.status || '').toLowerCase() === 'sold';
@@ -209,7 +214,7 @@ function buildPage(a) {
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${escAttr(title)} | Ninart Vision</title>
   <meta name="description"  content="${escAttr(desc)}">
   <meta name="robots"       content="index, follow">
@@ -249,33 +254,45 @@ ${JSON.stringify(jsonLd, null, 2)}
 <header class="header">
   <div class="container header-row">
     <a class="brand" href="../../index.html">
-      <img src="../../images/logo.webp" alt="Ninart Vision Logo">
+      <img src="../../images/logo.webp" alt="Ninart Vision Logo" width="751" height="134" decoding="async">
     </a>
     <nav class="nav desktop-nav">
       <a href="../../index.html">Home</a>
       <a href="../../support.html">Support a Project</a>
       <a href="../../sale/shop.html" class="active">Shop</a>
+      <a href="../../room-visualizer.html">Room preview</a>
       <a href="../../artists/">Artists</a>
       <a href="../../news.html">News</a>
       <a href="../../about.html">About</a>
     </nav>
-    <div class="header-actions">
-      <button class="hamburger" id="openMenu" aria-label="Open menu">&#9776;</button>
+    <div class="header-tools">
+      <a href="../../sale/shop.html" class="header-cart" aria-label="Shopping cart">
+        <span class="header-cart__surface">
+          <svg class="header-cart__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="18" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.73L23 6H6"/></svg>
+        </span>
+        <span class="header-cart__badge is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span>
+      </a>
+      <button class="hamburger" id="openMenu" aria-label="Open menu" type="button">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>
 
 <!-- ── MOBILE MENU ─────────────────────────────────────────────────────── -->
 <div class="menu-overlay" id="menuOverlay">
-  <div class="menu-links">
-    <button class="menu-close" id="closeMenu" aria-label="Close menu">&#10005;</button>
-    <a class="menu-link" href="../../index.html">Home</a>
-    <a class="menu-link" href="../../support.html">Support a Project</a>
-    <a class="menu-link" href="../../sale/shop.html">Shop</a>
-    <a class="menu-link" href="../../artists/">Artists</a>
-    <a class="menu-link" href="../../news.html">News</a>
-    <a class="menu-link" href="../../about.html">About</a>
-  </div>
+  <button class="menu-close" id="closeMenu" type="button" aria-label="Close menu">✕</button>
+
+  <nav class="menu-links" aria-label="Mobile navigation">
+    <a class="menu-link" href="../../index.html">HOME</a>
+    <a class="menu-link" href="../../support.html">SUPPORT A PROJECT</a>
+    <a class="menu-link" href="../../sale/shop.html">SHOP</a>
+    <a class="menu-link" href="../../room-visualizer.html">ROOM PREVIEW</a>
+    <a class="menu-link" href="../../artists/">ARTISTS</a>
+    <a class="menu-link" href="../../news.html">NEWS</a>
+    <a class="menu-link" href="../../about.html">ABOUT</a>
+    <a class="menu-link menu-link-cart" href="../../sale/shop.html">CART <span class="header-cart__badge header-cart__badge--menu is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span></a>
+  </nav>
 </div>
 
 <!-- ── PRODUCT ─────────────────────────────────────────────────────────── -->
@@ -290,9 +307,10 @@ ${JSON.stringify(jsonLd, null, 2)}
       <div class="product-left">
         <div class="product-gallery">
           ${displayImg
-            ? `<img id="mainImg" src="${displayImg}"
+            ? `<img id="mainImg" src="${displayImg}"${imgDimAttr}
                alt="${escAttr(a.image?.alt || a.title || title)}"
                decoding="async"
+               fetchpriority="high"
                style="width:100%;max-width:600px;display:block;border-radius:8px;">`
             : '<p class="muted">No image available.</p>'
           }
@@ -355,20 +373,9 @@ ${JSON.stringify(jsonLd, null, 2)}
   </div>
 </footer>
 
+<script defer src="../../script.min.js?v=nv20260518"></script>
 <script>
-  // Footer year
   document.getElementById('yr').textContent = new Date().getFullYear();
-
-  // Mobile menu
-  (function () {
-    const open    = document.getElementById('openMenu');
-    const close   = document.getElementById('closeMenu');
-    const overlay = document.getElementById('menuOverlay');
-    if (!open || !close || !overlay) return;
-    open.addEventListener('click',    () => overlay.classList.add('active'));
-    close.addEventListener('click',   () => overlay.classList.remove('active'));
-    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); });
-  }());
 
   // Share button
   (function () {

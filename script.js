@@ -155,19 +155,96 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!menuOverlay.dataset.menuBound) {
       menuOverlay.dataset.menuBound = "1";
 
+      openMenu.setAttribute("aria-expanded", "false");
+      openMenu.setAttribute("aria-controls", menuOverlay.id || "menuOverlay");
+      menuOverlay.setAttribute("role", "dialog");
+      menuOverlay.setAttribute("aria-modal", "true");
+      menuOverlay.setAttribute("aria-label", "Site navigation");
+
       let lastTouchOpenTs = 0;
+      /** Locks scroll position (iOS + desktop) while mobile menu is open */
+      let scrollLockState = null;
+
+      const lockMenuScroll = () => {
+        if (scrollLockState) return;
+        const y = window.scrollY || window.pageYOffset || 0;
+        scrollLockState = {
+          y,
+          html: document.documentElement.style.overflow || "",
+          bodyTop: document.body.style.top || "",
+        };
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${y}px`;
+        document.body.style.width = "100%";
+      };
+
+      const unlockMenuScroll = () => {
+        if (!scrollLockState) return;
+        const { y, html, bodyTop } = scrollLockState;
+        scrollLockState = null;
+        document.documentElement.style.overflow = html;
+        document.body.style.overflow = "";
+        document.body.style.position = "";
+        document.body.style.top = bodyTop || "";
+        document.body.style.width = "";
+        window.scrollTo(0, y);
+      };
+
+      const menuFocusSelector =
+        'button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled]), select:not([disabled])';
+
+      const trapMenuFocus = e => {
+        if (e.key !== "Tab" || !menuOverlay.classList.contains("active")) return;
+        const nodes = [...menuOverlay.querySelectorAll(menuFocusSelector)].filter(
+          n =>
+            !n.closest("[aria-hidden=true]") && !n.closest(".is-hidden")
+        );
+        if (nodes.length === 0) return;
+        const first = nodes[0];
+        const last = nodes[nodes.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      };
 
       const openMobileMenu = (ev) => {
         ev?.preventDefault();
         ev?.stopPropagation();
         menuOverlay.classList.add("active");
+        openMenu.setAttribute("aria-expanded", "true");
+        lockMenuScroll();
+        window.setTimeout(() => closeMenu?.focus({ preventScroll: true }), 0);
       };
 
       const closeMobileMenu = (ev) => {
         ev?.preventDefault();
         ev?.stopPropagation();
         menuOverlay.classList.remove("active");
+        openMenu.setAttribute("aria-expanded", "false");
+        unlockMenuScroll();
+        window.setTimeout(() => openMenu?.focus({ preventScroll: true }), 0);
       };
+
+      document.addEventListener(
+        "keydown",
+        e => {
+          if (e.key === "Escape" && menuOverlay.classList.contains("active")) {
+            e.preventDefault();
+            closeMobileMenu(e);
+          }
+        },
+        true
+      );
+
+      menuOverlay.addEventListener("keydown", trapMenuFocus);
 
       openMenu.addEventListener("touchend", (ev) => {
         lastTouchOpenTs = Date.now();
@@ -186,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Close when clicking on a menu link.
       const menuLinks = menuOverlay.querySelectorAll(".menu-link");
       menuLinks.forEach(link => {
-        link.addEventListener("click", () => menuOverlay.classList.remove("active"));
+        link.addEventListener("click", () => closeMobileMenu());
       });
 
       // Close only when tapping/clicking the backdrop itself.
@@ -379,6 +456,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function openModal(item) {
+    if (!modal) return;
     currentItem = item;
     photos = (item.dataset.photos || "")
       .split(",")
@@ -456,6 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     modal.classList.add("open");
+    document.body.style.overflow = "hidden";
   }
 
   // Expose openModal for external use (e.g. delegation handlers)
@@ -527,7 +606,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.initShopItems();
 
   // Close button with both click and touch support for mobile
-  if (closeBtn) {
+  if (closeBtn && modal) {
     const closeModal = (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -537,6 +616,13 @@ document.addEventListener("DOMContentLoaded", () => {
     
     closeBtn.addEventListener("click", closeModal);
     closeBtn.addEventListener("touchend", closeModal, { passive: false });
+
+    document.addEventListener("keydown", e => {
+      if (e.key !== "Escape" || !modal.classList.contains("open")) return;
+      const mo = document.getElementById("menuOverlay");
+      if (mo && mo.classList.contains("active")) return;
+      closeModal(e);
+    });
   }
 
   galleryPrev?.addEventListener("click", e => {
@@ -953,12 +1039,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       updateSlider();
     }, 100);
-  } else {
-    console.warn('⚠️ Featured Projects Slider elements not found:', {
-      track: !!projectsTrack,
-      prev: !!projectsPrev,
-      next: !!projectsNext
-    });
   }
 
 });
@@ -1076,9 +1156,15 @@ document.addEventListener("click", e => {
 document.addEventListener('keydown', function(e) {
   if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
     e.preventDefault();
-    const isSubPage =
+    let adminPath = './admin.html';
+    if (location.pathname.includes('/products/')) adminPath = '../../admin.html';
+    else if (
       location.pathname.includes('/artists/') ||
-      location.pathname.includes('/sale/');
-    window.open(isSubPage ? '../admin.html' : './admin.html', '_blank');
+      location.pathname.includes('/sale/')
+    ) {
+      adminPath = '../admin.html';
+    }
+
+    window.open(adminPath, '_blank');
   }
 });

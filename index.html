@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ka">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ninart Vision | Original Contemporary Art by Georgian Artists</title>
 
 <meta name="description" content="Discover and buy original contemporary paintings by Georgian artists. Ninart Vision is an independent art platform featuring handcrafted artworks, limited editions, and curated collections from emerging and established creators.">
@@ -89,7 +89,7 @@
     body{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;overflow-x:hidden;width:100%;position:relative}
     img,video{max-width:100%;height:auto}
     .container{width:min(1100px,92%);margin:0 auto;max-width:100%}
-    .header{position:fixed;top:0;left:0;width:100%;z-index:9999;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,0,0,.06)}
+    .header{position:fixed;top:0;left:0;width:100%;z-index:9999;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,0,0,.06)}
     .header-row{min-height:80px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:16px 0;gap:12px}
     .brand{display:flex;align-items:center}
     .brand img{height:48px;width:auto;display:block}
@@ -240,7 +240,7 @@
         <!-- Search / room preview bar (left-aligned pill) -->
         <div class="search-wrapper">
           <a class="search-icon" href="room-visualizer.html" aria-label="Room preview — upload your room photo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L8 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-1.5-3z"/><circle cx="12" cy="14" r="3.5"/></svg></a>
-          <input type="text" id="siteSearch" class="search-input" placeholder="ატვირთეთ თქვენი ინტერიერის ფოტო და მოარგეთ ნამუშევარი..." autocomplete="off" aria-label="ატვირთეთ ინტერიერის ფოტო და მოარგეთ ნამუშევარი ოთახის გადახედვის გვერდზე">
+          <input type="text" id="siteSearch" class="search-input" placeholder="ატვირთეთ თქვენი ინტერიერის ფოტო და მოარგეთ ნამუშევარი..." autocomplete="off" aria-label="Filter featured works on this page. Room preview: use the camera icon on the left." title="Type to filter the gallery below. Room preview: use the camera icon link.">
         </div>
 
         <!-- Social Icons on right -->
@@ -945,7 +945,7 @@
   </footer>
 
 <!-- Critical runtime first (menu, hero, modal, search) -->
-<script defer src="./script.min.js?v=nv20260516"></script>
+<script defer src="./script.min.js?v=nv20260518"></script>
 <script defer src="./js/editorial-rule.min.js?v=nv20260215"></script>
 
 <!-- Load non-critical modules after first paint/idle -->
