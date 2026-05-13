@@ -481,15 +481,8 @@
 .nvr-catalog {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: clamp(12px, 1.5vw, 20px);
-  margin-bottom: clamp(2.5rem, 6vw, 4rem);
-}
-
-.nvr-catalog {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(18px, 2.5vw, 28px);
-  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  gap: clamp(6px, 0.85vw, 12px);
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
 }
 
 .nvr-catalog > p.muted {
@@ -502,16 +495,35 @@
   background: rgba(255, 255, 255, 0.7);
 }
 
+@media (max-width: 1140px) {
+  .nvr-catalog {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(10px, 1.3vw, 16px);
+  }
+
+  .nvr-cat-card img {
+    height: clamp(104px, 15vw, 160px);
+  }
+}
+
 @media (max-width: 900px) {
   .nvr-catalog {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .nvr-cat-card img {
+    height: clamp(124px, 26vw, 190px);
   }
 }
 
 @media (max-width: 520px) {
   .nvr-catalog {
     grid-template-columns: 1fr;
+  }
+
+  .nvr-cat-card img {
+    height: clamp(150px, 40vw, 240px);
   }
 
   .page-room-visualizer .nvr-hero-visual--live .nvr-lang-bar {
@@ -580,7 +592,7 @@
 
 .nvr-cat-card img {
   width: 100%;
-  height: clamp(280px, 36vw, 380px);
+  height: clamp(80px, 8.5vw, 120px);
   object-fit: contain;
   object-position: center;
   background-color: #f8f8f9;
@@ -588,49 +600,49 @@
 }
 
 .nvr-cat-card .nvr-card-body {
-  padding: 16px 18px 18px;
+  padding: 10px 12px 12px;
 }
 
 .nvr-cat-card .nvr-card-title {
   font-weight: 600;
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.35;
   letter-spacing: -0.01em;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: #111;
 }
 
 .nvr-cat-card .nvr-card-artist {
-  margin-bottom: 6px;
-  line-height: 1.4;
+  margin-bottom: 4px;
+  line-height: 1.35;
 }
 
 .nvr-cat-card .nvr-card-price {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
   color: #111;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .nvr-cat-card .nvr-card-desc {
-  font-size: 13px;
-  line-height: 1.45;
+  font-size: 12px;
+  line-height: 1.4;
   color: #444;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .nvr-cat-card .nvr-card-meta {
-  line-height: 1.45;
-  margin-bottom: 8px;
+  line-height: 1.4;
+  margin-bottom: 6px;
 }
 
 .nvr-cat-card .nvr-cat-status {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: #111;
@@ -642,8 +654,8 @@
 }
 
 .nvr-cat-card .nvr-card-body .muted.small {
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .nvr-stage-wrap.nvr-stage--tall .nvr-stage {
