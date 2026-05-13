@@ -21,8 +21,9 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Editor
-.vscode/
+# Editor — ignore local VS Code clutter; keep shared workspace settings committable
+.vscode/*
+!.vscode/settings.json
 *.swp
 *.swo
 
