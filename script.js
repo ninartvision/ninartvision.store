@@ -1048,6 +1048,109 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 100);
   }
 
+  /* Room preview: floating icon + separate tooltip (gallery + shop) */
+  function initNvRoomPreviewCtas() {
+    const reduced =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    document.querySelectorAll(".nv-room-preview-cta").forEach(wrap => {
+      const btn = wrap.querySelector(".nv-room-preview-cta__btn");
+      const tip = wrap.querySelector(".nv-room-preview-cta__tooltip");
+      if (!btn || !tip || wrap.dataset.nvRoomTooltipBound) return;
+      wrap.dataset.nvRoomTooltipBound = "1";
+
+      if (reduced) {
+        return;
+      }
+
+      const INTRO_DELAY_MS = 550;
+      const SHOW_MS = 3200;
+
+      let hideTimer = null;
+      let introTimer = null;
+
+      const clearHide = () => {
+        if (hideTimer) {
+          clearTimeout(hideTimer);
+          hideTimer = null;
+        }
+      };
+
+      const clearIntro = () => {
+        if (introTimer) {
+          clearTimeout(introTimer);
+          introTimer = null;
+        }
+      };
+
+      const showTip = () => {
+        tip.classList.add("is-visible");
+      };
+
+      const hideTip = () => {
+        tip.classList.remove("is-visible");
+      };
+
+      const showBrief = () => {
+        showTip();
+        clearHide();
+        hideTimer = window.setTimeout(() => {
+          hideTip();
+          hideTimer = null;
+        }, SHOW_MS);
+      };
+
+      const hideNow = () => {
+        clearHide();
+        clearIntro();
+        hideTip();
+      };
+
+      const onUserEnter = () => {
+        if (introTimer) {
+          clearIntro();
+          wrap.dataset.nvIntroCancelled = "1";
+        }
+        showBrief();
+      };
+
+      btn.addEventListener("pointerenter", onUserEnter);
+      btn.addEventListener("pointerleave", hideNow);
+      btn.addEventListener("focusin", onUserEnter);
+      btn.addEventListener("focusout", hideNow);
+
+      const scheduleIntroOnce = () => {
+        if (wrap.dataset.nvIntroScheduled === "1") return;
+        wrap.dataset.nvIntroScheduled = "1";
+        introTimer = window.setTimeout(() => {
+          introTimer = null;
+          if (wrap.dataset.nvIntroCancelled === "1") return;
+          showBrief();
+        }, INTRO_DELAY_MS);
+      };
+
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver(
+          entries => {
+            for (const en of entries) {
+              if (!en.isIntersecting || en.intersectionRatio < 0.12) continue;
+              io.unobserve(wrap);
+              scheduleIntroOnce();
+              break;
+            }
+          },
+          { threshold: [0, 0.12, 0.2] }
+        );
+        io.observe(wrap);
+      } else {
+        scheduleIntroOnce();
+      }
+    });
+  }
+
+  initNvRoomPreviewCtas();
+
 });
 
 /* =========================
