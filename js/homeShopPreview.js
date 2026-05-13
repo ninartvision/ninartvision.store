@@ -99,7 +99,7 @@ async function initHomeShopPreview() {
 
   let items = [];
   let currentFilter = "sale";
-  const LIMIT = 3;
+  const LIMIT = 6;
 
   function shuffle(arr) {
     return [...arr].sort(() => Math.random() - 0.5);
