@@ -112,6 +112,9 @@
     .as-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;border:none;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);width:44px;height:44px;border-radius:50%;font-size:28px;font-weight:300;color:#fff;cursor:pointer;opacity:.85;display:flex;align-items:center;justify-content:center;transition:all .3s ease}
     .as-arrow.left{left:12px}
     .as-arrow.right{right:12px}
+    .hero-slider .hero-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:max(14px,1.25rem);z-index:8;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;max-width:min(96%,calc(100% - 120px));pointer-events:none}
+    .hero-slider .hero-dot{pointer-events:auto;width:6px;height:6px;padding:0;border:none;border-radius:50%;background:rgba(255,255,255,.5);box-shadow:0 0 0 1px rgba(0,0,0,.18);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+    .hero-slider .hero-dot.active{background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.22),0 2px 10px rgba(0,0,0,.2);transform:scale(1.35)}
     .search-section{background:linear-gradient(180deg,#faf8f5 0%,#f5f1eb 100%);border-bottom:1px solid rgba(42,38,34,.06);padding:16px 0;margin-top:76px}
     .search-social-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:nowrap}
     .search-wrapper{display:flex;align-items:center;gap:14px;flex:0 1 auto;width:min(940px,calc(100% - 148px));max-width:min(940px,calc(100% - 148px));min-width:min(260px,calc(100% - 148px));min-height:48px;height:auto;padding:11px 24px 11px 18px;box-sizing:border-box;background:linear-gradient(165deg,#fdfcfa 0%,#f7f3ec 52%,#f0e9df 100%);border:1px solid rgba(58,48,40,.09);border-radius:999px;box-shadow:0 4px 22px rgba(42,38,34,.055),0 1px 3px rgba(42,38,34,.04),inset 0 1px 0 rgba(255,255,255,.88);transition:box-shadow .38s cubic-bezier(.22,1,.36,1),border-color .35s ease,transform .38s cubic-bezier(.22,1,.36,1),background .35s ease}
@@ -487,6 +490,8 @@
   <!-- Slider navigation arrows -->
   <button class="as-arrow left" id="prevSlide" aria-label="Previous artwork">&#8249;</button>
   <button class="as-arrow right" id="nextSlide" aria-label="Next artwork">&#8250;</button>
+
+  <div class="hero-dots" id="heroDots" role="group" aria-label="Hero artwork slides"></div>
 </section>
 
 
@@ -1105,21 +1110,6 @@
         });
       }
 
-      /* Dot click: navigate via arrow buttons */
-      var dots = container.querySelectorAll('.hero-dot');
-      dots.forEach(function (dot, i) {
-        dot.addEventListener('click', function () {
-          var current = 0;
-          slides.forEach(function (s, idx) {
-            if (s.classList.contains('active')) current = idx;
-          });
-          var diff = i - current;
-          if (diff === 0) return;
-          var btn = diff > 0 ? nextBtn : prevBtn;
-          for (var x = 0; x < Math.abs(diff); x++) btn.click();
-        });
-      });
-
       /* Autoplay — 5 s, pauses on hover and touch */
       var INTERVAL = 5000;
       var timer    = null;
@@ -1128,6 +1118,26 @@
       function tick()  { if (!paused) nextBtn.click(); }
       function start() { if (!timer) timer = setInterval(tick, INTERVAL); }
       function reset() { clearInterval(timer); timer = null; start(); }
+
+      /* Dot click: jump to slide in one step (same opacity transition as arrows) */
+      var dots = container.querySelectorAll('.hero-dot');
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () {
+          if (typeof window.__nvHeroGoTo === 'function') {
+            window.__nvHeroGoTo(i);
+          } else {
+            var current = 0;
+            slides.forEach(function (s, idx) {
+              if (s.classList.contains('active')) current = idx;
+            });
+            var diff = i - current;
+            if (diff === 0) return;
+            var btn = diff > 0 ? nextBtn : prevBtn;
+            for (var x = 0; x < Math.abs(diff); x++) btn.click();
+          }
+          reset();
+        });
+      });
 
       start();
 

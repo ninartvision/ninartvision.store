@@ -469,6 +469,63 @@ img, video {
 .as-arrow.left{ left: 12px; }
 .as-arrow.right{ right: 12px; }
 
+/* Pagination dots — homepage hero only (filled by inline initHero in index.html) */
+.hero-slider .hero-dots{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(14px, 1.25rem);
+  z-index: 8;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  max-width: min(96%, calc(100% - 120px));
+  pointer-events: none;
+}
+
+.hero-slider .hero-dot{
+  pointer-events: auto;
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
+  opacity: 0.92;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.hero-slider .hero-dot:hover{
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.82);
+  transform: scale(1.2);
+}
+
+.hero-slider .hero-dot:focus-visible{
+  outline: 2px solid rgba(255, 255, 255, 0.95);
+  outline-offset: 3px;
+}
+
+.hero-slider .hero-dot.active{
+  opacity: 1;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.22),
+    0 2px 10px rgba(0, 0, 0, 0.18);
+  transform: scale(1.38);
+}
+
 .as-arrow:hover,
 .as-arrow:active{
   opacity: 1;
@@ -558,6 +615,16 @@ img, video {
   
   .as-arrow.left{ left: 32px; }
   .as-arrow.right{ right: 32px; }
+
+  .hero-slider .hero-dots{
+    bottom: max(20px, 1.5rem);
+    gap: 8px;
+  }
+
+  .hero-slider .hero-dot{
+    width: 7px;
+    height: 7px;
+  }
 }
 
 /* Large Desktop - 1400px and up */

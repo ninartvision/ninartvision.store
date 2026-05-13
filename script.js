@@ -909,6 +909,13 @@ document.addEventListener("DOMContentLoaded", () => {
       slideIndex = i;
     }
 
+    /** Direct slide index (used by homepage hero pagination dots; keeps slideIndex in sync). */
+    window.__nvHeroGoTo = function (idx) {
+      if (typeof idx !== "number" || !slides.length) return;
+      const n = ((idx % slides.length) + slides.length) % slides.length;
+      show(n);
+    };
+
     prev?.addEventListener("click", () =>
       show((slideIndex - 1 + slides.length) % slides.length)
     );
