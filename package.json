@@ -4,6 +4,8 @@
   "description": "Image migration script for Ninart Vision",
   "type": "module",
   "scripts": {
+    "build:js":                "node scripts/minify-js.mjs",
+    "build":                   "npm run build:js",
     "migrate-images":          "node migrate-images.js",
     "generate-products":       "node scripts/generate-product-pages.mjs",
     "generate-products:clean": "node scripts/generate-product-pages.mjs --clean",

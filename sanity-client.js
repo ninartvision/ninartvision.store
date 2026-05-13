@@ -39,6 +39,16 @@ function cacheSet(key, data) {
   } catch (e) { /* storage quota exceeded — skip caching */ }
 }
 
+/** Escape text for HTML text nodes (e.g. inside <p>). */
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /* --------------------------------------------------
    SANITY IMAGE URL OPTIMIZATION
    Appends ?auto=format (WebP for modern browsers),
@@ -556,7 +566,7 @@ function nvEmpty(el, msg) {
         '<rect x="3" y="3" width="18" height="18" rx="2"/>' +
         '<path d="M3 9h18M9 21V9"/>' +
       '</svg>' +
-      '<p>' + (msg || 'No artworks available') + '</p>' +
+      '<p>' + escapeHtml(msg || 'No artworks available') + '</p>' +
     '</div>';
 }
 
@@ -564,7 +574,7 @@ function nvError(el, msg, retryFn) {
   if (!el) return;
   el.innerHTML =
     '<div class="nv-error">' +
-      '<p>' + (msg || 'Could not load content. Please check your connection.') + '</p>' +
+      '<p>' + escapeHtml(msg || 'Could not load content. Please check your connection.') + '</p>' +
       (retryFn ? '<button class="nv-retry" type="button">Try again</button>' : '') +
     '</div>';
   if (retryFn) {

@@ -78,7 +78,14 @@ function renderAllItems(artworksData) {
       medium: a.medium || '',
       year:   String(a.year || ''),
       desc:   a.shortDescription || a.desc || a.description || '',
-      keywords: a.keywords || '',
+      keywords: (function () {
+        var k = a.keywords;
+        if (Array.isArray(k)) {
+          return k.map(function (x) { return String(x == null ? '' : x); }).join(', ');
+        }
+        if (typeof k === 'string') return k;
+        return '';
+      })(),
       imgSrc, srcset, lqip, photos,
     };
   };

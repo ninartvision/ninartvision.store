@@ -1,25 +1,33 @@
 // ============================================
 // FIREBASE AUTHENTICATION CONFIGURATION
 // ============================================
+// Optional local config (gitignored): copy auth.config.example.js → auth.config.js
+// and set real values from Firebase Console > Project Settings > Web app.
+// index.html loads auth.config.js before this file; if missing, auth stays disabled.
 
-// TODO: Replace with your actual Firebase config
-// Get this from Firebase Console > Project Settings > Your apps > Web app
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+function getFirebaseConfig() {
+  if (typeof window === 'undefined') return null;
+  var c = window.__NV_FIREBASE_CONFIG__;
+  if (!c || typeof c !== 'object') return null;
+  if (typeof c.apiKey !== 'string' || !c.apiKey.trim()) return null;
+  if (typeof c.projectId !== 'string' || !c.projectId.trim()) return null;
+  if (typeof c.authDomain !== 'string' || !c.authDomain.trim()) return null;
+  if (typeof c.storageBucket !== 'string' || !c.storageBucket.trim()) return null;
+  if (typeof c.messagingSenderId !== 'string' || !c.messagingSenderId.trim()) return null;
+  if (typeof c.appId !== 'string' || !c.appId.trim()) return null;
+  return c;
+}
 
 // Initialize Firebase
 let auth;
-try {
-  firebase.initializeApp(firebaseConfig);
-  auth = firebase.auth();
-} catch (error) {
-  console.error('❌ Firebase initialization error:', error);
+const firebaseConfig = getFirebaseConfig();
+if (firebaseConfig) {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+  } catch (error) {
+    console.error('❌ Firebase initialization error:', error);
+  }
 }
 
 // ============================================
@@ -63,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function signInWithGoogle() {
   if (!auth) {
-    alert('Firebase is not configured. Please add your Firebase config in auth.js');
+    alert('Firebase is not configured. Copy auth.config.example.js to auth.config.js, add your Firebase web app values, and reload. See FIREBASE_SETUP.md.');
     return;
   }
 
