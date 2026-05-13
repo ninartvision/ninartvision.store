@@ -1919,7 +1919,7 @@ img, video {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(92, 82, 72, 0.52);
+  color: rgba(68, 60, 52, 0.72);
   text-decoration: none;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -1929,12 +1929,12 @@ img, video {
 
 .search-wrapper:hover .search-icon,
 .search-wrapper:focus-within .search-icon{
-  color: rgba(74, 62, 52, 0.62);
+  color: rgba(54, 46, 40, 0.82);
 }
 
 .search-icon:hover,
 .search-icon:focus-visible{
-  color: rgba(58, 48, 40, 0.78);
+  color: rgba(44, 38, 34, 0.9);
 }
 
 .search-icon:focus-visible{
