@@ -1,5 +1,24 @@
 ﻿const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
 
+/** Plain-text / HTML body contexts (e.g. inside <span>). */
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Double-quoted attribute values (src, alt, data-*, style url(...)). */
+function escapeAttr(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/'/g, '&#39;');
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const grid = document.getElementById("shopGrid");
   const title = document.querySelector(".artist-name");
@@ -37,8 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------------------------
   async function fetchArtistData() {
     try {
+      const slugLit = JSON.stringify(String(artistSlug));
       const query = `
-        *[_type == "artist" && slug.current == "${artistSlug}"][0]{
+        *[_type == "artist" && slug.current == ${slugLit}][0]{
           _id,
           name,
           "avatar": image.asset->url,
@@ -196,8 +216,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
+      const slugLit = JSON.stringify(String(artistSlug));
       const query = `
-        *[_type == "artwork" && artist->slug.current == "${artistSlug}" && status in ["sale", "sold", "published"]] | order(_createdAt desc) {
+        *[_type == "artwork" && artist->slug.current == ${slugLit} && status in ["sale", "sold", "published"]] | order(_createdAt desc) {
           _id,
           title,
           price,
@@ -298,27 +319,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    grid.innerHTML = items.map(a => `
-      <div class="shop-item ${a.status}"
-        data-img="${a.img}"
-        data-artist="${artistSlug}"
-        data-slug="${(a.slug || '').replace(/"/g, '&quot;')}"
-        data-status="${a.status}"
+    grid.innerHTML = items.map(a => {
+      const stClass = a.status === 'sold' ? 'sold' : (a.status === 'sale' ? 'sale' : '');
+      return `
+      <div class="shop-item${stClass ? ' ' + stClass : ''}"
+        data-img="${escapeAttr(a.img)}"
+        data-artist="${escapeAttr(artistSlug)}"
+        data-slug="${escapeAttr(a.slug || '')}"
+        data-status="${escapeAttr(a.status)}"
         data-is-sold="${String(a.status === 'sold')}"
         data-is-on-sale="${String(a.status === 'sale')}"
-        data-title="${a.title}"
-        data-price="${a.price}"
-        data-size="${a.size}"
-        data-medium="${a.medium}"
-        data-year="${a.year}"
-        data-desc="${String(a.description || '').replace(/"/g, '&quot;')}"
-        data-alt="${a.alt}"
-        data-photos="${a.photos.join(",")}">
+        data-title="${escapeAttr(a.title)}"
+        data-price="${escapeAttr(String(a.price))}"
+        data-size="${escapeAttr(a.size)}"
+        data-medium="${escapeAttr(a.medium)}"
+        data-year="${escapeAttr(a.year)}"
+        data-desc="${escapeAttr(String(a.description || ''))}"
+        data-alt="${escapeAttr(a.alt)}"
+        data-photos="${escapeAttr(a.photos.join(','))}">
 
         <div class="nv-img-wrap shop-item__visual">
-        <img src="${a.img}"
-             ${a.imgSrcset ? `srcset="${a.imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 300px"` : ''}
-             alt="${a.alt}" loading="lazy" decoding="async"
+        <img src="${escapeAttr(a.img)}"
+             ${a.imgSrcset ? `srcset="${escapeAttr(a.imgSrcset)}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 300px"` : ''}
+             alt="${escapeAttr(a.alt)}" loading="lazy" decoding="async"
              width="600" height="750" onerror="this.src='../images/placeholder.jpg'">
         ${a.status !== 'sold' ? `<button type="button" class="shop-item__cart-btn" aria-label="Add to cart — inquire via WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></button>` : ''}
         </div>
@@ -326,11 +349,12 @@ document.addEventListener("DOMContentLoaded", () => {
         ${a.status === 'sold' ? '<div class="sold-badge"></div>' : ''}
 
         <div class="shop-meta">
-          <span>${a.title}</span>
+          <span>${escapeHtml(a.title)}</span>
           ${a.price ? `<span class="price">${fmtPrice(a.price)}</span>` : ""}
         </div>
       </div>
-    `).join("");
+    `;
+    }).join("");
 
     // Initialize modal/gallery
     if (window.initShopItems) window.initShopItems();

@@ -18,8 +18,8 @@ const SANITY_CONFIG = {
    and fall through to a live fetch automatically.
 -------------------------------------------------- */
 const CACHE_TTL = 6 * 60 * 1000; // 6 minutes in ms
-// DEBUG: cache disabled — set to false to re-enable
-const CACHE_BYPASS = true;
+// DEBUG: set CACHE_BYPASS to true to skip localStorage cache while debugging
+const CACHE_BYPASS = false;
 
 function cacheGet(key) {
   if (CACHE_BYPASS) return null;

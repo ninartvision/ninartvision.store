@@ -4,6 +4,23 @@
  */
 const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
 
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeAttr(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/'/g, '&#39;');
+}
+
 function homeNormStatus(raw) {
   if (typeof window.normalizeArtworkListingStatus === 'function') {
     return window.normalizeArtworkListingStatus(raw);
@@ -134,7 +151,8 @@ async function initHomeShopPreview() {
     } else {
       show.forEach(p => {
         const div = document.createElement("div");
-        div.className = "shop-item " + p.status;
+        const stClass = p.status === 'sold' ? 'sold' : (p.status === 'sale' ? 'sale' : '');
+        div.className = "shop-item" + (stClass ? " " + stClass : "");
 
         const imgSrc = (typeof window.sanityImgUrl === 'function')
           ? window.sanityImgUrl(p.image, { w: 600, q: 80 })
@@ -166,13 +184,13 @@ async function initHomeShopPreview() {
 
         div.innerHTML = `
           <div class="nv-img-wrap shop-item__visual">
-          <img src="${imgSrc}"${imgSrcset ? ` srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 350px"` : ''}
-               alt="${p.alt || p.title}" loading="lazy" decoding="async"
+          <img src="${escapeAttr(imgSrc)}"${imgSrcset ? ` srcset="${escapeAttr(imgSrcset)}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 350px"` : ''}
+               alt="${escapeAttr(p.alt || p.title)}" loading="lazy" decoding="async"
                width="600" height="750" onerror="this.src='images/placeholder.jpg'">
           ${cartBtn}
           </div>
           <div class="shop-meta">
-            <span>${p.title}</span>
+            <span>${escapeHtml(p.title)}</span>
             ${p.price ? `<span class="price">${fmtPrice(p.price)}</span>` : ''}
           </div>
         `;

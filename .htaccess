@@ -70,9 +70,8 @@
   # Only rewrite if WebP is accepted by the browser
   RewriteCond %{HTTP_ACCEPT} image/webp
 
-  # Serve .webp instead of .jpg/.jpeg/.png if it exists
-  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME}.webp -f [OR]
-  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME%\.[^.]+}.webp -f
+  # Serve .webp instead of .jpg/.jpeg/.png if a same-basename .webp exists next to the original file
+  RewriteCond %{DOCUMENT_ROOT}/$1.webp -f
   RewriteRule ^(.+)\.(jpe?g|png)$ $1.webp [T=image/webp,E=accept:1,L]
 </IfModule>
 

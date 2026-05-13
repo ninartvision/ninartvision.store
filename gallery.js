@@ -1,4 +1,22 @@
 ﻿const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
+
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeAttr(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/'/g, '&#39;');
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   const grid = document.getElementById("galleryGrid");
 
@@ -56,13 +74,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       const card = document.createElement("article");
       card.className = "card";
 
+      const thumbSrc = window.sanityImgUrl(art.img, {w: 600, q: 80});
+      const thumbSrcset = window.sanitySrcset(art.img, [400, 600, 800]);
+      const slugEnc = encodeURIComponent(art.artist.slug || '');
+      const artistName = art.artist.name || 'artist';
+
       card.innerHTML = `
-        <div class="nv-img-wrap"${art.lqip ? ` style="background-image:url(${art.lqip})"` : ''}>
+        <div class="nv-img-wrap"${art.lqip ? ` style="background-image:url(${escapeAttr(art.lqip)})"` : ''}>
           <img class="thumb-img nv-lqip"
-            src="${window.sanityImgUrl(art.img, {w: 600, q: 80})}"
-            srcset="${window.sanitySrcset(art.img, [400, 600, 800])}"
+            src="${escapeAttr(thumbSrc)}"
+            srcset="${escapeAttr(thumbSrcset)}"
             sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 400px"
-            alt="${art.title}"
+            alt="${escapeAttr(art.title)}"
             loading="lazy"
             decoding="async"
             width="600" height="450"
@@ -71,14 +94,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
         <div class="card-body">
-          <h3>${art.title}</h3>
+          <h3>${escapeHtml(art.title)}</h3>
 
           ${art.artist && art.artist.slug
-            ? `<a class="artist-credit" href="./artists/artist.html?artist=${art.artist.slug}" aria-label="View artworks by ${art.artist.name || 'artist'}">${art.artist.name}</a>`
+            ? `<a class="artist-credit" href="./artists/artist.html?artist=${slugEnc}" aria-label="View artworks by ${escapeAttr(artistName)}">${escapeHtml(art.artist.name || '')}</a>`
             : ''}
 
           <p class="muted">
-            ${art.medium || ""}${art.size ? " | " + art.size : ""}
+            ${escapeHtml(art.medium || "")}${art.size ? " | " + escapeHtml(art.size) : ""}
           </p>
 
           <div class="card-row">
@@ -95,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     <a class="buy"
                       href="https://wa.me/995579388833?text=Hello, I'm interested in ${encodeURIComponent(
-                        art.title
+                        art.title || ''
                       )}"
                       target="_blank">WhatsApp</a>
                   `

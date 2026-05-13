@@ -5,6 +5,23 @@
  */
 const fmtPrice = p => { const n = Number(String(p || '').replace(/[^\d.]/g, '')); return n ? '\u20BE' + n.toLocaleString('en-US') : ''; };
 
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeAttr(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/'/g, '&#39;');
+}
+
 let allRenderedItems = [];
 
 // ========================================
@@ -83,8 +100,9 @@ function renderAllItems(artworksData) {
 
   const frag = document.createDocumentFragment();
   allRenderedItems = items.map(a => {
+    const stClass = a.status === 'sold' ? 'sold' : (a.status === 'sale' ? 'sale' : '');
     const div = document.createElement('div');
-    div.className        = `shop-item ${a.status}`;
+    div.className        = `shop-item${stClass ? ' ' + stClass : ''}`;
     div.dataset.status   = a.status;
     div.dataset.isSold   = String(a.status === 'sold');
     div.dataset.isOnSale = String(a.status === 'sale');
@@ -100,17 +118,17 @@ function renderAllItems(artworksData) {
     div.dataset.ogImage  = a.ogImageUrl;
     div.dataset.photos   = a.photos.join(',');
     div.innerHTML = `
-      <div class="nv-img-wrap"${a.lqip ? ` style="background-image:url(${a.lqip})"` : ''}>
-        <img class="nv-lqip" src="${a.imgSrc}"
-          ${a.srcset ? `srcset="${a.srcset}" sizes="(max-width:600px) 100vw, 400px"` : ''}
-          alt="${a.title}" loading="lazy"
+      <div class="nv-img-wrap"${a.lqip ? ` style="background-image:url(${escapeAttr(a.lqip)})"` : ''}>
+        <img class="nv-lqip" src="${escapeAttr(a.imgSrc)}"
+          ${a.srcset ? `srcset="${escapeAttr(a.srcset)}" sizes="(max-width:600px) 100vw, 400px"` : ''}
+          alt="${escapeAttr(a.title)}" loading="lazy"
           onload="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage=''"
           onerror="this.classList.add('nv-loaded');this.parentNode.style.backgroundImage=''">
         ${a.status !== 'sold' ? `<button type="button" class="shop-item__cart-btn" aria-label="Add to cart — inquire via WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></button>` : ''}
       </div>
       ${a.status === 'sold' ? '<div class="sold-badge"></div>' : ''}
       <div class="shop-meta">
-        <span>${a.title}</span>
+        <span>${escapeHtml(a.title)}</span>
         <span class="price">${fmtPrice(a.price)}</span>
       </div>
     `;

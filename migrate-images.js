@@ -1,6 +1,7 @@
 import { createClient } from '@sanity/client';
 import fs from 'fs';
 import path from 'path';
+import vm from 'node:vm';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,19 +16,54 @@ const client = createClient({
   token: process.env.SANITY_TOKEN || '' // You'll need to provide this
 });
 
-// Read and parse data.js
+/** Ensure parsed ARTWORKS payload is an array of plain objects. */
+function assertArtworksShape(data) {
+  if (!Array.isArray(data)) {
+    throw new Error('ARTWORKS must be an array');
+  }
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
+    if (item === null || typeof item !== 'object' || Array.isArray(item)) {
+      throw new Error(`ARTWORKS[${i}] must be a plain object`);
+    }
+  }
+}
+
+/**
+ * Parse the ARTWORKS array literal from data.js.
+ * Prefer strict JSON.parse when data.js is valid JSON; otherwise evaluate the
+ * JS array literal inside an isolated vm context.
+ */
 function loadArtworksFromDataJs() {
   const dataJsContent = fs.readFileSync(path.join(__dirname, 'data.js'), 'utf-8');
-  
-  // Extract ARTWORKS array from data.js
+
   const artworksMatch = dataJsContent.match(/window\.ARTWORKS\s*=\s*(\[[\s\S]*?\]);/);
   if (!artworksMatch) {
     throw new Error('Could not find ARTWORKS array in data.js');
   }
-  
-  // Use eval to parse the array (safe since we control the source)
-  const artworksArray = eval(artworksMatch[1]);
-  return artworksArray;
+
+  const raw = artworksMatch[1].trim();
+
+  try {
+    const parsed = JSON.parse(raw);
+    assertArtworksShape(parsed);
+    return parsed;
+  } catch (jsonErr) {
+    try {
+      const fromVm = vm.runInNewContext(`(${raw})`, Object.create(null), {
+        filename: 'data.js[ARTWORKS]',
+        timeout: 10_000,
+      });
+      assertArtworksShape(fromVm);
+      return fromVm;
+    } catch (vmErr) {
+      const err = new Error(
+        `Could not parse ARTWORKS: JSON error: ${jsonErr.message}; VM fallback: ${vmErr.message}`
+      );
+      err.cause = vmErr;
+      throw err;
+    }
+  }
 }
 
 // Upload image to Sanity

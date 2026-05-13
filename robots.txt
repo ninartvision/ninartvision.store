@@ -1,0 +1,8 @@
+# Ninart Vision — https://ninartvision.store/
+# Public static site; block tooling and admin-only pages from indexing.
+
+User-agent: *
+Disallow: /admin.html
+Disallow: /sanity-diagnostic.html
+
+Sitemap: https://ninartvision.store/sitemap.xml
