@@ -19,6 +19,15 @@
  *
  * SELF-CONTAINED: does not depend on sanity-queries.js being loaded.
  */
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 (async function cmsNews() {
   const _API =
     'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production';
@@ -50,6 +59,7 @@
 
   // Convert Sanity portable-text blocks to <p class="para-{lang}"> strings
   function blocksToHtml(blocks, lang) {
+    const langClass = lang === 'en' ? 'en' : 'ka';
     if (!Array.isArray(blocks)) return '';
     return blocks
       .filter((b) => b._type === 'block' && Array.isArray(b.children))
@@ -66,7 +76,7 @@
             return t;
           })
           .join('');
-        return `<p class="para-${lang}">${html}</p>`;
+        return `<p class="para-${langClass}">${html}</p>`;
       })
       .join('\n');
   }
@@ -74,12 +84,15 @@
   function renderPost(post) {
     const kaBody = blocksToHtml(post.bodyKa, 'ka');
     const enBody = blocksToHtml(post.bodyEn, 'en');
-    return `<a class="news-item" href="javascript:void(0)">
-  <span class="date">${fmtDate(post.publishedAt)}</span>
+    const dateStr = escapeHtml(fmtDate(post.publishedAt));
+    const tKa = post.titleKa ? `<span class="title-ka">${escapeHtml(post.titleKa)}</span>` : '';
+    const tEn = post.titleEn ? `<span class="title-en">${escapeHtml(post.titleEn)}</span>` : '';
+    return `<button type="button" class="news-item">
+  <span class="date">${dateStr}</span>
   <span class="text">
     <span class="news-title">
-      ${post.titleKa ? `<span class="title-ka">${post.titleKa}</span>` : ''}
-      ${post.titleEn ? `<span class="title-en">${post.titleEn}</span>` : ''}
+      ${tKa}
+      ${tEn}
     </span>
     <span class="news-content">
       ${kaBody}
@@ -88,7 +101,7 @@
       Browse artists &rarr;
     </span>  </span>
   <span class="arrow">→</span>
-</a>`;
+</button>`;
   }
 
   function renderToPage(posts) {

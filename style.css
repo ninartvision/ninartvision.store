@@ -1401,6 +1401,20 @@ img, video {
   color: inherit;
 }
 
+#news button.news-item,
+.news-list button.news-item{
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  text-align: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
 #news .news-list{
   display: flex;
   flex-direction: column;

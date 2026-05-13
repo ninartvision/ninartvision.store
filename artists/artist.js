@@ -4,6 +4,31 @@
     return n ? '\u20BE' + n.toLocaleString('en-US') : ''
   }
 
+  function escapeHtml(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+  }
+
+  function escapeAttr(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/'/g, '&#39;')
+  }
+
+  function isSanityCdnHttps(u) {
+    return /^https:\/\/cdn\.sanity\.io\//i.test(String(u || '').trim())
+  }
+
+  function escapeGroqString(str) {
+    return String(str).replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+  }
+
   /* ---------------------------
      GET ARTIST SLUG
   --------------------------- */
@@ -12,6 +37,11 @@
 
   if (!artistSlug) {
     console.error('No artist slug in URL')
+    return
+  }
+
+  if (!/^[a-zA-Z0-9._-]+$/.test(artistSlug)) {
+    console.error('Invalid artist slug')
     return
   }
 
@@ -31,7 +61,7 @@
   --------------------------- */
   async function fetchArtworks() {
     const query = `
-      *[_type == "artwork" && artist->slug.current == "${artistSlug}" && status in ["sale", "sold", "published"]] | order(_createdAt desc){
+      *[_type == "artwork" && artist->slug.current == "${escapeGroqString(artistSlug)}" && status in ["sale", "sold", "published"]] | order(_createdAt desc){
         _id,
         title,
         "slug": slug.current,
@@ -105,12 +135,15 @@
       const rawUrl = img.asset?.url || ''
       const src = iUrl(rawUrl, { w: 800, q: 80 })
       const srcset = iSet(rawUrl, [400, 700, 1000])
+      const safeSrc = isSanityCdnHttps(src) ? src : ''
+      const safeSrcset = srcset && isSanityCdnHttps(rawUrl) ? srcset : ''
+      const alt = img.alt || 'Artist gallery image'
       return `
       <div class="gallery-item" data-index="${index}">
         <img
-          src="${src}"
-          ${srcset ? `srcset="${srcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 450px"` : ''}
-          alt="${img.alt || 'Artist gallery image'}"
+          src="${escapeAttr(safeSrc || '../images/placeholder.jpg')}"
+          ${safeSrcset ? `srcset="${escapeAttr(safeSrcset)}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 450px"` : ''}
+          alt="${escapeAttr(alt)}"
           loading="lazy"
           decoding="async"
           width="800" height="600"
@@ -168,8 +201,10 @@
 
           // Thumbnail at 600px; lightbox photos at 1200px
           const rawUrl = a.image?.asset?.url || null
-          const imgUrl = rawUrl ? iUrl(rawUrl, { w: 600, q: 80 }) : '../images/placeholder.jpg'
-          const imgSrcset = rawUrl ? iSet(rawUrl, [400, 600, 800]) : ''
+          const imgUrlRaw = rawUrl ? iUrl(rawUrl, { w: 600, q: 80 }) : '../images/placeholder.jpg'
+          const imgUrl = rawUrl && isSanityCdnHttps(imgUrlRaw) ? imgUrlRaw : '../images/placeholder.jpg'
+          const imgSrcsetRaw = rawUrl ? iSet(rawUrl, [400, 600, 800]) : ''
+          const imgSrcset = rawUrl && isSanityCdnHttps(rawUrl) ? imgSrcsetRaw : ''
           const lqip = a.image?.asset?.metadata?.lqip || ''
 
           // Get all photos at 1200px for the lightbox
@@ -177,37 +212,43 @@
             ? a.images.map(img => img.asset?.url).filter(Boolean).map(u => iUrl(u, { w: 1200, q: 85 }))
             : (rawUrl ? [iUrl(rawUrl, { w: 1200, q: 85 })] : ['../images/placeholder.jpg'])
 
+          const safePhotos = allPhotos.filter(u => isSanityCdnHttps(u) || /^\.\.\/images\//.test(String(u)))
+
           const cardStatus =
             typeof window.normalizeArtworkListingStatus === 'function'
               ? window.normalizeArtworkListingStatus(a.status)
               : (a.status === 'sold' ? 'sold' : (a.status === 'sale' ? 'sale' : (String(a.status || '').trim().toLowerCase() === 'published' ? 'sale' : '')))
           
-          const slugEsc = (a.slug?.current || a.slug || '').replace(/"/g, '&quot;')
+          const slugVal = a.slug?.current || a.slug || ''
           const cartBtn =
             cardStatus === 'sale'
               ? `<button type="button" class="shop-item__cart-btn" aria-label="Add to cart — inquire via WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></button>`
               : ''
 
+          const titleDisp = a.title || 'Untitled'
+          const altDisp = a.image?.alt || a.title || 'Artwork'
+          const lqipStyle = lqip ? ` style="background-image:url('${escapeAttr(lqip)}')"` : ''
+
           return `
-      <div class="shop-item ${cardStatus}"
-        data-status="${cardStatus}"
+      <div class="shop-item${cardStatus ? ' ' + escapeAttr(cardStatus) : ''}"
+        data-status="${escapeAttr(cardStatus)}"
         data-is-sold="${String(cardStatus === 'sold')}"
         data-is-on-sale="${String(cardStatus === 'sale')}"
-        data-title="${a.title || 'Untitled'}"
-        data-slug="${slugEsc}"
-        data-artist="${artistSlug}"
-        data-price="${a.price || ''}"
-        data-size="${a.size || ''}"
-        data-medium="${a.medium || ''}"
-        data-year="${a.year || ''}"
-        data-desc="${a.desc || a.shortDescription || ''}"
-        data-photos="${allPhotos.join(',')}">  
+        data-title="${escapeAttr(titleDisp)}"
+        data-slug="${escapeAttr(slugVal)}"
+        data-artist="${escapeAttr(artistSlug)}"
+        data-price="${escapeAttr(String(a.price || ''))}"
+        data-size="${escapeAttr(a.size || '')}"
+        data-medium="${escapeAttr(a.medium || '')}"
+        data-year="${escapeAttr(String(a.year || ''))}"
+        data-desc="${escapeAttr(String(a.desc || a.shortDescription || ''))}"
+        data-photos="${escapeAttr(safePhotos.join(','))}">  
 
-        <div class="nv-img-wrap"${lqip ? ` style="background-image:url(${lqip})"` : ''}>
+        <div class="nv-img-wrap"${lqipStyle}>
           <img class="nv-lqip"
-               src="${imgUrl}"
-               ${imgSrcset ? `srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 300px"` : ''}
-               alt="${a.image?.alt || a.title || 'Artwork'}"
+               src="${escapeAttr(imgUrl)}"
+               ${imgSrcset ? `srcset="${escapeAttr(imgSrcset)}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 300px"` : ''}
+               alt="${escapeAttr(altDisp)}"
                loading="lazy"
                decoding="async"
                width="600" height="750"
@@ -216,7 +257,7 @@
           ${cartBtn}
         </div>
         <div class="shop-meta">
-          <span>${a.title || 'Untitled'}</span>
+          <span>${escapeHtml(titleDisp)}</span>
           ${a.price ? `<span class="price">${fmtPrice(a.price)}</span>` : ''}
         </div>
       </div>

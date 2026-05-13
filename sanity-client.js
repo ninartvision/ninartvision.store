@@ -745,7 +745,7 @@ function injectSchema(type, data) {
   var el = document.createElement('script');
   el.type = 'application/ld+json';
   el.setAttribute('data-nv-ld', '1');  /* sentinel — prevents double-inject */
-  el.textContent = JSON.stringify(payload);
+  el.textContent = JSON.stringify(payload).replace(/</g, '\\u003c');
   document.head.appendChild(el);
 }
 

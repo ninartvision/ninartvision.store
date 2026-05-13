@@ -1,3 +1,27 @@
+function escapeHtml(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function escapeAttr(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/'/g, "&#39;");
+}
+
+function isSafeArtistAvatarUrl(u) {
+  const s = String(u ?? "").trim();
+  if (!s) return false;
+  if (s === "images/artists/placeholder.jpg") return true;
+  return /^https:\/\/cdn\.sanity\.io\//i.test(s);
+}
+
 function observeHomeArtistReveal(grid) {
   const cards = grid.querySelectorAll(".artist-card");
   const reduced =
@@ -48,16 +72,19 @@ async function initHomeArtistsPreview() {
         const slug = artist.slug || artist._id;
 
         const avatarRaw = artist.image?.asset?.url || null;
-        const avatar = avatarRaw
-          ? typeof window.sanityImgUrl === "function"
-            ? window.sanityImgUrl(avatarRaw, {
-                w: 560,
-                h: 700,
-                fit: "crop",
-                q: 82,
-              })
-            : avatarRaw
-          : "images/artists/placeholder.jpg";
+        let avatar = "images/artists/placeholder.jpg";
+        if (avatarRaw) {
+          const built =
+            typeof window.sanityImgUrl === "function"
+              ? window.sanityImgUrl(avatarRaw, {
+                  w: 560,
+                  h: 700,
+                  fit: "crop",
+                  q: 82,
+                })
+              : avatarRaw;
+          avatar = isSafeArtistAvatarUrl(built) ? built : "images/artists/placeholder.jpg";
+        }
 
         return `
         <a class="artist-card"
@@ -65,15 +92,15 @@ async function initHomeArtistsPreview() {
 
           <div class="artist-showcase-media">
             <div class="artist-avatar"
-                 style="background-image:url('${avatar}')"></div>
+                 style="background-image:url('${escapeAttr(avatar)}')"></div>
           </div>
 
           <h3 class="artist-name">
             <img src="images/icon.jpg" class="flag-icon" alt="">
-            <span>${artist.name}</span>
+            <span>${escapeHtml(artist.name)}</span>
           </h3>
 
-          ${artist.style ? `<p class="artist-style">${artist.style}</p>` : ""}
+          ${artist.style ? `<p class="artist-style">${escapeHtml(artist.style)}</p>` : ""}
         </a>
       `;
       })

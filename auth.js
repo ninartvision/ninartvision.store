@@ -3,7 +3,7 @@
 // ============================================
 // Optional local config (gitignored): copy auth.config.example.js → auth.config.js
 // and set real values from Firebase Console > Project Settings > Web app.
-// index.html loads auth.config.js before this file; if missing, auth stays disabled.
+// index.html may load auth.config.js before this file when Firebase is enabled; otherwise auth stays disabled.
 
 function getFirebaseConfig() {
   if (typeof window === 'undefined') return null;

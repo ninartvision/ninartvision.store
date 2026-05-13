@@ -15,6 +15,42 @@
  * SELF-CONTAINED: does not depend on sanity-queries.js being loaded.
  * Load on any page that contains social links or settings-driven text.
  */
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Only https: URLs from trusted social hosts (blocks javascript:, data:, etc.). */
+function sanitizeSocialHttpsUrl(raw) {
+  const s = String(raw ?? '').trim();
+  if (!s) return '';
+  try {
+    const u = new URL(s);
+    if (u.protocol !== 'https:') return '';
+      const h = u.hostname.toLowerCase();
+      if (
+        h === 'facebook.com' ||
+        h.endsWith('.facebook.com') ||
+        h === 'instagram.com' ||
+        h.endsWith('.instagram.com')
+      ) {
+        return u.href;
+      }
+    return '';
+  } catch {
+    return '';
+  }
+}
+
+function isSafeContactEmail(raw) {
+  const s = String(raw ?? '').trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+}
+
 (async function cmsSettings() {
   const _API =
     'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production';
@@ -49,16 +85,22 @@
   function applySettings(s) {
     // ── Facebook ────────────────────────────────────────────────
     if (s.facebookUrl) {
-      document
-        .querySelectorAll('.soc[aria-label="Facebook"]')
-        .forEach((el) => (el.href = s.facebookUrl));
+      const fb = sanitizeSocialHttpsUrl(s.facebookUrl);
+      if (fb) {
+        document
+          .querySelectorAll('.soc[aria-label="Facebook"]')
+          .forEach((el) => (el.href = fb));
+      }
     }
 
     // ── Instagram ───────────────────────────────────────────────
     if (s.instagramUrl) {
-      document
-        .querySelectorAll('.soc[aria-label="Instagram"]')
-        .forEach((el) => (el.href = s.instagramUrl));
+      const ig = sanitizeSocialHttpsUrl(s.instagramUrl);
+      if (ig) {
+        document
+          .querySelectorAll('.soc[aria-label="Instagram"]')
+          .forEach((el) => (el.href = ig));
+      }
     }
 
     // ── WhatsApp ────────────────────────────────────────────────
@@ -82,19 +124,17 @@
     }
 
     // ── Contact email ───────────────────────────────────────────
-    if (s.contactEmail) {
-      // Update all mailto: hrefs
+    if (s.contactEmail && isSafeContactEmail(s.contactEmail)) {
+      const mail = String(s.contactEmail).trim();
       document.querySelectorAll('a[href^="mailto:"]').forEach((el) => {
-        el.href = `mailto:${s.contactEmail}`;
-        // If the link text itself is an email address, update it too
+        el.href = `mailto:${mail}`;
         if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.textContent.trim())) {
-          el.textContent = s.contactEmail;
+          el.textContent = mail;
         }
       });
-      // Update any plain .contact-email text elements
       document
         .querySelectorAll('.contact-email')
-        .forEach((el) => (el.textContent = s.contactEmail));
+        .forEach((el) => (el.textContent = mail));
     }
 
     // ── Homepage cloth banner ───────────────────────────────────
@@ -114,7 +154,7 @@
       if (p) {
         const strong = p.querySelector('strong');
         const brandName = strong ? strong.textContent : 'Ninart Vision';
-        p.innerHTML = `<strong class="brand-highlight">${brandName}</strong> ${s.missionTextEn}`;
+        p.innerHTML = `<strong class="brand-highlight">${escapeHtml(brandName)}</strong> ${escapeHtml(s.missionTextEn)}`;
       }
     }
   }

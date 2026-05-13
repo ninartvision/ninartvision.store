@@ -19,6 +19,49 @@
  *
  * SELF-CONTAINED: does not depend on sanity-queries.js being loaded.
  */
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeAttr(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Project card href: https on ninartvision.store / www, or same-site relative path (no javascript:/data:). */
+function sanitizeProjectHref(raw) {
+  const s = String(raw ?? '').trim();
+  if (!s) return '';
+  if (/^(javascript|data|vbscript):/i.test(s) || s.startsWith('//')) return '';
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/i.test(s)) {
+    try {
+      const u = new URL(s);
+      if (u.protocol !== 'https:') return '';
+      const h = u.hostname.toLowerCase();
+      if (h !== 'ninartvision.store' && h !== 'www.ninartvision.store') return '';
+      return u.href;
+    } catch {
+      return '';
+    }
+  }
+  if (s.includes(':')) return '';
+  return s;
+}
+
+function sanitizeSanityImageUrl(u) {
+  const s = String(u ?? '').trim();
+  if (!/^https:\/\/cdn\.sanity\.io\//i.test(s)) return '';
+  return s;
+}
+
 (async function cmsProjects() {
   const _API =
     'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production';
@@ -45,34 +88,32 @@
   }
 
   function renderCard(p) {
-    // Prefer legacy URL so existing bookmarks /  project1-7 links keep working;
-    // fall back to the dynamic template for new Sanity-only projects.
-    const href = p.legacyUrl
-      ? p.legacyUrl
-      : `project.html?p=${encodeURIComponent(p.slug || p._id)}`;
+    const fallbackHref = `project.html?p=${encodeURIComponent(p.slug || p._id)}`;
+    let href = p.legacyUrl ? sanitizeProjectHref(p.legacyUrl) : fallbackHref;
+    if (!href) href = fallbackHref;
 
-    const imgUrl = p.coverImage?.asset?.url;
-    const imgBase = imgUrl || './images/placeholder.jpg';
-    const imgSrc    = imgUrl ? `${imgUrl}?auto=format&w=800&q=80` : imgBase;
-    const imgSrcset = imgUrl
-      ? `${imgUrl}?auto=format&w=400&q=80 400w, ${imgUrl}?auto=format&w=800&q=80 800w`
+    const rawImg = p.coverImage?.asset?.url;
+    const safeImg = rawImg ? sanitizeSanityImageUrl(rawImg) : '';
+    const imgBase = './images/placeholder.jpg';
+    const imgSrc = safeImg ? `${safeImg}?auto=format&w=800&q=80` : imgBase;
+    const imgSrcset = safeImg
+      ? `${safeImg}?auto=format&w=400&q=80 400w, ${safeImg}?auto=format&w=800&q=80 800w`
       : '';
 
-    const alt   = p.coverImage?.alt || p.titleEn || 'Project image';
-    // Combine both title languages the same way the static cards do
+    const altRaw = p.coverImage?.alt || p.titleEn || 'Project image';
     const titleEn = p.titleEn || '';
-    const titleKa = p.titleKa ? `„${p.titleKa}"` : '';
-    const heading = [titleEn, titleKa].filter(Boolean).join(' – ');
-    const desc    = p.shortDescEn || '';
+    const titleKa = p.titleKa ? `\u201e${p.titleKa}\u201d` : '';
+    const heading = [titleEn, titleKa].filter(Boolean).join(' \u2013 ');
+    const desc = p.shortDescEn || '';
 
-    return `<a class="card" href="${href}">
+    return `<a class="card" href="${escapeAttr(href)}">
   <picture>
-    <img src="${imgSrc}"${imgSrcset ? ` srcset="${imgSrcset}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 360px"` : ''}
-         alt="${alt}" loading="lazy" decoding="async" width="800" height="1000">
+    <img src="${escapeAttr(imgSrc)}"${imgSrcset ? ` srcset="${escapeAttr(imgSrcset)}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 360px"` : ''}
+         alt="${escapeAttr(altRaw)}" loading="lazy" decoding="async" width="800" height="1000">
   </picture>
   <div class="card-body">
-    <h3>${heading}</h3>
-    ${desc ? `<p class="muted">${desc}</p>` : ''}
+    <h3>${escapeHtml(heading)}</h3>
+    ${desc ? `<p class="muted">${escapeHtml(desc)}</p>` : ''}
     <span class="link">Read more →</span>
   </div>
 </a>`;

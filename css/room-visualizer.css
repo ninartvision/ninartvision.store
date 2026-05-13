@@ -478,11 +478,11 @@
   margin-bottom: 0;
 }
 
-.nvr-catalog-lead {
-  margin-bottom: clamp(1.25rem, 3vw, 1.75rem);
-  line-height: 1.55;
-  max-width: 36rem;
-  font-size: 15px;
+.nvr-catalog {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(12px, 1.5vw, 20px);
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
 }
 
 .nvr-catalog {
