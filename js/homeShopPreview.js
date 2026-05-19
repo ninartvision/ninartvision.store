@@ -186,6 +186,10 @@ async function initHomeShopPreview() {
       .join(' ')
       .toLowerCase();
     div.dataset.slug = p.slug || '';
+    div.dataset.size = p.size || '';
+    div.dataset.medium = p.medium || '';
+    div.dataset.year = p.year || '';
+    div.dataset.image = imgSrc || '';
     div.dataset.artist = 'nini';
     div.dataset.artistName = 'Nini Mzhavia';
 
@@ -297,6 +301,9 @@ async function initHomeShopPreview() {
           ? ''
           : (artwork.shortDescription || ''),
         price: artwork.price || '',
+        size: artwork.dimensions || '',
+        medium: artwork.medium || '',
+        year: artwork.year || '',
         keywords: artwork.keywords || '',
         // Prefer explicit asset URL, fall back to older shapes
         image: artwork.image?.asset?.url || (Array.isArray(artwork.images) && artwork.images[0]?.asset?.url) || 'images/placeholder.jpg',
@@ -348,6 +355,30 @@ async function initHomeShopPreview() {
       render();
     });
   });
+
+  /** Homepage only: cart icon opens drawer; selecting artwork adds to cart (modal unchanged). */
+  track.addEventListener(
+    'click',
+    e => {
+      const cartBtn = e.target.closest('.shop-item__cart-btn');
+      if (cartBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const item = cartBtn.closest('.shop-item');
+        if (item && typeof window.nvCart?.addFromShopItem === 'function') {
+          window.nvCart.addFromShopItem(item, {});
+          window.nvCart.open();
+        }
+        return;
+      }
+      const item = e.target.closest('.shop-item');
+      if (!item || !track.contains(item)) return;
+      if (typeof window.nvCart?.addFromShopItem === 'function') {
+        window.nvCart.addFromShopItem(item, {});
+      }
+    },
+    true
+  );
 }
 
 // Runs immediately when loaded because DOMContentLoaded has already fired
