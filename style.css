@@ -7005,9 +7005,19 @@ a.pill:visited{
 
   .filter-tabs.artist-filter-tabs.with-art {
     position: relative;
-    padding-right: 56px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 0;
     overflow: visible;
   }
+}
+
+/* Artist pages — room CTA flush right; filter pills stay left */
+.filter-tabs.artist-filter-tabs.with-art > .nv-room-preview-cta {
+  margin-top: 0;
+  margin-left: auto;
+  padding: 0;
+  justify-content: flex-end;
 }
 
 /* Small Mobile - further reduce decorative image */
