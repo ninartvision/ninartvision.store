@@ -1,0 +1,70 @@
+/**
+ * Anti-flash layer — load synchronously on homepage after nv-stable.css.
+ * Prevents text appearing then disappearing on first paint.
+ */
+
+/* Single language on cloth banner (html[lang] set by nv-boot.js in <head>) */
+html[lang="ka"] .cloth-banner-text .en {
+  display: none !important;
+}
+
+html[lang="en"] .cloth-banner-text .ka {
+  display: none !important;
+}
+
+/* Section headings: never blink out for entrance animation */
+.section-featured-projects .editorial-heading,
+.home-shop-preview .editorial-heading,
+#artists .editorial-heading,
+#news .editorial-heading,
+#about .editorial-heading {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* About scroll block: visible at load; editorial-rule.js handles motion */
+#about .editorial-heading[data-editorial-reveal] {
+  opacity: 1 !important;
+}
+
+/* CMS-driven grids: hidden until first render (no "Loading…" text flash) */
+#homeShopGrid:not(.home-shop-grid--ready) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#homeArtistsGrid:not(.home-artists-grid--ready) {
+  opacity: 0;
+  pointer-events: none;
+  min-height: clamp(200px, 42vw, 320px);
+}
+
+/* News: stay readable at load; no opacity:0 → scroll reveal blink */
+#news .news-item {
+  opacity: 1 !important;
+}
+
+/* Hide news list only while Sanity replaces static HTML */
+#news .news-list.news-list--cms-swapping {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Featured projects: soften Sanity track swap */
+#projectsTrack.projects-track--swapping {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+#projectsTrack.projects-track--ready {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #news .news-list.news-list--cms-swapping,
+  #projectsTrack.projects-track--swapping {
+    transition: none !important;
+  }
+}

@@ -12,9 +12,6 @@
 
   function markUiReady() {
     document.documentElement.classList.add('nv-ui-ready');
-    requestAnimationFrame(function () {
-      document.documentElement.classList.add('nv-animate-ready');
-    });
   }
 
   if (document.readyState === 'loading') {

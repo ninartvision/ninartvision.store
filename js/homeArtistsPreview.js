@@ -57,13 +57,12 @@ async function initHomeArtistsPreview() {
   const grid = document.getElementById("homeArtistsGrid");
   if (!grid) return;
 
-  grid.innerHTML = `<p class="muted">Loading artists...</p>`;
-
   try {
     const artists = await fetchArtistsFromSanity(3);
 
     if (!artists || !artists.length) {
-      grid.innerHTML = `<p class="muted">No artists available.</p>`;
+      grid.replaceChildren();
+      grid.classList.add("home-artists-grid--ready");
       return;
     }
 
@@ -106,10 +105,12 @@ async function initHomeArtistsPreview() {
       })
       .join("");
 
+    grid.classList.add("home-artists-grid--ready");
     observeHomeArtistReveal(grid);
   } catch (err) {
     console.error("Failed to load artists on home page", err);
-    grid.innerHTML = `<p class="muted">Failed to load artists.</p>`;
+    grid.replaceChildren();
+    grid.classList.add("home-artists-grid--ready");
   }
 }
 
