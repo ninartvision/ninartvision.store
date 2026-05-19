@@ -918,16 +918,50 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
+    /** Portrait vs landscape — only landscape gets mobile contain scaling (see style.css). */
+    function nvHeroClassifySlideAspect(slide) {
+      const img = slide?.querySelector("img");
+      if (!img) return;
+      const w =
+        img.naturalWidth || parseInt(img.getAttribute("width"), 10) || 0;
+      const h =
+        img.naturalHeight || parseInt(img.getAttribute("height"), 10) || 0;
+      if (w < 1 || h < 1) return;
+      const isLandscape = w / h > 1.02;
+      slide.classList.toggle("slide--landscape", isLandscape);
+      slide.classList.toggle("slide--portrait", !isLandscape);
+    }
+
+    function nvHeroClassifyAllSlides() {
+      slides.forEach((slide) => {
+        const img = slide.querySelector("img");
+        if (!img) return;
+        nvHeroClassifySlideAspect(slide);
+        if (!img.complete || !img.naturalWidth) {
+          img.addEventListener(
+            "load",
+            () => nvHeroClassifySlideAspect(slide),
+            { once: true }
+          );
+        }
+      });
+    }
+
     function show(i) {
       slides.forEach(s => s.classList.remove("active"));
       slides[i].classList.add("active");
       slideIndex = i;
       nvHydrateHeroSlide(slides[i]);
+      nvHeroClassifySlideAspect(slides[i]);
       const nextIdx = (i + 1) % slides.length;
-      if (nextIdx !== i) nvHydrateHeroSlide(slides[nextIdx]);
+      if (nextIdx !== i) {
+        nvHydrateHeroSlide(slides[nextIdx]);
+        nvHeroClassifySlideAspect(slides[nextIdx]);
+      }
     }
 
     nvHydrateHeroSlide(slides[0]);
+    nvHeroClassifyAllSlides();
 
     /** Direct slide index (used by homepage hero pagination dots; keeps slideIndex in sync). */
     window.__nvHeroGoTo = function (idx) {
