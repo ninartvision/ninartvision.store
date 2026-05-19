@@ -237,6 +237,7 @@
         data-title="${escapeAttr(titleDisp)}"
         data-slug="${escapeAttr(slugVal)}"
         data-artist="${escapeAttr(artistSlug)}"
+        data-artist-name="${escapeAttr((window.ARTISTS?.find(a => a.id === artistSlug) || {}).name || '')}"
         data-price="${escapeAttr(String(a.price || ''))}"
         data-size="${escapeAttr(a.size || '')}"
         data-medium="${escapeAttr(a.medium || '')}"

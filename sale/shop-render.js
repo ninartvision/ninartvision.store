@@ -122,6 +122,7 @@ function renderAllItems(artworksData) {
     div.dataset.keywords = a.keywords;
     div.dataset.slug     = a.slug;
     div.dataset.artist   = 'nini';
+    div.dataset.artistName = 'Nini Mzhavia';
     div.dataset.ogImage  = a.ogImageUrl;
     div.dataset.photos   = a.photos.join(',');
     div.innerHTML = `

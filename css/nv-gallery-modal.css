@@ -1,0 +1,227 @@
+/**
+ * Ninart Vision — Premium gallery modal design system
+ * Layers on existing .product-modal markup; preserves current luxury look.
+ */
+
+.nv-gm,
+.product-modal.nv-gm {
+  --nv-gm-space-xs: 6px;
+  --nv-gm-space-sm: 10px;
+  --nv-gm-space-md: 14px;
+  --nv-gm-space-lg: 22px;
+  --nv-gm-space-xl: 28px;
+  --nv-gm-radius-shell: 18px;
+  --nv-gm-radius-card: 12px;
+  --nv-gm-shadow-shell: 0 12px 50px rgba(0, 0, 0, 0.35);
+  --nv-gm-text-title: clamp(1.15rem, 4.2vw, 1.45rem);
+  --nv-gm-text-body: clamp(0.88rem, 2.8vw, 0.95rem);
+  --nv-gm-text-meta: 0.82rem;
+  --nv-gm-accent: rgba(139, 115, 85, 0.38);
+  --nv-gm-accent-soft: rgba(139, 115, 85, 0.12);
+  --nv-gm-stage-bg: #f4f4f4;
+  --nv-gm-stage-tint: transparent;
+}
+
+/* Artist accent atmospheres — subtle stage tint only */
+.nv-gm[data-nv-artist="nini"],
+.product-modal.nv-gm[data-nv-artist="nini"] {
+  --nv-gm-accent: rgba(139, 115, 85, 0.42);
+  --nv-gm-accent-soft: rgba(139, 115, 85, 0.14);
+  --nv-gm-stage-tint: linear-gradient(165deg, rgba(253, 250, 246, 0.9) 0%, rgba(235, 228, 216, 0.35) 100%);
+}
+
+.nv-gm[data-nv-artist="mzia"],
+.product-modal.nv-gm[data-nv-artist="mzia"] {
+  --nv-gm-accent: rgba(72, 108, 82, 0.38);
+  --nv-gm-accent-soft: rgba(72, 108, 82, 0.12);
+  --nv-gm-stage-tint: linear-gradient(165deg, rgba(246, 250, 247, 0.92) 0%, rgba(220, 232, 224, 0.35) 100%);
+}
+
+.nv-gm[data-nv-artist="nanuli"],
+.product-modal.nv-gm[data-nv-artist="nanuli"] {
+  --nv-gm-accent: rgba(118, 88, 128, 0.36);
+  --nv-gm-accent-soft: rgba(118, 88, 128, 0.11);
+  --nv-gm-stage-tint: linear-gradient(165deg, rgba(250, 246, 252, 0.9) 0%, rgba(228, 218, 234, 0.32) 100%);
+}
+
+.nv-gm[data-nv-artist="default"],
+.product-modal.nv-gm[data-nv-artist="default"] {
+  --nv-gm-accent: rgba(58, 48, 40, 0.28);
+  --nv-gm-accent-soft: rgba(58, 48, 40, 0.08);
+}
+
+/* Shell — open transition without layout shift */
+.product-modal.nv-gm {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.32s;
+}
+
+.product-modal.nv-gm.open {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
+}
+
+.product-modal.nv-gm.open {
+  display: flex;
+}
+
+.product-modal.nv-gm .product-modal-box {
+  border-radius: var(--nv-gm-radius-shell);
+  box-shadow: var(--nv-gm-shadow-shell);
+  transform: translateY(8px) scale(0.98);
+  transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.product-modal.nv-gm.open .product-modal-box {
+  transform: translateY(0) scale(1);
+}
+
+/* Gallery stage */
+.product-modal.nv-gm .product-left,
+.nv-gm__stage {
+  background: var(--nv-gm-stage-bg);
+  background-image: var(--nv-gm-stage-tint);
+  background-blend-mode: normal;
+}
+
+/* Typography hierarchy */
+.product-modal.nv-gm .product-right {
+  padding: var(--nv-gm-space-lg);
+}
+
+.product-modal.nv-gm #productTitle,
+.nv-gm__title {
+  font-size: var(--nv-gm-text-title);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 var(--nv-gm-space-xs);
+}
+
+.nv-gm__artist {
+  font-size: var(--nv-gm-text-meta);
+  margin: 0 0 var(--nv-gm-space-sm);
+  color: rgba(42, 36, 30, 0.62);
+  letter-spacing: 0.02em;
+}
+
+.nv-gm__artist[hidden] {
+  display: none !important;
+}
+
+.nv-gm__collection {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(42, 36, 30, 0.5);
+  margin-bottom: var(--nv-gm-space-sm);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--nv-gm-accent-soft);
+  border: 1px solid var(--nv-gm-accent);
+}
+
+.nv-gm__collection[hidden] {
+  display: none !important;
+}
+
+.product-modal.nv-gm #productDesc,
+.nv-gm__desc {
+  font-size: var(--nv-gm-text-body);
+  line-height: 1.55;
+  margin-bottom: var(--nv-gm-space-md);
+}
+
+.product-modal.nv-gm .product-info {
+  margin: var(--nv-gm-space-md) 0;
+}
+
+/* Option cards — accent border on focus/hover preserved from base styles */
+.product-modal.nv-gm .product-modal-gift-card {
+  border-radius: var(--nv-gm-radius-card);
+}
+
+.product-modal.nv-gm .product-modal-gift-card:focus-within {
+  box-shadow: 0 0 0 1px var(--nv-gm-accent);
+}
+
+/* CTA block spacing */
+.product-modal.nv-gm .product-buy,
+.nv-gm__commerce {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nv-gm-space-sm);
+  margin-top: var(--nv-gm-space-md);
+}
+
+/* Mobile-first: safe areas, scroll, touch */
+.product-modal.nv-gm {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 900px) {
+  .product-modal.nv-gm {
+    overflow-x: hidden;
+    padding:
+      max(12px, env(safe-area-inset-top, 0px))
+      max(12px, env(safe-area-inset-right, 0px))
+      max(12px, env(safe-area-inset-bottom, 0px))
+      max(12px, env(safe-area-inset-left, 0px));
+    align-items: flex-end;
+  }
+
+  .product-modal.nv-gm .product-modal-box {
+    width: 100%;
+    max-width: 100%;
+    max-height: min(94dvh, calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 16px));
+    border-radius: clamp(14px, 4vw, var(--nv-gm-radius-shell)) clamp(14px, 4vw, var(--nv-gm-radius-shell)) 0 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .product-modal.nv-gm .product-right {
+    padding:
+      var(--nv-gm-space-md)
+      max(var(--nv-gm-space-md), env(safe-area-inset-right, 0px))
+      max(var(--nv-gm-space-lg), env(safe-area-inset-bottom, 0px))
+      max(var(--nv-gm-space-md), env(safe-area-inset-left, 0px));
+  }
+
+  .product-modal.nv-gm .product-close {
+    top: max(10px, env(safe-area-inset-top, 0px));
+    right: max(10px, env(safe-area-inset-right, 0px));
+  }
+
+  .product-modal.nv-gm .product-buy {
+    gap: var(--nv-gm-space-sm);
+  }
+}
+
+@media (max-width: 430px) {
+  .product-modal.nv-gm #productTitle {
+    font-size: 1.12rem;
+  }
+
+  .product-modal.nv-gm .product-modal-gift-card__title {
+    font-size: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-modal.nv-gm,
+  .product-modal.nv-gm .product-modal-box {
+    transition: none !important;
+    transform: none !important;
+  }
+}

@@ -325,6 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="shop-item${stClass ? ' ' + stClass : ''}"
         data-img="${escapeAttr(a.img)}"
         data-artist="${escapeAttr(artistSlug)}"
+        data-artist-name="${escapeAttr(artistData?.name || '')}"
         data-slug="${escapeAttr(a.slug || '')}"
         data-status="${escapeAttr(a.status)}"
         data-is-sold="${String(a.status === 'sold')}"
