@@ -183,43 +183,8 @@
     }
   </style>
 
-  <!-- Mobile header: logo left / tools right — after style.min so it always wins on homepage -->
-  <style id="nv-mobile-header">
-    @media (max-width:900px){
-      .header .container.header-row{
-        display:grid!important;
-        grid-template-columns:1fr auto!important;
-        grid-template-areas:"logo tools"!important;
-        align-items:center;
-        column-gap:12px;
-        min-height:64px;
-        padding:12px 0;
-      }
-      .header .container.header-row>.desktop-nav{display:none!important}
-      .header .container.header-row>.brand{
-        grid-area:logo!important;
-        grid-column:1!important;
-        justify-self:start!important;
-        margin:7px 0 0 clamp(10px,3.5vw,18px)!important;
-        max-width:min(160px,52vw);
-        transform:none!important;
-      }
-      .header .container.header-row>.brand img{max-height:32px;width:auto;height:auto}
-      .header .container.header-row>.header-tools,
-      .header .container.header-row>.header-mobile-actions{
-        grid-area:tools!important;
-        grid-column:2!important;
-        justify-self:end!important;
-        margin-right:clamp(2px,1vw,6px);
-        gap:10px;
-      }
-    }
-    @media (max-width:600px){
-      .header .container.header-row{min-height:58px;padding:10px 0}
-      .header .container.header-row>.brand{margin-top:5px;margin-left:clamp(8px,3vw,14px)!important;max-width:min(140px,48vw)}
-      .header .container.header-row>.brand img{max-height:28px}
-    }
-  </style>
+  <!-- Mobile header layout for homepage is inlined in critical CSS above (prevents FOUC while style.min.css loads async).
+       Global mobile header rules live in style.min.css for all pages. -->
 
   <link rel="icon" type="image/webp" href="./images/favicon.webp">
   <link rel="shortcut icon" type="image/webp" href="./images/favicon.webp">
@@ -241,7 +206,7 @@
     'allow_ad_personalization_signals': false
   });
 </script>
-<script defer src="./analytics.min.js"></script>
+<script defer src="./analytics.min.js?v=nv20260527"></script>
 
 <!-- Prevent flash of unstyled icons and hash navigation jump -->
 <script>
@@ -1025,21 +990,21 @@
 
 <!-- Critical runtime first (menu, hero, modal, search) -->
 <script defer src="./script.min.js?v=nv20260527"></script>
-<script defer src="./js/editorial-rule.min.js?v=nv20260215"></script>
+<script defer src="./js/editorial-rule.min.js?v=nv20260527"></script>
 
 <!-- Load non-critical modules after first paint/idle -->
 <script>
   (function () {
     var nonCriticalScripts = [
       "./sanity-client.min.js?v=nv20260527",
-      "./data.min.js?v=nv20260213",
+      "./data.min.js?v=nv20260527",
       "./js/homeShopPreview.min.js?v=nv20260527",
-      "./js/homeArtistsPreview.min.js",
-      "./auth.min.js",
-      "./js/cms-settings.js",
-      "./js/news-cards.min.js?v=nv20260213",
-      "./js/cms-news.js",
-      "./js/cms-projects.js"
+      "./js/homeArtistsPreview.min.js?v=nv20260527",
+      "./auth.min.js?v=nv20260527",
+      "./js/cms-settings.js?v=nv20260527",
+      "./js/news-cards.min.js?v=nv20260527",
+      "./js/cms-news.js?v=nv20260527",
+      "./js/cms-projects.js?v=nv20260527"
     ];
 
     function loadScript(src) {

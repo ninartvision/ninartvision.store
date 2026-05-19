@@ -7159,34 +7159,72 @@ a.pill:visited{
   line-height: 1;
 }
 
-@media (max-width: 480px){
-  .nv-room-preview-cta__tooltip{
-    right: auto;
-    left: 50%;
-    top: calc(100% + 14px);
+/* Mobile: horizontal hint beside the icon (points right → icon); desktop layout unchanged above 900px */
+@media (max-width: 900px) {
+  .shop-header .filter-tabs.with-art {
+    overflow: visible;
+  }
+
+  .nv-room-preview-cta__float {
+    overflow: visible;
+  }
+
+  .nv-room-preview-cta__tooltip {
+    right: calc(100% + 10px);
+    left: auto;
+    top: 50%;
     bottom: auto;
-    transform: translate(-50%, -10px);
-    width: auto;
-    max-width: min(calc(100vw - 32px), 300px);
+    z-index: 5;
+    width: max-content;
+    max-width: min(240px, calc(100vw - 88px));
+    transform: translate(8px, -50%);
   }
 
-  .nv-room-preview-cta__tooltip.is-visible{
-    transform: translate(-50%, 0);
+  .nv-room-preview-cta__tooltip.is-visible {
+    transform: translate(0, -50%);
   }
 
-  .nv-room-preview-cta__tooltip-text{
-    overflow-wrap: anywhere;
+  .nv-room-preview-cta__bubble {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px 8px 10px;
   }
 
-  .nv-room-preview-cta__bubble::after{
-    top: -7px;
+  .nv-room-preview-cta__tooltip-text {
+    flex: 0 1 auto;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+    line-height: 1.3;
+  }
+
+  .nv-room-preview-cta__tooltip-arrow-char {
+    flex-shrink: 0;
+  }
+
+  .nv-room-preview-cta__bubble::after {
+    top: 50%;
+    right: -6px;
+    left: auto;
     bottom: auto;
-    left: 50%;
-    right: auto;
-    margin-top: 0;
-    margin-left: -7px;
-    border-width: 0 7px 8px 7px;
-    border-color: transparent transparent #ebe4d8 transparent;
+    margin-top: -6px;
+    margin-left: 0;
+    border-width: 6px 0 6px 7px;
+    border-color: transparent transparent transparent #f0e9df;
+  }
+}
+
+@media (max-width: 430px) {
+  .nv-room-preview-cta__tooltip {
+    max-width: min(210px, calc(100vw - 76px));
+  }
+
+  .nv-room-preview-cta__bubble {
+    padding: 7px 10px 7px 9px;
+    font-size: 11px;
+    gap: 5px;
   }
 }
 
@@ -7212,9 +7250,9 @@ a.pill:visited{
   }
 }
 
-@media (prefers-reduced-motion: reduce) and (max-width: 480px){
+@media (prefers-reduced-motion: reduce) and (max-width: 900px){
   .nv-room-preview-cta__tooltip{
-    transform: translate(-50%, 0) !important;
+    transform: translate(0, -50%) !important;
   }
 }
 

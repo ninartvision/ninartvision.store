@@ -1118,8 +1118,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const INTRO_DELAY_MS = 550;
-      const SHOW_MS = 3200;
+      const isMobileHint =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(max-width: 900px)").matches;
+
+      const INTRO_DELAY_MS = isMobileHint ? 500 : 550;
+      const SHOW_MS = isMobileHint ? 2600 : 3200;
 
       let hideTimer = null;
       let introTimer = null;
@@ -1184,21 +1188,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }, INTRO_DELAY_MS);
       };
 
-      if ("IntersectionObserver" in window) {
-        const io = new IntersectionObserver(
-          entries => {
-            for (const en of entries) {
-              if (!en.isIntersecting || en.intersectionRatio < 0.12) continue;
-              io.unobserve(wrap);
-              scheduleIntroOnce();
-              break;
-            }
-          },
-          { threshold: [0, 0.12, 0.2] }
-        );
-        io.observe(wrap);
-      } else {
-        scheduleIntroOnce();
+      /* Brief auto-hint on load: mobile only; desktop keeps hover/focus tooltip */
+      if (isMobileHint) {
+        if ("IntersectionObserver" in window) {
+          const io = new IntersectionObserver(
+            entries => {
+              for (const en of entries) {
+                if (!en.isIntersecting || en.intersectionRatio < 0.12) continue;
+                io.unobserve(wrap);
+                scheduleIntroOnce();
+                break;
+              }
+            },
+            { threshold: [0, 0.12, 0.2] }
+          );
+          io.observe(wrap);
+        } else {
+          scheduleIntroOnce();
+        }
       }
     });
   }
