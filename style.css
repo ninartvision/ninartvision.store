@@ -7013,6 +7013,12 @@ a.pill:visited{
 }
 
 /* Artist pages — room CTA flush right; filter pills stay left */
+.filter-tabs.artist-filter-tabs.with-art {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
 .filter-tabs.artist-filter-tabs.with-art > .nv-room-preview-cta {
   margin-top: 0;
   margin-left: auto;
