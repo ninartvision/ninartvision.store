@@ -3999,9 +3999,11 @@ a.pill:visited{
     animation: none !important;
   }
 
-  .product-buy #addToCartBtn.product-modal-add-cart::before{
+  .product-buy #addToCartBtn.product-modal-add-cart::before,
+  .product-buy #addToCartBtn.product-modal-add-cart::after{
     animation: none !important;
     opacity: 0 !important;
+    box-shadow: none !important;
   }
 
   .product-buy #addToCartBtn.product-modal-add-cart:hover{
@@ -5136,18 +5138,19 @@ a.pill:visited{
 }
 
 @keyframes nv-add-cart-shine-sweep{
-  0%, 74%{
-    transform: rotate(11deg) translateX(-95%);
+  0%{
+    transform: translateX(-115%) skewX(-14deg);
     opacity: 0;
   }
-  77%{
-    opacity: 1;
+  12%{
+    opacity: 0.85;
   }
-  92%{
-    transform: rotate(11deg) translateX(260%);
+  48%{
+    transform: translateX(215%) skewX(-14deg);
     opacity: 0;
   }
   100%{
+    transform: translateX(215%) skewX(-14deg);
     opacity: 0;
   }
 }
@@ -5194,18 +5197,32 @@ a.pill:visited{
 .product-buy #addToCartBtn.product-modal-add-cart::before{
   content: "";
   position: absolute;
-  top: -55%;
-  left: -40%;
-  width: 42%;
-  height: 210%;
+  top: -50%;
+  left: 0;
+  width: 38%;
+  height: 200%;
   background: linear-gradient(
-    78deg,
+    90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.055) 48%,
-    transparent 92%
+    rgba(255, 255, 255, 0.07) 42%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.07) 58%,
+    transparent 100%
   );
   pointer-events: none;
-  animation: nv-add-cart-shine-sweep 12s cubic-bezier(0.37, 0, 0.21, 1) infinite;
+  animation: nv-add-cart-shine-sweep 4.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.product-buy #addToCartBtn.product-modal-add-cart::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .product-buy #addToCartBtn.product-modal-add-cart:hover:not([hidden]){
@@ -5222,9 +5239,24 @@ a.pill:visited{
   filter: brightness(1.05);
 }
 
-.product-buy #addToCartBtn.product-modal-add-cart:hover:not([hidden])::before,
-.product-buy #addToCartBtn.product-modal-add-cart:active:not([hidden])::before{
-  animation-play-state: paused;
+.product-buy #addToCartBtn.product-modal-add-cart:hover:not([hidden])::before{
+  animation-duration: 2.6s;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 40%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0.1) 60%,
+    transparent 100%
+  );
+}
+
+.product-buy #addToCartBtn.product-modal-add-cart:hover:not([hidden])::after{
+  opacity: 1;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 22px rgba(255, 248, 240, 0.14),
+    0 0 36px rgba(255, 255, 255, 0.06);
 }
 
 .product-buy #addToCartBtn.product-modal-add-cart:active:not([hidden]){
