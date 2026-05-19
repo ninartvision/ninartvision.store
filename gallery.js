@@ -18,6 +18,13 @@ function escapeAttr(s) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  var params = new URLSearchParams(window.location.search);
+  var artworkSlug = params.get('artwork');
+  if (artworkSlug) {
+    window.location.replace('./products/' + encodeURIComponent(artworkSlug.trim()) + '/');
+    return;
+  }
+
   const grid = document.getElementById("galleryGrid");
 
   if (!grid) {

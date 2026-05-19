@@ -639,7 +639,7 @@ function _buildSchema(type, d) {
       sale:      'https://schema.org/InStock'
     };
     var avail      = availMap[d.status] || 'https://schema.org/InStock';
-    var artworkUrl = d.slug ? (_SITE_URL + '/gallery.html?artwork=' + d.slug) : _SITE_URL;
+    var artworkUrl = d.slug ? (_SITE_URL + '/products/' + d.slug + '/') : _SITE_URL;
 
     return _clean({
       '@context':    'https://schema.org',

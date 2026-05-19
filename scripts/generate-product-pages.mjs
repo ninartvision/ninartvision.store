@@ -245,7 +245,7 @@ function buildPage(a) {
 ${JSON.stringify(jsonLd, null, 2)}
   </script>
 
-  <link rel="stylesheet" href="../../style.min.css" />
+  <link rel="stylesheet" href="../../style.min.css?v=nv20260527" />
   <link rel="icon"       href="../../images/favicon.webp">
 </head>
 <body>

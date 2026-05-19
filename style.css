@@ -8461,7 +8461,8 @@ svg { overflow: hidden; }
   }
 
   .header .container.header-row > .header-tools,
-  .header .container.header-row > .header-mobile-actions {
+  .header .container.header-row > .header-mobile-actions,
+  .header .container.header-row > .header-actions {
     grid-area: tools;
     grid-column: 2;
     justify-self: end;
@@ -8469,6 +8470,8 @@ svg { overflow: hidden; }
     margin: 0;
     margin-right: clamp(2px, 1vw, 6px);
     gap: 10px;
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -8490,7 +8493,8 @@ svg { overflow: hidden; }
   }
 
   .header .container.header-row > .header-tools,
-  .header .container.header-row > .header-mobile-actions {
+  .header .container.header-row > .header-mobile-actions,
+  .header .container.header-row > .header-actions {
     gap: 8px;
   }
 }
