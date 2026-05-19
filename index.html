@@ -147,11 +147,54 @@
     @media(min-width:900px){.hero-slider{height:82dvh;min-height:600px;max-height:950px}.hero-slider .slide{background-color:#fff}.hero-slider .slide img{object-fit:contain}.as-arrow{width:56px;height:56px;font-size:36px;background:rgba(255,255,255,.12)}.as-arrow.left{left:32px}.as-arrow.right{right:32px}}
     .site-footer{background:#111;color:#aaa;text-align:center;padding:28px 20px;font-size:13px;line-height:1.8}
     .site-footer a{color:#ccc;text-decoration:none}.site-footer a:hover{color:#fff;text-decoration:underline}
+    /* Hide below-fold copy until async CSS loads (avoids flash before opacity:0 animations) */
+    html:not(.nv-css-ready) .cloth-banner,
+    html:not(.nv-css-ready) .section-featured-projects .editorial-heading,
+    html:not(.nv-css-ready) .home-shop-preview .editorial-heading,
+    html:not(.nv-css-ready) .home-shop-preview .preview-tabs,
+    html:not(.nv-css-ready) .home-shop-preview .home-shop-carousel,
+    html:not(.nv-css-ready) .home-shop-preview .nv-gallery-entrance,
+    html:not(.nv-css-ready) #artists .editorial-heading,
+    html:not(.nv-css-ready) #news .editorial-heading,
+    html:not(.nv-css-ready) #about .editorial-heading{
+      visibility:hidden;
+    }
+    @media (prefers-reduced-motion:reduce){
+      html:not(.nv-css-ready) .cloth-banner,
+      html:not(.nv-css-ready) .section-featured-projects .editorial-heading,
+      html:not(.nv-css-ready) .home-shop-preview .editorial-heading,
+      html:not(.nv-css-ready) .home-shop-preview .preview-tabs,
+      html:not(.nv-css-ready) .home-shop-preview .home-shop-carousel,
+      html:not(.nv-css-ready) .home-shop-preview .nv-gallery-entrance,
+      html:not(.nv-css-ready) #artists .editorial-heading,
+      html:not(.nv-css-ready) #news .editorial-heading,
+      html:not(.nv-css-ready) #about .editorial-heading{
+        visibility:visible;
+      }
+    }
   </style>
 
   <!-- Full stylesheet loaded asynchronously (non-render-blocking) -->
-  <link rel="preload" href="./style.min.css?v=nv20260527" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="./style.min.css?v=nv20260527" as="style" onload="this.onload=null;this.rel='stylesheet';document.documentElement.classList.add('nv-css-ready')">
   <noscript><link rel="stylesheet" href="./style.min.css?v=nv20260527"></noscript>
+  <script>
+    (function () {
+      function nvMarkCssReady() {
+        document.documentElement.classList.add('nv-css-ready');
+      }
+      var link = document.querySelector('link[href*="style.min.css"]');
+      if (!link) {
+        nvMarkCssReady();
+        return;
+      }
+      if (link.rel === 'stylesheet' || link.sheet) {
+        nvMarkCssReady();
+        return;
+      }
+      link.addEventListener('load', nvMarkCssReady);
+      setTimeout(nvMarkCssReady, 4000);
+    })();
+  </script>
 
   <!-- Original Artworks: 3-up auto carousel (homepage section only) -->
   <style id="nv-home-shop-compact">
@@ -275,6 +318,7 @@
   // Mark page as loaded to enable smooth scrolling
   document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.classList.add('loaded');
+    document.documentElement.classList.add('nv-css-ready');
   });
 </script>
 
