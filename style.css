@@ -6971,7 +6971,8 @@ a.pill:visited{
     background-position: left center;
   }
 
-  .shop-header .filter-tabs.with-art > .nv-room-preview-cta {
+  .shop-header .filter-tabs.with-art > .nv-room-preview-cta,
+  .filter-tabs.artist-filter-tabs.with-art > .nv-room-preview-cta {
     position: static;
     transform: none;
     margin-top: 0;
@@ -6988,7 +6989,8 @@ a.pill:visited{
     padding-right: 56px;
   }
 
-  .shop-header .filter-tabs.with-art > .nv-room-preview-cta {
+  .shop-header .filter-tabs.with-art > .nv-room-preview-cta,
+  .filter-tabs.artist-filter-tabs.with-art > .nv-room-preview-cta {
     position: absolute;
     top: 50%;
     right: 0;
@@ -7000,6 +7002,12 @@ a.pill:visited{
     align-items: center;
     z-index: 2;
   }
+
+  .filter-tabs.artist-filter-tabs.with-art {
+    position: relative;
+    padding-right: 56px;
+    overflow: visible;
+  }
 }
 
 /* Small Mobile - further reduce decorative image */
@@ -7009,7 +7017,8 @@ a.pill:visited{
     width: 100%;
   }
 
-  .shop-header .filter-tabs.with-art > .nv-room-preview-cta {
+  .shop-header .filter-tabs.with-art > .nv-room-preview-cta,
+  .filter-tabs.artist-filter-tabs.with-art > .nv-room-preview-cta {
     margin-left: auto;
   }
 
@@ -7218,7 +7227,8 @@ a.pill:visited{
 
 /* Mobile: horizontal hint beside the icon (points right → icon); desktop layout unchanged above 900px */
 @media (max-width: 900px) {
-  .shop-header .filter-tabs.with-art {
+  .shop-header .filter-tabs.with-art,
+  .filter-tabs.artist-filter-tabs.with-art {
     overflow: visible;
   }
 
