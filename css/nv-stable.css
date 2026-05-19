@@ -47,8 +47,8 @@ html.nv-animate-ready #news .editorial-heading {
 }
 
 /* ── Shop preview: reserve grid + avoid empty pop-in ── */
-#homeShopGrid.home-shop-grid {
-  min-height: min(420px, 55vw);
+.home-shop-preview #homeShopGrid.home-shop-grid {
+  min-height: min(480px, 62vw);
 }
 
 #homeShopGrid:not(.home-shop-grid--ready) {

@@ -3169,50 +3169,7 @@ html.nv-animate-ready #about .editorial-heading:not([data-editorial-reveal]){
   background: #fff;     /* რომ ცარიელი ადგილი თეთრი იყოს */
   display: block;
 }
-/* ===== MOBILE 3-COLUMN GRID for HOME SHOP ===== */
-@media (max-width: 900px){
-  #homeShopGrid{
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 10px !important;
-    overflow-x: hidden !important;
-  }
-
-  #homeShopGrid .shop-item{
-    flex: none !important;
-  }
-
-  /* ✅ Scale down images to fit 3 columns */
-  #homeShopGrid .shop-item img{
-    width: 100%;
-    height: 180px;
-    object-fit: contain;
-    background: #fff;
-    display: block;
-  }
-}
-
-@media (max-width: 768px){
-  #homeShopGrid{
-    gap: 8px !important;
-  }
-
-  #homeShopGrid .shop-item img{
-    height: 160px;
-    object-fit: contain;
-  }
-}
-
-@media (max-width: 480px){
-  #homeShopGrid{
-    gap: 6px !important;
-  }
-
-  #homeShopGrid .shop-item img{
-    height: 140px;
-    object-fit: contain;
-  }
-}
+/* Homepage Original Artworks feed — see css/home-original-artworks.css (index only) */
 .shop-meta{
   display: flex;
   align-items: center;
@@ -6909,7 +6866,7 @@ a.pill:visited{
   }
   
   /* Ensure all images stay within bounds (exclude hero — needs contain box) */
-  img:not(.hero-slider .slide img) {
+  img:not(.hero-slider .slide img):not(.home-shop-preview #homeShopGrid .shop-item__visual img) {
     max-width: 100%;
     height: auto;
   }
@@ -6919,6 +6876,14 @@ a.pill:visited{
     max-height: 100%;
     width: auto;
     height: auto;
+    object-fit: contain;
+  }
+
+  .home-shop-preview #homeShopGrid .shop-item__visual img{
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
   }
   
