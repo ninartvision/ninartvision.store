@@ -165,7 +165,20 @@
       '<span class="nv-cart-drawer__subtotal-label">Subtotal</span>' +
       '<span class="nv-cart-drawer__subtotal-val" id="nvCartSubtotal">₾0</span>' +
       '</div>' +
-      '<button type="button" class="nv-cart-drawer__pay nv-cart-drawer__pay--tbc" id="nvCartPayTbc">Pay with TBC Bank</button>' +
+      '<div class="nv-cart-drawer__banks">' +
+      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--bog" id="nvCartPayBog">' +
+      '<span class="nv-cart-drawer__bank-logo">' +
+      '<img src="/images/nv-logo-bog.png" alt="საქართველოს ბანკი" width="128" height="36" loading="lazy" decoding="async">' +
+      '</span>' +
+      '<span class="nv-cart-drawer__bank-name">საქართველოს ბანკი</span>' +
+      '</button>' +
+      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--tbc" id="nvCartPayTbc">' +
+      '<span class="nv-cart-drawer__bank-logo">' +
+      '<img src="/images/nv-logo-tbc.png" alt="თიბისი ბანკი" width="128" height="36" loading="lazy" decoding="async">' +
+      '</span>' +
+      '<span class="nv-cart-drawer__bank-name">თიბისი ბანკი</span>' +
+      '</button>' +
+      '</div>' +
       '<button type="button" class="nv-cart-drawer__pay nv-cart-drawer__pay--wa" id="nvCartPayWhatsApp">Order via WhatsApp</button>' +
       '<p class="nv-cart-drawer__pay-note">TBC: we send transfer details after you confirm. WhatsApp: instant order message.</p>' +
       '</footer>' +
@@ -185,6 +198,7 @@
       el.addEventListener('click', close);
     });
 
+    document.getElementById('nvCartPayBog')?.addEventListener('click', checkoutBog);
     document.getElementById('nvCartPayTbc')?.addEventListener('click', checkoutTbc);
     document.getElementById('nvCartPayWhatsApp')?.addEventListener('click', checkoutWhatsApp);
 
@@ -435,11 +449,20 @@
     global.open('https://wa.me/' + phone + '?text=' + msg, '_blank', 'noopener');
   }
 
+  function checkoutBog() {
+    const items = readItems();
+    if (!items.length) return;
+    const msg = encodeURIComponent(
+      buildOrderMessage('გამარჯობა, საქართველოს ბანკით გადახდა მინდა შემდეგი შეკვეთისთვის:')
+    );
+    global.open('https://wa.me/' + DEFAULT_WA + '?text=' + msg, '_blank', 'noopener');
+  }
+
   function checkoutTbc() {
     const items = readItems();
     if (!items.length) return;
     const msg = encodeURIComponent(
-      buildOrderMessage('გამარჯობა, TBC Bank-ით გადახდა მინდა შემდეგი შეკვეთისთვის:')
+      buildOrderMessage('გამარჯობა, თიბისი ბანკით გადახდა მინდა შემდეგი შეკვეთისთვის:')
     );
     global.open('https://wa.me/' + DEFAULT_WA + '?text=' + msg, '_blank', 'noopener');
   }
