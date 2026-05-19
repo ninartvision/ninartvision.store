@@ -157,14 +157,20 @@
   <style id="nv-home-shop-compact">
     .home-shop-preview .home-shop-carousel{margin-bottom:18px}
     .home-shop-preview .home-shop-carousel__viewport{overflow:hidden;width:100%}
+    .home-shop-preview #homeShopGrid.home-shop-carousel__track,
     .home-shop-preview .home-shop-carousel__track{
-      display:flex;
+      display:flex !important;
+      width:100%;
       margin-bottom:0;
+      gap:0 !important;
+      grid-template-columns:none !important;
+      overflow:visible !important;
       transition:transform .65s cubic-bezier(.22,1,.36,1);
       will-change:transform;
     }
     .home-shop-preview .home-shop-carousel__slide{
       flex:0 0 100%;
+      width:100%;
       min-width:0;
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));

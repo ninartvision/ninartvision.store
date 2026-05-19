@@ -235,7 +235,7 @@ async function initHomeShopPreview() {
 
     track.replaceChildren(frag);
     applySlideTransform(pages.length);
-    startCarousel(pages.length);
+    requestAnimationFrame(() => startCarousel(pages.length));
 
     if (window.initShopItems) window.initShopItems();
     if (window.applyHomeSearch) window.applyHomeSearch();
