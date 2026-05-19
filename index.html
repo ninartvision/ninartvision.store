@@ -12,7 +12,11 @@
 <meta name="author" content="Nini Mzhavia">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://ninartvision.store/">
-
+<script>
+  if (/\/index\.html$/i.test(location.pathname)) {
+    location.replace(location.pathname.replace(/index\.html$/i, '/') + location.search + location.hash);
+  }
+</script>
 
   
   <!-- Open Graph / Social Media -->
@@ -103,7 +107,8 @@
     .hero-slider .hero-slides,.hero-slider .slides{position:absolute;inset:0;width:100%;height:100%}
     .hero-slider .slide{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;background-color:#f5f5f5;opacity:0;transition:opacity .4s ease-in-out}
     .hero-slider .slide.active{opacity:1}
-    .hero-slider .slide img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+    .hero-slider .slide img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;background:#f5f5f5}
+    .hero-slider .slide:not(.active) img:not([src]){visibility:hidden}
     .hero-slider .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.25));z-index:2;pointer-events:none}
     .hero-slider .hero-inner{position:relative;z-index:3;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;padding:40px 20px}
     .hero-slider .hero-content{width:100%;max-width:100%}
@@ -369,113 +374,113 @@
         <img src="./images/garden9.webp" alt="Garden painting by Nini Mzhavia — original acrylic on canvas" width="1500" height="1875" fetchpriority="high" decoding="async" loading="eager">
       </picture>
     </div>
-    <!-- Remaining slides: lazy loaded -->
+    <!-- Remaining slides: deferred until active (see script.js nvHydrateHeroSlide) -->
     <div class="slide">
       <picture>
-        <source srcset="./images/abstract3.webp" type="image/webp">
-        <img src="./images/abstract3.webp" alt="Abstract painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/abstract3.webp" type="image/webp">
+        <img data-nv-src="./images/abstract3.webp" alt="Abstract painting by Nini Mzhavia" width="1500" height="1875" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/svaneti10.webp" type="image/webp">
-        <img src="./images/svaneti10.webp" alt="Svaneti mountain landscape painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/svaneti10.webp" type="image/webp">
+        <img data-nv-src="./images/svaneti10.webp" alt="Svaneti mountain landscape painting by Nini Mzhavia" width="1500" height="1125" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/jvarimonastery5.webp" type="image/webp">
-        <img src="./images/jvarimonastery5.webp" alt="Jvari Monastery painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/jvarimonastery5.webp" type="image/webp">
+        <img data-nv-src="./images/jvarimonastery5.webp" alt="Jvari Monastery painting by Nini Mzhavia" width="1500" height="1125" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/babuacvera4.webp" type="image/webp">
-        <img src="./images/babuacvera4.webp" alt="Babuacvera painting by Nini Mzhavia" width="1500" height="2000" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/babuacvera4.webp" type="image/webp">
+        <img data-nv-src="./images/babuacvera4.webp" alt="Babuacvera painting by Nini Mzhavia" width="1500" height="2000" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/naturmort6.webp" type="image/webp">
-        <img src="./images/naturmort6.webp" alt="Still life painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/naturmort6.webp" type="image/webp">
+        <img data-nv-src="./images/naturmort6.webp" alt="Still life painting by Nini Mzhavia" width="1500" height="1875" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/jvari7.webp" type="image/webp">
-        <img src="./images/jvari7.webp" alt="Jvari landscape painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/jvari7.webp" type="image/webp">
+        <img data-nv-src="./images/jvari7.webp" alt="Jvari landscape painting by Nini Mzhavia" width="1500" height="1125" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/lily8.webp" type="image/webp">
-        <img src="./images/lily8.webp" alt="Lily flower painting by Nini Mzhavia" width="1390" height="1727" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/lily8.webp" type="image/webp">
+        <img data-nv-src="./images/lily8.webp" alt="Lily flower painting by Nini Mzhavia" width="1390" height="1727" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/dream9.webp" type="image/webp">
-        <img src="./images/dream9.webp" alt="Dream landscape painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/dream9.webp" type="image/webp">
+        <img data-nv-src="./images/dream9.webp" alt="Dream landscape painting by Nini Mzhavia" width="1500" height="1125" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/rose1.webp" type="image/webp">
-        <img src="./images/rose1.webp" alt="Rose painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/rose1.webp" type="image/webp">
+        <img data-nv-src="./images/rose1.webp" alt="Rose painting by Nini Mzhavia" width="1500" height="1875" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/sea4.webp" type="image/webp">
-        <img src="./images/sea4.webp" alt="Seascape painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/sea4.webp" type="image/webp">
+        <img data-nv-src="./images/sea4.webp" alt="Seascape painting by Nini Mzhavia" width="1500" height="1125" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/waterlily1.webp" type="image/webp">
-        <img src="./images/waterlily1.webp" alt="Water lily painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/waterlily1.webp" type="image/webp">
+        <img data-nv-src="./images/waterlily1.webp" alt="Water lily painting by Nini Mzhavia" width="1500" height="1125" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/swan1.webp" type="image/webp">
-        <img src="./images/swan1.webp" alt="Swan painting by Nini Mzhavia" width="1500" height="2250" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/swan1.webp" type="image/webp">
+        <img data-nv-src="./images/swan1.webp" alt="Swan painting by Nini Mzhavia" width="1500" height="2250" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/seaorange8.webp" type="image/webp">
-        <img src="./images/seaorange8.webp" alt="Sea orange sunset painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/seaorange8.webp" type="image/webp">
+        <img data-nv-src="./images/seaorange8.webp" alt="Sea orange sunset painting by Nini Mzhavia" width="1500" height="1125" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/lilac6.webp" type="image/webp">
-        <img src="./images/lilac6.webp" alt="Lilac floral painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/lilac6.webp" type="image/webp">
+        <img data-nv-src="./images/lilac6.webp" alt="Lilac floral painting by Nini Mzhavia" width="1500" height="1875" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/kids3.webp" type="image/webp">
-        <img src="./images/kids3.webp" alt="Children theme painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/kids3.webp" type="image/webp">
+        <img data-nv-src="./images/kids3.webp" alt="Children theme painting by Nini Mzhavia" width="1500" height="1125" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/boat.webp" type="image/webp">
-        <img src="./images/boat.webp" alt="Boat at sea painting by Nini Mzhavia" width="1500" height="2250" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/boat.webp" type="image/webp">
+        <img data-nv-src="./images/boat.webp" alt="Boat at sea painting by Nini Mzhavia" width="1500" height="2250" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/daffodils6.webp" type="image/webp">
-        <img src="./images/daffodils6.webp" alt="Daffodils floral painting by Nini Mzhavia" width="1500" height="1875" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/daffodils6.webp" type="image/webp">
+        <img data-nv-src="./images/daffodils6.webp" alt="Daffodils floral painting by Nini Mzhavia" width="1500" height="1875" decoding="async">
       </picture>
     </div>
     <div class="slide">
       <picture>
-        <source srcset="./images/deer5.webp" type="image/webp">
-        <img src="./images/deer5.webp" alt="Deer nature painting by Nini Mzhavia" width="1500" height="1125" loading="lazy" decoding="async">
+        <source data-nv-srcset="./images/deer5.webp" type="image/webp">
+        <img data-nv-src="./images/deer5.webp" alt="Deer nature painting by Nini Mzhavia" width="1500" height="1125" decoding="async">
       </picture>
     </div>
   </div>
@@ -542,7 +547,7 @@
       <!-- Slider -->
       <div class="projects-slider" id="projectsSlider">
         <div class="projects-track" id="projectsTrack">
-          <a class="card" href="project1.html">
+          <a class="card" href="products/svaneti-svaneti/">
             <picture>
               <source srcset="./images/me9.webp" type="image/webp">
               <img src="./images/me9.webp" alt="Svaneti project" loading="lazy" decoding="async" width="800" height="880">
@@ -555,7 +560,7 @@
           </a>
       
 
-          <a class="card" href="project2.html">
+          <a class="card" href="products/silent-bloom/">
             <picture>
               <source srcset="./images/me10.webp" type="image/webp">
               <img src="./images/me10.webp" alt="Silent Bloom project" loading="lazy" decoding="async" width="800" height="1067">
@@ -588,7 +593,7 @@
               <span class="link">Read more →</span>
             </div>
           </a>
-          <a class="card" href="project5.html">
+          <a class="card" href="products/magical-world/">
   <picture>
     <source srcset="./images/me3.webp" type="image/webp">
     <img src="./images/me3.webp" alt="Magical World project" loading="lazy" decoding="async" width="800" height="1038">
@@ -599,7 +604,7 @@
     <span class="link">Read more →</span>
   </div>
 </a>
-<a class="card" href="project6.html">
+<a class="card" href="products/the-way-to-the-monastery/">
             <picture>
               <source srcset="./images/me8.webp" type="image/webp">
               <img src="./images/me8.webp" alt="Way to the monastery project" loading="lazy" decoding="async" width="800" height="799">
@@ -947,20 +952,22 @@
 
       <div class="login-left">
         <div class="section-top">
-          <h2>Log In</h2>
-          <p class="muted">Sign in to save your favorites and track your orders.</p>
+          <h2 data-en="Collector account" data-ka="კოლექციონერის ანგარიში">Collector account</h2>
+          <p class="muted"
+             data-en="Sign in with Google to save favorites when this feature is enabled. To buy art today, browse the shop or message us on WhatsApp."
+             data-ka="შეგიძლიათ შეხვიდეთ Google-ით, როცა ფუნქცია ჩაირთვება. ნამუშევრის შესაძენად გადადით მაღაზიაში ან მოგვწერეთ WhatsApp-ზე.">
+            Sign in with Google to save favorites when this feature is enabled. To buy art today, browse the shop or message us on WhatsApp.
+          </p>
         </div>
 
-        <form class="form">
-          <label for="loginEmail">Email</label>
-          <input type="email" id="loginEmail" name="email" placeholder="your@email.com" required autocomplete="email" />
-
-          <label for="loginPassword">Password</label>
-          <input type="password" id="loginPassword" name="password" placeholder="••••••••" required autocomplete="current-password" />
-
-          <button class="btn btn-dark" type="submit">Log In</button>
-          <p class="muted small">Forgot password?</p>
-        </form>
+        <button type="button" id="homeGoogleSignIn" class="btn btn-dark" style="display:none"
+                data-en="Sign in with Google"
+                data-ka="შესვლა Google-ით">
+          Sign in with Google
+        </button>
+        <p class="muted small" style="margin-top:1rem;">
+          <a href="sale/shop.html" data-en="Browse the shop →" data-ka="მაღაზია →">Browse the shop →</a>
+        </p>
       </div>
 
       <!-- RIGHT IMAGE -->
@@ -975,20 +982,18 @@
 
   <footer class="site-footer" aria-label="Site footer">
     <div class="container">
-      <p>&copy; 2026 Ninart Vision &middot; Original Georgian Art &middot; <a href="about.html">About</a> &middot; <a href="support.html">Contact</a></p>
+      <p>&copy; 2026 Ninart Vision &middot; Original Georgian Art &middot; <a href="about.html">About</a> &middot; <a href="support.html">Contact</a> &middot; <a href="shipping.html">Shipping</a> &middot; <a href="returns.html">Returns</a> &middot; <a href="privacy.html">Privacy</a></p>
     </div>
   </footer>
 
 <!-- Critical runtime first (menu, hero, modal, search) -->
-<script defer src="./script.min.js?v=nv20260518"></script>
+<script defer src="./script.min.js?v=nv20260519"></script>
 <script defer src="./js/editorial-rule.min.js?v=nv20260215"></script>
 
 <!-- Load non-critical modules after first paint/idle -->
 <script>
   (function () {
     var nonCriticalScripts = [
-      "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
-      "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js",
       "./sanity-client.min.js?v=nv20260213",
       "./data.min.js?v=nv20260213",
       "./js/homeShopPreview.min.js?v=nv20260513",
@@ -1110,14 +1115,42 @@
         });
       }
 
-      /* Autoplay — 5 s, pauses on hover and touch */
+      /* Autoplay — delayed until after LCP so the first slide stays the LCP element */
       var INTERVAL = 5000;
       var timer    = null;
       var paused   = false;
+      var autoplayStarted = false;
 
       function tick()  { if (!paused) nextBtn.click(); }
-      function start() { if (!timer) timer = setInterval(tick, INTERVAL); }
-      function reset() { clearInterval(timer); timer = null; start(); }
+      function start() {
+        if (autoplayStarted) return;
+        autoplayStarted = true;
+        if (!timer) timer = setInterval(tick, INTERVAL);
+      }
+      function reset() {
+        if (!autoplayStarted) return;
+        clearInterval(timer);
+        timer = null;
+        start();
+      }
+
+      function scheduleAutoplay() {
+        var fallbackMs = 8000;
+        var started = false;
+        function go() {
+          if (started) return;
+          started = true;
+          setTimeout(start, 2500);
+        }
+        if ('PerformanceObserver' in window) {
+          try {
+            var po = new PerformanceObserver(function () { go(); po.disconnect(); });
+            po.observe({ type: 'largest-contentful-paint', buffered: true });
+          } catch (e) { /* ignore */ }
+        }
+        window.addEventListener('load', function () { setTimeout(go, 5000); }, { once: true });
+        setTimeout(go, fallbackMs);
+      }
 
       /* Dot click: jump to slide in one step (same opacity transition as arrows) */
       var dots = container.querySelectorAll('.hero-dot');
@@ -1139,7 +1172,7 @@
         });
       });
 
-      start();
+      scheduleAutoplay();
 
       var slider = document.querySelector('.hero-slider');
       if (slider) {

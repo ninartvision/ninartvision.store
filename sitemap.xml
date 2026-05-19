@@ -80,6 +80,27 @@
   </url>
 
   <url>
+    <loc>https://ninartvision.store/privacy.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.40</priority>
+  </url>
+
+  <url>
+    <loc>https://ninartvision.store/shipping.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.45</priority>
+  </url>
+
+  <url>
+    <loc>https://ninartvision.store/returns.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.40</priority>
+  </url>
+
+  <url>
     <loc>https://ninartvision.store/room-visualizer.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
@@ -101,20 +122,6 @@
   </url>
 
   <url>
-    <loc>https://ninartvision.store/project1.html</loc>
-    <lastmod>2026-05-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.55</priority>
-  </url>
-
-  <url>
-    <loc>https://ninartvision.store/project2.html</loc>
-    <lastmod>2026-05-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.55</priority>
-  </url>
-
-  <url>
     <loc>https://ninartvision.store/project3.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
@@ -123,20 +130,6 @@
 
   <url>
     <loc>https://ninartvision.store/project4.html</loc>
-    <lastmod>2026-05-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.55</priority>
-  </url>
-
-  <url>
-    <loc>https://ninartvision.store/project5.html</loc>
-    <lastmod>2026-05-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.55</priority>
-  </url>
-
-  <url>
-    <loc>https://ninartvision.store/project6.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>

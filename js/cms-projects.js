@@ -5,8 +5,8 @@
  * homepage Featured Projects slider (#projectsTrack).
  *
  * ROUTING LOGIC per project card:
- *   • legacyUrl is set  → links to the existing static HTML page
- *     (keeps project1–project7.html working during migration)
+ *   • legacyUrl is set  → links to a product URL or portfolio page
+ *     (prefer /products/{slug}/ over deprecated projectN.html)
  *   • legacyUrl is empty → links to project.html?p={slug}
  *     (new Sanity-managed projects use the dynamic detail template)
  *

@@ -903,11 +903,31 @@ document.addEventListener("DOMContentLoaded", () => {
   let slideIndex = 0;
 
   if (slides.length) {
+    /** Load deferred hero media when a slide becomes active (homepage LCP optimization). */
+    function nvHydrateHeroSlide(slide) {
+      if (!slide) return;
+      slide.querySelectorAll("source[data-nv-srcset]").forEach((source) => {
+        if (!source.getAttribute("srcset")) {
+          source.setAttribute("srcset", source.getAttribute("data-nv-srcset") || "");
+        }
+      });
+      slide.querySelectorAll("img[data-nv-src]").forEach((img) => {
+        if (!img.getAttribute("src")) {
+          img.setAttribute("src", img.getAttribute("data-nv-src") || "");
+        }
+      });
+    }
+
     function show(i) {
       slides.forEach(s => s.classList.remove("active"));
       slides[i].classList.add("active");
       slideIndex = i;
+      nvHydrateHeroSlide(slides[i]);
+      const nextIdx = (i + 1) % slides.length;
+      if (nextIdx !== i) nvHydrateHeroSlide(slides[nextIdx]);
     }
+
+    nvHydrateHeroSlide(slides[0]);
 
     /** Direct slide index (used by homepage hero pagination dots; keeps slideIndex in sync). */
     window.__nvHeroGoTo = function (idx) {

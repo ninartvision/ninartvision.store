@@ -51,6 +51,11 @@ jobs:
       - name: Remove node_modules from artifact
         run: rm -rf node_modules
 
+      - name: Remove non-public pages from deploy artifact
+        run: |
+          rm -f admin.html sanity-diagnostic.html
+          rm -f lh-home.json 2>/dev/null || true
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3

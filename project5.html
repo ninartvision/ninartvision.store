@@ -1,124 +1,18 @@
 <!DOCTYPE html>
-<html lang="ka">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Magical World – Original Acrylic Painting | Ninart Vision</title>
-  <link rel="stylesheet" href="./style.min.css" />
+  <title>Moved — Ninart Vision</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://ninartvision.store/products/magical-world/">
+  <meta http-equiv="refresh" content="0;url=https://ninartvision.store/products/magical-world/">
+  <link rel="icon" href="./images/favicon.webp">
 </head>
-
 <body>
-
-  <main class="project-page">
-
-    <section class="project-hero">
-      <div class="project-text">
-        <h1>„Magical World“ – „ზღაპრული სამყარო“</h1>
-        <p class="muted">A dreamlike world of golden light, harmony, and nature.</p>
-
-        <p class="project-paragraph geo">
-  ეს ნამუშევარი წარმოადგენს სამყაროს, სადაც სივრცე და სინათლე ქმნის მშვიდ და მედიტაციურ განწყობას. 
-
-ტექნიკაში გამოყენებულია ტექსტურული გელი, რაც ზედაპირს ანიჭებს რელიეფურობასა და ვიზუალურ სიღრმეს. ნამუშევარში დომინირებს თბილი ოქროსფერი განათება და პასტელური ტონალობა, რაც ქმნის სინაზის, ჰარმონიისა და ბუნებასთან შერწყმის განცდას.
-
-„Dream World“ გადმოსცემს თავისუფლებისა და სიმშვიდის ემოციას — სამყაროს, სადაც ბუნება, მოძრაობა და სინათლე ერთ მთლიან ისტორიად იქცევა.
-</p>
-
-
-<p class="project-paragraph eng">
-  This artwork presents a world where space and light create a calm, meditative atmosphere. 
-
-A textured gel technique is used to add relief and visual dimension to the surface. Warm golden light and pastel tones dominate the painting, creating a sense of tenderness, harmony, and unity with nature.
-
-“Dream World” conveys an emotion of freedom and tranquility — a world where nature, movement, and light become one complete story.
-</p>
-
-        <ul class="project-details">
-          <li><strong>Technique:</strong> Acrylic </li>
-          <li><strong>Size:</strong> 80x100 cm</li>
-          <li><strong>Year:</strong> 2025</li>
-        </ul>
-
-        <a class="link back-link" href="index.html">← Back</a>
-      </div>
-
-      <div class="project-image">
-        <img src="./images/me3.webp" alt="Magical World original acrylic painting by Nini Mzhavia" decoding="async" loading="lazy">
-      </div>
-    </section>
-
-    <section class="project-gallery">
-      <h2>More photos</h2>
-
-      <div class="gallery-list">
-        <img src="./images/dream9.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/dream3.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/dream4.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/dream5.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/dream6.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/dream7.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/dream10.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/dream2.webp" alt="" decoding="async" loading="lazy">
-        <img src="images/dream8.webp" alt="" decoding="async" loading="lazy">
-      
-        
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ✅ LIGHTBOX (აქ უნდა იყოს ერთხელ და მხოლოდ body-ში) -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-    <span class="close" id="lightboxClose" aria-label="Close lightbox">&times;</span>
-    <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
-  </div>
-
-  <!-- ✅ SCRIPT (უნდა იყოს ბოლოში) -->
-  <script>
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImg = document.getElementById("lightboxImg");
-    const closeBtn = document.getElementById("lightboxClose");
-
-    // Open lightbox
-    function openLightbox(imgSrc) {
-      lightbox.classList.add("open");
-      lightboxImg.src = imgSrc;
-      document.body.style.overflow = "hidden"; // Prevent body scroll
-      lightbox.setAttribute("aria-hidden", "false");
-      closeBtn.focus(); // Focus on close button for accessibility
-    }
-
-    // Close lightbox
-    function closeLightbox() {
-      lightbox.classList.remove("open");
-      document.body.style.overflow = ""; // Restore body scroll
-      lightbox.setAttribute("aria-hidden", "true");
-    }
-
-    // Add click event to all gallery images
-    document.querySelectorAll(".gallery-list img").forEach(img => {
-      img.addEventListener("click", () => {
-        openLightbox(img.src);
-      });
-    });
-
-    // Close button click
-    closeBtn.addEventListener("click", closeLightbox);
-
-    // Click outside image to close
-    lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox) {
-        closeLightbox();
-      }
-    });
-
-    // Escape key to close
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && lightbox.classList.contains("open")) {
-        closeLightbox();
-      }
-    });
-  </script>
-
+  <p style="font-family:system-ui,sans-serif;padding:2rem;">
+    This page moved to
+    <a href="https://ninartvision.store/products/magical-world/">https://ninartvision.store/products/magical-world/</a>.
+  </p>
 </body>
 </html>

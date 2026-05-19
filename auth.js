@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
   userInfo = document.getElementById('userInfo');
   userAvatar = document.getElementById('userAvatar');
   userName = document.getElementById('userName');
+  const homeGoogleSignIn = document.getElementById('homeGoogleSignIn');
 
   // Event Listeners
   if (signInBtn) {
@@ -50,6 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (loginBtn) {
     loginBtn.addEventListener('click', signInWithGoogle);
+  }
+
+  if (homeGoogleSignIn) {
+    homeGoogleSignIn.addEventListener('click', signInWithGoogle);
+    if (firebaseConfig) {
+      homeGoogleSignIn.style.display = 'inline-block';
+    }
   }
   
   if (logoutBtn) {
