@@ -142,16 +142,16 @@
     .social-icons .soc[aria-label="Facebook"] svg{fill:#1877F2}
     .social-icons .soc[aria-label="Instagram"] svg{fill:#E4405F}
     .social-icons .soc[aria-label="WhatsApp"] svg{fill:#25D366}
-    @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.header .container.header-row{display:grid;grid-template-columns:minmax(0,.88fr) auto minmax(0,1.38fr);align-items:center;justify-content:unset;flex-wrap:nowrap;column-gap:10px;min-height:64px;padding:12px 0}.header .container.header-row>.brand{grid-column:2;justify-self:center;align-self:center;margin:7px 0 0;max-width:min(148px,48vw);transform:translateX(-12px)}.header .container.header-row>.brand img{max-height:32px;width:auto;height:auto;max-width:100%}.header .container.header-row>.header-tools,.header .container.header-row>.header-mobile-actions{grid-column:3;justify-self:end;display:flex;align-items:center;gap:10px;margin:0}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{width:min(880px,calc(100% - 132px));max-width:min(880px,calc(100% - 132px));min-width:min(220px,calc(100% - 132px));padding:10px 20px 10px 16px;gap:12px;min-height:46px}.search-icon svg{width:20px;height:20px}.search-input{font-size:14px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
-    @media(max-width:600px){.header .container.header-row{min-height:58px;padding:10px 0}.header .container.header-row>.brand{max-width:min(132px,44vw);transform:translateX(-10px)}.header .container.header-row>.brand img{max-height:28px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{width:min(100%,calc(100% - 118px));max-width:min(100%,calc(100% - 118px));min-width:min(140px,calc(100% - 118px));min-height:46px;padding:10px 16px 10px 14px;gap:11px}.search-icon svg{width:19px;height:19px}.search-input{font-size:13px}.search-social-row{gap:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
+    @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.header .container.header-row{display:grid;grid-template-columns:1fr auto;grid-template-areas:"logo tools";align-items:center;justify-content:unset;flex-wrap:nowrap;column-gap:12px;min-height:64px;padding:12px 0}.header .container.header-row>.desktop-nav{display:none!important}.header .container.header-row>.brand{grid-area:logo;grid-column:1;justify-self:start;align-self:center;margin:7px 0 0;margin-left:clamp(10px,3.5vw,18px);max-width:min(160px,52vw)}.header .container.header-row>.brand img{max-height:32px;width:auto;height:auto;max-width:100%}.header .container.header-row>.header-tools,.header .container.header-row>.header-mobile-actions{grid-area:tools;grid-column:2;justify-self:end;display:flex;align-items:center;gap:10px;margin:0;margin-right:clamp(2px,1vw,6px)}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{width:min(880px,calc(100% - 132px));max-width:min(880px,calc(100% - 132px));min-width:min(220px,calc(100% - 132px));padding:10px 20px 10px 16px;gap:12px;min-height:46px}.search-icon svg{width:20px;height:20px}.search-input{font-size:14px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
+    @media(max-width:600px){.header .container.header-row{min-height:58px;padding:10px 0}.header .container.header-row>.brand{margin-top:5px;margin-left:clamp(8px,3vw,14px);max-width:min(140px,48vw)}.header .container.header-row>.brand img{max-height:28px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{width:min(100%,calc(100% - 118px));max-width:min(100%,calc(100% - 118px));min-width:min(140px,calc(100% - 118px));min-height:46px;padding:10px 16px 10px 14px;gap:11px}.search-icon svg{width:19px;height:19px}.search-input{font-size:13px}.search-social-row{gap:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
     @media(min-width:900px){.hero-slider{height:82dvh;min-height:600px;max-height:950px}.hero-slider .slide{background-color:#fff}.hero-slider .slide img{object-fit:contain}.as-arrow{width:56px;height:56px;font-size:36px;background:rgba(255,255,255,.12)}.as-arrow.left{left:32px}.as-arrow.right{right:32px}}
     .site-footer{background:#111;color:#aaa;text-align:center;padding:28px 20px;font-size:13px;line-height:1.8}
     .site-footer a{color:#ccc;text-decoration:none}.site-footer a:hover{color:#fff;text-decoration:underline}
   </style>
 
   <!-- Full stylesheet loaded asynchronously (non-render-blocking) -->
-  <link rel="preload" href="./style.min.css?v=nv20260525" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="./style.min.css?v=nv20260525"></noscript>
+  <link rel="preload" href="./style.min.css?v=nv20260526" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="./style.min.css?v=nv20260526"></noscript>
 
   <!-- Scoped override: compact 6-item layout for the "Original Artworks" preview (#homeShopGrid) on this page only.
        Placed AFTER style.min.css so equal-specificity rules win source-order; uses !important only where global mobile rules already use it. -->
@@ -180,6 +180,44 @@
     @media (max-width:420px){
       #homeShopGrid{gap:6px!important}
       #homeShopGrid .shop-item img{height:170px}
+    }
+  </style>
+
+  <!-- Mobile header: logo left / tools right — after style.min so it always wins on homepage -->
+  <style id="nv-mobile-header">
+    @media (max-width:900px){
+      .header .container.header-row{
+        display:grid!important;
+        grid-template-columns:1fr auto!important;
+        grid-template-areas:"logo tools"!important;
+        align-items:center;
+        column-gap:12px;
+        min-height:64px;
+        padding:12px 0;
+      }
+      .header .container.header-row>.desktop-nav{display:none!important}
+      .header .container.header-row>.brand{
+        grid-area:logo!important;
+        grid-column:1!important;
+        justify-self:start!important;
+        margin:7px 0 0 clamp(10px,3.5vw,18px)!important;
+        max-width:min(160px,52vw);
+        transform:none!important;
+      }
+      .header .container.header-row>.brand img{max-height:32px;width:auto;height:auto}
+      .header .container.header-row>.header-tools,
+      .header .container.header-row>.header-mobile-actions{
+        grid-area:tools!important;
+        grid-column:2!important;
+        justify-self:end!important;
+        margin-right:clamp(2px,1vw,6px);
+        gap:10px;
+      }
+    }
+    @media (max-width:600px){
+      .header .container.header-row{min-height:58px;padding:10px 0}
+      .header .container.header-row>.brand{margin-top:5px;margin-left:clamp(8px,3vw,14px)!important;max-width:min(140px,48vw)}
+      .header .container.header-row>.brand img{max-height:28px}
     }
   </style>
 

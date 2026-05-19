@@ -8421,29 +8421,35 @@ svg { overflow: hidden; }
   .card { animation: none; }
 }
 
-/* ========== Mobile site header (single source — logo left-balanced, tools right) ========== */
+/* ========== Mobile site header (single source — logo LEFT, tools RIGHT) ========== */
 @media (max-width: 900px) {
   .header .container.header-row {
     display: grid;
-    grid-template-columns: minmax(0, 0.88fr) auto minmax(0, 1.38fr);
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "logo tools";
     align-items: center;
     justify-content: unset;
     flex-wrap: nowrap;
-    column-gap: 10px;
+    column-gap: 12px;
     row-gap: 0;
     min-height: 64px;
     padding: 12px 0;
   }
 
+  .header .container.header-row > .desktop-nav {
+    display: none !important;
+  }
+
   .header .container.header-row > .brand {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: center;
+    grid-area: logo;
+    grid-column: 1;
+    justify-self: start;
     align-self: center;
     margin: 7px 0 0;
+    margin-left: clamp(10px, 3.5vw, 18px);
     padding: 0;
-    max-width: min(148px, 48vw);
-    transform: translateX(-12px);
+    max-width: min(160px, 52vw);
+    transform: none;
   }
 
   .header .container.header-row > .brand img {
@@ -8456,11 +8462,12 @@ svg { overflow: hidden; }
 
   .header .container.header-row > .header-tools,
   .header .container.header-row > .header-mobile-actions {
-    grid-column: 3;
-    grid-row: 1;
+    grid-area: tools;
+    grid-column: 2;
     justify-self: end;
     align-self: center;
     margin: 0;
+    margin-right: clamp(2px, 1vw, 6px);
     gap: 10px;
   }
 }
@@ -8469,13 +8476,13 @@ svg { overflow: hidden; }
   .header .container.header-row {
     min-height: 58px;
     padding: 10px 0;
-    column-gap: 8px;
+    column-gap: 10px;
   }
 
   .header .container.header-row > .brand {
     margin-top: 5px;
-    max-width: min(132px, 44vw);
-    transform: translateX(-10px);
+    margin-left: clamp(8px, 3vw, 14px);
+    max-width: min(140px, 48vw);
   }
 
   .header .container.header-row > .brand img {
@@ -8485,11 +8492,5 @@ svg { overflow: hidden; }
   .header .container.header-row > .header-tools,
   .header .container.header-row > .header-mobile-actions {
     gap: 8px;
-  }
-}
-
-@media (max-width: 900px) and (prefers-reduced-motion: reduce) {
-  .header .container.header-row > .brand {
-    transform: translateX(-10px);
   }
 }
