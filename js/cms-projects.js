@@ -123,10 +123,7 @@ function sanitizeSanityImageUrl(u) {
     const track = document.getElementById('projectsTrack');
     if (!track) return;
 
-    track.classList.add('projects-track--swapping');
     track.innerHTML = projects.map(renderCard).join('\n');
-    track.classList.remove('projects-track--swapping');
-    track.classList.add('projects-track--ready');
 
     // Reset the slider to position 0 after the content swap.
     // The arrows in script.js still work because they read

@@ -111,11 +111,7 @@ function escapeHtml(s) {
     document.querySelectorAll('.news-list').forEach((container) => {
       const show = isHome ? posts.slice(0, 3) : posts;
       if (show.length > 0) {
-        container.classList.add('news-list--cms-swapping');
         container.innerHTML = show.map(renderPost).join('\n');
-        requestAnimationFrame(function () {
-          container.classList.remove('news-list--cms-swapping');
-        });
       }
     });
     if (typeof window.initNewsCardReveal === 'function') {

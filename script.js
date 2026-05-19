@@ -903,16 +903,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let slideIndex = 0;
 
   if (slides.length) {
-    const heroRoot = document.querySelector(".hero-slider");
-    const dotsContainer = document.getElementById("heroDots");
-    const prefersReducedMotion =
-      window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let autoplayTimer = null;
-    let autoplayStarted = false;
-    let autoplayPaused = false;
-    const AUTOPLAY_MS = 5000;
-
     /** Load deferred hero media when a slide becomes active (homepage LCP optimization). */
     function nvHydrateHeroSlide(slide) {
       if (!slide) return;
@@ -928,123 +918,30 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    function syncHeroDots() {
-      if (!dotsContainer) return;
-      const dots = dotsContainer.querySelectorAll(".hero-dot");
-      slides.forEach((s, i) => {
-        if (dots[i]) dots[i].classList.toggle("active", s.classList.contains("active"));
-      });
-    }
-
     function show(i) {
-      const n = ((i % slides.length) + slides.length) % slides.length;
-      const slide = slides[n];
-      nvHydrateHeroSlide(slide);
-      const preloadIdx = (n + 1) % slides.length;
-      if (preloadIdx !== n) nvHydrateHeroSlide(slides[preloadIdx]);
-
-      const img = slide?.querySelector("img");
-      const applyActive = () => {
-        slides.forEach(s => s.classList.remove("active"));
-        slide.classList.add("active");
-        slideIndex = n;
-        syncHeroDots();
-      };
-
-      if (img && !img.complete && img.getAttribute("src")) {
-        const onReady = () => {
-          img.removeEventListener("load", onReady);
-          img.removeEventListener("error", onReady);
-          applyActive();
-        };
-        img.addEventListener("load", onReady);
-        img.addEventListener("error", onReady);
-        return;
-      }
-      applyActive();
-    }
-
-    function buildHeroDots() {
-      if (!dotsContainer || dotsContainer.children.length) return;
-      slides.forEach((_, i) => {
-        const d = document.createElement("button");
-        d.type = "button";
-        d.className = "hero-dot" + (i === 0 ? " active" : "");
-        d.setAttribute("aria-label", "Slide " + (i + 1));
-        d.addEventListener("click", () => {
-          show(i);
-          resetAutoplay();
-        });
-        dotsContainer.appendChild(d);
-      });
-    }
-
-    function startAutoplay() {
-      if (prefersReducedMotion || autoplayStarted || !next) return;
-      autoplayStarted = true;
-      autoplayTimer = setInterval(() => {
-        if (!autoplayPaused) show(slideIndex + 1);
-      }, AUTOPLAY_MS);
-    }
-
-    function resetAutoplay() {
-      if (!autoplayStarted) return;
-      clearInterval(autoplayTimer);
-      autoplayTimer = null;
-      autoplayStarted = false;
-      startAutoplay();
-    }
-
-    function scheduleAutoplay() {
-      if (prefersReducedMotion) return;
-      let started = false;
-      const go = () => {
-        if (started) return;
-        started = true;
-        setTimeout(startAutoplay, 2500);
-      };
-      if ("PerformanceObserver" in window) {
-        try {
-          const po = new PerformanceObserver(() => {
-            go();
-            po.disconnect();
-          });
-          po.observe({ type: "largest-contentful-paint", buffered: true });
-        } catch (e) { /* ignore */ }
-      }
-      window.addEventListener("load", () => setTimeout(go, 5000), { once: true });
-      setTimeout(go, 8000);
+      slides.forEach(s => s.classList.remove("active"));
+      slides[i].classList.add("active");
+      slideIndex = i;
+      nvHydrateHeroSlide(slides[i]);
+      const nextIdx = (i + 1) % slides.length;
+      if (nextIdx !== i) nvHydrateHeroSlide(slides[nextIdx]);
     }
 
     nvHydrateHeroSlide(slides[0]);
-    buildHeroDots();
-    syncHeroDots();
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        heroRoot?.classList.add("hero-slider--ready");
-      });
-    });
+    /** Direct slide index (used by homepage hero pagination dots; keeps slideIndex in sync). */
+    window.__nvHeroGoTo = function (idx) {
+      if (typeof idx !== "number" || !slides.length) return;
+      const n = ((idx % slides.length) + slides.length) % slides.length;
+      show(n);
+    };
 
-    window.__nvHeroGoTo = show;
-
-    prev?.addEventListener("click", () => {
-      show(slideIndex - 1);
-      resetAutoplay();
-    });
-    next?.addEventListener("click", () => {
-      show(slideIndex + 1);
-      resetAutoplay();
-    });
-
-    if (heroRoot) {
-      heroRoot.addEventListener("mouseenter", () => { autoplayPaused = true; });
-      heroRoot.addEventListener("mouseleave", () => { autoplayPaused = false; });
-      heroRoot.addEventListener("touchstart", () => { autoplayPaused = true; }, { passive: true });
-      heroRoot.addEventListener("touchend", () => { autoplayPaused = false; });
-    }
-
-    scheduleAutoplay();
+    prev?.addEventListener("click", () =>
+      show((slideIndex - 1 + slides.length) % slides.length)
+    );
+    next?.addEventListener("click", () =>
+      show((slideIndex + 1) % slides.length)
+    );
   }
 
   /* =========================
