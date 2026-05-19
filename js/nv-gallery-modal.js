@@ -163,7 +163,7 @@
       this._bindShopGrids();
 
       global.openProductModal = item => this.openFromShopItem(item);
-      global.nvWhatsAppCartFromShopItem = (item, opts) => this.whatsAppFromShopItem(item, opts);
+      global.nvWhatsAppCartFromShopItem = (item, opts) => this.addToCartFromShopItem(item, opts);
       global.initShopItems = () => this.bindShopGrids();
 
       this._inited = true;
@@ -479,50 +479,6 @@
         global.nvCart.addFromShopItem(item, options);
         global.nvCart.open();
         this.close();
-        return;
-      }
-
-      this.whatsAppFromShopItem(item, options);
-    },
-
-    whatsAppFromShopItem(item, options = {}) {
-      if (!item) return;
-      const sold =
-        String(item.dataset?.isSold || '').toLowerCase() === 'true' ||
-        String(item.dataset?.status || '').toLowerCase().trim() === 'sold';
-      if (sold) return;
-
-      const giftPackaging = Boolean(options.giftPackaging);
-      const frameSelection = Boolean(options.frameSelection);
-      const courierDelivery = Boolean(options.courierDelivery);
-
-      const title = item.dataset.title || '';
-      const price = fmtPrice(item.dataset.price);
-      const artistId = item.dataset.artist || '';
-      const artist = resolveArtist(artistId);
-      const artistName = item.dataset.artistName || artist?.name || '';
-      const phone = artist?.whatsapp || '995579388833';
-
-      if (typeof global.trackWhatsAppClick === 'function') {
-        global.trackWhatsAppClick(artistName, 'cart');
-      }
-
-      const rawSlug = item.dataset.slug || slugify(title);
-      const productUrl = rawSlug
-        ? `https://ninartvision.store/products/${rawSlug}/`
-        : global.location.href;
-
-      const frameLine = frameSelection ? '\nჩარჩო: დიახ (+ 50 ₾)' : '';
-      const giftLine = giftPackaging ? '\nსასაჩუქრე შეფუთვა: დიახ (+ 10 ₾)' : '';
-      const courierLine = courierDelivery ? '\nსაკურიერო მომსახურება: დიახ (+ 5 ₾)' : '';
-
-      const msg = encodeURIComponent(
-        `გამარჯობა, მაინტერესებს ნახატი: ${title}, ავტორი ${artistName}, ფასი ${price}${frameLine}${giftLine}${courierLine}\n${productUrl}`
-      );
-
-      global.open(`https://wa.me/${phone}?text=${msg}`, '_blank', 'noopener');
-      if (typeof global.nvIncrementCartCount === 'function') {
-        global.nvIncrementCartCount(1);
       }
     },
 

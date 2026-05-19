@@ -79,6 +79,62 @@
     return img?.currentSrc || img?.src || '';
   }
 
+  function slugFromPath() {
+    const m = String(global.location?.pathname || '').match(/\/products\/([^/]+)\/?/);
+    return m ? m[1] : '';
+  }
+
+  function parseProductPageLayout(layout) {
+    const root = layout || document.querySelector('section .product-layout');
+    if (!root) return null;
+    const right = root.querySelector('.product-right') || root;
+    const h1 = right.querySelector('h1');
+    const title = (h1?.textContent || '').trim();
+    const priceEl = right.querySelector('.product-price');
+    const mainImg = root.querySelector('#mainImg');
+    const sizeLi = [...right.querySelectorAll('.product-info li')].find(li =>
+      /^\s*size\s*:/i.test(li.textContent || '')
+    );
+    const size = sizeLi
+      ? String(sizeLi.textContent || '')
+          .replace(/^\s*size\s*:\s*/i, '')
+          .trim()
+      : '';
+    const artistEl = right.querySelector('p.muted');
+    const artistName = artistEl
+      ? String(artistEl.textContent || '')
+          .replace(/^\s*by\s+/i, '')
+          .trim()
+      : '';
+    const slug = slugFromPath();
+    return {
+      id: slug || itemIdFromDataset({ slug, title }),
+      title,
+      price: parsePriceNum(priceEl?.textContent),
+      size,
+      image: mainImg?.currentSrc || mainImg?.src || '',
+      slug,
+      artistName,
+      artistId: '',
+    };
+  }
+
+  function productPageAddonOptions() {
+    return {
+      frameSelection: Boolean(document.getElementById('frameSelectionToggle')?.checked),
+      giftPackaging: Boolean(document.getElementById('giftPackagingToggle')?.checked),
+      courierDelivery: Boolean(document.getElementById('courierDeliveryToggle')?.checked),
+    };
+  }
+
+  function isStaticProductPage() {
+    return (
+      /\/products\//.test(String(global.location?.pathname || '')) &&
+      Boolean(document.querySelector('section .product-layout')) &&
+      !document.getElementById('productModal')
+    );
+  }
+
   let root = null;
   let bodyEl = null;
   let subtotalEl = null;
@@ -289,25 +345,79 @@
     writeItems(list);
   }
 
+  function addFromProductPage(layout, options = {}) {
+    const data = parseProductPageLayout(layout);
+    if (!data?.title) return;
+    if (layout?.querySelector?.('.status.sold')) return;
+
+    const addons = {
+      frame: Boolean(options.frameSelection),
+      gift: Boolean(options.giftPackaging),
+      courier: Boolean(options.courierDelivery),
+    };
+
+    const list = readItems();
+    let item = list.find(i => i.id === data.id);
+    if (item) {
+      item.qty = (item.qty || 1) + 1;
+      if (addons.frame) item.addons = { ...item.addons, frame: true };
+      if (addons.gift) item.addons = { ...item.addons, gift: true };
+      if (addons.courier) item.addons = { ...item.addons, courier: true };
+    } else {
+      item = { ...data, qty: 1, addons };
+      list.push(item);
+    }
+    writeItems(list);
+  }
+
+  let productPageCartBound = false;
+
+  function bindProductPageCart() {
+    if (productPageCartBound || !isStaticProductPage()) return;
+    productPageCartBound = true;
+
+    const layout = document.querySelector('section .product-layout');
+    if (!layout || layout.querySelector('.status.sold')) return;
+
+    const onAdd = e => {
+      e.preventDefault();
+      e.stopPropagation();
+      addFromProductPage(layout, productPageAddonOptions());
+      open();
+    };
+
+    const addBtn = document.getElementById('addToCartBtn');
+    if (addBtn && !addBtn.closest('#productModal')) {
+      addBtn.addEventListener('click', onAdd);
+      return;
+    }
+
+    const waBtn = layout.querySelector('.product-buy a[href*="wa.me"]');
+    if (waBtn) {
+      waBtn.setAttribute('href', '#');
+      waBtn.addEventListener('click', onAdd);
+    }
+  }
+
+  function formatCartLine(it, index) {
+    const addonStr = addonLabels(it).join(', ');
+    const url = it.slug ? 'https://ninartvision.store/products/' + it.slug + '/' : '';
+    const parts = [
+      index + 1 + '. ' + (it.title || 'Artwork'),
+      it.size ? 'ზომა: ' + it.size : '',
+      'რაოდენობა: ' + (it.qty || 1),
+      'ფასი: ' + fmtGel(lineTotal(it)),
+      addonStr ? 'დამატებები: ' + addonStr : '',
+      url || '',
+    ];
+    return parts.filter(Boolean).join('\n');
+  }
+
   function buildOrderMessage(prefix) {
     const items = readItems();
     if (!items.length) return '';
-    const lines = items.map((it, i) => {
-      const addonStr = addonLabels(it).join(', ');
-      const url = it.slug ? 'https://ninartvision.store/products/' + it.slug + '/' : '';
-      return (
-        (i + 1) +
-        '. ' +
-        (it.title || 'Artwork') +
-        ' ×' +
-        (it.qty || 1) +
-        ' — ' +
-        fmtGel(lineTotal(it)) +
-        (addonStr ? ' (' + addonStr + ')' : '') +
-        (url ? '\n   ' + url : '')
-      );
-    });
-    return prefix + '\n\n' + lines.join('\n') + '\n\nჯამი: ' + fmtGel(cartSubtotal(items));
+    const lines = items.map((it, i) => formatCartLine(it, i));
+    return prefix + '\n\n' + lines.join('\n\n') + '\n\nჯამი: ' + fmtGel(cartSubtotal(items));
   }
 
   function checkoutWhatsApp() {
@@ -341,12 +451,14 @@
   function init() {
     mount();
     bindEvents();
+    bindProductPageCart();
     render();
     if (typeof global.nvSyncCartBadges === 'function') global.nvSyncCartBadges();
   }
 
   global.nvCart = {
     addFromShopItem,
+    addFromProductPage,
     open,
     close,
     render,
