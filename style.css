@@ -7294,24 +7294,103 @@ a.pill:visited{
   opacity: 0.9;
 }
 
-/* ===================== */
-/* 📱 MOBILE VERSION */
-/* ===================== */
+/* Collector account — mobile card layout (desktop unchanged) */
 @media (max-width: 768px) {
-  .login-wrapper {
+  #login.section-gray {
+    padding: clamp(28px, 6vw, 40px) 0;
+  }
+
+  #login .collector-account.login-wrapper {
     flex-direction: column;
-    align-items: center;
-    gap: 30px;
+    align-items: stretch;
+    gap: 0;
+    max-width: min(400px, 100%);
+    margin-inline: auto;
+    padding: 18px 16px 20px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 4px 22px rgba(42, 38, 34, 0.07);
   }
 
-  .login-left {
-    max-width: 100%;
-  }
-
-  .login-image {
-    width: 260px;       /* პატარა ზომა მობილურზე */
-    height: 160px;
+  #login .collector-account__art.login-image {
+    order: -1;
+    width: min(300px, 82vw);
+    height: clamp(168px, 38vw, 210px);
+    margin: 0 auto 12px;
+    flex-shrink: 0;
+    background-size: contain;
+    background-position: center center;
     opacity: 1;
+  }
+
+  #login .collector-account__body.login-left {
+    max-width: none;
+    text-align: center;
+  }
+
+  #login .collector-account__head.section-top {
+    margin-bottom: 10px;
+  }
+
+  #login .collector-account__head h2 {
+    font-size: 22px;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  #login .collector-account__desc {
+    font-size: 14px;
+    line-height: 1.45;
+    margin: 0;
+    max-width: 34ch;
+    margin-inline: auto;
+  }
+
+  #login .collector-account__cta-wrap {
+    margin: 14px 0 0;
+    padding: 0;
+  }
+
+  #login .collector-account__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 280px;
+    margin-inline: auto;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #fff;
+    text-decoration: none;
+    background: #111;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #login .collector-account__cta:hover,
+  #login .collector-account__cta:focus-visible {
+    color: #fff;
+    background: #222;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  }
+}
+
+@media (max-width: 420px) {
+  #login .collector-account__art.login-image {
+    display: none;
+  }
+
+  #login .collector-account.login-wrapper {
+    padding: 16px 14px 18px;
+  }
+
+  #login .collector-account__desc {
+    max-width: none;
   }
 }
 /* Artists title + small art */
