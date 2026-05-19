@@ -23,6 +23,7 @@
   <meta name="twitter:image" content="https://ninartvision.store/images/og-image.png">
 
   <link rel="stylesheet" href="./style.min.css" />
+  <link rel="icon" href="./images/favicon.webp">
 
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-1H7SY0J2EB"></script>
@@ -40,21 +41,56 @@
 </head>
 
 <body>
-  <header class="header">
-    <div class="container nav">
-      <a class="logo" href="index.html">Ninart Vision</a>
 
-      <nav class="menu">
-        <a href="index.html">მთავარი</a>
-        <a href="gallery.html" class="active">გალერეა</a>
-        <a href="room-visualizer.html">შენი კედელი</a>
+  <header class="header">
+    <div class="container header-row">
+
+      <a class="brand" href="./">
+        <img src="./images/logo.webp" alt="Ninart Vision Logo">
+      </a>
+
+      <nav class="nav desktop-nav" aria-label="Main navigation">
+        <a href="./">Home</a>
+        <a href="support.html">Support a Project</a>
         <a href="sale/shop.html">Shop</a>
+        <a href="room-visualizer.html">Room preview</a>
+        <a href="artists/">Artists</a>
+        <a href="news.html">News</a>
+        <a href="about.html">About</a>
       </nav>
+
+      <div class="header-tools">
+        <a href="sale/shop.html" class="header-cart" aria-label="Shopping cart">
+          <span class="header-cart__surface">
+            <svg class="header-cart__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="18" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.73L23 6H6"/></svg>
+          </span>
+          <span class="header-cart__badge is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span>
+        </a>
+
+        <button class="hamburger" id="openMenu" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
     </div>
   </header>
 
+  <div class="menu-overlay" id="menuOverlay">
+    <button class="menu-close" id="closeMenu" aria-label="Close menu">✕</button>
+
+    <nav class="menu-links" aria-label="Mobile navigation">
+      <a href="./" class="menu-link">HOME</a>
+      <a href="support.html" class="menu-link">SUPPORT A PROJECT</a>
+      <a href="sale/shop.html" class="menu-link">SHOP</a>
+      <a href="room-visualizer.html" class="menu-link">ROOM PREVIEW</a>
+      <a href="artists/" class="menu-link">ARTISTS</a>
+      <a href="news.html" class="menu-link">NEWS</a>
+      <a href="about.html" class="menu-link">ABOUT</a>
+    </nav>
+  </div>
+
   <main>
-    <section class="section">
+    <section class="section" style="padding-top: clamp(88px, 18vw, 108px);">
       <div class="container">
         <h1 class="page-title">გალერეა</h1>
         <p class="muted">
@@ -89,14 +125,13 @@
     </div>
   </footer>
 
-    <script>
+  <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
   <script defer src="./sanity-client.min.js?v=nv20260213"></script>
   <script defer src="./data.min.js?v=nv20260213"></script>
   <script defer src="./gallery.min.js?v=nv20260213"></script>
-  <script defer src="./script.min.js?v=nv20260518"></script>
+  <script defer src="./script.min.js?v=nv20260524"></script>
 </body>
 </html>
-
