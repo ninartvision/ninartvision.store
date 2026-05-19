@@ -85,7 +85,9 @@
   <!-- Preload only the exact LCP image candidate to avoid duplicate downloads -->
   <link rel="preload" as="image" href="./images/garden9.avif" type="image/avif" fetchpriority="high">
 
-  <!-- Critical above-the-fold CSS inlined to prevent FOUC while full CSS loads async -->
+  <script src="./js/nv-boot.js"></script>
+
+  <!-- Critical above-the-fold CSS inlined to prevent FOUC while full CSS loads -->
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     html{overflow-x:hidden;max-width:100%;scroll-behavior:auto;-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -103,20 +105,23 @@
     .nav-btn{padding:10px 14px;border:1px solid rgba(0,0,0,.2);border-radius:12px;background:transparent;color:#111;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s ease;text-decoration:none}
     .hamburger{width:44px;height:44px;background:transparent;border:none;cursor:pointer;display:none;flex-direction:column;justify-content:center;gap:6px}
     .hamburger span{width:26px;height:2px;background:#111;border-radius:6px}
-    .hero-slider{position:relative;width:100%;height:70dvh;min-height:500px;max-height:750px;overflow:hidden;background:#f5f5f5;margin-top:0}
+    .hero-slider{position:relative;width:100%;height:clamp(420px,78dvh,880px);min-height:400px;max-height:min(88dvh,900px);overflow:hidden;background:#f5f5f5;margin-top:0}
     .hero-slider .hero-slides,.hero-slider .slides{position:absolute;inset:0;width:100%;height:100%}
-    .hero-slider .slide{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;background-color:#f5f5f5;opacity:0;transition:opacity .4s ease-in-out}
-    .hero-slider .slide.active{opacity:1}
-    .hero-slider .slide img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;background:#f5f5f5}
+    .hero-slider .slide{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:12px 50px 48px;overflow:visible;background-color:#f5f5f5;opacity:0;transition:none}
+    .hero-slider .slide.active{opacity:1;visibility:visible}
+    .hero-slider .slide:not(.active){visibility:hidden;pointer-events:none}
+    .hero-slider .slide picture{display:flex;align-items:center;justify-content:center;width:100%;height:100%;max-width:100%;max-height:100%;margin:0 auto}
+    .hero-slider .slide img{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;object-position:center;display:block;background:transparent}
     .hero-slider .slide:not(.active) img:not([src]){visibility:hidden}
+    .hero-slider .hero-dots{min-height:14px}
     .hero-slider .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15),rgba(0,0,0,.25));z-index:2;pointer-events:none}
     .hero-slider .hero-inner{position:relative;z-index:3;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;padding:40px 20px}
     .hero-slider .hero-content{width:100%;max-width:100%}
     .hero-slider .hero-content h1{font-size:clamp(26px,6.5vw,42px);font-weight:700;line-height:1.2;margin:0 0 20px;text-shadow:0 3px 15px rgba(0,0,0,.5)}
     .hero-slider .hero-content p{font-size:clamp(14px,3.5vw,17px);line-height:1.6;max-width:90%;margin:0 auto;opacity:.95;text-shadow:0 2px 10px rgba(0,0,0,.6)}
-    .as-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;border:none;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);width:44px;height:44px;border-radius:50%;font-size:28px;font-weight:300;color:#fff;cursor:pointer;opacity:.85;display:flex;align-items:center;justify-content:center;transition:all .3s ease}
-    .as-arrow.left{left:12px}
-    .as-arrow.right{right:12px}
+    .as-arrow{position:absolute;top:auto;bottom:max(54px,3.35rem);transform:none;z-index:10;border:none;background:rgba(255,255,255,.94);box-shadow:0 2px 14px rgba(42,38,34,.14);width:38px;height:38px;border-radius:50%;font-size:24px;font-weight:300;color:#2a2620;cursor:pointer;opacity:1;display:flex;align-items:center;justify-content:center;transition:background .3s ease,box-shadow .3s ease}
+    .as-arrow.left{left:8px}
+    .as-arrow.right{right:8px}
     .hero-slider .hero-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:max(14px,1.25rem);z-index:8;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;max-width:min(96%,calc(100% - 120px));pointer-events:none}
     .hero-slider .hero-dot{pointer-events:auto;width:6px;height:6px;padding:0;border:none;border-radius:50%;background:rgba(255,255,255,.5);box-shadow:0 0 0 1px rgba(0,0,0,.18);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .hero-slider .hero-dot.active{background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.22),0 2px 10px rgba(0,0,0,.2);transform:scale(1.35)}
@@ -143,15 +148,15 @@
     .social-icons .soc[aria-label="Instagram"] svg{fill:#E4405F}
     .social-icons .soc[aria-label="WhatsApp"] svg{fill:#25D366}
     @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{width:min(880px,calc(100% - 132px));max-width:min(880px,calc(100% - 132px));min-width:min(220px,calc(100% - 132px));padding:10px 20px 10px 16px;gap:12px;min-height:46px}.search-icon svg{width:20px;height:20px}.search-input{font-size:14px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
-    @media(max-width:600px){.header-row{min-height:64px;padding:10px 0}.brand img{height:36px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{width:min(100%,calc(100% - 118px));max-width:min(100%,calc(100% - 118px));min-width:min(140px,calc(100% - 118px));min-height:46px;padding:10px 16px 10px 14px;gap:11px}.search-icon svg{width:19px;height:19px}.search-input{font-size:13px}.search-social-row{gap:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
-    @media(min-width:900px){.hero-slider{height:82dvh;min-height:600px;max-height:950px}.hero-slider .slide{background-color:#fff}.hero-slider .slide img{object-fit:contain}.as-arrow{width:56px;height:56px;font-size:36px;background:rgba(255,255,255,.12)}.as-arrow.left{left:32px}.as-arrow.right{right:32px}}
+    @media(max-width:600px){.header-row{min-height:64px;padding:10px 0}.brand img{height:36px}.hero-slider{height:clamp(400px,76dvh,820px);min-height:380px}.hero-slider .slide{padding:10px 46px 44px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{width:min(100%,calc(100% - 118px));max-width:min(100%,calc(100% - 118px));min-width:min(140px,calc(100% - 118px));min-height:46px;padding:10px 16px 10px 14px;gap:11px}.search-icon svg{width:19px;height:19px}.search-input{font-size:13px}.search-social-row{gap:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
+    @media(min-width:900px){.hero-slider{height:82dvh;min-height:600px;max-height:950px}.hero-slider .slide{background-color:#fff;padding:16px 64px 52px}.hero-slider .slide img{object-fit:contain;object-position:center}.as-arrow{top:50%;bottom:auto;transform:translateY(-50%);width:56px;height:56px;font-size:36px;color:#fff;background:rgba(255,255,255,.12);box-shadow:none}.as-arrow.left{left:32px}.as-arrow.right{right:32px}}
     .site-footer{background:#111;color:#aaa;text-align:center;padding:28px 20px;font-size:13px;line-height:1.8}
     .site-footer a{color:#ccc;text-decoration:none}.site-footer a:hover{color:#fff;text-decoration:underline}
   </style>
 
-  <!-- Full stylesheet loaded asynchronously (non-render-blocking) -->
-  <link rel="preload" href="./style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="./style.min.css"></noscript>
+  <!-- Full stylesheet — synchronous to prevent section/layout FOUC (nv-stable.css layers on top) -->
+  <link rel="stylesheet" href="./style.min.css?v=nv20260521">
+  <link rel="stylesheet" href="./css/nv-stable.css?v=nv20260521">
 
   <!-- Scoped override: compact 6-item layout for the "Original Artworks" preview (#homeShopGrid) on this page only.
        Placed AFTER style.min.css so equal-specificity rules win source-order; uses !important only where global mobile rules already use it. -->
@@ -987,7 +992,7 @@
   </footer>
 
 <!-- Critical runtime first (menu, hero, modal, search) -->
-<script defer src="./script.min.js?v=nv20260519"></script>
+<script defer src="./script.min.js?v=nv20260520"></script>
 <script defer src="./js/editorial-rule.min.js?v=nv20260215"></script>
 
 <!-- Load non-critical modules after first paint/idle -->
@@ -1083,116 +1088,5 @@
     }
   </script>
 
-  <!-- Hero cinematic: dots, click-nav, autoplay -->
-  <script>
-  (function () {
-    function initHero() {
-      var slides    = document.querySelectorAll('.hero-slides .slide');
-      var container = document.getElementById('heroDots');
-      var prevBtn   = document.getElementById('prevSlide');
-      var nextBtn   = document.getElementById('nextSlide');
-      if (!slides.length || !container || !nextBtn || !prevBtn) return;
-
-      /* Build dot buttons */
-      slides.forEach(function (_, i) {
-        var d = document.createElement('button');
-        d.className  = 'hero-dot' + (i === 0 ? ' active' : '');
-        d.type       = 'button';
-        d.setAttribute('aria-label', 'Slide ' + (i + 1));
-        container.appendChild(d);
-      });
-
-      /* Keep dots in sync with the slider active class */
-      if ('MutationObserver' in window) {
-        var obs = new MutationObserver(function () {
-          var dots = container.querySelectorAll('.hero-dot');
-          slides.forEach(function (s, i) {
-            dots[i].classList.toggle('active', s.classList.contains('active'));
-          });
-        });
-        slides.forEach(function (s) {
-          obs.observe(s, { attributes: true, attributeFilter: ['class'] });
-        });
-      }
-
-      /* Autoplay — delayed until after LCP so the first slide stays the LCP element */
-      var INTERVAL = 5000;
-      var timer    = null;
-      var paused   = false;
-      var autoplayStarted = false;
-
-      function tick()  { if (!paused) nextBtn.click(); }
-      function start() {
-        if (autoplayStarted) return;
-        autoplayStarted = true;
-        if (!timer) timer = setInterval(tick, INTERVAL);
-      }
-      function reset() {
-        if (!autoplayStarted) return;
-        clearInterval(timer);
-        timer = null;
-        start();
-      }
-
-      function scheduleAutoplay() {
-        var fallbackMs = 8000;
-        var started = false;
-        function go() {
-          if (started) return;
-          started = true;
-          setTimeout(start, 2500);
-        }
-        if ('PerformanceObserver' in window) {
-          try {
-            var po = new PerformanceObserver(function () { go(); po.disconnect(); });
-            po.observe({ type: 'largest-contentful-paint', buffered: true });
-          } catch (e) { /* ignore */ }
-        }
-        window.addEventListener('load', function () { setTimeout(go, 5000); }, { once: true });
-        setTimeout(go, fallbackMs);
-      }
-
-      /* Dot click: jump to slide in one step (same opacity transition as arrows) */
-      var dots = container.querySelectorAll('.hero-dot');
-      dots.forEach(function (dot, i) {
-        dot.addEventListener('click', function () {
-          if (typeof window.__nvHeroGoTo === 'function') {
-            window.__nvHeroGoTo(i);
-          } else {
-            var current = 0;
-            slides.forEach(function (s, idx) {
-              if (s.classList.contains('active')) current = idx;
-            });
-            var diff = i - current;
-            if (diff === 0) return;
-            var btn = diff > 0 ? nextBtn : prevBtn;
-            for (var x = 0; x < Math.abs(diff); x++) btn.click();
-          }
-          reset();
-        });
-      });
-
-      scheduleAutoplay();
-
-      var slider = document.querySelector('.hero-slider');
-      if (slider) {
-        slider.addEventListener('mouseenter', function () { paused = true; });
-        slider.addEventListener('mouseleave', function () { paused = false; });
-        slider.addEventListener('touchstart', function () { paused = true; }, { passive: true });
-        slider.addEventListener('touchend',   function () { paused = false; });
-      }
-
-      [prevBtn, nextBtn].forEach(function (btn) {
-        btn.addEventListener('click', reset);
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initHero);
-    } else {
-      initHero();
-    }
-  }());
-  </script>
 </body>
 </html>

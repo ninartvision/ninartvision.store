@@ -178,6 +178,7 @@ async function initHomeShopPreview() {
 
     // Single DOM mutation — replaces all children atomically
     grid.replaceChildren(frag);
+    grid.classList.add('home-shop-grid--ready');
 
     if (window.initShopItems) window.initShopItems();
     if (window.applyHomeSearch) window.applyHomeSearch();
@@ -256,19 +257,8 @@ async function initHomeShopPreview() {
     section.style.display = 'block';
   }
 
-  // Initial render and auto-rotation
+  // Initial render only — no auto-shuffle (was causing visible grid flicker every 5s)
   render();
-
-  // Pause rotation when the page tab is not visible (saves CPU/battery)
-  let rotationInterval = setInterval(render, 5000);
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      clearInterval(rotationInterval);
-      rotationInterval = null;
-    } else if (!rotationInterval) {
-      rotationInterval = setInterval(render, 5000);
-    }
-  });
 
   // Filter button handlers
   buttons.forEach(btn => {

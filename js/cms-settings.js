@@ -139,10 +139,14 @@ function isSafeContactEmail(raw) {
 
     // ── Homepage cloth banner ───────────────────────────────────
     const bannerKa = document.querySelector('.cloth-banner-text .ka');
-    if (bannerKa && s.clothBannerKa) bannerKa.textContent = s.clothBannerKa;
+    if (bannerKa && s.clothBannerKa && bannerKa.textContent.trim() !== String(s.clothBannerKa).trim()) {
+      bannerKa.textContent = s.clothBannerKa;
+    }
 
     const bannerEn = document.querySelector('.cloth-banner-text .en');
-    if (bannerEn && s.clothBannerEn) bannerEn.textContent = s.clothBannerEn;
+    if (bannerEn && s.clothBannerEn && bannerEn.textContent.trim() !== String(s.clothBannerEn).trim()) {
+      bannerEn.textContent = s.clothBannerEn;
+    }
 
     // ── Mission section ─────────────────────────────────────────
     if (s.missionTitle) {
