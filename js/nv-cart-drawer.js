@@ -166,17 +166,15 @@
       '<span class="nv-cart-drawer__subtotal-val" id="nvCartSubtotal">₾0</span>' +
       '</div>' +
       '<div class="nv-cart-drawer__banks">' +
-      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--bog" id="nvCartPayBog">' +
+      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--bog" id="nvCartPayBog" aria-label="საქართველოს ბანკი">' +
       '<span class="nv-cart-drawer__bank-logo">' +
-      '<img src="/images/nv-logo-bog.png" alt="საქართველოს ბანკი" width="128" height="36" loading="lazy" decoding="async">' +
+      '<img src="/images/nv-logo-bog.png" alt="საქართველოს ბანკი" width="140" height="40" loading="lazy" decoding="async">' +
       '</span>' +
-      '<span class="nv-cart-drawer__bank-name">საქართველოს ბანკი</span>' +
       '</button>' +
-      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--tbc" id="nvCartPayTbc">' +
+      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--tbc" id="nvCartPayTbc" aria-label="თიბისი ბანკი">' +
       '<span class="nv-cart-drawer__bank-logo">' +
-      '<img src="/images/nv-logo-tbc.png" alt="თიბისი ბანკი" width="128" height="36" loading="lazy" decoding="async">' +
+      '<img src="/images/nv-logo-tbc.png" alt="თიბისი ბანკი" width="140" height="40" loading="lazy" decoding="async">' +
       '</span>' +
-      '<span class="nv-cart-drawer__bank-name">თიბისი ბანკი</span>' +
       '</button>' +
       '</div>' +
       '<button type="button" class="nv-cart-drawer__pay nv-cart-drawer__pay--wa" id="nvCartPayWhatsApp">Order via WhatsApp</button>' +

@@ -258,24 +258,28 @@
 
 .nv-cart-drawer__bank {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-height: 88px;
-  padding: 12px 10px;
+  min-height: 72px;
+  padding: 10px;
   border-radius: 14px;
   border: 1px solid rgba(58, 48, 40, 0.12);
   background: linear-gradient(165deg, #fffefb 0%, #f8f4ee 100%);
   cursor: pointer;
-  font-family: "FiraGO", "DejaVu Sans", system-ui, -apple-system, sans-serif;
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
 .nv-cart-drawer__bank:hover {
   transform: translateY(-1px);
-  border-color: rgba(58, 48, 40, 0.2);
   box-shadow: 0 6px 18px rgba(28, 22, 16, 0.08);
+}
+
+.nv-cart-drawer__bank--bog:hover {
+  border-color: rgba(232, 98, 28, 0.35);
+}
+
+.nv-cart-drawer__bank--tbc:hover {
+  border-color: rgba(0, 174, 239, 0.4);
 }
 
 .nv-cart-drawer__bank-logo {
@@ -283,35 +287,21 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 36px;
-  padding: 6px 8px;
+  height: 48px;
+  padding: 8px 10px;
   border-radius: 10px;
-  background: #111;
-}
-
-.nv-cart-drawer__bank--bog .nv-cart-drawer__bank-logo {
-  background: #0d0d0d;
-}
-
-.nv-cart-drawer__bank--tbc .nv-cart-drawer__bank-logo {
-  background: #0a0a0a;
+  background: #0c0c0c;
+  overflow: hidden;
 }
 
 .nv-cart-drawer__bank-logo img {
   display: block;
   width: auto;
   max-width: 100%;
-  height: 28px;
+  height: 32px;
+  max-height: 32px;
   object-fit: contain;
-}
-
-.nv-cart-drawer__bank-name {
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: 0.01em;
-  color: #1c1916;
-  text-align: center;
+  object-position: center;
 }
 
 .nv-cart-drawer__pay {
@@ -360,21 +350,7 @@ body.nv-cart-drawer-open {
   }
 
   .nv-cart-drawer__bank {
-    flex-direction: row;
-    justify-content: flex-start;
     min-height: 64px;
-    padding: 10px 12px;
-  }
-
-  .nv-cart-drawer__bank-logo {
-    width: auto;
-    min-width: 108px;
-    flex-shrink: 0;
-  }
-
-  .nv-cart-drawer__bank-name {
-    text-align: left;
-    font-size: 12px;
   }
 }
 
