@@ -54,17 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const NV_CART_STORAGE_KEY = "nv_cart_inquiries";
   const NV_CART_ITEMS_KEY = "nv_cart_items";
-  const NV_HOME_CART = Boolean(document.getElementById("homeShopGrid"));
 
   function nvReadCartCount() {
     try {
-      if (NV_HOME_CART) {
-        const raw = localStorage.getItem(NV_CART_ITEMS_KEY);
-        if (raw) {
-          const items = JSON.parse(raw);
-          if (Array.isArray(items)) {
-            return items.reduce((s, i) => s + (Number(i.qty) > 0 ? Number(i.qty) : 1), 0);
-          }
+      const raw = localStorage.getItem(NV_CART_ITEMS_KEY);
+      if (raw) {
+        const items = JSON.parse(raw);
+        if (Array.isArray(items)) {
+          return items.reduce((s, i) => s + (Number(i.qty) > 0 ? Number(i.qty) : 1), 0);
         }
       }
       const n = parseInt(localStorage.getItem(NV_CART_STORAGE_KEY) || "0", 10);
@@ -104,21 +101,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   nvSyncCartBadges();
   window.addEventListener("storage", e => {
-    if (e.key === NV_CART_STORAGE_KEY || (NV_HOME_CART && e.key === NV_CART_ITEMS_KEY)) {
-      nvSyncCartBadges();
-    }
+    if (e.key === NV_CART_STORAGE_KEY || e.key === NV_CART_ITEMS_KEY) nvSyncCartBadges();
   });
 
-  if (NV_HOME_CART) {
-    (function nvLoadCartDrawerScript() {
-      if (document.querySelector("script[data-nv-cart-drawer]")) return;
-      const el = document.createElement("script");
-      el.src = "./js/nv-cart-drawer.min.js?v=nv20260609";
-      el.defer = true;
-      el.dataset.nvCartDrawer = "1";
-      document.head.appendChild(el);
-    })();
-  }
+  (function nvLoadCartDrawerScript() {
+    if (document.querySelector("script[data-nv-cart-drawer]")) return;
+    const ref = document.querySelector('script[src*="script.min.js"], script[src*="script.js"]');
+    const src = ref?.getAttribute("src") || "script.min.js";
+    const dir = src.includes("/") ? src.replace(/[^/]+$/, "") : "";
+    const jsBase = dir.includes("js/") ? dir : dir + "js/";
+    const el = document.createElement("script");
+    el.src = jsBase + "nv-cart-drawer.min.js?v=nv20260609";
+    el.defer = true;
+    el.dataset.nvCartDrawer = "1";
+    document.head.appendChild(el);
+  })();
 
   const fmtPrice = p => {
     const n = Number(String(p || "").replace(/[^\d.]/g, ""));

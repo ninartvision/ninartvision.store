@@ -468,6 +468,23 @@
       statusEl.hidden = true;
     },
 
+    addToCartFromShopItem(item, options = {}) {
+      if (!item) return;
+      const sold =
+        String(item.dataset?.isSold || '').toLowerCase() === 'true' ||
+        String(item.dataset?.status || '').toLowerCase().trim() === 'sold';
+      if (sold) return;
+
+      if (typeof global.nvCart?.addFromShopItem === 'function') {
+        global.nvCart.addFromShopItem(item, options);
+        global.nvCart.open();
+        this.close();
+        return;
+      }
+
+      this.whatsAppFromShopItem(item, options);
+    },
+
     whatsAppFromShopItem(item, options = {}) {
       if (!item) return;
       const sold =
@@ -561,7 +578,7 @@
         e.preventDefault();
         e.stopPropagation();
         if (!this._currentItem) return;
-        this.whatsAppFromShopItem(this._currentItem, {
+        this.addToCartFromShopItem(this._currentItem, {
           frameSelection: Boolean(this._els.frameSelectionToggle?.checked),
           giftPackaging: Boolean(this._els.giftPackagingToggle?.checked),
           courierDelivery: Boolean(this._els.courierDeliveryToggle?.checked),
@@ -577,7 +594,7 @@
             e.preventDefault();
             e.stopPropagation();
             const item = cartHit.closest('.shop-item');
-            if (item) this.whatsAppFromShopItem(item);
+            if (item) this.addToCartFromShopItem(item);
             return;
           }
           if (e.target.closest('a, button')) return;

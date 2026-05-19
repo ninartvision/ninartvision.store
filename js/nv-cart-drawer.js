@@ -134,6 +134,8 @@
 
     document.addEventListener('keydown', e => {
       if (e.key !== 'Escape' || !root?.classList.contains('is-open')) return;
+      const menu = document.getElementById('menuOverlay');
+      if (menu?.classList.contains('active')) return;
       const modal = document.getElementById('productModal');
       if (modal?.classList.contains('open')) return;
       close();
@@ -142,6 +144,10 @@
     document.querySelectorAll('a.header-cart, a.menu-link-cart').forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
+        const menu = document.getElementById('menuOverlay');
+        if (menu?.classList.contains('active')) {
+          document.getElementById('closeMenu')?.click();
+        }
         open();
       });
     });
@@ -164,10 +170,6 @@
 
     bodyEl.innerHTML = items
       .map((item, index) => {
-        const addons = addonLabels(item);
-        const addonsHtml = addons.length
-          ? '<p class="nv-cart-drawer__addons">' + addons.join(' · ') + '</p>'
-          : '';
         const thumb = item.image
           ? '<img class="nv-cart-drawer__thumb" src="' +
             escapeAttr(item.image) +
@@ -182,13 +184,6 @@
           '<h3 class="nv-cart-drawer__item-title">' +
           escapeHtml(item.title || 'Untitled') +
           '</h3>' +
-          (item.artistName
-            ? '<p class="nv-cart-drawer__item-artist">' + escapeHtml(item.artistName) + '</p>'
-            : '') +
-          (item.size
-            ? '<p class="nv-cart-drawer__item-artist">' + escapeHtml(item.size) + '</p>'
-            : '') +
-          addonsHtml +
           '<div class="nv-cart-drawer__item-row">' +
           '<div class="nv-cart-drawer__qty">' +
           '<button type="button" data-nv-cart-qty="-1" aria-label="Decrease quantity">−</button>' +
@@ -201,7 +196,6 @@
           fmtGel(lineTotal(item)) +
           '</span>' +
           '</div>' +
-          '<button type="button" class="nv-cart-drawer__remove" data-nv-cart-remove>Remove</button>' +
           '</div>' +
           '</article>'
         );
@@ -217,17 +211,9 @@
         const list = readItems();
         const it = list[idx];
         if (!it) return;
-        it.qty = Math.max(1, (it.qty || 1) + delta);
-        writeItems(list);
-      });
-    });
-
-    bodyEl.querySelectorAll('[data-nv-cart-remove]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const idx = Number(btn.closest('.nv-cart-drawer__item')?.dataset.nvCartIndex);
-        if (!Number.isFinite(idx)) return;
-        const list = readItems();
-        list.splice(idx, 1);
+        const next = (it.qty || 1) + delta;
+        if (next < 1) list.splice(idx, 1);
+        else it.qty = next;
         writeItems(list);
       });
     });
