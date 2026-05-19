@@ -480,8 +480,9 @@
 
 .nvr-catalog {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: clamp(6px, 0.85vw, 12px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 1.5vw, 18px);
+  align-items: stretch;
   margin-bottom: clamp(2rem, 5vw, 3.5rem);
 }
 
@@ -497,33 +498,22 @@
 
 @media (max-width: 1140px) {
   .nvr-catalog {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(10px, 1.3vw, 16px);
-  }
-
-  .nvr-cat-card img {
-    height: clamp(104px, 15vw, 160px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(10px, 1.2vw, 14px);
   }
 }
 
 @media (max-width: 900px) {
   .nvr-catalog {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .nvr-cat-card img {
-    height: clamp(124px, 26vw, 190px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
   }
 }
 
 @media (max-width: 520px) {
   .nvr-catalog {
-    grid-template-columns: 1fr;
-  }
-
-  .nvr-cat-card img {
-    height: clamp(150px, 40vw, 240px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .page-room-visualizer .nvr-hero-visual--live .nvr-lang-bar {
@@ -553,6 +543,10 @@
 }
 
 .nvr-cat-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
   border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--nvr-radius-lg);
   overflow: hidden;
@@ -592,7 +586,9 @@
 
 .nvr-cat-card img {
   width: 100%;
-  height: clamp(80px, 8.5vw, 120px);
+  aspect-ratio: 4 / 3;
+  height: auto;
+  flex: 0 0 auto;
   object-fit: contain;
   object-position: center;
   background-color: #f8f8f9;
@@ -600,6 +596,8 @@
 }
 
 .nvr-cat-card .nvr-card-body {
+  flex: 1 1 auto;
+  min-width: 0;
   padding: 10px 12px 12px;
 }
 
@@ -610,6 +608,7 @@
   letter-spacing: -0.01em;
   margin-bottom: 4px;
   color: #111;
+  overflow-wrap: anywhere;
 }
 
 .nvr-cat-card .nvr-card-artist {
@@ -632,8 +631,10 @@
   margin-bottom: 6px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
 .nvr-cat-card .nvr-card-meta {
