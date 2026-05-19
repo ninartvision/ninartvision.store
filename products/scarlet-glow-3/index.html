@@ -76,7 +76,7 @@
       <a href="../../about.html">About</a>
     </nav>
     <div class="header-actions">
-      <button class="hamburger" id="openMenu" aria-label="Open menu">&#9776;</button>
+      <button type="button" class="hamburger" id="openMenu" aria-label="Open menu">&#9776;</button>
     </div>
   </div>
 </header>
@@ -161,20 +161,11 @@
   </div>
 </footer>
 
+<script defer src="../../script.min.js?v=nv20260527"></script>
 <script>
   // Footer year
   document.getElementById('yr').textContent = new Date().getFullYear();
 
-  // Mobile menu
-  (function () {
-    const open    = document.getElementById('openMenu');
-    const close   = document.getElementById('closeMenu');
-    const overlay = document.getElementById('menuOverlay');
-    if (!open || !close || !overlay) return;
-    open.addEventListener('click',    () => overlay.classList.add('active'));
-    close.addEventListener('click',   () => overlay.classList.remove('active'));
-    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); });
-  }());
 
   // Share button
   (function () {

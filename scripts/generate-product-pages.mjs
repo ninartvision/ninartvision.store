@@ -373,7 +373,7 @@ ${JSON.stringify(jsonLd, null, 2)}
   </div>
 </footer>
 
-<script defer src="../../script.min.js?v=nv20260518"></script>
+<script defer src="../../script.min.js?v=nv20260527"></script>
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
 

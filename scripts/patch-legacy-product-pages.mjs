@@ -58,7 +58,7 @@ const SHELL_SNIPPET = `<!-- ── HEADER ────────────�
 
 `;
 
-const DEFER_TAG = `<script defer src="../../script.min.js?v=nv20260518"></script>\n`;
+const DEFER_TAG = `<script defer src="../../script.min.js?v=nv20260527"></script>\n`;
 
 function patchFile(absPath) {
   let html = readFileSync(absPath, 'utf8');
@@ -84,7 +84,7 @@ function patchFile(absPath) {
 
   html = html.replace(
     /<script defer src="\.\.\/\.\.\/script\.min\.js\?v=[^"]*"><\/script>/,
-    `<script defer src="../../script.min.js?v=nv20260518"></script>`
+    `<script defer src="../../script.min.js?v=nv20260527"></script>`
   );
 
   if (html !== orig) writeFileSync(absPath, html, 'utf8');
