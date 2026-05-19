@@ -99,68 +99,100 @@ async function initHomeShopPreview() {
     window.normalizeArtworkListingStatus = homeNormStatus;
   }
 
-  const grid = document.getElementById("homeShopGrid");
-  const buttons = document.querySelectorAll(".preview-btn");
-  const section = document.querySelector(".home-shop-preview");
+  const track = document.getElementById('homeShopGrid');
+  const buttons = document.querySelectorAll('.preview-btn');
+  const section = document.querySelector('.home-shop-preview');
 
-  if (!grid) return;
+  if (!track) return;
+
+  const carouselRoot = track.closest('[data-home-shop-carousel]');
 
   let items = [];
-  let currentFilter = "sale";
-  const LIMIT = 6;
+  let currentFilter = 'sale';
+  let slideIndex = 0;
+  let carouselTimer = null;
+  let carouselPaused = false;
+  const CAROUSEL_MS = 5500;
 
-  function shuffle(arr) {
-    return [...arr].sort(() => Math.random() - 0.5);
+  function prefersReducedMotion() {
+    return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   }
 
-  function render() {
-    const filtered = items.filter(item => item.status === currentFilter);
-    const show = shuffle(filtered).slice(0, LIMIT);
+  function getPerSlide() {
+    const w = window.innerWidth;
+    if (w <= 420) return 1;
+    if (w <= 640) return 2;
+    return 3;
+  }
 
-    // Build all nodes in a detached fragment — zero reflows during construction
-    const frag = document.createDocumentFragment();
+  function chunk(arr, size) {
+    const out = [];
+    for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+    return out;
+  }
 
-    if (!show.length) {
-      const p = document.createElement('p');
-      p.className = 'muted';
-      p.textContent = 'No artworks available.';
-      frag.appendChild(p);
-    } else {
-      show.forEach(p => {
-        const div = document.createElement("div");
-        const stClass = p.status === 'sold' ? 'sold' : (p.status === 'sale' ? 'sale' : '');
-        div.className = "shop-item" + (stClass ? " " + stClass : "");
+  function stopCarousel() {
+    if (carouselTimer) {
+      clearInterval(carouselTimer);
+      carouselTimer = null;
+    }
+  }
 
-        const imgSrc = (typeof window.sanityImgUrl === 'function')
-          ? window.sanityImgUrl(p.image, { w: 600, q: 80 })
-          : p.image;
-        const imgSrcset = (typeof window.sanitySrcset === 'function')
-          ? window.sanitySrcset(p.image, [400, 600, 800])
-          : '';
+  function applySlideTransform(pageCount) {
+    if (pageCount <= 1) {
+      track.style.transform = '';
+      return;
+    }
+    track.style.transform = `translate3d(-${slideIndex * 100}%, 0, 0)`;
+  }
 
-        div.dataset.title = p.title || '';
-        div.dataset.status = p.status || '';
-        div.dataset.isSold = String(p.status === 'sold');
-        div.dataset.isOnSale = String(p.status === 'sale');
-        div.dataset.price = String(p.price || '').replace(/[^\d.]/g, '');
-        div.dataset.photos = (p.photos || [imgSrc]).join(',');
-        div.dataset.desc = p.shortDescription || '';
-        div.dataset.keywords = p.keywords || '';
-        // Pre-build searchBlob so applyHomeSearch can filter without DOM reads
-        div.dataset.searchBlob = [
-          p.title || '',
-          p.keywords || ''
-        ].map(s => s.trim()).filter(Boolean).join(' ').toLowerCase();
+  function startCarousel(pageCount) {
+    stopCarousel();
+    if (pageCount <= 1 || prefersReducedMotion() || carouselPaused) return;
+    carouselTimer = setInterval(() => {
+      if (carouselPaused) return;
+      slideIndex = (slideIndex + 1) % pageCount;
+      applySlideTransform(pageCount);
+    }, CAROUSEL_MS);
+  }
 
-        div.dataset.slug = p.slug || '';
-        div.dataset.artist = 'nini';
-        div.dataset.artistName = 'Nini Mzhavia';
+  function createShopItem(p) {
+    const div = document.createElement('div');
+    const stClass = p.status === 'sold' ? 'sold' : p.status === 'sale' ? 'sale' : '';
+    div.className = 'shop-item' + (stClass ? ' ' + stClass : '');
 
-        const cartBtn = p.status === 'sale'
-          ? `<button type="button" class="shop-item__cart-btn" aria-label="Add to cart — inquire via WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></button>`
-          : '';
+    const imgSrc =
+      typeof window.sanityImgUrl === 'function'
+        ? window.sanityImgUrl(p.image, { w: 600, q: 80 })
+        : p.image;
+    const imgSrcset =
+      typeof window.sanitySrcset === 'function'
+        ? window.sanitySrcset(p.image, [400, 600, 800])
+        : '';
 
-        div.innerHTML = `
+    div.dataset.title = p.title || '';
+    div.dataset.status = p.status || '';
+    div.dataset.isSold = String(p.status === 'sold');
+    div.dataset.isOnSale = String(p.status === 'sale');
+    div.dataset.price = String(p.price || '').replace(/[^\d.]/g, '');
+    div.dataset.photos = (p.photos || [imgSrc]).join(',');
+    div.dataset.desc = p.shortDescription || '';
+    div.dataset.keywords = p.keywords || '';
+    div.dataset.searchBlob = [p.title || '', p.keywords || '']
+      .map(s => s.trim())
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    div.dataset.slug = p.slug || '';
+    div.dataset.artist = 'nini';
+    div.dataset.artistName = 'Nini Mzhavia';
+
+    const cartBtn =
+      p.status === 'sale'
+        ? `<button type="button" class="shop-item__cart-btn" aria-label="Add to cart — inquire via WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></button>`
+        : '';
+
+    div.innerHTML = `
           <div class="nv-img-wrap shop-item__visual">
           <img src="${escapeAttr(imgSrc)}"${imgSrcset ? ` srcset="${escapeAttr(imgSrcset)}" sizes="(max-width:600px) 100vw, (max-width:900px) 50vw, 350px"` : ''}
                alt="${escapeAttr(p.alt || p.title)}" loading="lazy" decoding="async"
@@ -173,13 +205,37 @@ async function initHomeShopPreview() {
           </div>
         `;
 
-        frag.appendChild(div);
+    return div;
+  }
+
+  function render() {
+    stopCarousel();
+    slideIndex = 0;
+
+    const filtered = items.filter(item => item.status === currentFilter);
+    const perSlide = getPerSlide();
+    const pages = chunk(filtered, perSlide);
+
+    const frag = document.createDocumentFragment();
+
+    if (!pages.length) {
+      const p = document.createElement('p');
+      p.className = 'muted';
+      p.textContent = 'No artworks available.';
+      frag.appendChild(p);
+      track.style.transform = '';
+    } else {
+      pages.forEach(pageItems => {
+        const slide = document.createElement('div');
+        slide.className = 'home-shop-carousel__slide';
+        pageItems.forEach(item => slide.appendChild(createShopItem(item)));
+        frag.appendChild(slide);
       });
     }
 
-    // Single DOM mutation — replaces all children atomically
-    grid.replaceChildren(frag);
-    grid.classList.add('home-shop-grid--ready');
+    track.replaceChildren(frag);
+    applySlideTransform(pages.length);
+    startCarousel(pages.length);
 
     if (window.initShopItems) window.initShopItems();
     if (window.applyHomeSearch) window.applyHomeSearch();
@@ -258,8 +314,24 @@ async function initHomeShopPreview() {
     section.style.display = 'block';
   }
 
-  // Initial render only — no auto-shuffle (was causing visible grid flicker every 5s)
   render();
+
+  if (carouselRoot) {
+    carouselRoot.addEventListener('mouseenter', () => {
+      carouselPaused = true;
+    });
+    carouselRoot.addEventListener('mouseleave', () => {
+      carouselPaused = false;
+      const pageCount = track.querySelectorAll('.home-shop-carousel__slide').length;
+      startCarousel(pageCount);
+    });
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(render, 200);
+  });
 
   // Filter button handlers
   buttons.forEach(btn => {

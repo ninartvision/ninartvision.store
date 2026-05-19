@@ -153,33 +153,84 @@
   <link rel="preload" href="./style.min.css?v=nv20260527" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="./style.min.css?v=nv20260527"></noscript>
 
-  <!-- Scoped override: compact 6-item layout for the "Original Artworks" preview (#homeShopGrid) on this page only.
-       Placed AFTER style.min.css so equal-specificity rules win source-order; uses !important only where global mobile rules already use it. -->
+  <!-- Original Artworks: 3-up auto carousel (homepage section only) -->
   <style id="nv-home-shop-compact">
-    #homeShopGrid.home-shop-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-bottom:18px}
-    #homeShopGrid .shop-item img{height:200px;object-fit:cover}
-    #homeShopGrid .shop-meta{padding:8px 10px 10px;font-size:12px;line-height:1.35;letter-spacing:.005em}
-    #homeShopGrid .shop-meta span:first-child{font-weight:600;color:rgba(42,38,34,.86)}
-    #homeShopGrid .shop-meta .price{font-weight:600;color:rgba(58,48,40,.62)}
-    #homeShopGrid .shop-item__cart-btn{width:32px;height:32px}
-    #homeShopGrid .shop-item__cart-btn svg{width:16px;height:16px}
+    .home-shop-preview .home-shop-carousel{margin-bottom:18px}
+    .home-shop-preview .home-shop-carousel__viewport{overflow:hidden;width:100%}
+    .home-shop-preview .home-shop-carousel__track{
+      display:flex;
+      margin-bottom:0;
+      transition:transform .65s cubic-bezier(.22,1,.36,1);
+      will-change:transform;
+    }
+    .home-shop-preview .home-shop-carousel__slide{
+      flex:0 0 100%;
+      min-width:0;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+    .home-shop-preview .home-shop-carousel__slide .shop-item img{
+      height:200px;
+      object-fit:cover;
+    }
+    .home-shop-preview .home-shop-carousel__slide .shop-meta{
+      padding:8px 10px 10px;
+      font-size:12px;
+      line-height:1.35;
+      letter-spacing:.005em;
+    }
+    .home-shop-preview .home-shop-carousel__slide .shop-meta span:first-child{
+      font-weight:600;
+      color:rgba(42,38,34,.86);
+    }
+    .home-shop-preview .home-shop-carousel__slide .shop-meta .price{
+      font-weight:600;
+      color:rgba(58,48,40,.62);
+    }
+    .home-shop-preview .home-shop-carousel__slide .shop-item__cart-btn{
+      width:32px;
+      height:32px;
+    }
+    .home-shop-preview .home-shop-carousel__slide .shop-item__cart-btn svg{
+      width:16px;
+      height:16px;
+    }
     @media (max-width:1100px){
-      #homeShopGrid.home-shop-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-      #homeShopGrid .shop-item img{height:220px}
+      .home-shop-preview .home-shop-carousel__slide{gap:12px}
+      .home-shop-preview .home-shop-carousel__slide .shop-item img{height:220px}
     }
     @media (max-width:900px){
-      #homeShopGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
-      #homeShopGrid .shop-item img{height:180px}
-      #homeShopGrid .shop-meta{padding:6px 8px 8px;font-size:11.5px}
+      .home-shop-preview .home-shop-carousel__slide{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:10px;
+      }
+      .home-shop-preview .home-shop-carousel__slide .shop-item img{height:180px}
+      .home-shop-preview .home-shop-carousel__slide .shop-meta{
+        padding:6px 8px 8px;
+        font-size:11.5px;
+      }
     }
     @media (max-width:640px){
-      #homeShopGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
-      #homeShopGrid .shop-item img{height:200px}
-      #homeShopGrid .shop-meta{padding:6px 8px 8px;font-size:11px}
+      .home-shop-preview .home-shop-carousel__slide{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:8px;
+      }
+      .home-shop-preview .home-shop-carousel__slide .shop-item img{height:200px}
+      .home-shop-preview .home-shop-carousel__slide .shop-meta{
+        padding:6px 8px 8px;
+        font-size:11px;
+      }
     }
     @media (max-width:420px){
-      #homeShopGrid{gap:6px!important}
-      #homeShopGrid .shop-item img{height:170px}
+      .home-shop-preview .home-shop-carousel__slide{
+        grid-template-columns:repeat(1,minmax(0,1fr));
+        gap:6px;
+      }
+      .home-shop-preview .home-shop-carousel__slide .shop-item img{height:170px}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .home-shop-preview .home-shop-carousel__track{transition:none}
     }
   </style>
 
@@ -674,8 +725,11 @@
       <button type="button" class="preview-btn" data-filter="sold">SOLD</button>
     </div>
 
-    <!-- აქ უნდა იყოს ცარიელი grid -->
-    <div id="homeShopGrid" class="home-shop-grid"></div>
+    <div class="home-shop-carousel" data-home-shop-carousel aria-roledescription="carousel">
+      <div class="home-shop-carousel__viewport">
+        <div id="homeShopGrid" class="home-shop-carousel__track" aria-live="polite"></div>
+      </div>
+    </div>
 
   </div>
 
