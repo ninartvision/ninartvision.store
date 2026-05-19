@@ -119,9 +119,6 @@ async function initHomeShopPreview() {
   }
 
   function getPerSlide() {
-    const w = window.innerWidth;
-    if (w <= 420) return 1;
-    if (w <= 640) return 2;
     return 3;
   }
 
@@ -335,7 +332,11 @@ async function initHomeShopPreview() {
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(render, 200);
+    resizeTimer = setTimeout(() => {
+      const pageCount = track.querySelectorAll('.home-shop-carousel__slide').length;
+      if (pageCount > 1) applySlideTransform(pageCount);
+      else render();
+    }, 200);
   });
 
   // Filter button handlers
