@@ -160,6 +160,8 @@
     .home-shop-preview #homeShopGrid.home-shop-carousel__track,
     .home-shop-preview .home-shop-carousel__track{
       display:flex !important;
+      flex-direction:row !important;
+      flex-wrap:nowrap !important;
       width:100%;
       margin-bottom:0;
       gap:0 !important;
@@ -168,12 +170,14 @@
       transition:transform .65s cubic-bezier(.22,1,.36,1);
       will-change:transform;
     }
-    .home-shop-preview .home-shop-carousel__slide{
-      flex:0 0 100%;
-      width:100%;
+    .home-shop-preview .home-shop-carousel__track > .home-shop-carousel__slide{
+      flex:0 0 100% !important;
+      width:100% !important;
+      max-width:100% !important;
       min-width:0;
-      display:grid;
+      display:grid !important;
       grid-template-columns:repeat(3,minmax(0,1fr));
+      grid-template-rows:auto;
       gap:14px;
     }
     .home-shop-preview .home-shop-carousel__slide .shop-item img{
@@ -203,11 +207,18 @@
       height:16px;
     }
     @media (max-width:1100px){
-      .home-shop-preview .home-shop-carousel__slide{gap:12px}
+      .home-shop-preview .home-shop-carousel__track > .home-shop-carousel__slide{gap:12px}
       .home-shop-preview .home-shop-carousel__slide .shop-item img{height:220px}
     }
     @media (max-width:900px){
-      .home-shop-preview .home-shop-carousel__slide{
+      .home-shop-preview #homeShopGrid.home-shop-carousel__track,
+      .home-shop-preview .home-shop-carousel__track{
+        display:flex !important;
+        flex-wrap:nowrap !important;
+        grid-template-columns:none !important;
+      }
+      .home-shop-preview .home-shop-carousel__track > .home-shop-carousel__slide{
+        display:grid !important;
         grid-template-columns:repeat(3,minmax(0,1fr));
         gap:10px;
       }
@@ -218,7 +229,7 @@
       }
     }
     @media (max-width:640px){
-      .home-shop-preview .home-shop-carousel__slide{
+      .home-shop-preview .home-shop-carousel__track > .home-shop-carousel__slide{
         grid-template-columns:repeat(2,minmax(0,1fr));
         gap:8px;
       }
@@ -229,7 +240,7 @@
       }
     }
     @media (max-width:420px){
-      .home-shop-preview .home-shop-carousel__slide{
+      .home-shop-preview .home-shop-carousel__track > .home-shop-carousel__slide{
         grid-template-columns:repeat(1,minmax(0,1fr));
         gap:6px;
       }

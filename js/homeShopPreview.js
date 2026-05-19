@@ -138,12 +138,17 @@ async function initHomeShopPreview() {
     }
   }
 
+  function getViewportWidth() {
+    return track.parentElement?.clientWidth || track.clientWidth;
+  }
+
   function applySlideTransform(pageCount) {
     if (pageCount <= 1) {
       track.style.transform = '';
       return;
     }
-    track.style.transform = `translate3d(-${slideIndex * 100}%, 0, 0)`;
+    const offset = slideIndex * getViewportWidth();
+    track.style.transform = `translate3d(-${offset}px, 0, 0)`;
   }
 
   function startCarousel(pageCount) {
