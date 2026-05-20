@@ -7363,67 +7363,98 @@ a.pill:visited{
   opacity: 0.9;
 }
 
-/* #login — Collector card: Terms hero–style text stack (card frame, art & CTA chrome unchanged) */
+/* #login — Terms editorial block: desktop = left copy / right art (cream, airy); mobile = centered card */
+#login.section-gray {
+  background: linear-gradient(168deg, #fdfcfa 0%, #f6f1e9 48%, #efe9e0 100%);
+}
+
 #login .collector-account__head.section-top {
-  text-align: center;
+  text-align: left;
 }
 
 #login .collector-account__terms-title {
-  margin: 0 0 0;
+  margin: 0;
   font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  font-size: clamp(1.68rem, 4.2vw, 2.05rem);
+  font-size: clamp(2.05rem, 3.6vw, 3.15rem);
   font-weight: 500;
-  line-height: 1.06;
-  letter-spacing: -0.025em;
+  line-height: 1.03;
+  letter-spacing: -0.03em;
   color: #1a1514;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.38);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 #login .collector-account__terms-ornament {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: clamp(14px, 2.3vw, 21px);
-  margin: clamp(14px, 2.5vw, 20px) auto clamp(14px, 2.6vw, 22px);
+  justify-content: flex-start;
+  gap: clamp(12px, 2vw, 18px);
+  margin: clamp(16px, 2.4vw, 22px) 0 clamp(14px, 2.2vw, 20px);
+  max-width: 220px;
 }
 
 #login .collector-account__terms-line {
   display: block;
-  width: clamp(52px, 13vw, 92px);
+  flex: 1 1 0;
+  min-width: 28px;
+  max-width: 88px;
   height: 1px;
   background: linear-gradient(
     90deg,
     transparent,
-    #d4b896 24%,
+    #d4b896 22%,
     #b8956e 50%,
-    #d4b896 76%,
+    #d4b896 78%,
     transparent
   );
 }
 
 #login .collector-account__terms-gem {
   display: block;
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   flex-shrink: 0;
   transform: rotate(45deg);
   background: linear-gradient(135deg, #d4b896, #b8956e);
-  box-shadow: 0 0 14px rgba(184, 149, 110, 0.34);
+  box-shadow: 0 0 12px rgba(184, 149, 110, 0.28);
 }
 
 #login .collector-account__terms-lede {
-  margin-inline: auto;
-  max-width: 34rem;
+  margin: 0;
+  max-width: 26rem;
   font-family: FiraGO, "DejaVu Sans", system-ui, sans-serif;
-  font-size: clamp(0.93rem, 2vw, 1.04rem);
+  font-size: clamp(0.88rem, 1.35vw, 0.98rem);
   font-weight: 400;
-  line-height: 1.88;
-  letter-spacing: 0.028em;
-  color: rgba(46, 40, 36, 0.78);
+  line-height: 1.85;
+  letter-spacing: 0.04em;
+  color: rgba(46, 40, 36, 0.72);
+  text-align: left;
 }
 
 #login .collector-account__cta-wrap {
-  text-align: center;
+  margin-top: clamp(18px, 2.5vw, 26px);
+  text-align: left;
+}
+
+@media (min-width: 769px) {
+  #login.section-gray {
+    padding-top: clamp(52px, 6.5vw, 78px);
+    padding-bottom: clamp(52px, 6.5vw, 78px);
+  }
+
+  #login .collector-account.login-wrapper {
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(44px, 6.5vw, 92px);
+  }
+
+  #login .collector-account__body.login-left {
+    max-width: min(520px, 48%);
+    flex: 1 1 auto;
+  }
+
+  #login .collector-account__art.login-image {
+    flex-shrink: 0;
+  }
 }
 
 /* Collector account — mobile card layout (desktop unchanged) */
@@ -7463,6 +7494,30 @@ a.pill:visited{
 
   #login .collector-account__head.section-top {
     margin-bottom: 10px;
+    text-align: center;
+  }
+
+  #login .collector-account__terms-ornament {
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: none;
+  }
+
+  #login .collector-account__terms-line {
+    flex: 0 0 auto;
+    width: clamp(44px, 11vw, 76px);
+    max-width: none;
+    min-width: 0;
+  }
+
+  #login .collector-account__terms-lede {
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  #login .collector-account__cta-wrap {
+    text-align: center;
   }
 
   #login .collector-account__head h2.collector-account__terms-title {
