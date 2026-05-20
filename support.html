@@ -198,8 +198,8 @@
     </section>
 
     <!-- CONTACT FORM -->
-    <section id="contactForm" class="support-form">
-      <h2
+    <section id="supportContactSection" class="support-form" aria-labelledby="supportContactHeading">
+      <h2 id="supportContactHeading"
         data-en="Get in Touch"
         data-ka="Get in Touch">
         Get in Touch
@@ -294,8 +294,8 @@
 </div>
 
 <!-- JS -->
-<script src="support.js?v=nv20260624"></script>
-<script defer src="lang.js?v=nv20260624"></script>
+<script src="support.js?v=nv20260724"></script>
+<script defer src="lang.js?v=nv20260724"></script>
 <script defer src="payment-modal.min.js?v=nv20260527"></script>
   <!-- EmailJS Configuration and Form Handler -->
   <script>
@@ -319,23 +319,48 @@
       emailjs.init({ publicKey: NV_EMAILJS.publicKey });
     }
 
+    function nvSupportLangIsEn() {
+      try {
+        var s = localStorage.getItem('siteLang');
+        if (s === 'en') return true;
+        if (s === 'ka') return false;
+      } catch (_) {}
+      var active = document.querySelector('.lang-item.active');
+      var dl = active && active.getAttribute('data-lang');
+      if (dl) {
+        dl = String(dl).toLowerCase();
+        if (dl === 'en') return true;
+        if (dl === 'ka') return false;
+      }
+      var lab = active && active.querySelector('span');
+      return !!(lab && String(lab.textContent || '').trim() === 'EN');
+    }
+
     function sendEmail(event) {
       event.preventDefault();
-      
-      const form = event.target;
-      const submitBtn = document.getElementById('submitBtn');
-      const statusDiv = document.getElementById('formStatus');
-      const isEn = document.querySelector('.lang-item.active span')?.textContent === 'EN';
-      
+
+      var form = event.target;
+      if (!form || String(form.tagName || '').toUpperCase() !== 'FORM') return;
+
+      var submitBtn = document.getElementById('submitBtn');
+      var statusDiv = document.getElementById('formStatus');
+      var nameEl = document.getElementById('fromName');
+      var emailEl = document.getElementById('fromEmail');
+      var msgEl = document.getElementById('message');
+
+      if (!submitBtn || !statusDiv || !nameEl || !emailEl || !msgEl) return;
+
+      var isEn = nvSupportLangIsEn();
+
       submitBtn.disabled = true;
       submitBtn.textContent = isEn ? 'Sending...' : 'იგზავნება...';
-      
+
       statusDiv.className = 'form-status';
       statusDiv.textContent = '';
 
-      const fromName = document.getElementById('fromName').value.trim();
-      const fromEmail = document.getElementById('fromEmail').value.trim();
-      const message = document.getElementById('message').value.trim();
+      var fromName = String(nameEl.value || '').trim();
+      var fromEmail = String(emailEl.value || '').trim();
+      var message = String(msgEl.value || '').trim();
 
       if (!nvEmailJsReady()) {
         const subject = encodeURIComponent('Ninart Vision — ' + fromName);
@@ -358,14 +383,9 @@
         NV_EMAILJS.templateId,
         templateParams
       )
-      .then(function(response) {
-        // Success
-        console.log('SUCCESS!', response.status, response.text);
-        
-        // Show success message
+      .then(function () {
         statusDiv.className = 'form-status success';
-        const currentLang = document.querySelector('.lang-item.active span').textContent;
-        statusDiv.innerHTML = currentLang === 'EN' 
+        statusDiv.innerHTML = isEn
           ? '✓ Message sent successfully! We\'ll get back to you soon.'
           : '✓ შეტყობინება წარმატებით გაიგზავნა! მალე დაგიბრუნდებით პასუხს.';
         
@@ -378,22 +398,15 @@
           statusDiv.textContent = '';
         }, 5000);
         
-      }, function(error) {
-        // Error
-        console.error('FAILED...', error);
-        
-        // Show error message
+      }, function () {
         statusDiv.className = 'form-status error';
-        const currentLang = document.querySelector('.lang-item.active span').textContent;
-        statusDiv.innerHTML = currentLang === 'EN'
+        statusDiv.innerHTML = isEn
           ? '✗ Failed to send message. Please try again or contact us directly at <a href="mailto:ninimzhavia9@gmail.com">ninimzhavia9@gmail.com</a>'
           : '✗ შეტყობინების გაგზავნა ვერ მოხერხდა. გთხოვთ სცადოთ თავიდან ან დაგვიკავშირდეთ პირდაპირ: <a href="mailto:ninimzhavia9@gmail.com">ninimzhavia9@gmail.com</a>';
       })
       .finally(function() {
-        // Re-enable submit button
         submitBtn.disabled = false;
-        const currentLang = document.querySelector('.lang-item.active span').textContent;
-        submitBtn.textContent = currentLang === 'EN' ? 'Send Message' : 'გაგზავნა';
+        submitBtn.textContent = isEn ? 'Send Message' : 'გაგზავნა';
       });
     }
   </script>

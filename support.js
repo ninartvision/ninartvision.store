@@ -1,4 +1,6 @@
 function scrollToForm() {
-  document.getElementById("contactForm")
-    .scrollIntoView({ behavior: "smooth" });
+  var el = document.getElementById("contactForm");
+  if (el && typeof el.scrollIntoView === "function") {
+    el.scrollIntoView({ behavior: "smooth" });
+  }
 }

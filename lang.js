@@ -10,6 +10,26 @@ function nvResolveLangFromButton(btn) {
   return m ? String(m[1]).toLowerCase() : null;
 }
 
+function nvIsForbiddenI18nNode(el) {
+  if (!el || el.nodeType !== 1) return true;
+  var tag = String(el.tagName || "").toUpperCase();
+  if (tag === "SCRIPT" || tag === "STYLE" || tag === "NOSCRIPT" || tag === "TEMPLATE") return true;
+  try {
+    if (typeof el.closest === "function") {
+      if (el.closest("script,style,noscript,template")) return true;
+    }
+  } catch (_) {}
+  return false;
+}
+
+function nvNormalizeI18nString(s) {
+  if (s == null) return null;
+  var t = String(s);
+  if (!t.trim()) return null;
+  if (t.toLowerCase().trim() === "undefined") return null;
+  return t;
+}
+
 function setLangButtonsActive(lang) {
   document.querySelectorAll(".lang-item").forEach(function (btn) {
     var lid = nvResolveLangFromButton(btn);
@@ -17,7 +37,7 @@ function setLangButtonsActive(lang) {
   });
 }
 
-/** Apply stored text for lang from data-{lang}; never writes "undefined". */
+/** Apply stored text for lang from data-{lang}; never writes "undefined" or wipes on bad values. */
 function setLang(rawLang, event) {
   if (event && typeof event.stopPropagation === "function") {
     event.stopPropagation();
@@ -29,11 +49,27 @@ function setLang(rawLang, event) {
   var alt = lang === "en" ? "ka" : "en";
 
   document.querySelectorAll("[data-en], [data-ka]").forEach(function (el) {
-    var txt = el.getAttribute("data-" + lang);
-    if (txt == null || txt === "") txt = el.getAttribute("data-" + alt);
+    if (nvIsForbiddenI18nNode(el)) return;
+    var txt = nvNormalizeI18nString(el.getAttribute("data-" + lang));
+    if (txt == null) txt = nvNormalizeI18nString(el.getAttribute("data-" + alt));
     if (txt == null) return;
     el.innerHTML = txt;
   });
+
+  document
+    .querySelectorAll("[data-en-placeholder], [data-ka-placeholder]")
+    .forEach(function (el) {
+      if (nvIsForbiddenI18nNode(el)) return;
+      var tg = String(el.tagName || "").toUpperCase();
+      if (tg !== "INPUT" && tg !== "TEXTAREA") return;
+      var ph =
+        nvNormalizeI18nString(el.getAttribute("data-" + lang + "-placeholder")) ||
+        nvNormalizeI18nString(el.getAttribute("data-" + alt + "-placeholder"));
+      if (ph == null) return;
+      try {
+        el.setAttribute("placeholder", ph);
+      } catch (_) {}
+    });
 
   setLangButtonsActive(lang);
   localStorage.setItem("siteLang", lang);
@@ -46,6 +82,11 @@ function setLang(rawLang, event) {
     window.dispatchEvent(new CustomEvent("languageChanged", { detail: { lang: lang } }));
   } catch (_) {}
 }
+
+/** Optional: callers may rely on an explicit global in some tooling environments */
+try {
+  window.setLang = setLang;
+} catch (_) {}
 
 document.addEventListener("DOMContentLoaded", function () {
   var savedLang = localStorage.getItem("siteLang") || "ka";

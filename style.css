@@ -1924,6 +1924,8 @@ img, video {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  isolation: isolate;
   color: rgba(68, 60, 52, 0.72);
   text-decoration: none;
   cursor: pointer;
@@ -1947,16 +1949,80 @@ img, video {
   outline-offset: 3px;
 }
 
+/* Homepage room-preview camera — subtle life (glow + breath); luxury minimal */
+@keyframes nv-search-cam-glow {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0.42;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.07);
+    opacity: 0.68;
+  }
+}
+
+@keyframes nv-search-cam-svg {
+  0%,
+  100% {
+    transform: translateZ(0) scale(1);
+  }
+  50% {
+    transform: translateZ(0) scale(1.04);
+  }
+}
+
+.search-icon::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle at 50% 46%,
+    rgba(139, 115, 85, 0.26) 0%,
+    rgba(139, 115, 85, 0.09) 50%,
+    transparent 78%
+  );
+  /* Ambient glow lives on the aura pseudo — avoids blurring SVG strokes */
+  box-shadow:
+    0 0 14px rgba(139, 115, 85, 0.11),
+    0 0 28px rgba(139, 115, 85, 0.06);
+  animation: nv-search-cam-glow 3.85s ease-in-out infinite;
+}
+
 .search-icon svg{
   width: 22px;
   height: 22px;
   display: block;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: none;
+  shape-rendering: geometricPrecision;
+  animation: nv-search-cam-svg 3.85s ease-in-out infinite;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-.search-wrapper:hover .search-icon svg{
-  transform: scale(1.04);
+.search-wrapper:hover .search-icon svg,
+.search-icon:hover svg{
+  animation: none;
+  transform: scale(1.08) translateZ(0);
+  filter: none;
+}
+
+.search-wrapper:hover .search-icon::after,
+.search-icon:hover::after{
+  animation: none;
+  opacity: 0.62;
+  transform: translate(-50%, -50%) scale(1.02);
 }
 
 .search-input{
@@ -2030,10 +2096,19 @@ img, video {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     transform: none;
   }
+  .search-icon::after,
+  .search-icon svg{
+    animation: none !important;
+  }
+  .search-icon::after{
+    opacity: 0.45;
+    transform: translate(-50%, -50%) scale(1);
+  }
   .search-icon svg{
     transition: none;
   }
-  .search-wrapper:hover .search-icon svg{
+  .search-wrapper:hover .search-icon svg,
+  .search-icon:hover svg{
     transform: none;
   }
   .search-input::placeholder{
