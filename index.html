@@ -125,16 +125,11 @@
     .search-wrapper{display:flex;align-items:center;gap:14px;flex:0 1 auto;width:min(940px,calc(100% - 148px));max-width:min(940px,calc(100% - 148px));min-width:min(260px,calc(100% - 148px));min-height:48px;height:auto;padding:11px 24px 11px 18px;box-sizing:border-box;background:linear-gradient(165deg,#fdfcfa 0%,#f7f3ec 52%,#f0e9df 100%);border:1px solid rgba(58,48,40,.09);border-radius:999px;box-shadow:0 4px 22px rgba(42,38,34,.055),0 1px 3px rgba(42,38,34,.04),inset 0 1px 0 rgba(255,255,255,.88);transition:box-shadow .38s cubic-bezier(.22,1,.36,1),border-color .35s ease,transform .38s cubic-bezier(.22,1,.36,1),background .35s ease}
     .search-wrapper:hover{transform:translateY(-1px);border-color:rgba(58,48,40,.12);box-shadow:0 8px 30px rgba(42,38,34,.075),0 2px 8px rgba(42,38,34,.045),inset 0 1px 0 rgba(255,255,255,.92)}
     .search-wrapper:focus-within{border-color:rgba(139,115,85,.32);box-shadow:0 10px 36px rgba(42,38,34,.08),0 0 0 3px rgba(212,196,176,.32),inset 0 1px 0 rgba(255,255,255,.9);transform:translateY(-1px)}
-    .search-icon,.search-icon:visited{flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;isolation:isolate;color:rgba(68,60,52,.72);text-decoration:none;cursor:pointer;transition:color .3s ease;border-radius:10px;-webkit-tap-highlight-color:transparent}
-    .search-wrapper:hover .search-icon,.search-wrapper:focus-within .search-icon{color:rgba(54,46,40,.82)}
-    .search-icon:hover,.search-icon:focus-visible{color:rgba(44,38,34,.9)}
+    .search-icon,.search-icon:visited{flex-shrink:0;display:flex;align-items:center;justify-content:center;color:rgba(52,46,40,.9);text-decoration:none;cursor:pointer;transition:color .3s ease;border-radius:10px;-webkit-tap-highlight-color:transparent}
+    .search-wrapper:hover .search-icon,.search-wrapper:focus-within .search-icon{color:rgba(46,40,36,.94)}
+    .search-icon:hover,.search-icon:focus-visible{color:rgba(40,34,30,.97)}
     .search-icon:focus-visible{outline:2px solid rgba(139,115,85,.35);outline-offset:3px}
-    @keyframes nv-scg{0%,100%{transform:translate(-50%,-50%) scale(.92);opacity:.42}50%{transform:translate(-50%,-50%) scale(1.07);opacity:.68}}
-    @keyframes nv-scs{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-    .search-icon::after{content:"";position:absolute;left:50%;top:50%;width:40px;height:40px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle at 50% 46%,rgba(139,115,85,.22) 0%,rgba(139,115,85,.07) 45%,transparent 72%);animation:nv-scg 3.85s ease-in-out infinite}
-    .search-icon svg{position:relative;z-index:1;width:22px;height:22px;display:block;flex-shrink:0;transition:transform .35s cubic-bezier(.22,1,.36,1),filter .35s ease;filter:drop-shadow(0 1px 0 rgba(255,248,242,.55)) drop-shadow(0 1px 1px rgba(42,34,28,.1));animation:nv-scs 3.85s ease-in-out infinite}
-    .search-wrapper:hover .search-icon svg,.search-icon:hover svg{animation:none;transform:scale(1.08);filter:drop-shadow(0 1px 0 rgba(255,252,248,.85)) drop-shadow(0 1px 2px rgba(42,34,28,.16))}
-    .search-wrapper:hover .search-icon::after,.search-icon:hover::after{animation:none;opacity:.58;transform:translate(-50%,-50%) scale(1.02)}
+    .search-icon svg{width:22px;height:22px;display:block;flex-shrink:0;filter:none;-webkit-filter:none;shape-rendering:geometricPrecision}
     .search-input{flex:1 1 auto;min-width:0;width:100%;min-height:1.45em;border:none;background:transparent;font-family:FiraGO,"DejaVu Sans",system-ui,sans-serif;font-size:15px;font-weight:400;letter-spacing:.01em;color:#2a2620;-webkit-appearance:none;appearance:none;box-shadow:none;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0;margin:0;line-height:1.45}
     .search-input::placeholder{color:rgba(98,88,78,.52);opacity:1;transition:opacity .45s cubic-bezier(.22,1,.36,1),color .35s ease}
     .search-input:focus::placeholder{opacity:.38;color:rgba(98,88,78,.42)}
@@ -146,7 +141,6 @@
     .social-icons .soc[aria-label="Facebook"] svg{fill:#1877F2}
     .social-icons .soc[aria-label="Instagram"] svg{fill:#E4405F}
     .social-icons .soc[aria-label="WhatsApp"] svg{fill:#25D366}
-    @media (prefers-reduced-motion:reduce){.search-icon::after,.search-icon svg{animation:none!important}.search-icon::after{opacity:.45;transform:translate(-50%,-50%) scale(1)}.search-wrapper:hover .search-icon svg,.search-icon:hover svg{transform:none;filter:drop-shadow(0 1px 0 rgba(255,248,242,.55)) drop-shadow(0 1px 1px rgba(42,34,28,.1))}}
     @media(max-width:900px){.desktop-nav{display:none}.hamburger{display:flex}.header .container.header-row{display:grid;grid-template-columns:1fr auto;grid-template-areas:"logo tools";align-items:center;justify-content:unset;flex-wrap:nowrap;column-gap:12px;min-height:64px;padding:12px 0}.header .container.header-row>.desktop-nav{display:none!important}.header .container.header-row>.brand{grid-area:logo;grid-column:1;justify-self:start;align-self:center;margin:7px 0 0;margin-left:clamp(10px,3.5vw,18px);max-width:min(160px,52vw)}.header .container.header-row>.brand img{max-height:32px;width:auto;height:auto;max-width:100%}.header .container.header-row>.header-tools,.header .container.header-row>.header-mobile-actions{grid-area:tools;grid-column:2;justify-self:end;display:flex;align-items:center;gap:10px;margin:0;margin-right:clamp(2px,1vw,6px)}.search-section{padding:12px 0;margin-top:70px}.search-wrapper{width:min(880px,calc(100% - 132px));max-width:min(880px,calc(100% - 132px));min-width:min(220px,calc(100% - 132px));padding:10px 20px 10px 16px;gap:12px;min-height:46px}.search-icon svg{width:20px;height:20px}.search-input{font-size:14px}.social-icons .soc{width:34px;height:34px}.social-icons .soc svg{width:16px;height:16px}}
     @media(max-width:600px){.header .container.header-row{min-height:58px;padding:10px 0}.header .container.header-row>.brand{margin-top:5px;margin-left:clamp(8px,3vw,14px);max-width:min(140px,48vw)}.header .container.header-row>.brand img{max-height:28px}.hero-slider{height:75dvh;min-height:380px}.search-section{margin-top:65px;padding:10px 0}.search-wrapper{width:min(100%,calc(100% - 118px));max-width:min(100%,calc(100% - 118px));min-width:min(140px,calc(100% - 118px));min-height:46px;padding:10px 16px 10px 14px;gap:11px}.search-icon svg{width:19px;height:19px}.search-input{font-size:13px}.search-social-row{gap:12px}.social-icons{gap:6px}.social-icons .soc{width:32px;height:32px}.social-icons .soc svg{width:15px;height:15px}}
     @media(min-width:900px){.hero-slider{height:82dvh;min-height:600px;max-height:950px}.hero-slider .slide{background-color:#fff}.hero-slider .slide img{object-fit:contain}.as-arrow{width:56px;height:56px;font-size:36px;background:rgba(255,255,255,.12)}.as-arrow.left{left:32px}.as-arrow.right{right:32px}}
@@ -385,7 +379,7 @@
       <div class="search-social-row">
         <!-- Search / room preview bar (left-aligned pill) -->
         <div class="search-wrapper">
-          <a class="search-icon" href="room-visualizer.html" aria-label="Room preview — upload your room photo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L8 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-1.5-3z"/><circle cx="12" cy="14" r="3.5"/></svg></a>
+          <a class="search-icon" href="room-visualizer.html" aria-label="Room preview — upload your room photo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="1" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L8 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-1.5-3z"/><circle cx="12" cy="14" r="3.5"/></svg></a>
           <input type="text" id="siteSearch" class="search-input" placeholder="ატვირთეთ თქვენი ინტერიერის ფოტო და მოარგეთ ნამუშევარი..." autocomplete="off" aria-label="Filter featured works on this page. Room preview: use the camera icon on the left." title="Type to filter the gallery below. Room preview: use the camera icon link.">
         </div>
 
@@ -627,7 +621,7 @@
 <section id="support" class="section section-featured-projects">
   <div class="container">
     <header class="editorial-heading">
-      <p class="editorial-heading__eyebrow" data-en="Projects" data-ka="Projects">Projects</p>
+      <p class="editorial-heading__eyebrow" data-en="PROJECTS" data-ka="PROJECTS">PROJECTS</p>
       <h2 class="editorial-heading__title" data-en="Featured Projects" data-ka="Featured Projects">Featured Projects</h2>
       <p class="editorial-heading__lede muted" title="ახალი რელიზები, ლიმიტირებული ედიციები და ეკსკლუზიური ორიგინალური ნამუშევრები — ყველაფერი ერთ სივრცეში." data-en="ახალი რელიზები, ლიმიტირებული ედიციები და ეკსკლუზიური ორიგინალური ნამუშევრები — ყველაფერი ერთ სივრცეში." data-ka="ახალი რელიზები, ლიმიტირებული ედიციები და ეკსკლუზიური ორიგინალური ნამუშევრები — ყველაფერი ერთ სივრცეში.">ახალი რელიზები, ლიმიტირებული ედიციები და ეკსკლუზიური ორიგინალური ნამუშევრები — ყველაფერი ერთ სივრცეში.</p>
       <div
@@ -760,9 +754,9 @@
 <section class="home-shop-preview section">
   <div class="container">
     <header class="editorial-heading">
-      <p class="editorial-heading__eyebrow" data-en="Artworks" data-ka="Artworks">Artworks</p>
+      <p class="editorial-heading__eyebrow" data-en="ARTWORKS" data-ka="ARTWORKS">ARTWORKS</p>
       <h2 class="editorial-heading__title" data-en="Original Artworks" data-ka="Original Artworks">Original Artworks</h2>
-      <p class="editorial-heading__lede muted" title="კურატორული ორიგინალები და ედიციები — ხელით დახატული ნამუშევრები, შერჩეული კოლექციონერებისთვის." data-en="კურატორული ორიგინალები და ედიციები — ხელით დახატული ნამუშევრები, შერჩეული კოლექციონერებისთვის." data-ka="კურატორული ორიგინალები და ედიციები — ხელით დახატული ნამუშევრები, შერჩეული კოლექციონერებისთვის.">კურატორული ორიგინალები და ედიციები — ხელით დახატული ნამუშევრები, შერჩეული კოლექციონერებისთვის.</p>
+      <p class="editorial-heading__lede muted" title="კურატორიული ორიგინალები და კოლექციები — ხელით დახატული ნამუშევრები." data-en="კურატორიული ორიგინალები და კოლექციები — ხელით დახატული ნამუშევრები." data-ka="კურატორიული ორიგინალები და კოლექციები — ხელით დახატული ნამუშევრები.">კურატორიული ორიგინალები და კოლექციები — ხელით დახატული ნამუშევრები.</p>
       <div
         class="home-shop-expand-rule"
         data-home-shop-expand-rule
@@ -788,19 +782,13 @@
 
   </div>
 
-  <a href="sale/shop.html" class="nv-gallery-entrance" aria-label="Gallery — Click here to view all paintings">
+  <a href="sale/shop.html" class="nv-gallery-entrance" aria-label="Gallery → — CLICK HERE">
     <div class="nv-gallery-entrance__surface">
       <div class="nv-gallery-entrance__content">
         <span class="nv-gallery-entrance__title">
-          Gallery
-          <span class="nv-gallery-entrance__arrow" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="14 0 38 18" fill="none" focusable="false">
-              <path d="M14 9h27.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" opacity="0.88"/>
-              <path d="M38 4l9 5-9 5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" opacity="0.88"/>
-            </svg>
-          </span>
+          Gallery&nbsp;<span class="nv-gallery-entrance__arrow" aria-hidden="true">→</span>
         </span>
-        <span class="nv-gallery-entrance__sub">click here</span>
+        <span class="nv-gallery-entrance__sub" data-en="CLICK HERE" data-ka="CLICK HERE">CLICK HERE</span>
       </div>
     </div>
   </a>
@@ -813,7 +801,7 @@
 <section id="artists" class="section">
   <div class="container">
     <header class="editorial-heading">
-      <p class="editorial-heading__eyebrow" data-en="Creators" data-ka="Creators">Creators</p>
+      <p class="editorial-heading__eyebrow" data-en="ARTISTS" data-ka="ARTISTS">ARTISTS</p>
       <h2 class="editorial-heading__title" data-en="Artists" data-ka="Artists">Artists</h2>
       <p class="editorial-heading__lede muted" title="ქართველი ავტორები ქვეყნის სხვადასხვა კუთხიდან." data-en="ქართველი ავტორები ქვეყნის სხვადასხვა კუთხიდან." data-ka="ქართველი ავტორები ქვეყნის სხვადასხვა კუთხიდან.">ქართველი ავტორები ქვეყნის სხვადასხვა კუთხიდან.</p>
       <div
@@ -843,8 +831,8 @@
 <section id="news" class="section">
   <div class="container">
     <header class="editorial-heading">
-      <p class="editorial-heading__eyebrow" data-en="Journal" data-ka="Journal">Journal</p>
-      <h2 class="editorial-heading__title" data-en="News & Stories" data-ka="News & Stories">News & Stories</h2>
+      <p class="editorial-heading__eyebrow" data-en="JOURNAL" data-ka="JOURNAL">JOURNAL</p>
+      <h2 class="editorial-heading__title" data-en="News &amp; Stories" data-ka="News &amp; Stories">News &amp; Stories</h2>
       <p class="editorial-heading__lede muted" title="აზრები ხელოვნებაზე, შემოქმედებასა და შთაგონებაზე, რომელიც ყოველი ტილოს უკან არის." data-en="აზრები ხელოვნებაზე, შემოქმედებასა და შთაგონებაზე, რომელიც ყოველი ტილოს უკან არის." data-ka="აზრები ხელოვნებაზე, შემოქმედებასა და შთაგონებაზე, რომელიც ყოველი ტილოს უკან არის.">აზრები ხელოვნებაზე, შემოქმედებასა და შთაგონებაზე, რომელიც ყოველი ტილოს უკან არის.</p>
       <div
         class="editorial-heading__rule editorial-rule"
@@ -1015,7 +1003,7 @@
 <section id="about" class="section">
   <div class="container">
     <header class="editorial-heading" data-editorial-reveal="once">
-      <p class="editorial-heading__eyebrow" data-en="About" data-ka="About">About</p>
+      <p class="editorial-heading__eyebrow" data-en="ABOUT" data-ka="ABOUT">ABOUT</p>
       <h2 class="editorial-heading__title" data-en="About Us" data-ka="About Us">About Us</h2>
       <div
         class="editorial-heading__rule editorial-rule"
@@ -1063,6 +1051,7 @@
 
       <div class="login-left collector-account__body">
         <div class="section-top collector-account__head">
+          <p class="small muted" data-en="TERMS" data-ka="TERMS">TERMS</p>
           <h2 class="collector-account__terms-title" data-en="Terms &amp; Conditions" data-ka="Terms &amp; Conditions">Terms &amp; Conditions</h2>
           <div class="collector-account__terms-ornament" aria-hidden="true">
             <span class="collector-account__terms-line"></span>
@@ -1070,9 +1059,9 @@
             <span class="collector-account__terms-line"></span>
           </div>
           <p class="muted collector-account__desc collector-account__terms-lede"
-             data-en="შეკვეთა და პირობები • ბოლო განახლება: 2026"
-             data-ka="შეკვეთა და პირობები • ბოლო განახლება: 2026">
-            შეკვეთა და პირობები • ბოლო განახლება: 2026
+             data-en="შეკვეთა და პირობები · ბოლო განახლება: 2026"
+             data-ka="შეკვეთა და პირობები · ბოლო განახლება: 2026">
+            შეკვეთა და პირობები · ბოლო განახლება: 2026
           </p>
         </div>
 
