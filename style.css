@@ -7363,6 +7363,69 @@ a.pill:visited{
   opacity: 0.9;
 }
 
+/* #login — Collector card: Terms hero–style text stack (card frame, art & CTA chrome unchanged) */
+#login .collector-account__head.section-top {
+  text-align: center;
+}
+
+#login .collector-account__terms-title {
+  margin: 0 0 0;
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  font-size: clamp(1.68rem, 4.2vw, 2.05rem);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: #1a1514;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.38);
+}
+
+#login .collector-account__terms-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2.3vw, 21px);
+  margin: clamp(14px, 2.5vw, 20px) auto clamp(14px, 2.6vw, 22px);
+}
+
+#login .collector-account__terms-line {
+  display: block;
+  width: clamp(52px, 13vw, 92px);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #d4b896 24%,
+    #b8956e 50%,
+    #d4b896 76%,
+    transparent
+  );
+}
+
+#login .collector-account__terms-gem {
+  display: block;
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, #d4b896, #b8956e);
+  box-shadow: 0 0 14px rgba(184, 149, 110, 0.34);
+}
+
+#login .collector-account__terms-lede {
+  margin-inline: auto;
+  max-width: 34rem;
+  font-family: FiraGO, "DejaVu Sans", system-ui, sans-serif;
+  font-size: clamp(0.93rem, 2vw, 1.04rem);
+  font-weight: 400;
+  line-height: 1.88;
+  letter-spacing: 0.028em;
+  color: rgba(46, 40, 36, 0.78);
+}
+
+#login .collector-account__cta-wrap {
+  text-align: center;
+}
+
 /* Collector account — mobile card layout (desktop unchanged) */
 @media (max-width: 768px) {
   #login.section-gray {
@@ -7402,15 +7465,20 @@ a.pill:visited{
     margin-bottom: 10px;
   }
 
-  #login .collector-account__head h2 {
-    font-size: 22px;
-    margin-bottom: 6px;
-    line-height: 1.2;
+  #login .collector-account__head h2.collector-account__terms-title {
+    font-size: clamp(19px, 5vw, 23px);
+    margin-bottom: 0;
+    line-height: 1.08;
   }
 
-  #login .collector-account__desc {
+  #login .collector-account__terms-ornament {
+    margin-top: clamp(10px, 2.8vw, 14px);
+    margin-bottom: clamp(10px, 2.8vw, 14px);
+  }
+
+  #login .collector-account__desc.collector-account__terms-lede {
     font-size: 14px;
-    line-height: 1.45;
+    line-height: 1.55;
     margin: 0;
     max-width: 34ch;
     margin-inline: auto;

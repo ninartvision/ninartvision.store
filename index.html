@@ -175,8 +175,8 @@
   </style>
 
   <!-- Full stylesheet loaded asynchronously (non-render-blocking) -->
-  <link rel="preload" href="./style.min.css?v=nv20260527" as="style" onload="this.onload=null;this.rel='stylesheet';document.documentElement.classList.add('nv-css-ready')">
-  <noscript><link rel="stylesheet" href="./style.min.css?v=nv20260527"></noscript>
+  <link rel="preload" href="./style.min.css?v=nv20260622" as="style" onload="this.onload=null;this.rel='stylesheet';document.documentElement.classList.add('nv-css-ready')">
+  <noscript><link rel="stylesheet" href="./style.min.css?v=nv20260622"></noscript>
   <script>
     (function () {
       function nvMarkCssReady() {
@@ -1058,11 +1058,16 @@
 
       <div class="login-left collector-account__body">
         <div class="section-top collector-account__head">
-          <h2 data-en="Collector account" data-ka="კოლექციონერის ანგარიში">Collector account</h2>
-          <p class="muted collector-account__desc"
-             data-en="Sign in with Google to save favorites when this feature is enabled. To buy art today, browse the shop or message us on WhatsApp."
-             data-ka="შეგიძლიათ შეხვიდეთ Google-ით, როცა ფუნქცია ჩაირთვება. ნამუშევრის შესაძენად გადადით მაღაზიაში ან მოგვწერეთ WhatsApp-ზე.">
-            Sign in with Google to save favorites when this feature is enabled. To buy art today, browse the shop or message us on WhatsApp.
+          <h2 class="collector-account__terms-title" data-en="Terms &amp; Conditions" data-ka="Terms &amp; Conditions">Terms &amp; Conditions</h2>
+          <div class="collector-account__terms-ornament" aria-hidden="true">
+            <span class="collector-account__terms-line"></span>
+            <span class="collector-account__terms-gem"></span>
+            <span class="collector-account__terms-line"></span>
+          </div>
+          <p class="muted collector-account__desc collector-account__terms-lede"
+             data-en="Orders and terms · Last updated: 2026"
+             data-ka="შეკვეთა და პირობები • ბოლო განახლება: 2026">
+            შეკვეთა და პირობები • ბოლო განახლება: 2026
           </p>
         </div>
 
@@ -1072,7 +1077,7 @@
           Sign in with Google
         </button>
         <p class="collector-account__cta-wrap">
-          <a href="sale/shop.html" class="collector-account__cta" data-en="Browse the shop →" data-ka="მაღაზია →">Browse the shop →</a>
+          <a href="terms.html" class="collector-account__cta" data-en="View Terms →" data-ka="იხილეთ წესები →">იხილეთ წესები →</a>
         </p>
       </div>
 
