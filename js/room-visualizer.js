@@ -988,6 +988,21 @@
   function sanitizeFullscreenStageClone(clone) {
     if (!clone) return;
     clone.removeAttribute('id');
+    clone.style.display = 'block';
+    clone.style.position = 'relative';
+    clone.style.width = '100%';
+    clone.style.height = '100%';
+    clone.style.minWidth = '0';
+    clone.style.minHeight = '0';
+    clone.style.maxWidth = '100%';
+    clone.style.maxHeight = '100%';
+    clone.style.flex = 'none';
+    clone.style.flexShrink = '0';
+    clone.style.boxSizing = 'border-box';
+    clone.style.aspectRatio = 'auto';
+    clone.style.overflow = 'hidden';
+    clone.style.transform = 'none';
+    clone.style.transformOrigin = '';
     clone.style.pointerEvents = 'none';
     clone.querySelectorAll('*').forEach(function (element) {
       element.removeAttribute('id');
@@ -1028,28 +1043,18 @@
     if (!roomImg.getAttribute('src')) return;
     ensureFullscreenPreviewModal();
 
-    var stageRect = stage.getBoundingClientRect();
-    var viewportWidth = window.innerWidth;
-    var viewportHeight = window.innerHeight;
-    var scale = Math.min((viewportWidth * 0.95) / Math.max(stageRect.width, 1), (viewportHeight * 0.95) / Math.max(stageRect.height, 1));
-    scale = Number.isFinite(scale) && scale > 0 ? scale : 1;
-
     var stageClone = stage.cloneNode(true);
     sanitizeFullscreenStageClone(stageClone);
-    stageClone.style.width = '100%';
-    stageClone.style.height = '100%';
-    stageClone.style.maxWidth = 'none';
-    stageClone.style.maxHeight = 'none';
     stageClone.style.margin = '0';
-    stageClone.style.aspectRatio = 'auto';
-    stageClone.style.transform = 'none';
-    stageClone.style.pointerEvents = 'none';
+    stageClone.style.boxShadow = 'none';
 
     fullscreenPreviewScene.innerHTML = '';
-    fullscreenPreviewScene.style.width = stageRect.width + 'px';
-    fullscreenPreviewScene.style.height = stageRect.height + 'px';
-    fullscreenPreviewScene.style.transform = 'scale(' + scale + ')';
-    fullscreenPreviewScene.style.transformOrigin = 'center center';
+    fullscreenPreviewScene.style.width = '100%';
+    fullscreenPreviewScene.style.height = '100%';
+    fullscreenPreviewScene.style.minWidth = '0';
+    fullscreenPreviewScene.style.minHeight = '0';
+    fullscreenPreviewScene.style.maxWidth = '100%';
+    fullscreenPreviewScene.style.maxHeight = '100%';
     fullscreenPreviewScene.style.pointerEvents = 'none';
     fullscreenPreviewScene.appendChild(stageClone);
 
