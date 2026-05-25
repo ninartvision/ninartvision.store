@@ -13,12 +13,14 @@
   <meta property="og:description" id="ogDescription" content="">
   <meta property="og:image"       id="ogImage"       content="">
 
-  <link rel="stylesheet" href="./style.min.css?v=nv20260615" />
+  <link rel="stylesheet" href="./style.min.css?v=nv20260626" />
+  <link rel="stylesheet" href="./css/project-featured-editorial.css?v=nv20260626" />
   <link rel="icon" href="./images/favicon.webp">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap"></noscript>
 
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-1H7SY0J2EB"></script>
@@ -29,7 +31,7 @@
     gtag('config', 'G-1H7SY0J2EB', { anonymize_ip: true, allow_google_signals: false });
   </script>
 </head>
-<body>
+<body class="page-art-project">
 
   <!-- ─── TOP NAV ──────────────────────────────────────────────── -->
   <header class="header">
@@ -86,39 +88,91 @@
   </div>
 
   <!-- ─── PROJECT CONTENT (hidden until JS populates it) ─────────  -->
-  <main id="projectContent" class="project-page" style="display:none;">
+  <main id="projectContent" class="fp-project" style="display:none;">
+    <div class="fp-project__ambient" aria-hidden="true"></div>
+    <div class="fp-project__wrap">
+      <header class="fp-hero" data-art-reveal>
+        <p class="fp-hero__label">Featured Project</p>
+        <h1 id="fpHeroTitle" class="fp-hero__title"></h1>
+        <div class="fp-hero__divider" aria-hidden="true"></div>
+        <p id="fpHeroIntro" class="fp-hero__intro"></p>
+      </header>
 
-    <section class="project-hero">
-
-      <div class="project-text">
-        <h1 id="projTitle"></h1>
-        <p class="muted" id="projDesc"></p>
-
-        <!-- Bilingual body text rendered by JS -->
-        <div id="projBodyKa"></div>
-        <div id="projBodyEn"></div>
-
-        <ul class="project-details" id="projDetails"></ul>
-
-        <!-- Artist link — hidden until an artist reference exists -->
-        <a id="projArtistLink"
-           href="artists/"
-           class="link"
-           style="display:none;margin-bottom:12px;">View artist →</a>
-
-        <a class="link back-link" href="index.html">← Back</a>
+      <div class="fp-split" data-art-reveal>
+        <div class="fp-split__copy">
+          <div class="fp-accordion" id="fpAccordion">
+            <div class="fp-accordion__item is-open" data-accordion-item>
+              <button type="button" class="fp-accordion__trigger" aria-expanded="true" aria-controls="fp-ka-panel" id="fp-ka-trigger">
+                <span>
+                  <span class="fp-accordion__trigger-label">აღწერა</span>
+                  <span class="fp-accordion__trigger-hint">ქართული</span>
+                </span>
+                <span class="fp-accordion__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </button>
+              <div class="fp-accordion__panel" id="fp-ka-panel" role="region" aria-labelledby="fp-ka-trigger">
+                <div class="fp-accordion__panel-inner">
+                  <div id="fpBodyKa" class="fp-accordion__body"></div>
+                </div>
+              </div>
+            </div>
+            <div class="fp-accordion__item" data-accordion-item>
+              <button type="button" class="fp-accordion__trigger" aria-expanded="false" aria-controls="fp-en-panel" id="fp-en-trigger">
+                <span>
+                  <span class="fp-accordion__trigger-label">Description</span>
+                  <span class="fp-accordion__trigger-hint">English</span>
+                </span>
+                <span class="fp-accordion__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </button>
+              <div class="fp-accordion__panel" id="fp-en-panel" role="region" aria-labelledby="fp-en-trigger" hidden>
+                <div class="fp-accordion__panel-inner">
+                  <div id="fpBodyEn" class="fp-accordion__body" lang="en"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a id="projArtistLink" href="artists/" class="link" style="display:none;margin-top:20px;">View artist →</a>
+        </div>
+        <figure class="fp-split__frame art-project__feature">
+          <div class="fp-frame-wrap">
+            <div class="fp-frame" id="projMainImage"></div>
+          </div>
+        </figure>
       </div>
 
-      <div class="project-image" id="projMainImage"></div>
+      <div class="fp-specs" data-art-reveal aria-label="Artwork details">
+        <div class="fp-specs__col">
+          <span class="fp-specs__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M8 7l4-4 4 4"/><path d="M8 17h8"/></svg></span>
+          <p class="fp-specs__label">Medium</p>
+          <p id="fpSpecMedium" class="fp-specs__value">—</p>
+        </div>
+        <div class="fp-specs__col">
+          <span class="fp-specs__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M8 10h8M8 14h5"/></svg></span>
+          <p class="fp-specs__label">Size</p>
+          <p id="fpSpecSize" class="fp-specs__value">—</p>
+        </div>
+        <div class="fp-specs__col">
+          <span class="fp-specs__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <p class="fp-specs__label">Year</p>
+          <p id="fpSpecYear" class="fp-specs__value">—</p>
+        </div>
+        <div class="fp-specs__col">
+          <span class="fp-specs__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+          <p class="fp-specs__label">Category</p>
+          <p id="fpSpecCategory" class="fp-specs__value">Original art</p>
+        </div>
+      </div>
 
-    </section>
+      <section class="fp-gallery art-project__gallery" id="projGallerySection" data-art-reveal style="display:none;" aria-labelledby="fpGalleryTitle">
+        <h2 id="fpGalleryTitle" class="fp-gallery__title">More photos</h2>
+        <div class="art-gallery__grid" id="projGalleryList"></div>
+      </section>
 
-    <!-- Extra gallery — hidden until images[] exists -->
-    <section class="project-gallery" id="projGallerySection" style="display:none;">
-      <h2>More photos</h2>
-      <div class="gallery-list" id="projGalleryList"></div>
-    </section>
-
+      <a class="fp-back" href="index.html">← Back</a>
+    </div>
   </main>
 
   <!-- ─── LIGHTBOX ─────────────────────────────────────────────── -->
@@ -130,8 +184,9 @@
   </div>
 
   <!-- ─── SCRIPTS ──────────────────────────────────────────────── -->
-  <script defer src="./js/project-detail-lightbox.min.js?v=nv20260615"></script>
-  <script defer src="./script.min.js?v=nv20260527"></script>
+  <script defer src="./js/project-detail-lightbox.min.js?v=nv20260626"></script>
+  <script defer src="./js/featured-project-page.min.js?v=nv20260626"></script>
+  <script defer src="./script.min.js?v=nv20260626"></script>
 
   <script>
     /* ── Project loader ───────────────────────────────────────── */
@@ -188,108 +243,103 @@
     /* ── Populate page DOM ────────────────────────────────────── */
     function populatePage(p) {
       const titleEn = p.titleEn || '';
-      const titleKa = p.titleKa ? `„${p.titleKa}"` : '';
-      const fullTitle = [titleEn, titleKa].filter(Boolean).join(' – ');
+      const titleKa = p.titleKa || '';
+      const displayTitle = [titleEn, titleKa].filter(Boolean).join(' – ');
+      const fullTitle = titleKa ? `${titleEn} – „${titleKa}"` : titleEn;
 
-      // Page / meta
-      document.getElementById('pageTitle').textContent   = `${titleEn || titleKa} | Ninart Vision`;
+      document.getElementById('pageTitle').textContent = `${titleEn || titleKa} | Ninart Vision`;
       document.getElementById('pageDescription').content = p.shortDescEn || '';
-      document.getElementById('ogTitle').content         = fullTitle;
-      document.getElementById('ogDescription').content   = p.shortDescEn || '';
+      document.getElementById('ogTitle').content = displayTitle || fullTitle;
+      document.getElementById('ogDescription').content = p.shortDescEn || '';
 
-      // Heading + short description
-      document.getElementById('projTitle').textContent = fullTitle;
-      if (p.shortDescEn) document.getElementById('projDesc').textContent = p.shortDescEn;
+      document.getElementById('fpHeroTitle').textContent = displayTitle;
+      document.getElementById('fpHeroIntro').textContent = p.shortDescEn || '';
 
-      // Body text
-      document.getElementById('projBodyKa').innerHTML = renderBlocks(p.bodyKa, 'geo');
-      document.getElementById('projBodyEn').innerHTML = renderBlocks(p.bodyEn, 'eng');
+      document.getElementById('fpBodyKa').innerHTML = renderBlocks(p.bodyKa);
+      document.getElementById('fpBodyEn').innerHTML = renderBlocks(p.bodyEn);
 
-      // Details list
-      const details = [];
-      if (p.medium) details.push(`<li><strong>Technique:</strong> ${p.medium}</li>`);
-      if (p.size)   details.push(`<li><strong>Size:</strong> ${p.size}</li>`);
-      if (p.year)   details.push(`<li><strong>Year:</strong> ${p.year}</li>`);
-      document.getElementById('projDetails').innerHTML = details.join('');
+      document.getElementById('fpSpecMedium').textContent = p.medium || '—';
+      document.getElementById('fpSpecSize').textContent = p.size || '—';
+      document.getElementById('fpSpecYear').textContent = p.year || '—';
 
-      // Artist link
       if (p.artist) {
-        const link  = document.getElementById('projArtistLink');
+        const link = document.getElementById('projArtistLink');
         const aSlug = p.artist.slug || p.artist._id;
-        link.href        = `artists/artist.html?artist=${encodeURIComponent(aSlug)}`;
+        link.href = `artists/artist.html?artist=${encodeURIComponent(aSlug)}`;
         link.textContent = `View ${p.artist.name}'s profile →`;
         link.style.display = '';
       }
 
-      // Cover image
       const coverUrl = p.coverImage?.asset?.url;
+      const mainHost = document.getElementById('projMainImage');
+      mainHost.innerHTML = '';
       if (coverUrl) {
         const img = document.createElement('img');
-        img.src     = `${coverUrl}?auto=format&w=1200&q=85`;
-        img.srcset  = [
-          `${coverUrl}?auto=format&w=600&q=80 600w`,
-          `${coverUrl}?auto=format&w=900&q=80 900w`,
-          `${coverUrl}?auto=format&w=1200&q=85 1200w`,
-        ].join(', ');
-        img.sizes   = '(max-width:900px) 100vw, 50vw';
-        img.alt     = p.coverImage?.alt || fullTitle;
+        img.id = 'mainImg';
+        img.src = `${coverUrl}?auto=format&w=1200&q=85`;
+        img.alt = p.coverImage?.alt || displayTitle;
         img.decoding = 'async';
-        img.loading  = 'lazy';
+        img.loading = 'eager';
         img.setAttribute('data-full', `${coverUrl}?auto=format&w=1600&q=90`);
-        document.getElementById('projMainImage').appendChild(img);
-
-        document.getElementById('ogImage').content =
-          `${coverUrl}?auto=format&w=1200&q=85`;
+        mainHost.appendChild(img);
+        document.getElementById('ogImage').content = `${coverUrl}?auto=format&w=1200&q=85`;
       }
 
-      // Gallery
       const extras = p.images || [];
       if (extras.length > 0) {
         const list = document.getElementById('projGalleryList');
         extras.forEach((imgObj) => {
           const url = imgObj?.asset?.url;
           if (!url) return;
-          const img    = document.createElement('img');
-          img.src      = `${url}?auto=format&w=800&q=80`;
-          img.alt      = imgObj.alt || fullTitle;
+          const img = document.createElement('img');
+          img.src = `${url}?auto=format&w=800&q=80`;
+          img.alt = imgObj.alt || displayTitle;
           img.decoding = 'async';
-          img.loading  = 'lazy';
+          img.loading = 'lazy';
           img.setAttribute('data-full', `${url}?auto=format&w=1600&q=90`);
           list.appendChild(img);
         });
         document.getElementById('projGallerySection').style.display = '';
       }
 
-      // Show content, hide loader
       document.getElementById('projectLoading').style.display = 'none';
-      document.getElementById('projectContent').style.display = '';
-
       const root = document.getElementById('projectContent');
+      root.style.display = '';
+
+      document.querySelectorAll('#projectContent [data-art-reveal]').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+
       if (window.NVProjectDetail && root) {
         window.NVProjectDetail.bindImages(root);
       }
+      if (window.NVFeaturedProject) {
+        window.NVFeaturedProject.init();
+      }
     }
 
-    /* ── Portable-text → HTML ─────────────────────────────────── */
-    function renderBlocks(blocks, cssClass) {
-      if (!Array.isArray(blocks)) return '';
-      return blocks
+    function renderBlocks(blocks) {
+      if (!Array.isArray(blocks) || !blocks.length) {
+        return '<p></p>';
+      }
+      const html = blocks
         .filter((b) => b._type === 'block' && Array.isArray(b.children))
         .map((b) => {
-          const html = b.children
+          const inner = b.children
             .map((c) => {
               let t = (c.text || '')
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
               if (c.marks?.includes('strong')) t = `<strong>${t}</strong>`;
-              if (c.marks?.includes('em'))     t = `<em>${t}</em>`;
+              if (c.marks?.includes('em')) t = `<em>${t}</em>`;
               return t;
             })
             .join('');
-          return `<p class="project-paragraph ${cssClass}">${html}</p>`;
+          return `<p>${inner}</p>`;
         })
-        .join('\n');
+        .join('');
+      return html || '<p></p>';
     }
 
     /* ── Error state ──────────────────────────────────────────── */

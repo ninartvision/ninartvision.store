@@ -55,10 +55,15 @@
 }
   </script>
 
-  <link rel="stylesheet" href="../../style.min.css?v=nv20260615" />
+  <link rel="stylesheet" href="../../style.min.css?v=nv20260626" />
+  <link rel="stylesheet" href="../../css/project-featured-editorial.css?v=nv20260626" />
   <link rel="icon"       href="../../images/favicon.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap"></noscript>
 </head>
-<body>
+<body class="page-art-project">
 
 <!-- ── HEADER ──────────────────────────────────────────────────────────── -->
 <header class="header">
@@ -96,68 +101,132 @@
 </div>
 
 
-<main class="project-page">
+<main class="fp-project">
+  <div class="fp-project__ambient" aria-hidden="true"></div>
 
-  <section class="project-hero">
-    <div class="project-text">
+  <div class="fp-project__wrap">
+    <header class="fp-hero" data-art-reveal>
+      <p class="fp-hero__label">Featured Project</p>
+      <h1 class="fp-hero__title">Silent Bloom – ჩუმი ყვავილობა</h1>
+      <div class="fp-hero__divider" aria-hidden="true"></div>
+      <p class="fp-hero__intro">Delicate dandelion textures capturing lightness and freedom.</p>
+    </header>
 
-        <h1>„Silent Bloom“ </h1>
-        <p class="muted">by Nini Mzhavia</p>
-        <p class="muted">„Silent Bloom“ </p>
+    <div class="fp-split" data-art-reveal>
+      <div class="fp-split__copy">
+        <div class="fp-accordion" id="silent-bloomAccordion">
+          <div class="fp-accordion__item is-open" data-accordion-item>
+            <button type="button" class="fp-accordion__trigger" aria-expanded="true" aria-controls="silent-bloom-ka-panel" id="silent-bloom-ka-trigger">
+              <span>
+                <span class="fp-accordion__trigger-label">აღწერა</span>
+                <span class="fp-accordion__trigger-hint">ქართული</span>
+              </span>
+              <span class="fp-accordion__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="fp-accordion__panel" id="silent-bloom-ka-panel" role="region" aria-labelledby="silent-bloom-ka-trigger">
+              <div class="fp-accordion__panel-inner">
+                <div class="fp-accordion__body">
+                  <p>ნაზი ბანკის ტექსტურები, რომლებიც სიმსუბუქესა და თავისუფლებას გადმოსცემს. თბილი პასტელური ტონები და ჰაეროვანი კომპოზიცია ქმნის მშვიდ, თანამედროვე ატმოსფეროს.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <ul class="project-details">
-          <li><strong>Size:</strong>   60 × 80 cm</li>
-          <li><strong>Medium:</strong> acrylic on canvas</li>
-          <li><strong>Year:</strong>   2025</li>
-        </ul>
-
-        <div class="product-buy">
-          <div class="product-price">₾350</div>
-
-          <p class="status sold">
-            Sold
-          </p>
-
-          
-
-          <button class="btn" id="shareBtn">
-            Share this artwork
-          </button>
-          <p id="shareMsg" class="muted">
-            Link copied!
-          </p>
+          <div class="fp-accordion__item" data-accordion-item>
+            <button type="button" class="fp-accordion__trigger" aria-expanded="false" aria-controls="silent-bloom-en-panel" id="silent-bloom-en-trigger">
+              <span>
+                <span class="fp-accordion__trigger-label">Description</span>
+                <span class="fp-accordion__trigger-hint">English</span>
+              </span>
+              <span class="fp-accordion__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="fp-accordion__panel" id="silent-bloom-en-panel" role="region" aria-labelledby="silent-bloom-en-trigger" hidden>
+              <div class="fp-accordion__panel-inner">
+                <div class="fp-accordion__body" lang="en">
+                  <p>Delicate dandelion textures capturing lightness and freedom. Warm pastel tones and an airy composition create a calm, contemporary atmosphere — a piece that brings softness and quiet beauty into any interior.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      
-      <a class="link back-link" href="../../sale/shop.html">← Back to Shop</a>
+      </div>
+
+      <figure class="fp-split__frame art-project__feature">
+        <div class="fp-frame-wrap">
+          <div class="fp-frame">
+            <img id="mainImg"
+                 src="https://cdn.sanity.io/images/8t5h923j/production/e8f86d53b5f971f374692feb0d400cb729262dd0-1500x2000.jpg?auto=format&amp;w=1200&amp;q=85"
+                 alt="Silent Bloom — original acrylic painting by Nini Mzhavia"
+                 decoding="async" fetchpriority="high" loading="eager" data-full="https://cdn.sanity.io/images/8t5h923j/production/e8f86d53b5f971f374692feb0d400cb729262dd0-1500x2000.jpg?auto=format&amp;w=1600&amp;q=90">
+          </div>
+        </div>
+      </figure>
     </div>
 
-    <div class="project-image">
-      <img id="mainImg" src="https://cdn.sanity.io/images/8t5h923j/production/e8f86d53b5f971f374692feb0d400cb729262dd0-1500x2000.jpg?auto=format&w=900&q=85"
-               alt="„Silent Bloom“ "
-               decoding="async">
+    <div class="fp-specs" data-art-reveal aria-label="Artwork details">
+      <div class="fp-specs__col">
+        <span class="fp-specs__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M8 7l4-4 4 4"/><path d="M8 17h8"/></svg>
+        </span>
+        <p class="fp-specs__label">Medium</p>
+        <p class="fp-specs__value">Acrylic on canvas</p>
+      </div>
+      <div class="fp-specs__col">
+        <span class="fp-specs__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M8 10h8M8 14h5"/></svg>
+        </span>
+        <p class="fp-specs__label">Size</p>
+        <p class="fp-specs__value">60 × 80 cm</p>
+      </div>
+      <div class="fp-specs__col">
+        <span class="fp-specs__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </span>
+        <p class="fp-specs__label">Year</p>
+        <p class="fp-specs__value">2025</p>
+      </div>
+      <div class="fp-specs__col">
+        <span class="fp-specs__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <p class="fp-specs__label">Category</p>
+        <p class="fp-specs__value">Floral</p>
+      </div>
     </div>
-  </section>
 
-  <section class="project-gallery">
-    <h2>More photos</h2>
-    <div class="gallery-list">
-        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/528235f402a1226a0ab1b01d3be01b2c92e22876-3024x3158.jpg?auto=format&w=1600&q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/528235f402a1226a0ab1b01d3be01b2c92e22876-3024x3158.jpg?auto=format&w=800&q=80"  alt="„Silent Bloom“  2">
-        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/9271ed94eecd8540f84bcac2d177be8e1604a8e8-2764x3722.jpg?auto=format&w=1600&q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/9271ed94eecd8540f84bcac2d177be8e1604a8e8-2764x3722.jpg?auto=format&w=800&q=80"  alt="„Silent Bloom“  3">
-        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/d59c78be3467b5e4cf86138c37d3238351c93ae5-1152x2048.jpg?auto=format&w=1600&q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/d59c78be3467b5e4cf86138c37d3238351c93ae5-1152x2048.jpg?auto=format&w=800&q=80"  alt="„Silent Bloom“  4">
-        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/8dd23b81b158a6bfd4b286084da5facdab7f5fb1-1500x2000.jpg?auto=format&w=1600&q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/8dd23b81b158a6bfd4b286084da5facdab7f5fb1-1500x2000.jpg?auto=format&w=800&q=80"  alt="„Silent Bloom“  5">
-        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/fe64c278663251dc9ca6c63d31d5a0b57aa173a7-1500x2000.jpg?auto=format&w=1600&q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/fe64c278663251dc9ca6c63d31d5a0b57aa173a7-1500x2000.jpg?auto=format&w=800&q=80"  alt="„Silent Bloom“  6">
-        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/6193fd0365a8aaf33c3bd097dd40855806d8eb97-1500x2000.jpg?auto=format&w=1600&q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/6193fd0365a8aaf33c3bd097dd40855806d8eb97-1500x2000.jpg?auto=format&w=800&q=80"  alt="„Silent Bloom“  7">
-    </div>
-  </section>
+    <aside class="fp-purchase" data-art-reveal aria-label="შეძენა და გაზიარება">
+      <p class="fp-purchase__price">₾350</p>
+      <p class="fp-purchase__status">Sold</p>
+      <button type="button" class="fp-purchase__btn" id="shareBtn" data-share-url="https://ninartvision.store/products/silent-bloom/" data-share-title="Silent Bloom – ჩუმი ყვავილობა">გაზიარება</button>
+      <p id="shareMsg" class="fp-purchase__msg" style="display:none;">ბმული კოპირებულია</p>
+    </aside>
 
+    <section class="fp-gallery art-project__gallery" data-art-reveal aria-labelledby="silent-bloomGalleryTitle">
+      <h2 id="silent-bloomGalleryTitle" class="fp-gallery__title">More photos</h2>
+      <div class="art-gallery__grid">
+        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/528235f402a1226a0ab1b01d3be01b2c92e22876-3024x3158.jpg?auto=format&amp;w=1600&amp;q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/528235f402a1226a0ab1b01d3be01b2c92e22876-3024x3158.jpg?auto=format&amp;w=800&amp;q=80" alt="Silent Bloom detail 2">
+        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/9271ed94eecd8540f84bcac2d177be8e1604a8e8-2764x3722.jpg?auto=format&amp;w=1600&amp;q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/9271ed94eecd8540f84bcac2d177be8e1604a8e8-2764x3722.jpg?auto=format&amp;w=800&amp;q=80" alt="Silent Bloom detail 3">
+        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/d59c78be3467b5e4cf86138c37d3238351c93ae5-1152x2048.jpg?auto=format&amp;w=1600&amp;q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/d59c78be3467b5e4cf86138c37d3238351c93ae5-1152x2048.jpg?auto=format&amp;w=800&amp;q=80" alt="Silent Bloom detail 4">
+        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/8dd23b81b158a6bfd4b286084da5facdab7f5fb1-1500x2000.jpg?auto=format&amp;w=1600&amp;q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/8dd23b81b158a6bfd4b286084da5facdab7f5fb1-1500x2000.jpg?auto=format&amp;w=800&amp;q=80" alt="Silent Bloom detail 5">
+        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/fe64c278663251dc9ca6c63d31d5a0b57aa173a7-1500x2000.jpg?auto=format&amp;w=1600&amp;q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/fe64c278663251dc9ca6c63d31d5a0b57aa173a7-1500x2000.jpg?auto=format&amp;w=800&amp;q=80" alt="Silent Bloom detail 6">
+        <img data-full="https://cdn.sanity.io/images/8t5h923j/production/6193fd0365a8aaf33c3bd097dd40855806d8eb97-1500x2000.jpg?auto=format&amp;w=1600&amp;q=90" decoding="async" loading="lazy" src="https://cdn.sanity.io/images/8t5h923j/production/6193fd0365a8aaf33c3bd097dd40855806d8eb97-1500x2000.jpg?auto=format&amp;w=800&amp;q=80" alt="Silent Bloom detail 7">
+      </div>
+    </section>
+
+    <a class="fp-back" href="../../sale/shop.html">← მაღაზიაში დაბრუნება</a>
+  </div>
 </main>
-
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
   <span class="close" id="lightboxClose" aria-label="Close lightbox">&times;</span>
   <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
 </div>
 
-<script defer src="../../js/project-detail-lightbox.min.js?v=nv20260615"></script>
-<script defer src="../../script.min.js?v=nv20260615"></script>
+<script defer src="../../js/project-detail-lightbox.min.js?v=nv20260626"></script>
+<script defer src="../../js/featured-project-page.min.js?v=nv20260626"></script>
+<script defer src="../../script.min.js?v=nv20260626"></script>
 </body>
 </html>

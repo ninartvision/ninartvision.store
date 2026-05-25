@@ -5,8 +5,10 @@
   'use strict';
 
   function initReveal() {
+    if (document.documentElement.dataset.fpRevealInit) return;
     var items = document.querySelectorAll('.page-art-project [data-art-reveal]');
     if (!items.length) return;
+    document.documentElement.dataset.fpRevealInit = '1';
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       items.forEach(function (el) {
         el.classList.add('is-visible');
@@ -31,6 +33,8 @@
 
   function initAccordion() {
     document.querySelectorAll('[data-accordion-item]').forEach(function (item) {
+      if (item.dataset.fpAccordionBound) return;
+      item.dataset.fpAccordionBound = '1';
       var btn = item.querySelector('.fp-accordion__trigger');
       var panel = item.querySelector('.fp-accordion__panel');
       if (!btn || !panel) return;
@@ -51,7 +55,8 @@
   function initShare() {
     var btn = document.getElementById('shareBtn');
     var msg = document.getElementById('shareMsg');
-    if (!btn) return;
+    if (!btn || btn.dataset.fpShareBound) return;
+    btn.dataset.fpShareBound = '1';
     var url = btn.getAttribute('data-share-url') || location.href;
     var title = btn.getAttribute('data-share-title') || document.title;
     btn.addEventListener('click', function () {
@@ -75,6 +80,8 @@
     initAccordion();
     initShare();
   }
+
+  window.NVFeaturedProject = { init: init };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

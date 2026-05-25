@@ -7,10 +7,15 @@
   <meta name="description" content="Amber Glow — a vibrant sunset seascape by Nini Mzhavia. Original acrylic painting on Ninart Vision.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ninartvision.store/project7.html">
-  <link rel="stylesheet" href="./style.min.css?v=nv20260615" />
+  <link rel="stylesheet" href="./style.min.css?v=nv20260626" />
+  <link rel="stylesheet" href="./css/project-featured-editorial.css?v=nv20260626" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap"></noscript>
 </head>
 
-<body>
+<body class="page-art-project">
 
   <header class="header">
     <div class="container header-row">
@@ -44,64 +49,128 @@
     </nav>
   </div>
 
-  <main class="project-page">
+  <main class="fp-project">
+  <div class="fp-project__ambient" aria-hidden="true"></div>
 
-    <section class="project-hero">
-      <div class="project-text">
-        <h1>„Amber Glow“ – „ქარვისფერი ნათება“</h1>
-        <p class="muted">A vibrant sunset seascape filled with warmth and freedom.</p>
+  <div class="fp-project__wrap">
+    <header class="fp-hero" data-art-reveal>
+      <p class="fp-hero__label">Featured Project</p>
+      <h1 class="fp-hero__title">Amber Glow – ქარვისფერი ნათება</h1>
+      <div class="fp-hero__divider" aria-hidden="true"></div>
+      <p class="fp-hero__intro">A vibrant sunset seascape filled with warmth and freedom.</p>
+    </header>
 
-        <p class="project-paragraph geo">
-  ნამუშევარი ასახავს ზღვის ჰორიზონტს მზის ჩასვლისას, სადაც თბილი ოქროსფერი სხივები წყლის ზედაპირზე ირეკლება.
-</p>
+    <div class="fp-split" data-art-reveal>
+      <div class="fp-split__copy">
+        <div class="fp-accordion" id="amberAccordion">
+          <div class="fp-accordion__item is-open" data-accordion-item>
+            <button type="button" class="fp-accordion__trigger" aria-expanded="true" aria-controls="amber-ka-panel" id="amber-ka-trigger">
+              <span>
+                <span class="fp-accordion__trigger-label">აღწერა</span>
+                <span class="fp-accordion__trigger-hint">ქართული</span>
+              </span>
+              <span class="fp-accordion__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="fp-accordion__panel" id="amber-ka-panel" role="region" aria-labelledby="amber-ka-trigger">
+              <div class="fp-accordion__panel-inner">
+                <div class="fp-accordion__body">
+                  <p>ნამუშევარი ასახავს ზღვის ჰორიზონტს მზის ჩასვლისას, სადაც თბილი ოქროსფერი სხივები წყლის ზედაპირზე ირეკლება.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-
-<p class="project-paragraph eng">
-  This artwork captures the sea horizon at sunset, where warm golden light reflects across the water and fills the space with a luminous glow. The composition is built through energetic brushstrokes, giving the waves movement and a vivid rhythm. Cool blue and turquoise tones blend harmoniously with warm orange and rosy shades in the sky, creating an emotional contrast and a strong sense of depth. The painting conveys a feeling of freedom and serenity.
-</p>
-
-        <ul class="project-details">
-          <li><strong>Technique:</strong> Acrylic </li>
-          <li><strong>Size:</strong> 60x80 cm</li>
-          <li><strong>Year:</strong> 2025</li>
-        </ul>
-
-        <a class="link back-link" href="index.html">← Back</a>
+          <div class="fp-accordion__item" data-accordion-item>
+            <button type="button" class="fp-accordion__trigger" aria-expanded="false" aria-controls="amber-en-panel" id="amber-en-trigger">
+              <span>
+                <span class="fp-accordion__trigger-label">Description</span>
+                <span class="fp-accordion__trigger-hint">English</span>
+              </span>
+              <span class="fp-accordion__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <div class="fp-accordion__panel" id="amber-en-panel" role="region" aria-labelledby="amber-en-trigger" hidden>
+              <div class="fp-accordion__panel-inner">
+                <div class="fp-accordion__body" lang="en">
+                  <p>This artwork captures the sea horizon at sunset, where warm golden light reflects across the water and fills the space with a luminous glow. The composition is built through energetic brushstrokes, giving the waves movement and a vivid rhythm. Cool blue and turquoise tones blend harmoniously with warm orange and rosy shades in the sky, creating an emotional contrast and a strong sense of depth. The painting conveys a feeling of freedom and serenity.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="project-image">
-        <img src="./images/me7.webp" alt="Amber Glow original acrylic painting by Nini Mzhavia" decoding="async" loading="lazy">
+      <figure class="fp-split__frame art-project__feature">
+        <div class="fp-frame-wrap">
+          <div class="fp-frame">
+            <img id="mainImg"
+                 src="./images/me7.webp"
+                 alt="Amber Glow original acrylic painting by Nini Mzhavia"
+                 decoding="async" decoding="async" loading="lazy">
+          </div>
+        </div>
+      </figure>
+    </div>
+
+    <div class="fp-specs" data-art-reveal aria-label="Artwork details">
+      <div class="fp-specs__col">
+        <span class="fp-specs__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M8 7l4-4 4 4"/><path d="M8 17h8"/></svg>
+        </span>
+        <p class="fp-specs__label">Medium</p>
+        <p class="fp-specs__value">Acrylic on canvas</p>
+      </div>
+      <div class="fp-specs__col">
+        <span class="fp-specs__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M8 10h8M8 14h5"/></svg>
+        </span>
+        <p class="fp-specs__label">Size</p>
+        <p class="fp-specs__value">60 × 80 cm</p>
+      </div>
+      <div class="fp-specs__col">
+        <span class="fp-specs__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </span>
+        <p class="fp-specs__label">Year</p>
+        <p class="fp-specs__value">2025</p>
+      </div>
+      <div class="fp-specs__col">
+        <span class="fp-specs__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <p class="fp-specs__label">Category</p>
+        <p class="fp-specs__value">Seascape</p>
+      </div>
+    </div>
+
+
+    <section class="fp-gallery art-project__gallery" data-art-reveal aria-labelledby="amberGalleryTitle">
+      <h2 id="amberGalleryTitle" class="fp-gallery__title">More photos</h2>
+      <div class="art-gallery__grid">
+        <img decoding="async" loading="lazy" src="./images/seaorange8.webp" alt="Amber Glow detail">
+        <img decoding="async" loading="lazy" src="./images/seaorange6.webp" alt="Amber Glow detail">
+        <img decoding="async" loading="lazy" src="./images/seaorange3.webp" alt="Amber Glow detail">
+        <img decoding="async" loading="lazy" src="./images/seaorange4.webp" alt="Amber Glow detail">
+        <img decoding="async" loading="lazy" src="./images/seaorange2.webp" alt="Amber Glow detail">
+        <img decoding="async" loading="lazy" src="./images/seaorange1.webp" alt="Amber Glow detail">
+        <img decoding="async" loading="lazy" src="./images/seaorange7.webp" alt="Amber Glow detail">
+        <img decoding="async" loading="lazy" src="./images/seaorange5.webp" alt="Amber Glow detail">
       </div>
     </section>
 
-    <section class="project-gallery">
-      <h2>More photos</h2>
-
-      <div class="gallery-list">
-        <img src="./images/seaorange8.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/seaorange6.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/seaorange3.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/seaorange4.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/seaorange2.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/seaorange1.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/seaorange7.webp" alt="" decoding="async" loading="lazy">
-        <img src="./images/seaorange5.webp" alt="" decoding="async" loading="lazy">
-        
-      
-        
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ✅ LIGHTBOX (აქ უნდა იყოს ერთხელ და მხოლოდ body-ში) -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-    <span class="close" id="lightboxClose" aria-label="Close lightbox">&times;</span>
-    <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
+    <a class="fp-back" href="index.html">← Back</a>
   </div>
+</main>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <span class="close" id="lightboxClose" aria-label="Close lightbox">&times;</span>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
+</div>
 
-  <script defer src="./js/project-detail-lightbox.min.js?v=nv20260615"></script>
-  <script defer src="./script.min.js?v=nv20260527"></script>
-
+<script defer src="./js/project-detail-lightbox.min.js?v=nv20260626"></script>
+<script defer src="./js/featured-project-page.min.js?v=nv20260626"></script>
+<script defer src="./script.min.js?v=nv20260626"></script>
 </body>
 </html>
