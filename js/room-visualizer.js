@@ -947,8 +947,19 @@
     reader.readAsArrayBuffer(file);
   }
 
+  function clearRoomPreviewState() {
+    if (roomObjectUrl) {
+      URL.revokeObjectURL(roomObjectUrl);
+      roomObjectUrl = null;
+    }
+    roomImg.removeAttribute('data-nvr-orient');
+    roomImg.removeAttribute('src');
+    roomImg.src = '';
+  }
+
   function applyRoomPreviewSrc(url, orientMode) {
     if (!url) return;
+    clearRoomPreviewState();
     roomObjectUrl = url;
     roomImg.src = url;
     if (orientMode === 'baked') {
@@ -1073,10 +1084,7 @@
   fileInput.addEventListener('change', () => {
     const f = fileInput.files && fileInput.files[0];
     if (!f || !/^image\//.test(f.type)) return;
-    if (roomObjectUrl) URL.revokeObjectURL(roomObjectUrl);
-    roomObjectUrl = null;
-    roomImg.removeAttribute('src');
-    roomImg.removeAttribute('data-nvr-orient');
+    clearRoomPreviewState();
     loadRoomPreviewFromFile(f, function (url, orientMode) {
       if (!url) return;
       applyRoomPreviewSrc(url, orientMode);
@@ -1086,10 +1094,8 @@
   });
 
   resetBtn.addEventListener('click', () => {
-    if (roomObjectUrl) URL.revokeObjectURL(roomObjectUrl);
-    roomObjectUrl = null;
+    clearRoomPreviewState();
     fileInput.value = '';
-    roomImg.removeAttribute('data-nvr-orient');
     revealStage(false);
     updateArtVisibility();
   });
