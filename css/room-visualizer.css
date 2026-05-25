@@ -1,177 +1,395 @@
-/* Room visualizer — gallery-focused UI; IDs / classes preserved for JS */
+/**
+ * Ninart Vision — Room Preview (room-visualizer.html)
+ * Premium editorial gallery aesthetic. All copy & functionality unchanged.
+ */
 
 .page-room-visualizer {
-  --nvr-radius: 16px;
-  --nvr-radius-lg: 20px;
-  --nvr-border: rgba(0, 0, 0, 0.08);
-  --nvr-border-soft: rgba(0, 0, 0, 0.06);
-  --nvr-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
-  --nvr-shadow-card-hover: 0 16px 48px rgba(0, 0, 0, 0.09);
-  --nvr-shadow-stage: 0 12px 56px rgba(0, 0, 0, 0.07);
+  --nvr-ivory: #f6f1e9;
+  --nvr-cream: #fffcf8;
+  --nvr-warm: #faf6f0;
+  --nvr-taupe: #9a8b7e;
+  --nvr-nude: #e8d5cf;
+  --nvr-nude-soft: rgba(232, 213, 205, 0.5);
+  --nvr-paper: rgba(255, 253, 250, 0.82);
+  --nvr-paper-strong: rgba(255, 253, 250, 0.94);
+  --nvr-paper-solid: #fffdfa;
+  --nvr-glass: rgba(255, 253, 250, 0.68);
+  --nvr-ink: #1a1514;
+  --nvr-muted: rgba(46, 40, 36, 0.74);
+  --nvr-brown: #5c4a3d;
+  --nvr-gold: #b8956e;
+  --nvr-gold-light: #d4b896;
+  --nvr-rose: #c9a8a2;
+  --nvr-rose-glow: rgba(201, 168, 162, 0.42);
+  --nvr-gold-glow: rgba(212, 184, 150, 0.38);
+  --nvr-line: rgba(26, 21, 18, 0.08);
+  --nvr-line-gold: rgba(184, 149, 110, 0.28);
+  --nvr-radius: 22px;
+  --nvr-radius-lg: 28px;
+  --nvr-shadow-sm: 0 14px 40px rgba(26, 21, 18, 0.06);
+  --nvr-shadow-md: 0 22px 60px rgba(26, 21, 18, 0.08);
+  --nvr-shadow-deep: 0 32px 80px rgba(26, 21, 18, 0.1);
+  --nvr-shadow-card-hover: 0 36px 72px rgba(26, 21, 18, 0.12);
+  --nvr-shadow-stage: 0 28px 72px rgba(26, 21, 18, 0.11);
+  --nvr-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --nvr-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --nvr-stage-bg: #f8f4ee;
 }
 
+.page-room-visualizer {
+  background:
+    linear-gradient(168deg, #e8e0d4 0%, var(--nvr-ivory) 22%, var(--nvr-cream) 55%, #f2ebe3 100%);
+  color: var(--nvr-ink);
+}
+
+/* ── Ambient layers ───────────────────────────────────────────────── */
+.nvr-page {
+  position: relative;
+  overflow: hidden;
+}
+
+.nvr-page__ambient {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.nvr-page__ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+.nvr-page__ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 95% 50% at 50% -8%, rgba(201, 168, 162, 0.2), transparent 58%),
+    radial-gradient(ellipse 65% 55% at 100% 22%, var(--nvr-gold-glow), transparent 54%),
+    radial-gradient(ellipse 58% 48% at 0% 68%, rgba(232, 213, 205, 0.28), transparent 52%),
+    radial-gradient(ellipse 40% 35% at 72% 88%, rgba(184, 149, 110, 0.12), transparent 50%);
+  animation: nvrAmbientShift 28s var(--nvr-ease) infinite alternate;
+}
+
+@keyframes nvrAmbientShift {
+  from { opacity: 0.92; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.02); }
+}
+
+/* Brush wash */
+.nvr-page__brush {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.7;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='b1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23e8d5cf' stop-opacity='0.35'/%3E%3Cstop offset='100%25' stop-color='%23d4b896' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cellipse cx='620' cy='180' rx='280' ry='140' fill='url(%23b1)' transform='rotate(-12 620 180)'/%3E%3Cellipse cx='120' cy='480' rx='220' ry='120' fill='url(%23b1)' transform='rotate(18 120 480)'/%3E%3Cpath d='M200 120 Q400 80 600 200 T750 350' stroke='%23c9a8a2' stroke-width='48' fill='none' opacity='0.12' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / cover;
+  mix-blend-mode: multiply;
+}
+
+/* Soft art wash */
+.nvr-page__art {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.nvr-page__art::before {
+  content: "";
+  position: absolute;
+  top: 4%;
+  right: -4%;
+  width: min(44vw, 420px);
+  height: min(50vh, 460px);
+  background:
+    url("../images/login-art.webp") no-repeat right top / contain,
+    radial-gradient(ellipse 72% 62% at 76% 26%, rgba(184, 149, 110, 0.2), transparent 58%);
+  opacity: 0.34;
+  filter: saturate(0.78) brightness(1.06);
+  -webkit-mask-image: radial-gradient(ellipse 82% 78% at 74% 28%, #000 6%, transparent 72%);
+  mask-image: radial-gradient(ellipse 82% 78% at 74% 28%, #000 6%, transparent 72%);
+  animation: nvrArtDrift 26s var(--nvr-ease) infinite alternate;
+}
+
+@keyframes nvrArtDrift {
+  from { transform: translate(0, 0); opacity: 0.28; }
+  to { transform: translate(-14px, 10px); opacity: 0.38; }
+}
+
+/* Botanical lines */
+.nvr-page__botanical {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.65;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 420' fill='none'%3E%3Cpath d='M110 24c-10 68 14 128 0 188-12 56-32 108-20 168 8 42 26 30 20-10-6-36 10-92 24-138' stroke='%23b8956e' stroke-width='0.7' opacity='0.4'/%3E%3Cpath d='M44 88c34 44 54 108 32 168' stroke='%23c9a8a2' stroke-width='0.55' opacity='0.32'/%3E%3Cpath d='M176 128c-28 54-38 116-22 178' stroke='%239a8b7e' stroke-width='0.5' opacity='0.26'/%3E%3C/svg%3E") no-repeat 2% 12% / clamp(90px, 11vw, 130px) auto,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 420' fill='none'%3E%3Cpath d='M110 396c10-68-14-128 0-188 12-56 32-108 20-168-8-42-26-30-20 10 6 36-10 92-24 138' stroke='%23b8956e' stroke-width='0.65' opacity='0.35'/%3E%3C/svg%3E") no-repeat 98% 55% / clamp(80px, 9vw, 110px) auto;
+}
+
+/* Floating shapes */
+.nvr-page__shapes {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.nvr-shape {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(184, 149, 110, 0.18);
+  background: linear-gradient(135deg, rgba(255, 253, 250, 0.45), rgba(232, 213, 205, 0.12));
+  box-shadow: 0 8px 32px rgba(26, 21, 18, 0.04);
+}
+
+.nvr-shape--1 {
+  top: 16%;
+  left: 5%;
+  width: clamp(48px, 6vw, 72px);
+  height: clamp(48px, 6vw, 72px);
+  animation: nvrFloatA 20s var(--nvr-ease) infinite alternate;
+}
+
+.nvr-shape--2 {
+  top: 42%;
+  right: 8%;
+  width: clamp(32px, 4vw, 48px);
+  height: clamp(32px, 4vw, 48px);
+  animation: nvrFloatB 24s var(--nvr-ease) infinite alternate;
+}
+
+.nvr-shape--3 {
+  bottom: 28%;
+  left: 12%;
+  width: clamp(24px, 3vw, 36px);
+  height: clamp(24px, 3vw, 36px);
+  opacity: 0.7;
+  animation: nvrFloatA 18s var(--nvr-ease) infinite alternate-reverse;
+}
+
+.nvr-shape--4 {
+  top: 72%;
+  right: 18%;
+  width: clamp(56px, 7vw, 84px);
+  height: clamp(56px, 7vw, 84px);
+  border-radius: 42% 58% 52% 48% / 48% 42% 58% 52%;
+  animation: nvrFloatB 22s var(--nvr-ease) infinite alternate;
+}
+
+.nvr-shape--5 {
+  top: 8%;
+  right: 28%;
+  width: clamp(20px, 2.5vw, 28px);
+  height: clamp(20px, 2.5vw, 28px);
+  opacity: 0.55;
+}
+
+.nvr-page__float {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.nvr-page__float::before,
+.nvr-page__float::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(48px);
+}
+
+.nvr-page__float::before {
+  top: 8%;
+  right: -6%;
+  width: min(42vw, 380px);
+  height: min(42vw, 380px);
+  background: radial-gradient(circle, var(--nvr-rose-glow), transparent 68%);
+  animation: nvrFloatA 20s var(--nvr-ease) infinite alternate;
+}
+
+.nvr-page__float::after {
+  bottom: 14%;
+  left: -8%;
+  width: min(36vw, 320px);
+  height: min(36vw, 320px);
+  background: radial-gradient(circle, var(--nvr-gold-glow), transparent 65%);
+  animation: nvrFloatB 24s var(--nvr-ease) infinite alternate;
+}
+
+@keyframes nvrFloatA {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-28px, 22px) scale(1.1); }
+}
+
+@keyframes nvrFloatB {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(24px, -18px) scale(1.08); }
+}
+
+/* ── Layout shell ─────────────────────────────────────────────────── */
 .page-room-visualizer main {
-  background-color: #fafafa;
-  padding-bottom: clamp(2rem, 6vw, 4rem);
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  padding-bottom: clamp(2.5rem, 6vw, 4rem);
 }
 
 .page-room-visualizer .nvr-main {
   margin-top: clamp(88px, 14vw, 108px);
+  max-width: min(1080px, 100%);
 }
 
 .page-room-visualizer .nvr-section {
   padding-top: 0;
-  padding-bottom: clamp(40px, 8vw, 56px);
+  padding-bottom: clamp(56px, 9vw, 80px);
+}
+
+.page-room-visualizer .nvr-main > .nvr-section {
+  animation: nvrFadeUp 0.9s var(--nvr-ease-out) both;
+}
+
+@keyframes nvrFadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Hero block (eyebrow, title, intro, upload) ───────────────────── */
+.nvr-hero-block {
+  position: relative;
+  margin-bottom: clamp(32px, 5vw, 48px);
+  padding: clamp(36px, 5.5vw, 52px) clamp(28px, 4.5vw, 44px);
+  border-radius: var(--nvr-radius-lg);
+  border: 1px solid var(--nvr-line-gold);
+  background: var(--nvr-glass);
+  box-shadow: var(--nvr-shadow-deep), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(20px) saturate(1.12);
+  backdrop-filter: blur(20px) saturate(1.12);
+  overflow: hidden;
+}
+
+.nvr-hero-block__glow {
+  pointer-events: none;
+  position: absolute;
+  inset: -20% -10%;
+  background:
+    radial-gradient(ellipse 55% 45% at 18% 22%, rgba(201, 168, 162, 0.22), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 88% 78%, rgba(212, 184, 150, 0.16), transparent 52%);
+  z-index: 0;
+}
+
+.nvr-hero-block > *:not(.nvr-hero-block__glow) {
+  position: relative;
+  z-index: 1;
+}
+
+.nvr-hero-block::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--nvr-radius-lg) var(--nvr-radius-lg) 0 0;
+  background: linear-gradient(90deg, transparent, var(--nvr-gold-light), var(--nvr-rose), var(--nvr-gold-light), transparent);
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.nvr-hero-block::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(280px, 60%);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184, 149, 110, 0.35), transparent);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .page-room-visualizer .nvr-hero-head.section-top {
-  margin-bottom: 12px;
+  margin-bottom: clamp(14px, 2.5vw, 18px);
+  text-align: center;
 }
 
-.page-room-visualizer .nvr-hero-head.section-top h2 {
-  margin-bottom: 0;
+.page-room-visualizer .nvr-hero-head .small {
+  margin: 0 0 clamp(12px, 2vw, 14px);
+  font-family: "FiraGO", "DejaVu Sans", system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--nvr-gold);
 }
 
 .page-room-visualizer .nvr-hero-head h2,
 .page-room-visualizer .nvr-catalog-head h2 {
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  font-weight: 500;
   letter-spacing: -0.02em;
-  font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.1;
+  color: var(--nvr-ink);
 }
 
-.page-room-visualizer .nvr-hero-visual {
-  position: relative;
+.page-room-visualizer .nvr-hero-head h2 {
+  margin: 0 0 clamp(4px, 1vw, 6px);
+  font-size: clamp(2rem, 5.5vw, 3.15rem);
 }
 
-/* Language pill toggle — floats over preview area (not in nav row); pills unchanged */
-.page-room-visualizer .nvr-lang-bar {
-  display: flex;
-  justify-content: flex-end;
-  position: absolute;
-  top: clamp(10px, calc(-0.2vw + 22px), 26px);
-  right: clamp(2px, 0.65vw, 10px);
-  z-index: 4;
-  margin: 0;
-  pointer-events: none;
-}
-
-.page-room-visualizer .nvr-hero-visual--live .nvr-lang-bar {
-  top: clamp(90px, calc(10vw + 22px), 133px);
-}
-
-.page-room-visualizer .nvr-lang-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.055);
-  border: 1px solid rgba(0, 0, 0, 0.065);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  pointer-events: auto;
-}
-
-.page-room-visualizer .nvr-lang-switch .lang-item {
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  min-height: 0;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: #3a3a3a;
-  background: rgba(255, 255, 255, 0.92);
-  border: none;
-  box-shadow: none;
-  cursor: pointer;
-  transition:
-    background-color 0.18s ease,
-    color 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.page-room-visualizer .nvr-lang-switch .lang-item:hover {
-  transform: none;
-  box-shadow: none;
-  background: #fff;
-  color: #111;
-}
-
-.page-room-visualizer .nvr-lang-switch .lang-item.active {
-  background: #111;
-  color: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
-}
-
-.page-room-visualizer .nvr-lang-switch .lang-item:focus-visible {
-  outline: 2px solid #111;
-  outline-offset: 3px;
-}
-
-.page-room-visualizer .nvr-lang-switch .lang-item img {
-  width: 17px;
-  height: 13px;
-  border-radius: 3px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.page-room-visualizer .nvr-lang-switch .nvr-lang-code {
-  letter-spacing: 0.08em;
-  line-height: 1;
-}
-
-.page-room-visualizer .nvr-lang-switch .lang-item .arrow,
-.page-room-visualizer .nvr-lang-switch .lang-item .nvr-lang-arrow {
-  font-size: 12px;
-  line-height: 1;
-  font-style: normal;
-  opacity: 0.42;
-  margin-left: 1px;
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s ease;
-}
-
-.page-room-visualizer .nvr-lang-switch .lang-item:hover .arrow,
-.page-room-visualizer .nvr-lang-switch .lang-item:hover .nvr-lang-arrow {
-  opacity: 0.7;
-  transform: translateX(2px);
-}
-
-.page-room-visualizer .nvr-lang-switch .lang-item.active .arrow,
-.page-room-visualizer .nvr-lang-switch .lang-item.active .nvr-lang-arrow {
-  opacity: 0.8;
-}
-
-.nvr-toolbar .nvr-slider-label-text {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.35em;
+.page-room-visualizer .nvr-hero-head h2::after {
+  content: "";
+  display: block;
+  width: min(100px, 28%);
+  height: 1px;
+  margin: clamp(16px, 2.8vw, 22px) auto 0;
+  background: linear-gradient(90deg, transparent, var(--nvr-gold-light), transparent);
 }
 
 .nvr-page-intro {
-  max-width: 42rem;
-  margin-bottom: clamp(1.75rem, 4vw, 2.25rem);
-  line-height: 1.65;
-  font-size: clamp(15px, 2vw, 16px);
+  max-width: min(40rem, 100%);
+  margin: 0 auto clamp(24px, 3.5vw, 30px);
+  text-align: center;
+  line-height: 1.78;
+  font-family: "FiraGO", "DejaVu Sans", system-ui, sans-serif;
+  font-size: clamp(0.94rem, 2vw, 1.05rem);
+  color: var(--nvr-muted);
 }
 
+/* Upload controls card */
 .nvr-upload-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
-  margin-bottom: clamp(1.25rem, 3vw, 1.75rem);
-  padding: clamp(14px, 2.5vw, 18px) clamp(16px, 3vw, 22px);
-  border-radius: var(--nvr-radius-lg);
-  border: 1px solid var(--nvr-border-soft);
-  background: #fff;
-  box-shadow: var(--nvr-shadow-sm);
+  justify-content: center;
+  gap: clamp(10px, 2vw, 14px);
+  padding: clamp(18px, 2.8vw, 24px);
+  border-radius: var(--nvr-radius);
+  border: 1px solid var(--nvr-line-gold);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(246, 241, 233, 0.55));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 12px 36px rgba(26, 21, 18, 0.05);
+  transition: box-shadow 0.5s var(--nvr-ease), border-color 0.4s ease;
+}
+
+.nvr-upload-row:hover {
+  border-color: rgba(184, 149, 110, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 16px 44px rgba(26, 21, 18, 0.07);
 }
 
 .nvr-upload-row input[type="file"] {
@@ -192,21 +410,28 @@
 
 .page-room-visualizer .nvr-upload-row .btn.btn-dark {
   border: none;
-  padding: 12px 24px;
+  padding: 0.82em 2em;
   border-radius: 999px;
+  font-family: "FiraGO", sans-serif;
   font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.015em;
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.14);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--nvr-ink) 0%, #2a2320 100%);
+  color: #fff;
+  box-shadow: 0 12px 32px rgba(26, 21, 18, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    background-color 0.18s ease;
+    transform 0.5s var(--nvr-ease),
+    box-shadow 0.5s var(--nvr-ease),
+    background 0.45s ease,
+    letter-spacing 0.4s ease;
 }
 
 .page-room-visualizer .nvr-upload-row .btn.btn-dark:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.18);
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, var(--nvr-brown) 0%, var(--nvr-ink) 100%);
+  box-shadow: 0 18px 40px rgba(26, 21, 18, 0.2);
+  letter-spacing: 0.14em;
 }
 
 .page-room-visualizer .nvr-upload-row .btn.btn-dark:active {
@@ -215,38 +440,41 @@
 
 .page-room-visualizer .nvr-upload-row button.btn:not(.btn-dark),
 .page-room-visualizer .nvr-upload-row label.btn:not(.btn-dark) {
-  background: #fff;
-  color: #111;
-  border: 1px solid var(--nvr-border);
-  padding: 11px 18px;
+  background: var(--nvr-paper-solid);
+  color: var(--nvr-ink);
+  border: 1px solid var(--nvr-line-gold);
+  padding: 0.75em 1.5em;
   border-radius: 999px;
+  font-family: "FiraGO", sans-serif;
   font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.02em;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   transition:
-    background-color 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
+    transform 0.45s var(--nvr-ease),
+    background 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.45s var(--nvr-ease);
 }
 
 .page-room-visualizer .nvr-upload-row button.btn:not(.btn-dark):hover {
-  background: rgba(0, 0, 0, 0.035);
-  border-color: rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
+  background: #fff;
+  border-color: var(--nvr-gold);
+  box-shadow: 0 8px 24px rgba(26, 21, 18, 0.08);
 }
 
 .page-room-visualizer .nvr-upload-row button.btn:not(.btn-dark):focus-visible,
 .page-room-visualizer .nvr-upload-row .btn.btn-dark:focus-visible {
-  outline: 2px solid #111;
+  outline: 2px solid var(--nvr-gold);
   outline-offset: 3px;
 }
 
 #nvrExpand[aria-pressed="true"] {
-  background: #111 !important;
+  background: var(--nvr-ink) !important;
   color: #fff !important;
-  border-color: #111 !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+  border-color: var(--nvr-ink) !important;
+  box-shadow: 0 10px 28px rgba(26, 21, 18, 0.16) !important;
 }
 
 .nvr-reset-btn {
@@ -257,26 +485,270 @@
   display: inline-block;
 }
 
+/* ── Gallery presentation shell ─────────────────────────────────── */
+.page-room-visualizer .nvr-hero-visual {
+  position: relative;
+  margin-bottom: clamp(40px, 6vw, 56px);
+}
+
+.nvr-gallery-shell {
+  position: relative;
+  padding: clamp(20px, 3vw, 28px);
+  border-radius: calc(var(--nvr-radius-lg) + 4px);
+  border: 1px solid var(--nvr-line-gold);
+  background: var(--nvr-glass);
+  box-shadow: var(--nvr-shadow-deep), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: blur(22px) saturate(1.1);
+  backdrop-filter: blur(22px) saturate(1.1);
+  overflow: hidden;
+}
+
+.nvr-gallery-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201, 168, 162, 0.14), transparent 60%),
+    radial-gradient(ellipse 40% 35% at 100% 100%, rgba(212, 184, 150, 0.1), transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.nvr-gallery-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nvr-gallery-shell__corners {
+  pointer-events: none;
+  position: absolute;
+  inset: clamp(14px, 2vw, 20px);
+  z-index: 2;
+  border: 1px solid rgba(184, 149, 110, 0.22);
+  border-radius: calc(var(--nvr-radius-lg) - 4px);
+  opacity: 0.85;
+}
+
+.nvr-gallery-shell__corners::before,
+.nvr-gallery-shell__corners::after {
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: var(--nvr-gold);
+  border-style: solid;
+  opacity: 0.45;
+}
+
+.nvr-gallery-shell__corners::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+  border-radius: 4px 0 0 0;
+}
+
+.nvr-gallery-shell__corners::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 1px 1px 0;
+  border-radius: 0 0 4px 0;
+}
+
+.page-room-visualizer .nvr-lang-bar {
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  top: clamp(8px, 1.5vw, 14px);
+  right: clamp(8px, 1.5vw, 14px);
+  z-index: 14;
+  margin: 0;
+  pointer-events: none;
+}
+
+.page-room-visualizer .nvr-hero-visual--live .nvr-lang-bar {
+  top: clamp(88px, calc(10vw + 24px), 128px);
+}
+
+.page-room-visualizer .nvr-lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--nvr-paper-strong);
+  border: 1px solid var(--nvr-line-gold);
+  box-shadow: 0 10px 32px rgba(26, 21, 18, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+  backdrop-filter: blur(14px) saturate(1.08);
+  pointer-events: auto;
+  transition: box-shadow 0.45s var(--nvr-ease), transform 0.45s var(--nvr-ease);
+}
+
+.page-room-visualizer .nvr-lang-switch:hover {
+  box-shadow: 0 14px 40px rgba(26, 21, 18, 0.1);
+}
+
+.page-room-visualizer .nvr-lang-switch .lang-item {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  min-height: 0;
+  border-radius: 999px;
+  font-family: "FiraGO", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nvr-muted);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    background 0.4s var(--nvr-ease),
+    color 0.4s ease,
+    box-shadow 0.4s var(--nvr-ease);
+}
+
+.page-room-visualizer .nvr-lang-switch .lang-item:hover {
+  transform: none;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--nvr-ink);
+}
+
+.page-room-visualizer .nvr-lang-switch .lang-item.active {
+  background: var(--nvr-ink);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(26, 21, 18, 0.14);
+}
+
+.page-room-visualizer .nvr-lang-switch .lang-item:focus-visible {
+  outline: 2px solid var(--nvr-gold);
+  outline-offset: 2px;
+}
+
+.page-room-visualizer .nvr-lang-switch .lang-item img {
+  width: 18px;
+  height: 14px;
+  border-radius: 3px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.page-room-visualizer .nvr-lang-switch .nvr-lang-code {
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+
+.page-room-visualizer .nvr-lang-switch .lang-item .arrow,
+.page-room-visualizer .nvr-lang-switch .lang-item .nvr-lang-arrow {
+  font-size: 11px;
+  line-height: 1;
+  font-style: normal;
+  opacity: 0.45;
+  transition: opacity 0.35s ease, transform 0.35s var(--nvr-ease);
+}
+
+.page-room-visualizer .nvr-lang-switch .lang-item.active .arrow,
+.page-room-visualizer .nvr-lang-switch .lang-item.active .nvr-lang-arrow {
+  opacity: 0.75;
+}
+
+/* Placeholder — gallery empty state */
 .nvr-placeholder {
-  border: 1px dashed rgba(0, 0, 0, 0.12);
+  position: relative;
+  border: 1px dashed rgba(184, 149, 110, 0.4);
   border-radius: var(--nvr-radius-lg);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 249, 0.98) 100%);
-  min-height: clamp(200px, 32vw, 280px);
+    linear-gradient(160deg, rgba(255, 253, 250, 0.96) 0%, rgba(246, 241, 233, 0.9) 48%, rgba(232, 213, 205, 0.25) 100%);
+  min-height: clamp(260px, 38vw, 360px);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: clamp(28px, 5vw, 44px);
-  margin-bottom: clamp(2rem, 5vw, 3rem);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), var(--nvr-shadow-sm);
+  padding: clamp(40px, 7vw, 64px) clamp(28px, 5vw, 48px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 16px 48px rgba(26, 21, 18, 0.06);
+  transition:
+    border-color 0.5s var(--nvr-ease),
+    box-shadow 0.5s var(--nvr-ease),
+    transform 0.5s var(--nvr-ease);
+  overflow: hidden;
+}
+
+.nvr-placeholder:hover {
+  border-color: rgba(184, 149, 110, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 22px 56px rgba(26, 21, 18, 0.08);
+}
+
+.nvr-placeholder__wash {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(201, 168, 162, 0.18), transparent 65%),
+    repeating-linear-gradient(
+      -12deg,
+      transparent,
+      transparent 48px,
+      rgba(184, 149, 110, 0.03) 48px,
+      rgba(184, 149, 110, 0.03) 49px
+    );
+  opacity: 0.9;
+}
+
+.nvr-placeholder__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(18px, 3vw, 24px);
+  max-width: 32rem;
+}
+
+.nvr-placeholder__glyph {
+  display: block;
+  width: clamp(56px, 10vw, 72px);
+  height: clamp(56px, 10vw, 72px);
+  border-radius: 50%;
+  border: 1px solid rgba(184, 149, 110, 0.35);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.9), rgba(232, 213, 205, 0.35)),
+    var(--nvr-paper-solid);
+  box-shadow: 0 12px 32px rgba(26, 21, 18, 0.08);
+  position: relative;
+  animation: nvrGlyphPulse 4s var(--nvr-ease) infinite alternate;
+}
+
+.nvr-placeholder__glyph::before {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b8956e' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpath d='M21 15l-5-5L5 21'/%3E%3C/svg%3E") center / 55% no-repeat;
+  opacity: 0.85;
+}
+
+@keyframes nvrGlyphPulse {
+  from { transform: scale(1); box-shadow: 0 12px 32px rgba(26, 21, 18, 0.08); }
+  to { transform: scale(1.04); box-shadow: 0 16px 40px rgba(201, 168, 162, 0.2); }
 }
 
 .nvr-placeholder-copy {
-  max-width: 28rem;
-  margin: 0 auto;
-  line-height: 1.6;
-  font-size: 15px;
+  position: relative;
+  z-index: 1;
+  max-width: 30rem;
+  margin: 0;
+  line-height: 1.78;
+  font-family: "FiraGO", sans-serif;
+  font-size: clamp(0.92rem, 2vw, 1.02rem);
+  color: var(--nvr-muted);
+  letter-spacing: 0.01em;
 }
 
 .nvr-placeholder[hidden],
@@ -285,30 +757,64 @@
 }
 
 .nvr-stage-wrap {
-  margin-bottom: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 0;
+  padding-top: clamp(8px, 1.5vw, 12px);
+}
+
+.nvr-stage-wrap .nvr-hint,
+.nvr-stage-wrap .nvr-toolbar,
+.nvr-stage-wrap .nvr-stage {
+  animation: nvrFadeUp 0.7s var(--nvr-ease-out) both;
+}
+
+.nvr-stage-wrap .nvr-toolbar {
+  animation-delay: 0.06s;
+}
+
+.nvr-stage-wrap .nvr-stage {
+  animation-delay: 0.12s;
 }
 
 .nvr-hint {
-  font-size: 13px;
-  color: #555;
-  margin-bottom: 12px;
-  line-height: 1.55;
+  font-family: "FiraGO", sans-serif;
+  font-size: clamp(0.82rem, 1.8vw, 0.88rem);
+  color: var(--nvr-muted);
+  margin-bottom: 14px;
+  line-height: 1.6;
   max-width: 48rem;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .nvr-toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
+  justify-content: center;
   gap: 18px 28px;
   margin-bottom: 16px;
   font-size: 13px;
-  color: #444;
-  padding: 16px 18px;
+  padding: clamp(16px, 2.5vw, 20px);
   border-radius: var(--nvr-radius);
-  border: 1px solid var(--nvr-border-soft);
-  background: #fff;
+  border: 1px solid var(--nvr-line);
+  background: var(--nvr-paper);
   box-shadow: var(--nvr-shadow-sm);
+}
+
+.nvr-toolbar .nvr-slider-label-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em;
+  font-family: "FiraGO", sans-serif;
+  font-weight: 600;
+  color: var(--nvr-ink);
+}
+
+.nvr-toolbar .nvr-slider-meta {
+  font-weight: 400;
+  color: var(--nvr-muted);
 }
 
 .nvr-toolbar .nvr-slider-field {
@@ -318,23 +824,16 @@
   gap: 10px;
   margin: 0;
   font-family: inherit;
-  font-weight: 600;
-  font-size: 13px;
-  color: #111;
-  letter-spacing: 0.01em;
-}
-
-.nvr-toolbar .nvr-slider-meta {
-  font-weight: 400;
 }
 
 .nvr-toolbar input[type="range"] {
   width: min(240px, 55vw);
   height: 6px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.04));
+  background: linear-gradient(90deg, rgba(184, 149, 110, 0.25), rgba(232, 213, 205, 0.35));
   appearance: none;
   -webkit-appearance: none;
+  transition: background 0.35s ease;
 }
 
 .nvr-toolbar input[type="range"]::-webkit-slider-thumb {
@@ -343,31 +842,32 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #111;
+  background: var(--nvr-ink);
   cursor: pointer;
   border: 2px solid #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
-  transition: transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(26, 21, 18, 0.18);
+  transition: transform 0.35s var(--nvr-ease);
 }
 
 .nvr-toolbar input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.06);
+  transform: scale(1.08);
+  background: var(--nvr-brown);
 }
 
 .nvr-toolbar input[type="range"]::-moz-range-track {
   height: 6px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.04));
+  background: linear-gradient(90deg, rgba(184, 149, 110, 0.25), rgba(232, 213, 205, 0.35));
 }
 
 .nvr-toolbar input[type="range"]::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #111;
+  background: var(--nvr-ink);
   cursor: pointer;
   border: 2px solid #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 12px rgba(26, 21, 18, 0.18);
 }
 
 .nvr-stage {
@@ -375,20 +875,350 @@
   width: 100%;
   border-radius: var(--nvr-radius-lg);
   overflow: hidden;
-  /* Flat tone matches page bg so letterboxing isn’t a gray slab behind multiply-blended art */
-  background-color: #fafafa;
-  border: 1px solid var(--nvr-border-soft);
+  background:
+    linear-gradient(180deg, #fcfaf6 0%, var(--nvr-stage-bg) 100%);
+  border: 1px solid var(--nvr-line-gold);
   touch-action: none;
   aspect-ratio: 16 / 10;
   max-height: min(70vh, 640px);
   margin-left: auto;
   margin-right: auto;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    var(--nvr-shadow-stage);
+    var(--nvr-shadow-stage),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  transition:
+    box-shadow 0.5s var(--nvr-ease),
+    border-color 0.4s ease;
 }
 
-/* Room photo: full image visible, native orientation — overrides global img { height: auto } on mobile */
+.nvr-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  box-shadow: inset 0 0 80px rgba(26, 21, 18, 0.04);
+  border-radius: inherit;
+}
+
+.nvr-stage:hover {
+  box-shadow:
+    0 32px 80px rgba(26, 21, 18, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+}
+
+/* ── Catalog section ───────────────────────────────────────────────── */
+.nvr-catalog-block {
+  position: relative;
+  padding: clamp(36px, 5vw, 52px) clamp(24px, 3.5vw, 36px);
+  border-radius: var(--nvr-radius-lg);
+  border: 1px solid var(--nvr-line-gold);
+  background: var(--nvr-glass);
+  box-shadow: var(--nvr-shadow-deep), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  backdrop-filter: blur(18px) saturate(1.08);
+  overflow: hidden;
+}
+
+.nvr-catalog-block__glow {
+  pointer-events: none;
+  position: absolute;
+  inset: -15% -5%;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(201, 168, 162, 0.16), transparent 55%),
+    radial-gradient(ellipse 35% 30% at 10% 20%, rgba(212, 184, 150, 0.12), transparent 50%);
+  z-index: 0;
+}
+
+.nvr-catalog-block > *:not(.nvr-catalog-block__glow) {
+  position: relative;
+  z-index: 1;
+}
+
+.nvr-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 0 auto clamp(28px, 4vw, 36px);
+  max-width: min(400px, 70%);
+}
+
+.nvr-divider::before,
+.nvr-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184, 149, 110, 0.35), transparent);
+}
+
+.nvr-divider__gem {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--nvr-gold-light), var(--nvr-rose));
+  box-shadow: 0 0 10px rgba(184, 149, 110, 0.35);
+  flex-shrink: 0;
+}
+
+.page-room-visualizer .nvr-catalog-head.section-top {
+  margin-top: 0;
+  margin-bottom: clamp(10px, 2vw, 14px);
+  text-align: center;
+}
+
+.page-room-visualizer .nvr-catalog-head .small {
+  font-family: "FiraGO", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--nvr-gold);
+}
+
+.page-room-visualizer .nvr-catalog-head h2 {
+  margin-bottom: 0;
+  font-size: clamp(1.65rem, 3.8vw, 2.2rem);
+}
+
+.nvr-catalog-lead {
+  max-width: min(36rem, 100%);
+  margin: 0 auto clamp(24px, 3.5vw, 32px);
+  text-align: center;
+  line-height: 1.72;
+  font-family: "FiraGO", sans-serif;
+  font-size: clamp(0.9rem, 1.9vw, 1rem);
+  color: var(--nvr-muted);
+}
+
+.nvr-catalog {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 1.8vw, 20px);
+  align-items: stretch;
+  margin-bottom: 0;
+}
+
+/* Premium catalogue empty / error states (JS injects <p class="muted">) */
+.nvr-catalog > p.muted {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 22px);
+  text-align: center;
+  min-height: clamp(200px, 28vw, 280px);
+  padding: clamp(2.5rem, 7vw, 3.5rem) clamp(1.5rem, 4vw, 2.5rem);
+  margin: 0;
+  border-radius: var(--nvr-radius-lg);
+  border: 1px dashed rgba(184, 149, 110, 0.38);
+  background:
+    linear-gradient(165deg, rgba(255, 253, 250, 0.95), rgba(246, 241, 233, 0.85));
+  font-family: "FiraGO", sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  line-height: 1.72;
+  color: var(--nvr-muted);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 12px 40px rgba(26, 21, 18, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.nvr-catalog > p.muted::before {
+  content: "";
+  display: block;
+  width: clamp(52px, 9vw, 64px);
+  height: clamp(52px, 9vw, 64px);
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(184, 149, 110, 0.32);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95), rgba(232, 213, 205, 0.4)),
+    var(--nvr-paper-solid);
+  box-shadow: 0 10px 28px rgba(26, 21, 18, 0.07);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b8956e' stroke-width='1.15' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'/%3E%3Cpath d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95), rgba(232, 213, 205, 0.4));
+  background-repeat: no-repeat, no-repeat;
+  background-position: center 52%, center;
+  background-size: 42%, cover;
+}
+
+.nvr-catalog > p.muted::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 55% 45% at 50% 30%, rgba(201, 168, 162, 0.12), transparent 60%);
+  pointer-events: none;
+}
+
+/* Catalog cards */
+.nvr-cat-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  border: 1px solid var(--nvr-line);
+  border-radius: var(--nvr-radius);
+  overflow: hidden;
+  background: var(--nvr-paper-solid);
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  box-shadow: var(--nvr-shadow-sm);
+  transition:
+    transform 0.45s var(--nvr-ease),
+    box-shadow 0.45s var(--nvr-ease),
+    border-color 0.4s ease;
+}
+
+.nvr-cat-card:hover,
+.nvr-cat-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--nvr-shadow-card-hover);
+  border-color: var(--nvr-line-gold);
+  outline: none;
+}
+
+.nvr-cat-card:focus-visible {
+  outline: 2px solid var(--nvr-gold);
+  outline-offset: 3px;
+}
+
+.nvr-cat-card.is-selected {
+  transform: translateY(-2px);
+  border-color: rgba(184, 149, 110, 0.45);
+  box-shadow:
+    0 0 0 1px var(--nvr-gold),
+    var(--nvr-shadow-card-hover);
+}
+
+.nvr-cat-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  height: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
+  object-position: center;
+  background-color: var(--nvr-warm);
+  display: block;
+  transition: transform 0.5s var(--nvr-ease);
+}
+
+.nvr-cat-card:hover img {
+  transform: scale(1.02);
+}
+
+.nvr-cat-card .nvr-card-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 12px 14px 14px;
+}
+
+.nvr-cat-card .nvr-card-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  line-height: 1.3;
+  margin-bottom: 4px;
+  color: var(--nvr-ink);
+  overflow-wrap: anywhere;
+}
+
+.nvr-cat-card .nvr-card-artist {
+  font-family: "FiraGO", sans-serif;
+  font-size: 12px;
+  color: var(--nvr-muted);
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+
+.nvr-cat-card .nvr-card-price {
+  font-family: "FiraGO", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--nvr-brown);
+  margin-bottom: 6px;
+}
+
+.nvr-cat-card .nvr-card-desc,
+.nvr-cat-card .nvr-card-meta,
+.nvr-cat-card .nvr-card-body .muted.small {
+  font-family: "FiraGO", sans-serif;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--nvr-muted);
+}
+
+.nvr-cat-card .nvr-card-desc {
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nvr-cat-card .nvr-cat-status {
+  font-family: "FiraGO", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nvr-gold);
+  margin-top: 4px;
+}
+
+.nvr-cat-card.is-sold .nvr-cat-status {
+  color: var(--nvr-muted);
+}
+
+/* ── Footer ───────────────────────────────────────────────────────── */
+.page-room-visualizer .nvr-footer {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(24px, 4vw, 40px);
+  padding: clamp(28px, 4vw, 36px) 0;
+  background: transparent;
+  border-top: 1px solid var(--nvr-line);
+}
+
+.page-room-visualizer .nvr-footer .footer-row {
+  max-width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 24px);
+  font-family: "FiraGO", sans-serif;
+  font-size: 13px;
+  color: var(--nvr-muted);
+  gap: 12px;
+}
+
+.page-room-visualizer .nvr-footer .footer-row a {
+  color: var(--nvr-brown);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.35s ease, border-color 0.35s ease;
+}
+
+.page-room-visualizer .nvr-footer .footer-row a:hover {
+  color: var(--nvr-ink);
+  border-bottom-color: var(--nvr-gold-light);
+}
+
+/* ── Georgian heading scale (room preview title) ───────────────────── */
+html[data-site-lang="ka"] .page-room-visualizer .nvr-hero-head h2,
+html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
+  font-size: clamp(1.55rem, 4.2vw, 2.35rem);
+  line-height: 1.14;
+  max-width: min(14em, 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Room photo & artwork (functionality preserved) ─────────────────── */
 .page-room-visualizer .nvr-stage .nvr-room {
   display: block;
   position: absolute;
@@ -416,6 +1246,69 @@
   image-orientation: from-image;
 }
 
+.nvr-art-wrap {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 32%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  transform-origin: center center;
+  cursor: grab;
+  touch-action: none;
+  background: transparent;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 1px rgba(26, 21, 18, 0.04),
+    inset 0 2px 4px rgba(26, 21, 18, 0.04),
+    0 20px 48px rgba(26, 21, 18, 0.14),
+    0 10px 24px rgba(26, 21, 18, 0.1);
+  z-index: 2;
+}
+
+.nvr-art-wrap.is-dragging {
+  cursor: grabbing;
+}
+
+.page-room-visualizer .nvr-art-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+  user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  background: transparent;
+  mix-blend-mode: multiply;
+  -webkit-mix-blend-mode: multiply;
+}
+
+.page-room-visualizer .nvr-art-wrap[data-nvr-art-alpha='1'] img {
+  mix-blend-mode: normal;
+  -webkit-mix-blend-mode: normal;
+}
+
+.nvr-resize-corner {
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  width: 20px;
+  height: 20px;
+  background: var(--nvr-ink);
+  border: 2px solid #fff;
+  border-radius: 6px;
+  cursor: nwse-resize;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(26, 21, 18, 0.2);
+  touch-action: none;
+  transition: transform 0.35s var(--nvr-ease), background 0.35s ease;
+}
+
+.nvr-resize-corner:hover {
+  transform: scale(1.08);
+  background: var(--nvr-brown);
+}
+
+/* ── Fullscreen preview (unchanged behavior) ──────────────────────── */
 .page-room-visualizer .nvr-fullscreen-preview {
   position: fixed;
   inset: 0;
@@ -434,7 +1327,7 @@
     calc(env(safe-area-inset-bottom, 0px) + 12px)
     calc(env(safe-area-inset-left, 0px) + 12px);
   margin: 0;
-  background: rgba(0, 0, 0, 0.82);
+  background: rgba(26, 21, 18, 0.88);
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
@@ -513,7 +1406,6 @@
   aspect-ratio: auto;
 }
 
-/* Fullscreen: room photo fixed; artwork layer + resize handle stay interactive */
 .nvr-stage.nvr-stage--fullscreen .nvr-room,
 .page-room-visualizer .nvr-fullscreen-preview__scene .nvr-room {
   pointer-events: none !important;
@@ -575,7 +1467,7 @@
   height: 44px;
   border: none;
   border-radius: 999px;
-  background: rgba(17, 17, 17, 0.9);
+  background: rgba(26, 21, 18, 0.92);
   color: #fff;
   font-size: 28px;
   line-height: 1;
@@ -584,7 +1476,13 @@
   justify-content: center;
   cursor: pointer;
   pointer-events: auto;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px rgba(26, 21, 18, 0.25);
+  transition: background 0.35s ease, transform 0.35s var(--nvr-ease);
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__close:hover {
+  background: var(--nvr-brown);
+  transform: scale(1.04);
 }
 
 .page-room-visualizer .nvr-fullscreen-preview__close:focus-visible {
@@ -592,107 +1490,15 @@
   outline-offset: 3px;
 }
 
-.nvr-art-wrap {
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  width: 32%;
-  transform: translate(-50%, -50%) rotate(0deg);
-  transform-origin: center center;
-  cursor: grab;
-  touch-action: none;
-  background: transparent;
-  border-radius: 3px;
-  /* Inset rim + ambient shadows only on wrapper (never filter on img — preserves multiply backdrop) */
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, 0.045),
-    inset 0 2px 4px rgba(0, 0, 0, 0.05),
-    inset 0 -1px 2px rgba(255, 255, 255, 0.07),
-    0 20px 48px rgba(0, 0, 0, 0.16),
-    0 10px 24px rgba(0, 0, 0, 0.12),
-    0 3px 8px rgba(0, 0, 0, 0.08);
-  z-index: 2;
+.nvr-stage-wrap.nvr-stage--tall .nvr-stage {
+  max-height: 88vh;
 }
 
-.nvr-art-wrap.is-dragging {
-  cursor: grabbing;
-}
-
-/*
- * Multiply blends JPEG near-whites into the wall; drop-shadow must NOT live on the img —
- * filter isolates the layer and breaks backdrop blending (visible white “card”).
- * Shadow stays on .nvr-art-wrap (no filter on the blended bitmap).
- * When JS delivers edge-knocked PNG alpha (data-nvr-art-alpha), use normal blend so colors stay true.
- */
-.page-room-visualizer .nvr-art-wrap img {
-  display: block;
-  width: 100%;
-  height: auto;
-  vertical-align: top;
-  user-select: none;
-  pointer-events: none;
-  -webkit-user-drag: none;
-  background: transparent;
-  mix-blend-mode: multiply;
-  -webkit-mix-blend-mode: multiply;
-}
-
-.page-room-visualizer .nvr-art-wrap[data-nvr-art-alpha='1'] img {
-  mix-blend-mode: normal;
-  -webkit-mix-blend-mode: normal;
-}
-
-.nvr-resize-corner {
-  position: absolute;
-  right: -8px;
-  bottom: -8px;
-  width: 20px;
-  height: 20px;
-  background: #111;
-  border: 2px solid #fff;
-  border-radius: 6px;
-  cursor: nwse-resize;
-  z-index: 3;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
-  touch-action: none;
-  transition: transform 0.15s ease;
-}
-
-.nvr-resize-corner:hover {
-  transform: scale(1.06);
-}
-
-.page-room-visualizer .nvr-catalog-head.section-top {
-  margin-top: clamp(2rem, 5vw, 3rem);
-  margin-bottom: 8px;
-}
-
-.page-room-visualizer .nvr-catalog-head.section-top h2 {
-  margin-bottom: 0;
-}
-
-.nvr-catalog {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(12px, 1.5vw, 18px);
-  align-items: stretch;
-  margin-bottom: clamp(2rem, 5vw, 3.5rem);
-}
-
-.nvr-catalog > p.muted {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: clamp(2rem, 6vw, 3rem);
-  margin: 0;
-  border-radius: var(--nvr-radius);
-  border: 1px dashed rgba(0, 0, 0, 0.1);
-  background: rgba(255, 255, 255, 0.7);
-}
-
+/* ── Responsive ─────────────────────────────────────────────────────── */
 @media (max-width: 1140px) {
   .nvr-catalog {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(10px, 1.2vw, 14px);
+    gap: clamp(12px, 1.4vw, 16px);
   }
 }
 
@@ -703,6 +1509,30 @@
   }
 }
 
+@media (max-width: 640px) {
+  .nvr-hero-block,
+  .nvr-catalog-block,
+  .nvr-gallery-shell {
+    padding-left: clamp(20px, 4vw, 24px);
+    padding-right: clamp(20px, 4vw, 24px);
+  }
+
+  .nvr-page__brush,
+  .nvr-page__botanical {
+    opacity: 0.4;
+  }
+
+  .nvr-shape--3,
+  .nvr-shape--5 {
+    display: none;
+  }
+
+  html[data-site-lang="ka"] .page-room-visualizer .nvr-hero-head h2,
+  html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
+    font-size: clamp(1.4rem, 4.8vw, 1.85rem);
+  }
+}
+
 @media (max-width: 520px) {
   .nvr-catalog {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -710,7 +1540,7 @@
   }
 
   .page-room-visualizer .nvr-hero-visual--live .nvr-lang-bar {
-    top: clamp(140px, calc(35vw + 20px), 192px);
+    top: clamp(120px, calc(32vw + 24px), 180px);
   }
 
   .nvr-toolbar .nvr-slider-field {
@@ -735,123 +1565,39 @@
   }
 }
 
-.nvr-cat-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-width: 0;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: var(--nvr-radius-lg);
-  overflow: hidden;
-  background: #fff;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-  font: inherit;
-  color: inherit;
-  box-shadow: var(--nvr-shadow-sm);
-  transition:
-    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.22s ease,
-    border-color 0.22s ease;
-}
+@media (prefers-reduced-motion: reduce) {
+  .nvr-page__ambient::after,
+  .nvr-page__float::before,
+  .nvr-page__float::after,
+  .nvr-page__art::before,
+  .nvr-shape,
+  .nvr-placeholder__glyph,
+  .page-room-visualizer .nvr-main > .nvr-section,
+  .nvr-stage-wrap .nvr-hint,
+  .nvr-stage-wrap .nvr-toolbar,
+  .nvr-stage-wrap .nvr-stage {
+    animation: none;
+  }
 
-.nvr-cat-card:hover,
-.nvr-cat-card:focus-visible {
-  transform: translateY(-4px);
-  box-shadow: var(--nvr-shadow-card-hover);
-  border-color: rgba(0, 0, 0, 0.1);
-  outline: none;
-}
+  .nvr-cat-card,
+  .nvr-cat-card img,
+  .page-room-visualizer .nvr-upload-row .btn,
+  .nvr-resize-corner {
+    transition: none;
+  }
 
-.nvr-cat-card:focus-visible {
-  outline: 2px solid #111;
-  outline-offset: 3px;
-}
+  .nvr-cat-card:hover {
+    transform: none;
+  }
 
-.nvr-cat-card.is-selected {
-  transform: translateY(-2px);
-  border-color: rgba(0, 0, 0, 0.28);
-  box-shadow:
-    0 0 0 1px #111,
-    0 20px 56px rgba(0, 0, 0, 0.11);
-}
+  .nvr-page__brush,
+  .nvr-page__botanical,
+  .nvr-page__shapes {
+    opacity: 0.35;
+  }
 
-.nvr-cat-card img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  height: auto;
-  flex: 0 0 auto;
-  object-fit: contain;
-  object-position: center;
-  background-color: #f8f8f9;
-  display: block;
-}
-
-.nvr-cat-card .nvr-card-body {
-  flex: 1 1 auto;
-  min-width: 0;
-  padding: 10px 12px 12px;
-}
-
-.nvr-cat-card .nvr-card-title {
-  font-weight: 600;
-  font-size: 13px;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-  margin-bottom: 4px;
-  color: #111;
-  overflow-wrap: anywhere;
-}
-
-.nvr-cat-card .nvr-card-artist {
-  margin-bottom: 4px;
-  line-height: 1.35;
-}
-
-.nvr-cat-card .nvr-card-price {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #111;
-  margin-bottom: 6px;
-}
-
-.nvr-cat-card .nvr-card-desc {
-  font-size: 12px;
-  line-height: 1.4;
-  color: #444;
-  margin-bottom: 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-}
-
-.nvr-cat-card .nvr-card-meta {
-  line-height: 1.4;
-  margin-bottom: 6px;
-}
-
-.nvr-cat-card .nvr-cat-status {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #111;
-  margin-top: 2px;
-}
-
-.nvr-cat-card.is-sold .nvr-cat-status {
-  color: #666;
-}
-
-.nvr-cat-card .nvr-card-body .muted.small {
-  font-size: 12px;
-  line-height: 1.35;
-}
-
-.nvr-stage-wrap.nvr-stage--tall .nvr-stage {
-  max-height: 88vh;
+  .nvr-shape--3,
+  .nvr-shape--5 {
+    display: none;
+  }
 }

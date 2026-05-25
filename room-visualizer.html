@@ -18,8 +18,22 @@
   <meta name="twitter:image" content="https://ninartvision.store/images/og-image.png">
 
   <link rel="stylesheet" href="./style.min.css?v=nv20260527" />
-  <link rel="stylesheet" href="./css/room-visualizer.css?v=nv20260613" />
+  <link rel="stylesheet" href="./css/room-visualizer.css?v=nv20260727" />
   <link rel="icon" href="./images/favicon.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap"></noscript>
+  <script>
+    (function () {
+      try {
+        var l = localStorage.getItem("siteLang") || "ka";
+        l = l === "en" ? "en" : "ka";
+        document.documentElement.setAttribute("lang", l === "en" ? "en" : "ka");
+        document.documentElement.setAttribute("data-site-lang", l);
+      } catch (_) {}
+    })();
+  </script>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-1H7SY0J2EB"></script>
 <script>
@@ -79,9 +93,24 @@
   </nav>
 </div>
 
-<main>
+<main class="nvr-page">
+  <div class="nvr-page__ambient" aria-hidden="true"></div>
+  <div class="nvr-page__brush" aria-hidden="true"></div>
+  <div class="nvr-page__art" aria-hidden="true"></div>
+  <div class="nvr-page__botanical" aria-hidden="true"></div>
+  <div class="nvr-page__shapes" aria-hidden="true">
+    <span class="nvr-shape nvr-shape--1"></span>
+    <span class="nvr-shape nvr-shape--2"></span>
+    <span class="nvr-shape nvr-shape--3"></span>
+    <span class="nvr-shape nvr-shape--4"></span>
+    <span class="nvr-shape nvr-shape--5"></span>
+  </div>
+  <div class="nvr-page__float" aria-hidden="true"></div>
+
   <div class="container nvr-main">
     <section class="section nvr-section">
+      <div class="nvr-hero-block">
+      <div class="nvr-hero-block__glow" aria-hidden="true"></div>
       <div class="section-top nvr-hero-head">
         <p class="small muted" data-en="ROOM PREVIEW" data-ka="ROOM PREVIEW">ROOM PREVIEW</p>
         <h2 data-en="Preview in your space" data-ka="Preview in your space">Preview in your space</h2>
@@ -98,8 +127,11 @@
         <button type="button" class="btn nvr-reset-btn" id="nvrResetRoom" data-visible="0">Remove photo</button>
         <button type="button" class="btn" id="nvrExpand" aria-pressed="false" title="Larger preview area">Larger preview</button>
       </div>
+      </div>
 
       <div class="nvr-hero-visual">
+        <div class="nvr-gallery-shell">
+        <div class="nvr-gallery-shell__corners" aria-hidden="true"></div>
         <div class="nvr-lang-bar">
           <div class="nvr-lang-switch" role="group" aria-label="Choose language">
             <button type="button" class="lang-item" data-lang="ka">
@@ -116,11 +148,15 @@
         </div>
 
       <div class="nvr-placeholder" id="nvrPlaceholder" role="status">
-        <p class="muted nvr-placeholder-copy"
-          data-en="ფოტოს არჩევის შემდეგ აქ გამოჩნდება თქვენი კედლის პრევიუ (JPEG, PNG ან WebP)."
-          data-ka="ფოტოს არჩევის შემდეგ აქ გამოჩნდება თქვენი კედლის პრევიუ (JPEG, PNG ან WebP).">
-          ფოტოს არჩევის შემდეგ აქ გამოჩნდება თქვენი კედლის პრევიუ (JPEG, PNG ან WebP).
-        </p>
+        <div class="nvr-placeholder__wash" aria-hidden="true"></div>
+        <div class="nvr-placeholder__inner">
+          <span class="nvr-placeholder__glyph" aria-hidden="true"></span>
+          <p class="muted nvr-placeholder-copy"
+            data-en="ფოტოს არჩევის შემდეგ აქ გამოჩნდება თქვენი კედლის პრევიუ (JPEG, PNG ან WebP)."
+            data-ka="ფოტოს არჩევის შემდეგ აქ გამოჩნდება თქვენი კედლის პრევიუ (JPEG, PNG ან WebP).">
+            ფოტოს არჩევის შემდეგ აქ გამოჩნდება თქვენი კედლის პრევიუ (JPEG, PNG ან WebP).
+          </p>
+        </div>
       </div>
 
       <div id="nvrStageWrap" class="nvr-stage-wrap" hidden>
@@ -146,7 +182,12 @@
           </div>
         </div>
       </div>
+        </div>
       </div>
+
+      <div class="nvr-catalog-block">
+      <div class="nvr-catalog-block__glow" aria-hidden="true"></div>
+      <div class="nvr-divider" aria-hidden="true"><span class="nvr-divider__gem"></span></div>
 
       <div class="section-top nvr-catalog-head">
         <p class="small muted" data-en="ARTWORKS" data-ka="ARTWORKS">ARTWORKS</p>
@@ -158,11 +199,12 @@
         სრული კატალოგი — იგივე ნამუშევრები, რაც გალერეაში. ნახატზე შეეხეთ, რომ იგი თქვენს კედელზე გამოჩნდეს.
       </p>
       <div id="nvrCatalog" class="nvr-catalog" aria-live="polite"></div>
+      </div>
     </section>
   </div>
 </main>
 
-<footer class="footer">
+<footer class="footer nvr-footer">
   <div class="container footer-row">
     <p>© <span id="nvrYear"></span> Ninart Vision</p>
     <p class="muted"><a href="./sale/shop.html">Shop</a> · <a href="./gallery.html">Gallery</a></p>
