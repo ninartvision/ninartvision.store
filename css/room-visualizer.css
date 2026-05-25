@@ -452,10 +452,13 @@
 .page-room-visualizer .nvr-fullscreen-preview__backdrop {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  pointer-events: auto;
 }
 
 .page-room-visualizer .nvr-fullscreen-preview__frame {
   position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   flex: 1 1 auto;
@@ -465,6 +468,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  /* Children (scene, close) receive events; backdrop alone closes modal */
   pointer-events: none;
   opacity: 0;
   transition: opacity 180ms ease;
@@ -486,7 +490,7 @@
   min-height: 0;
   max-width: 100%;
   max-height: 100%;
-  pointer-events: none;
+  pointer-events: auto;
   overflow: hidden;
 }
 
@@ -502,6 +506,31 @@
   box-sizing: border-box;
   box-shadow: none;
   overflow: hidden;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+/* Fullscreen: room photo fixed/non-interactive; artwork + handle stay draggable */
+.page-room-visualizer .nvr-fullscreen-preview__scene .nvr-room {
+  pointer-events: none !important;
+  z-index: 0;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__scene .nvr-art-wrap {
+  pointer-events: auto !important;
+  touch-action: none;
+  z-index: 2;
+  cursor: grab;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__scene .nvr-art-wrap.is-dragging {
+  cursor: grabbing;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__scene .nvr-resize-corner {
+  pointer-events: auto !important;
+  touch-action: none;
+  z-index: 3;
 }
 
 .page-room-visualizer .nvr-fullscreen-preview__img {
@@ -526,6 +555,7 @@
 
 .page-room-visualizer .nvr-fullscreen-preview__close {
   position: absolute;
+  z-index: 10;
   top: max(12px, env(safe-area-inset-top, 0px));
   right: max(12px, env(safe-area-inset-right, 0px));
   width: 44px;

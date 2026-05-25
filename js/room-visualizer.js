@@ -88,6 +88,12 @@
   let fullscreenPreviewScene = null;
   let fullscreenPreviewVisible = false;
   let fullscreenCloseTimer = null;
+  let fullscreenStage = null;
+  let fullscreenArtWrap = null;
+  let fullscreenCorner = null;
+  let interactiveStage = stage;
+  let interactiveArtWrap = artWrap;
+  let interactiveCorner = corner;
   /** Center x,y as % of stage; width as % of stage width; rotation deg */
   let cx = 50;
   let cy = 45;
@@ -739,6 +745,12 @@
     artWrap.style.top = cy + '%';
     artWrap.style.width = sw + '%';
     artWrap.style.transform = 'translate(-50%, -50%) rotate(' + rot + 'deg)';
+    if (fullscreenArtWrap) {
+      fullscreenArtWrap.style.left = cx + '%';
+      fullscreenArtWrap.style.top = cy + '%';
+      fullscreenArtWrap.style.width = sw + '%';
+      fullscreenArtWrap.style.transform = 'translate(-50%, -50%) rotate(' + rot + 'deg)';
+    }
     if (scaleInput && scaleVal) {
       scaleInput.value = String(Math.round(sw));
       scaleVal.textContent = Math.round(sw) + '%';
@@ -985,6 +997,26 @@
     if (heroVisual) heroVisual.classList.toggle('nvr-hero-visual--live', !!show);
   }
 
+  function syncFullscreenArtworkLayer() {
+    if (!fullscreenArtWrap) return;
+    var hasArt = !artWrap.hidden && !!(artImg.getAttribute('src'));
+    fullscreenArtWrap.hidden = !hasArt;
+    if (fullscreenCorner) {
+      fullscreenCorner.hidden = !hasArt;
+    }
+    var cloneArtImg = fullscreenArtWrap.querySelector('img');
+    if (cloneArtImg && artImg.getAttribute('src')) {
+      cloneArtImg.src = artImg.src;
+      cloneArtImg.alt = artImg.alt || '';
+      if (artWrap.getAttribute('data-nvr-art-alpha')) {
+        fullscreenArtWrap.setAttribute('data-nvr-art-alpha', '1');
+      } else {
+        fullscreenArtWrap.removeAttribute('data-nvr-art-alpha');
+      }
+    }
+    applyArtTransform();
+  }
+
   function sanitizeFullscreenStageClone(clone) {
     if (!clone) return;
     clone.removeAttribute('id');
@@ -1003,11 +1035,84 @@
     clone.style.overflow = 'hidden';
     clone.style.transform = 'none';
     clone.style.transformOrigin = '';
-    clone.style.pointerEvents = 'none';
+    clone.style.pointerEvents = 'auto';
+    clone.style.touchAction = 'none';
     clone.querySelectorAll('*').forEach(function (element) {
       element.removeAttribute('id');
-      element.style.pointerEvents = 'none';
     });
+
+    var room = clone.querySelector('.nvr-room');
+    if (room) {
+      room.style.pointerEvents = 'none';
+      if (roomImg.getAttribute('data-nvr-orient')) {
+        room.setAttribute('data-nvr-orient', roomImg.getAttribute('data-nvr-orient'));
+      }
+    }
+
+    var wrap = clone.querySelector('.nvr-art-wrap');
+    if (wrap) {
+      wrap.style.pointerEvents = 'auto';
+      wrap.style.touchAction = 'none';
+      wrap.hidden = artWrap.hidden;
+    }
+
+    var cornerEl = clone.querySelector('.nvr-resize-corner');
+    if (cornerEl) {
+      cornerEl.style.pointerEvents = 'auto';
+      cornerEl.style.touchAction = 'none';
+      cornerEl.hidden = corner.hidden;
+    }
+  }
+
+  function setFullscreenInteractionTargets(clone) {
+    fullscreenStage = clone;
+    fullscreenArtWrap = clone ? clone.querySelector('.nvr-art-wrap') : null;
+    fullscreenCorner = clone ? clone.querySelector('.nvr-resize-corner') : null;
+    interactiveStage = clone || stage;
+    interactiveArtWrap = fullscreenArtWrap || artWrap;
+    interactiveCorner = fullscreenCorner || corner;
+  }
+
+  function clearFullscreenInteractionTargets() {
+    fullscreenStage = null;
+    fullscreenArtWrap = null;
+    fullscreenCorner = null;
+    interactiveStage = stage;
+    interactiveArtWrap = artWrap;
+    interactiveCorner = corner;
+  }
+
+  function attachFullscreenArtworkControls(clone) {
+    setFullscreenInteractionTargets(clone);
+    syncFullscreenArtworkLayer();
+    if (!fullscreenArtWrap) return;
+
+    fullscreenArtWrap.addEventListener('pointerdown', function (event) {
+      if (dragMode) return;
+      if (event.target.closest('.nvr-resize-corner')) return;
+      event.preventDefault();
+      var rect = interactiveStage.getBoundingClientRect();
+      dragMode = 'move';
+      dragStart = { px: event.clientX, py: event.clientY, cx, cy, rw: rect.width, rh: rect.height };
+      fullscreenArtWrap.classList.add('is-dragging');
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerUp);
+    });
+
+    if (fullscreenCorner) {
+      fullscreenCorner.addEventListener('pointerdown', function (event) {
+        if (dragMode) return;
+        event.preventDefault();
+        event.stopPropagation();
+        var rect = interactiveStage.getBoundingClientRect();
+        dragMode = 'resize';
+        dragStart = { px: event.clientX, py: event.clientY, sw, rw: rect.width };
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('pointercancel', onPointerUp);
+      });
+    }
   }
 
   function ensureFullscreenPreviewModal() {
@@ -1024,9 +1129,19 @@
     backdrop.addEventListener('click', closeFullscreenPreview);
     closeBtn.addEventListener('click', closeFullscreenPreview);
     fullscreenPreviewModal.addEventListener('click', function (event) {
-      if (event.target === fullscreenPreviewModal) {
+      if (
+        event.target === fullscreenPreviewModal ||
+        event.target.classList.contains('nvr-fullscreen-preview__backdrop')
+      ) {
         closeFullscreenPreview();
       }
+    });
+
+    fullscreenPreviewScene.addEventListener('click', function (event) {
+      event.stopPropagation();
+    });
+    fullscreenPreviewScene.addEventListener('pointerdown', function (event) {
+      event.stopPropagation();
     });
 
     document.addEventListener('keydown', function (event) {
@@ -1055,8 +1170,10 @@
     fullscreenPreviewScene.style.minHeight = '0';
     fullscreenPreviewScene.style.maxWidth = '100%';
     fullscreenPreviewScene.style.maxHeight = '100%';
-    fullscreenPreviewScene.style.pointerEvents = 'none';
+    fullscreenPreviewScene.style.pointerEvents = 'auto';
     fullscreenPreviewScene.appendChild(stageClone);
+
+    attachFullscreenArtworkControls(stageClone);
 
     fullscreenPreviewModal.setAttribute('aria-hidden', 'false');
     fullscreenPreviewModal.classList.add('is-open');
@@ -1073,6 +1190,7 @@
     if (!fullscreenPreviewModal || !fullscreenPreviewVisible) return;
     fullscreenPreviewVisible = false;
     fullscreenPreviewModal.classList.remove('is-visible');
+    clearFullscreenInteractionTargets();
     if (fullscreenCloseTimer) {
       clearTimeout(fullscreenCloseTimer);
     }
@@ -1087,6 +1205,9 @@
     const hasArt = !!(selectedId && artImg.getAttribute('src'));
     artWrap.hidden = !(hasRoom && hasArt);
     corner.hidden = artWrap.hidden;
+    if (fullscreenPreviewVisible) {
+      syncFullscreenArtworkLayer();
+    }
   }
 
   function setSelectedArtwork(id) {
@@ -1114,11 +1235,14 @@
       }
       applyArtTransform();
       updateArtVisibility();
+      if (fullscreenPreviewVisible) {
+        syncFullscreenArtworkLayer();
+      }
     });
   }
 
   function stageRect() {
-    return stage.getBoundingClientRect();
+    return (interactiveStage && interactiveStage.getBoundingClientRect) ? interactiveStage.getBoundingClientRect() : stage.getBoundingClientRect();
   }
 
   function clamp(n, lo, hi) {
@@ -1148,6 +1272,9 @@
     window.removeEventListener('pointercancel', onPointerUp);
     dragMode = null;
     dragStart = null;
+    if (interactiveArtWrap) {
+      interactiveArtWrap.classList.remove('is-dragging');
+    }
     artWrap.classList.remove('is-dragging');
   }
 
