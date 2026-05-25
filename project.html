@@ -13,7 +13,7 @@
   <meta property="og:description" id="ogDescription" content="">
   <meta property="og:image"       id="ogImage"       content="">
 
-  <link rel="stylesheet" href="./style.min.css?v=nv20260528" />
+  <link rel="stylesheet" href="./style.min.css?v=nv20260614" />
   <link rel="icon" href="./images/favicon.webp">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -262,10 +262,7 @@
         img.addEventListener('click', () =>
           openLightbox(`${coverUrl}?auto=format&w=1600&q=90`)
         );
-        const mainFrame = document.createElement('div');
-        mainFrame.className = 'project-image__frame';
-        mainFrame.appendChild(img);
-        document.getElementById('projMainImage').appendChild(mainFrame);
+        document.getElementById('projMainImage').appendChild(img);
 
         document.getElementById('ogImage').content =
           `${coverUrl}?auto=format&w=1200&q=85`;
@@ -287,10 +284,7 @@
           img.addEventListener('click', () =>
             openLightbox(`${url}?auto=format&w=1600&q=90`)
           );
-          const item = document.createElement('div');
-          item.className = 'gallery-list__item';
-          item.appendChild(img);
-          list.appendChild(item);
+          list.appendChild(img);
         });
         document.getElementById('projGallerySection').style.display = '';
       }

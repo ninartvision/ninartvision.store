@@ -180,12 +180,16 @@ function buildPage(a) {
     .filter(Boolean)
     .filter(u => u !== rawImgUrl);   // avoid duplicating the hero
 
-  const thumbsHtml = extraPhotos.length
-    ? extraPhotos.map((u, i) =>
-        `<img src="${sanityImg(u, { w: 120, q: 75 })}" class="product-thumb" ` +
-        `alt="${escAttr((a.title || 'photo') + ' ' + (i + 2))}" ` +
-        `onclick="document.getElementById('mainImg').src='${escAttr(sanityImg(u, { w: 900, q: 85 }))}'">`
-      ).join('\n        ')
+  const galleryHtml = extraPhotos.length
+    ? extraPhotos.map((u, i) => {
+        const thumb = sanityImg(u, { w: 800, q: 80 });
+        const full  = sanityImg(u, { w: 1600, q: 90 });
+        return (
+          `<img src="${thumb}" data-full="${escAttr(full)}" ` +
+          `alt="${escAttr((a.title || 'photo') + ' ' + (i + 2))}" ` +
+          `decoding="async" loading="lazy">`
+        );
+      }).join('\n        ')
     : '';
 
   // Schema.org Product
@@ -245,7 +249,7 @@ function buildPage(a) {
 ${JSON.stringify(jsonLd, null, 2)}
   </script>
 
-  <link rel="stylesheet" href="../../style.min.css?v=nv20260527" />
+  <link rel="stylesheet" href="../../style.min.css?v=nv20260614" />
   <link rel="icon"       href="../../images/favicon.webp">
 </head>
 <body>
@@ -295,89 +299,107 @@ ${JSON.stringify(jsonLd, null, 2)}
   </nav>
 </div>
 
-<!-- ── PRODUCT ─────────────────────────────────────────────────────────── -->
-<section class="section" style="padding-top:100px; min-height:70vh;">
-  <div class="container">
+<main class="project-page">
 
-    <a href="../../sale/shop.html" class="btn btn-dark" style="margin-bottom:2rem;">&#8592; Back to Shop</a>
+  <section class="project-hero">
+    <div class="project-text">
+      <h1>${escText(a.title || title)}</h1>
+      ${artistName ? `<p class="muted">by ${escText(artistName)}</p>` : ''}
+      ${desc        ? `<p class="muted">${escText(desc)}</p>` : ''}
 
-    <div class="product-layout">
+      <ul class="project-details">
+        ${a.dimensions ? `<li><strong>Size:</strong> ${escText(a.dimensions)}</li>` : ''}
+        ${a.medium     ? `<li><strong>Medium:</strong> ${escText(a.medium)}</li>` : ''}
+        ${a.year       ? `<li><strong>Year:</strong> ${escText(String(a.year))}</li>` : ''}
+      </ul>
 
-      <!-- LEFT: image gallery -->
-      <div class="product-left">
-        <div class="product-gallery">
-          ${displayImg
-            ? `<img id="mainImg" src="${displayImg}"${imgDimAttr}
-               alt="${escAttr(a.image?.alt || a.title || title)}"
-               decoding="async"
-               fetchpriority="high"
-               style="width:100%;max-width:600px;display:block;border-radius:8px;">`
-            : '<p class="muted">No image available.</p>'
-          }
-        </div>
-        ${thumbsHtml
-          ? `<div class="product-thumbs" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:8px;">
-        ${thumbsHtml}
-      </div>`
+      <div class="product-buy">
+        ${price ? `<div class="product-price">${escText(price)}</div>` : ''}
+
+        <p class="status ${isSold ? 'sold' : 'sale'}">
+          ${isSold ? 'Sold' : 'Available'}
+        </p>
+
+        ${!isSold
+          ? `<a class="btn btn-dark"
+               href="${waUrl}"
+               target="_blank" rel="noopener noreferrer">
+              Buy via WhatsApp
+             </a>`
           : ''
         }
+
+        <button type="button" class="btn" id="shareBtn">Share this artwork</button>
+        <p id="shareMsg" class="muted" style="font-size:.8rem;display:none;">Link copied!</p>
       </div>
 
-      <!-- RIGHT: details -->
-      <div class="product-right">
-        <h1 style="margin-bottom:.5rem;">${escText(a.title || title)}</h1>
-        ${artistName ? `<p class="muted" style="margin-bottom:1rem;">by ${escText(artistName)}</p>` : ''}
-        ${desc        ? `<p class="muted">${escText(desc)}</p>` : ''}
-
-        <ul class="product-info" style="margin:1.25rem 0;">
-          ${a.dimensions ? `<li><b>Size:</b>   ${escText(a.dimensions)}</li>` : ''}
-          ${a.medium     ? `<li><b>Medium:</b> ${escText(a.medium)}</li>`     : ''}
-          ${a.year       ? `<li><b>Year:</b>   ${escText(String(a.year))}</li>` : ''}
-        </ul>
-
-        <div class="product-buy">
-          ${price ? `<div class="product-price">${escText(price)}</div>` : ''}
-
-          <p class="status ${isSold ? 'sold' : 'sale'}" style="margin-top:.75rem;">
-            ${isSold ? 'Sold' : 'Available'}
-          </p>
-
-          ${!isSold
-            ? `<a class="btn btn-dark"
-                 href="${waUrl}"
-                 target="_blank" rel="noopener noreferrer"
-                 style="margin-top:1rem;display:inline-block;">
-                Buy via WhatsApp
-               </a>`
-            : ''
-          }
-
-          <button class="btn" id="shareBtn"
-                  style="margin-top:.75rem;background:transparent;border:1px solid currentColor;cursor:pointer;">
-            Share this artwork
-          </button>
-          <p id="shareMsg" class="muted" style="font-size:.8rem;margin-top:.5rem;display:none;">
-            Link copied!
-          </p>
-        </div>
-      </div>
-
+      <a class="link back-link" href="../../sale/shop.html">← Back to Shop</a>
     </div>
-  </div>
-</section>
 
-<!-- ── FOOTER ──────────────────────────────────────────────────────────── -->
-<footer class="footer" style="margin-top:4rem;">
-  <div class="container footer-bottom">
-    <p>&copy; <span id="yr"></span> Ninart Vision. All rights reserved.</p>
-  </div>
-</footer>
+    <div class="project-image">
+      ${displayImg
+        ? `<img id="mainImg" src="${displayImg}"${imgDimAttr}
+             alt="${escAttr(a.image?.alt || a.title || title)}"
+             decoding="async" fetchpriority="high">`
+        : '<p class="muted">No image available.</p>'
+      }
+    </div>
+  </section>
 
-<script defer src="../../script.min.js?v=nv20260527"></script>
+  ${galleryHtml
+    ? `<section class="project-gallery">
+    <h2>More photos</h2>
+    <div class="gallery-list">
+        ${galleryHtml}
+    </div>
+  </section>`
+    : ''
+  }
+
+</main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <span class="close" id="lightboxClose" aria-label="Close lightbox">&times;</span>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
+</div>
+
+<script defer src="../../script.min.js?v=nv20260614"></script>
 <script>
-  document.getElementById('yr').textContent = new Date().getFullYear();
+  (function () {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const closeBtn = document.getElementById('lightboxClose');
+    if (!lightbox || !lightboxImg || !closeBtn) return;
 
-  // Share button
+    function openLightbox(imgSrc) {
+      lightbox.classList.add('open');
+      lightboxImg.src = imgSrc;
+      document.body.style.overflow = 'hidden';
+      lightbox.setAttribute('aria-hidden', 'false');
+      closeBtn.focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+      lightbox.setAttribute('aria-hidden', 'true');
+    }
+
+    document.querySelectorAll('.gallery-list img').forEach(function (img) {
+      img.addEventListener('click', function () {
+        openLightbox(img.getAttribute('data-full') || img.src);
+      });
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+    });
+  }());
+
   (function () {
     const btn = document.getElementById('shareBtn');
     const msg = document.getElementById('shareMsg');

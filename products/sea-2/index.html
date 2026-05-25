@@ -55,7 +55,7 @@
 }
   </script>
 
-  <link rel="stylesheet" href="../../style.min.css?v=nv20260527" />
+  <link rel="stylesheet" href="../../style.min.css?v=nv20260614" />
   <link rel="icon"       href="../../images/favicon.webp">
 </head>
 <body>
@@ -95,79 +95,63 @@
   </div>
 </div>
 
-<!-- ── PRODUCT ─────────────────────────────────────────────────────────── -->
-<section class="section" style="padding-top:100px; min-height:70vh;">
-  <div class="container">
 
-    <a href="../../sale/shop.html" class="btn btn-dark" style="margin-bottom:2rem;">&#8592; Back to Shop</a>
+<main class="project-page">
 
-    <div class="product-layout">
+  <section class="project-hero">
+    <div class="project-text">
 
-      <!-- LEFT: image gallery -->
-      <div class="product-left">
-        <div class="product-gallery">
-          <img id="mainImg" src="https://cdn.sanity.io/images/8t5h923j/production/ccf65f2b558e1ae2e16b27e627a6fe3650603b6b-1500x1125.jpg?auto=format&w=900&q=85"
-               alt="&quot;sea&quot;&quot;sea&quot;"
-               decoding="async"
-               style="width:100%;max-width:600px;display:block;border-radius:8px;">
-        </div>
-        
-      </div>
-
-      <!-- RIGHT: details -->
-      <div class="product-right">
-        <h1 style="margin-bottom:.5rem;">"sea"</h1>
-        <p class="muted" style="margin-bottom:1rem;">by Mzia Kashia</p>
+        <h1>"sea"</h1>
+        <p class="muted">by Mzia Kashia</p>
         <p class="muted">"sea"</p>
 
-        <ul class="product-info" style="margin:1.25rem 0;">
-          <li><b>Size:</b>   30 x 40 cm</li>
-          <li><b>Medium:</b> acrylic on canvas</li>
-          <li><b>Year:</b>   2000</li>
+        <ul class="project-details">
+          <li><strong>Size:</strong>   30 x 40 cm</li>
+          <li><strong>Medium:</strong> acrylic on canvas</li>
+          <li><strong>Year:</strong>   2000</li>
         </ul>
 
         <div class="product-buy">
           <div class="product-price">₾300</div>
 
-          <p class="status sale" style="margin-top:.75rem;">
+          <p class="status sale">
             Available
           </p>
 
           <a class="btn btn-dark"
                  href="https://wa.me/995579388833?text=%E1%83%92%E1%83%90%E1%83%9B%E1%83%90%E1%83%A0%E1%83%AF%E1%83%9D%E1%83%91%E1%83%90%2C%20%E1%83%9B%E1%83%90%E1%83%98%E1%83%9C%E1%83%A2%E1%83%94%E1%83%A0%E1%83%94%E1%83%A1%E1%83%94%E1%83%91%E1%83%A1%20%E1%83%9C%E1%83%90%E1%83%AE%E1%83%90%E1%83%A2%E1%83%98%3A%20%22sea%22%2C%20%E1%83%90%E1%83%95%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%20Mzia%20Kashia%2C%20%E1%83%A4%E1%83%90%E1%83%A1%E1%83%98%20%E2%82%BE300%0Ahttps%3A%2F%2Fninartvision.store%2Fproducts%2Fsea-2%2F"
-                 target="_blank" rel="noopener noreferrer"
-                 style="margin-top:1rem;display:inline-block;">
+                 target="_blank" rel="noopener noreferrer">
                 Buy via WhatsApp
                </a>
 
-          <button class="btn" id="shareBtn"
-                  style="margin-top:.75rem;background:transparent;border:1px solid currentColor;cursor:pointer;">
+          <button class="btn" id="shareBtn">
             Share this artwork
           </button>
-          <p id="shareMsg" class="muted" style="font-size:.8rem;margin-top:.5rem;display:none;">
+          <p id="shareMsg" class="muted">
             Link copied!
           </p>
         </div>
-      </div>
-
+      
+      <a class="link back-link" href="../../sale/shop.html">← Back to Shop</a>
     </div>
-  </div>
-</section>
 
-<!-- ── FOOTER ──────────────────────────────────────────────────────────── -->
-<footer class="footer" style="margin-top:4rem;">
-  <div class="container footer-bottom">
-    <p>&copy; <span id="yr"></span> Ninart Vision. All rights reserved.</p>
-  </div>
-</footer>
+    <div class="project-image">
+      <img id="mainImg" src="https://cdn.sanity.io/images/8t5h923j/production/ccf65f2b558e1ae2e16b27e627a6fe3650603b6b-1500x1125.jpg?auto=format&w=900&q=85"
+               alt="&quot;sea&quot;&quot;sea&quot;"
+               decoding="async">
+    </div>
+  </section>
 
-<script defer src="../../script.min.js?v=nv20260527"></script>
+</main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <span class="close" id="lightboxClose" aria-label="Close lightbox">&times;</span>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
+</div>
+
+<script defer src="../../script.min.js?v=nv20260614"></script>
 <script>
-  // Footer year
-  document.getElementById('yr').textContent = new Date().getFullYear();
-
-
-  // Share button
+// Share button
   (function () {
     const btn = document.getElementById('shareBtn');
     const msg = document.getElementById('shareMsg');
@@ -182,6 +166,42 @@
           setTimeout(function () { msg.style.display = 'none'; }, 3000);
         });
       }
+    });
+  }());
+</script>
+<script>
+  (function () {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const closeBtn = document.getElementById('lightboxClose');
+    if (!lightbox || !lightboxImg || !closeBtn) return;
+
+    function openLightbox(imgSrc) {
+      lightbox.classList.add('open');
+      lightboxImg.src = imgSrc;
+      document.body.style.overflow = 'hidden';
+      lightbox.setAttribute('aria-hidden', 'false');
+      closeBtn.focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+      lightbox.setAttribute('aria-hidden', 'true');
+    }
+
+    document.querySelectorAll('.gallery-list img').forEach(function (img) {
+      img.addEventListener('click', function () {
+        openLightbox(img.getAttribute('data-full') || img.src);
+      });
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
     });
   }());
 </script>
