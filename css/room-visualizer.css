@@ -392,13 +392,15 @@
 .page-room-visualizer .nvr-stage .nvr-room {
   display: block;
   position: absolute;
-  inset: 0;
+  left: 50%;
+  top: 50%;
   z-index: 0;
-  width: 100% !important;
-  height: 100% !important;
+  width: auto;
+  height: auto;
   max-width: 100%;
   max-height: 100%;
   margin: 0;
+  transform: translate(-50%, -50%);
   object-fit: contain !important;
   object-position: center center;
   user-select: none;
