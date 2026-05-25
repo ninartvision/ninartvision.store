@@ -494,8 +494,10 @@
   overflow: hidden;
 }
 
-.page-room-visualizer .nvr-fullscreen-preview__scene > .nvr-stage {
+.page-room-visualizer .nvr-fullscreen-preview__scene > .nvr-stage,
+.nvr-stage.nvr-stage--fullscreen {
   display: block;
+  position: relative;
   width: 100%;
   height: 100%;
   min-width: 0;
@@ -508,14 +510,18 @@
   overflow: hidden;
   pointer-events: auto;
   touch-action: none;
+  isolation: isolate;
+  aspect-ratio: auto;
 }
 
-/* Fullscreen: room photo fixed/non-interactive; artwork + handle stay draggable */
+/* Fullscreen: room photo fixed; artwork layer + resize handle stay interactive */
+.nvr-stage.nvr-stage--fullscreen .nvr-room,
 .page-room-visualizer .nvr-fullscreen-preview__scene .nvr-room {
   pointer-events: none !important;
   z-index: 0;
 }
 
+.nvr-stage.nvr-stage--fullscreen .nvr-art-wrap,
 .page-room-visualizer .nvr-fullscreen-preview__scene .nvr-art-wrap {
   pointer-events: auto !important;
   touch-action: none;
@@ -523,14 +529,22 @@
   cursor: grab;
 }
 
+.nvr-stage.nvr-stage--fullscreen .nvr-art-wrap.is-dragging,
 .page-room-visualizer .nvr-fullscreen-preview__scene .nvr-art-wrap.is-dragging {
   cursor: grabbing;
 }
 
+.nvr-stage.nvr-stage--fullscreen .nvr-resize-corner,
 .page-room-visualizer .nvr-fullscreen-preview__scene .nvr-resize-corner {
   pointer-events: auto !important;
   touch-action: none;
   z-index: 3;
+}
+
+.nvr-stage.nvr-stage--fullscreen .nvr-art-wrap[hidden],
+.nvr-stage.nvr-stage--fullscreen .nvr-resize-corner[hidden] {
+  display: none !important;
+  pointer-events: none !important;
 }
 
 .page-room-visualizer .nvr-fullscreen-preview__img {
