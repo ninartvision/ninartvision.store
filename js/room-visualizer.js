@@ -1024,6 +1024,18 @@
     corner.style.touchAction = '';
   }
 
+  function cancelActiveDrag() {
+    window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('pointerup', onPointerUp);
+    window.removeEventListener('pointercancel', onPointerUp);
+    dragMode = null;
+    dragStart = null;
+    artWrap.classList.remove('is-dragging');
+    if (interactiveArtWrap && interactiveArtWrap !== artWrap) {
+      interactiveArtWrap.classList.remove('is-dragging');
+    }
+  }
+
   function setFullscreenInteractionTargets() {
     interactiveStage = stage;
     interactiveArtWrap = artWrap;
@@ -1101,6 +1113,8 @@
     if (!fullscreenPreviewModal || !fullscreenPreviewVisible) return;
     fullscreenPreviewVisible = false;
     fullscreenPreviewModal.classList.remove('is-visible');
+
+    cancelActiveDrag();
 
     if (stage.parentNode === fullscreenPreviewScene) {
       restoreStageHome();
