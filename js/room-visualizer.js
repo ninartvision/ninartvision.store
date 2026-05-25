@@ -1177,11 +1177,7 @@
 
   if (expandBtn) {
     expandBtn.addEventListener('click', () => {
-      stageWrap.classList.toggle('nvr-stage--tall');
-      expandBtn.setAttribute(
-        'aria-pressed',
-        stageWrap.classList.contains('nvr-stage--tall') ? 'true' : 'false'
-      );
+      openFullscreenPreview();
     });
   }
 
