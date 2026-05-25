@@ -83,6 +83,7 @@
   let artworks = [];
   let roomObjectUrl = null;
   let selectedId = null;
+  let activeUploadToken = 0;
   /** Center x,y as % of stage; width as % of stage width; rotation deg */
   let cx = 50;
   let cy = 45;
@@ -1084,8 +1085,10 @@
   fileInput.addEventListener('change', () => {
     const f = fileInput.files && fileInput.files[0];
     if (!f || !/^image\//.test(f.type)) return;
+    const uploadToken = ++activeUploadToken;
     clearRoomPreviewState();
     loadRoomPreviewFromFile(f, function (url, orientMode) {
+      if (uploadToken !== activeUploadToken) return;
       if (!url) return;
       applyRoomPreviewSrc(url, orientMode);
       revealStage(true);
@@ -1094,6 +1097,7 @@
   });
 
   resetBtn.addEventListener('click', () => {
+    activeUploadToken += 1;
     clearRoomPreviewState();
     fileInput.value = '';
     revealStage(false);
