@@ -13,7 +13,7 @@
   <meta property="og:description" id="ogDescription" content="">
   <meta property="og:image"       id="ogImage"       content="">
 
-  <link rel="stylesheet" href="./style.min.css?v=nv20260614" />
+  <link rel="stylesheet" href="./style.min.css?v=nv20260615" />
   <link rel="icon" href="./images/favicon.webp">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,7 +106,7 @@
            class="link"
            style="display:none;margin-bottom:12px;">View artist →</a>
 
-        <a class="link back-link" href="javascript:history.back()">← Back</a>
+        <a class="link back-link" href="index.html">← Back</a>
       </div>
 
       <div class="project-image" id="projMainImage"></div>
@@ -130,33 +130,10 @@
   </div>
 
   <!-- ─── SCRIPTS ──────────────────────────────────────────────── -->
+  <script defer src="./js/project-detail-lightbox.min.js?v=nv20260615"></script>
   <script defer src="./script.min.js?v=nv20260527"></script>
 
   <script>
-    /* ── Lightbox helpers ─────────────────────────────────────── */
-    const lightbox    = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-
-    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeLightbox();
-    });
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-
-    function openLightbox(src) {
-      lightboxImg.src = src;
-      lightbox.classList.add('open');
-      lightbox.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeLightbox() {
-      lightbox.classList.remove('open');
-      lightbox.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
-
     /* ── Project loader ───────────────────────────────────────── */
     (async function loadProject() {
       const API = 'https://8t5h923j.apicdn.sanity.io/v2025-02-05/data/query/production';
@@ -258,10 +235,7 @@
         img.alt     = p.coverImage?.alt || fullTitle;
         img.decoding = 'async';
         img.loading  = 'lazy';
-        img.style.cursor = 'zoom-in';
-        img.addEventListener('click', () =>
-          openLightbox(`${coverUrl}?auto=format&w=1600&q=90`)
-        );
+        img.setAttribute('data-full', `${coverUrl}?auto=format&w=1600&q=90`);
         document.getElementById('projMainImage').appendChild(img);
 
         document.getElementById('ogImage').content =
@@ -280,10 +254,7 @@
           img.alt      = imgObj.alt || fullTitle;
           img.decoding = 'async';
           img.loading  = 'lazy';
-          img.style.cursor = 'zoom-in';
-          img.addEventListener('click', () =>
-            openLightbox(`${url}?auto=format&w=1600&q=90`)
-          );
+          img.setAttribute('data-full', `${url}?auto=format&w=1600&q=90`);
           list.appendChild(img);
         });
         document.getElementById('projGallerySection').style.display = '';
@@ -292,6 +263,11 @@
       // Show content, hide loader
       document.getElementById('projectLoading').style.display = 'none';
       document.getElementById('projectContent').style.display = '';
+
+      const root = document.getElementById('projectContent');
+      if (window.NVProjectDetail && root) {
+        window.NVProjectDetail.bindImages(root);
+      }
     }
 
     /* ── Portable-text → HTML ─────────────────────────────────── */

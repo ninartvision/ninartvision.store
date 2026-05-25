@@ -2665,7 +2665,9 @@ img, video {
   min-width: 0;
 }
 
-.project-text #projDesc:empty{
+.project-text #projDesc:empty,
+.project-text #projBodyKa:empty,
+.project-text #projBodyEn:empty{
   display: none;
 }
 
@@ -2796,6 +2798,14 @@ img, video {
 @media (max-width: 850px){
   .project-hero{
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-hero .project-image{
+    order: 0;
+  }
+
+  .project-hero .project-text{
+    order: 0;
   }
 }
 
@@ -7196,10 +7206,43 @@ a.pill:visited{
     /* Overflow controlled by specific breakpoints, not here */
   }
   
-  /* Ensure all images stay within bounds */
-  img {
+  /* Ensure all images stay within bounds (exclude project detail gallery thumbs) */
+  img:not(.gallery-list img):not(.lightbox-img) {
     max-width: 100%;
     height: auto;
+  }
+
+  /* Featured / project detail — keep Roseslover grid + proportions on mobile */
+  .project-page,
+  .project-page .project-hero,
+  .project-page .project-gallery,
+  .project-page .gallery-list{
+    max-width: 100% !important;
+  }
+
+  .project-page .gallery-list{
+    display: grid !important;
+  }
+
+  .project-page .gallery-list > img,
+  .project-page .gallery-list__item img{
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 0;
+    max-height: none !important;
+    aspect-ratio: 4 / 3 !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+  }
+
+  .project-page .project-image > img{
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    aspect-ratio: auto;
+    object-fit: contain;
   }
   
   /* Lock sliders horizontally */

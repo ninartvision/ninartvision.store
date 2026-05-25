@@ -1,0 +1,70 @@
+/**
+ * Featured project detail — extends site .project-page (Svaneti only).
+ * Uses existing spacing, radius, and color tokens from style.css.
+ */
+.project-page--svaneti .project-hero{
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  grid-template-areas:
+    "intro image"
+    "body  image";
+  align-items: start;
+}
+
+.project-page--svaneti .project-intro,
+.project-page--svaneti .project-body{
+  min-width: 0;
+}
+
+.project-page--svaneti .project-intro{
+  grid-area: intro;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2vw, 16px);
+}
+
+.project-page--svaneti .project-intro h1{
+  margin: 0;
+  font-size: 32px;
+}
+
+.project-page--svaneti .project-body{
+  grid-area: body;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2vw, 16px);
+}
+
+.project-page--svaneti .project-image{
+  grid-area: image;
+  align-self: stretch;
+}
+
+.project-page--svaneti .project-image > img{
+  width: 100%;
+  height: 100%;
+  max-height: min(78dvh, 720px);
+  object-fit: contain;
+  object-position: center;
+}
+
+.project-page--svaneti .project-body .product-buy{
+  margin-top: clamp(6px, 1.2vw, 10px);
+  padding-top: clamp(14px, 2.5vw, 20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  width: 100%;
+}
+
+@media (max-width: 850px){
+  .project-page--svaneti .project-hero{
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "intro"
+      "image"
+      "body";
+    gap: clamp(20px, 4vw, 32px);
+  }
+
+  .project-page--svaneti .project-image > img{
+    max-height: min(62dvh, 520px);
+  }
+}

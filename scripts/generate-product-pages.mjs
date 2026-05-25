@@ -249,7 +249,7 @@ function buildPage(a) {
 ${JSON.stringify(jsonLd, null, 2)}
   </script>
 
-  <link rel="stylesheet" href="../../style.min.css?v=nv20260614" />
+  <link rel="stylesheet" href="../../style.min.css?v=nv20260615" />
   <link rel="icon"       href="../../images/favicon.webp">
 </head>
 <body>
@@ -363,43 +363,9 @@ ${JSON.stringify(jsonLd, null, 2)}
   <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
 </div>
 
-<script defer src="../../script.min.js?v=nv20260614"></script>
+<script defer src="../../js/project-detail-lightbox.min.js?v=nv20260615"></script>
+<script defer src="../../script.min.js?v=nv20260615"></script>
 <script>
-  (function () {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    const closeBtn = document.getElementById('lightboxClose');
-    if (!lightbox || !lightboxImg || !closeBtn) return;
-
-    function openLightbox(imgSrc) {
-      lightbox.classList.add('open');
-      lightboxImg.src = imgSrc;
-      document.body.style.overflow = 'hidden';
-      lightbox.setAttribute('aria-hidden', 'false');
-      closeBtn.focus();
-    }
-
-    function closeLightbox() {
-      lightbox.classList.remove('open');
-      document.body.style.overflow = '';
-      lightbox.setAttribute('aria-hidden', 'true');
-    }
-
-    document.querySelectorAll('.gallery-list img').forEach(function (img) {
-      img.addEventListener('click', function () {
-        openLightbox(img.getAttribute('data-full') || img.src);
-      });
-    });
-
-    closeBtn.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', function (e) {
-      if (e.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
-    });
-  }());
-
   (function () {
     const btn = document.getElementById('shareBtn');
     const msg = document.getElementById('shareMsg');

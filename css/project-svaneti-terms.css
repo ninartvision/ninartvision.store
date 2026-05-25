@@ -1,0 +1,199 @@
+/**
+ * Svaneti featured project — Terms page presentation (page-scoped only).
+ * Requires terms-page.css variables and components.
+ */
+.page-project-svaneti .terms-body__inner {
+  width: min(680px, 100%);
+}
+
+.page-project-svaneti .terms-hero__title {
+  font-size: clamp(2.35rem, 7vw, 4.25rem);
+}
+
+/* Featured artwork — central visual */
+.page-project-svaneti .terms-card--art {
+  cursor: default;
+  padding: clamp(28px, 4.5vw, 40px);
+}
+
+.page-project-svaneti .terms-card--art:hover {
+  transform: translateY(-4px);
+}
+
+.page-project-svaneti .terms-card--art .terms-card__main {
+  width: 100%;
+}
+
+.page-project-svaneti .terms-art__frame {
+  margin: 0;
+  border-radius: clamp(16px, 2.4vw, 22px);
+  overflow: hidden;
+  border: 1px solid var(--terms-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 12px 40px rgba(26, 21, 18, 0.08);
+  background: rgba(255, 253, 250, 0.6);
+}
+
+.page-project-svaneti .terms-art__frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(72dvh, 640px);
+  object-fit: contain;
+  object-position: center;
+  cursor: zoom-in;
+}
+
+/* Metadata list */
+.page-project-svaneti .terms-meta {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vw, 16px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page-project-svaneti .terms-meta li {
+  margin: 0;
+  padding: 0 0 clamp(12px, 2vw, 14px);
+  border-bottom: 1px solid rgba(26, 21, 18, 0.06);
+  font-family: "FiraGO", "DejaVu Sans", system-ui, sans-serif;
+  font-size: clamp(0.97rem, 2vw, 1.0625rem);
+  line-height: 1.75;
+  color: var(--terms-ink-muted);
+}
+
+.page-project-svaneti .terms-meta li:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.page-project-svaneti .terms-meta strong {
+  font-weight: 600;
+  color: var(--terms-ink-soft);
+  margin-right: 0.35em;
+}
+
+/* Purchase block inside terms-cta */
+.page-project-svaneti .terms-purchase__price {
+  margin: 0 auto clamp(10px, 2vw, 14px);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.75rem, 4vw, 2.15rem);
+  font-weight: 600;
+  color: var(--terms-ink);
+}
+
+.page-project-svaneti .terms-purchase__status {
+  margin: 0 auto clamp(20px, 3.5vw, 26px);
+  font-family: "FiraGO", "DejaVu Sans", system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(138, 52, 52, 0.92);
+}
+
+.page-project-svaneti .terms-purchase__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 2.4vw, 16px);
+  width: 100%;
+}
+
+.page-project-svaneti .terms-purchase__msg {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--terms-ink-muted);
+}
+
+.page-project-svaneti .terms-purchase__btn--ghost {
+  border-color: rgba(26, 21, 18, 0.12);
+  background: linear-gradient(
+    165deg,
+    rgba(255, 253, 250, 0.98) 0%,
+    rgba(248, 240, 228, 0.9) 100%
+  );
+  color: var(--terms-ink-soft);
+  box-shadow:
+    0 4px 18px rgba(26, 21, 18, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.page-project-svaneti .terms-purchase__btn--ghost:hover {
+  border-color: rgba(184, 149, 110, 0.42);
+  box-shadow:
+    0 8px 28px rgba(26, 21, 18, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* Gallery inside terms card */
+.page-project-svaneti .terms-card--gallery {
+  cursor: default;
+}
+
+.page-project-svaneti .terms-card--gallery:hover {
+  transform: translateY(-4px);
+}
+
+.page-project-svaneti .terms-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 16px);
+  width: 100%;
+}
+
+.page-project-svaneti .terms-gallery-grid img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center;
+  border-radius: clamp(14px, 2vw, 18px);
+  border: 1px solid var(--terms-border);
+  box-shadow: 0 4px 16px rgba(26, 21, 18, 0.06);
+  cursor: pointer;
+  transition:
+    transform 0.55s var(--terms-ease),
+    box-shadow 0.55s var(--terms-ease);
+}
+
+.page-project-svaneti .terms-gallery-grid img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(26, 21, 18, 0.1);
+}
+
+/* Accordion hint when collapsed */
+.page-project-svaneti .terms-card--accordion:not(.open) .terms-card__body--hint p {
+  margin: 0;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+  .page-project-svaneti .terms-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .page-project-svaneti .terms-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-project-svaneti .terms-art__frame img {
+    max-height: min(58dvh, 480px);
+  }
+
+  .page-project-svaneti .terms-purchase__actions .terms-cta__btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-project-svaneti .terms-gallery-grid img:hover {
+    transform: none;
+  }
+}

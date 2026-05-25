@@ -1,0 +1,39 @@
+<!--
+  Canonical Featured Project detail layout (master: project3.html / Roseslover).
+  Copy <main> through lightbox markup; keep page-specific SEO/head/header unchanged.
+-->
+<main class="project-page">
+
+  <section class="project-hero">
+    <div class="project-text">
+      <h1><!-- title --></h1>
+      <p class="muted"><!-- short description (EN) --></p>
+      <p class="project-paragraph geo"><!-- body KA --></p>
+      <p class="project-paragraph eng"><!-- body EN --></p>
+      <ul class="project-details">
+        <li><strong>Technique:</strong> …</li>
+        <li><strong>Size:</strong> …</li>
+        <li><strong>Year:</strong> …</li>
+      </ul>
+      <a class="link back-link" href="index.html">← Back</a>
+    </div>
+    <div class="project-image">
+      <img src="" alt="" decoding="async" loading="lazy">
+    </div>
+  </section>
+
+  <section class="project-gallery">
+    <h2>More photos</h2>
+    <div class="gallery-list">
+      <img src="" alt="" decoding="async" loading="lazy">
+    </div>
+  </section>
+
+</main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <span class="close" id="lightboxClose" aria-label="Close lightbox">&times;</span>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
+</div>
+
+<script defer src="./js/project-detail-lightbox.min.js?v=nv20260615"></script>

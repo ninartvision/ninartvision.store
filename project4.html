@@ -7,7 +7,7 @@
   <meta name="description" content="The Origin of Nature — an abstract exploration of nature’s awakening energy by Nini Mzhavia. Original acrylic on Ninart Vision.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ninartvision.store/project4.html">
-  <link rel="stylesheet" href="./style.min.css?v=nv20260614" />
+  <link rel="stylesheet" href="./style.min.css?v=nv20260615" />
 </head>
 
 <body>
@@ -99,52 +99,7 @@
     <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
   </div>
 
-  <!-- ✅ SCRIPT (უნდა იყოს ბოლოში) -->
-  <script>
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImg = document.getElementById("lightboxImg");
-    const closeBtn = document.getElementById("lightboxClose");
-
-    // Open lightbox
-    function openLightbox(imgSrc) {
-      lightbox.classList.add("open");
-      lightboxImg.src = imgSrc;
-      document.body.style.overflow = "hidden"; // Prevent body scroll
-      lightbox.setAttribute("aria-hidden", "false");
-      closeBtn.focus(); // Focus on close button for accessibility
-    }
-
-    // Close lightbox
-    function closeLightbox() {
-      lightbox.classList.remove("open");
-      document.body.style.overflow = ""; // Restore body scroll
-      lightbox.setAttribute("aria-hidden", "true");
-    }
-
-    // Add click event to all gallery images
-    document.querySelectorAll(".gallery-list img").forEach(img => {
-      img.addEventListener("click", () => {
-        openLightbox(img.src);
-      });
-    });
-
-    // Close button click
-    closeBtn.addEventListener("click", closeLightbox);
-
-    // Click outside image to close
-    lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox) {
-        closeLightbox();
-      }
-    });
-
-    // Escape key to close
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && lightbox.classList.contains("open")) {
-        closeLightbox();
-      }
-    });
-  </script>
+  <script defer src="./js/project-detail-lightbox.min.js?v=nv20260615"></script>
   <script defer src="./script.min.js?v=nv20260527"></script>
 
 </body>

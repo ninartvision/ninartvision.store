@@ -55,7 +55,7 @@
 }
   </script>
 
-  <link rel="stylesheet" href="../../style.min.css?v=nv20260614" />
+  <link rel="stylesheet" href="../../style.min.css?v=nv20260615" />
   <link rel="icon"       href="../../images/favicon.webp">
 </head>
 <body>
@@ -155,62 +155,7 @@
   <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged view" decoding="async" loading="lazy">
 </div>
 
-<script defer src="../../script.min.js?v=nv20260614"></script>
-<script>
-// Share button
-  (function () {
-    const btn = document.getElementById('shareBtn');
-    const msg = document.getElementById('shareMsg');
-    const url = 'https://ninartvision.store/products/jvari-monastery/';
-    if (!btn) return;
-    btn.addEventListener('click', function () {
-      if (navigator.share) {
-        navigator.share({ title: '“Jvari Monastery”', url: url }).catch(function () {});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(function () {
-          msg.style.display = 'block';
-          setTimeout(function () { msg.style.display = 'none'; }, 3000);
-        });
-      }
-    });
-  }());
-</script>
-<script>
-  (function () {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    const closeBtn = document.getElementById('lightboxClose');
-    if (!lightbox || !lightboxImg || !closeBtn) return;
-
-    function openLightbox(imgSrc) {
-      lightbox.classList.add('open');
-      lightboxImg.src = imgSrc;
-      document.body.style.overflow = 'hidden';
-      lightbox.setAttribute('aria-hidden', 'false');
-      closeBtn.focus();
-    }
-
-    function closeLightbox() {
-      lightbox.classList.remove('open');
-      document.body.style.overflow = '';
-      lightbox.setAttribute('aria-hidden', 'true');
-    }
-
-    document.querySelectorAll('.gallery-list img').forEach(function (img) {
-      img.addEventListener('click', function () {
-        openLightbox(img.getAttribute('data-full') || img.src);
-      });
-    });
-
-    closeBtn.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', function (e) {
-      if (e.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
-    });
-  }());
-</script>
-
+<script defer src="../../js/project-detail-lightbox.min.js?v=nv20260615"></script>
+<script defer src="../../script.min.js?v=nv20260615"></script>
 </body>
 </html>
