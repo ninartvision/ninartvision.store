@@ -9,7 +9,12 @@
   <link rel="canonical" href="https://ninartvision.store/support.html">
 
   <link rel="stylesheet" href="./style.min.css?v=nv20260527" />
+  <link rel="stylesheet" href="./css/support-page.css?v=nv20260701" />
   <link rel="icon" href="./images/favicon.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700&display=swap"></noscript>
   
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-1H7SY0J2EB"></script>
@@ -29,7 +34,7 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
-<body>
+<body class="page-support">
 
 <!-- HEADER -->
 <header class="header">
@@ -79,8 +84,34 @@
   </nav>
 </div>
 
+<main class="support-page">
+  <div class="support-page__ambient" aria-hidden="true"></div>
+  <div class="support-page__brush" aria-hidden="true"></div>
+  <div class="support-page__float" aria-hidden="true"></div>
+  <div class="support-page__shapes" aria-hidden="true">
+    <span class="support-shape support-shape--1"></span>
+    <span class="support-shape support-shape--2"></span>
+    <span class="support-shape support-shape--3"></span>
+    <span class="support-shape support-shape--4"></span>
+    <span class="support-shape support-shape--5"></span>
+    <span class="support-shape support-shape--6"></span>
+    <span class="support-shape support-shape--7"></span>
+  </div>
+  <div class="support-page__botanical" aria-hidden="true"></div>
+  <div class="support-page__art" aria-hidden="true"></div>
+
 <!-- HERO -->
 <section class="support-hero">
+  <div class="support-hero__mesh" aria-hidden="true"></div>
+  <div class="support-hero__backdrop" aria-hidden="true"></div>
+  <div class="support-hero__decor" aria-hidden="true">
+    <span class="support-hero__arc support-hero__arc--1"></span>
+    <span class="support-hero__arc support-hero__arc--2"></span>
+    <span class="support-hero__ring support-hero__ring--1"></span>
+    <span class="support-hero__ring support-hero__ring--2"></span>
+    <span class="support-hero__glow support-hero__glow--l"></span>
+    <span class="support-hero__glow support-hero__glow--r"></span>
+  </div>
   <div class="support-hero-overlay main-lang-anchor">
     <div class="lang-switch">
       <button type="button" data-lang="ka" class="lang-item active">
@@ -108,6 +139,12 @@
         Support Independent Art
       </h1>
 
+      <div class="support-hero__ornament" aria-hidden="true">
+        <span class="support-hero__line"></span>
+        <span class="support-hero__gem"></span>
+        <span class="support-hero__line"></span>
+      </div>
+
       <p
         data-en="Ninart Vision არის დამოუკიდებელი თანამედროვე ხელოვნების პლატფორმა. შენი მხარდაჭერა, იდეები და კოლაბორაციები ეხმარება არტისტებს განვითარებაში და ახალი პროექტების განხორციელებაში."
         data-ka="Ninart Vision არის დამოუკიდებელი თანამედროვე ხელოვნების პლატფორმა. შენი მხარდაჭერა, იდეები და კოლაბორაციები ეხმარება არტისტებს განვითარებაში და ახალი პროექტების განხორციელებაში.">
@@ -132,11 +169,11 @@
 </section>
 
 <!-- PAGE CONTENT -->
-<section class="section" style="padding-top:80px;">
+<section class="section support-main">
   <div class="container">
 
     <!-- WHY SUPPORT -->
-    <section class="support-intro">
+    <section class="support-intro" data-sp-reveal>
       <p class="small muted"
         data-en="WHY"
         data-ka="WHY">
@@ -155,8 +192,10 @@
       </p>
     </section>
 
+    <div class="support-divider" aria-hidden="true"><span class="support-divider__gem"></span></div>
+
     <!-- SUPPORT OPTIONS -->
-    <section id="supportOptions" class="support-options">
+    <section id="supportOptions" class="support-options" data-sp-reveal>
 
       <div class="support-card" id="openPaymentModalCard">
         <h3
@@ -207,8 +246,10 @@
 
     </section>
 
+    <div class="support-divider support-divider--alt" aria-hidden="true"><span class="support-divider__gem"></span></div>
+
     <!-- CONTACT FORM -->
-    <section id="supportContactSection" class="support-form" aria-labelledby="supportContactHeading">
+    <section id="supportContactSection" class="support-form" aria-labelledby="supportContactHeading" data-sp-reveal>
       <p class="small muted"
         data-en="CONTACT"
         data-ka="CONTACT">
@@ -267,6 +308,7 @@
 
   </div>
 </section>
+</main>
 
 <!-- PAYMENT DETAILS MODAL -->
 <div id="paymentModal" class="payment-modal">
@@ -426,6 +468,7 @@
     }
   </script>
 
+  <script defer src="./js/support-page.min.js?v=nv20260701"></script>
   <script defer src="./script.min.js?v=nv20260527"></script>
 </body>
 </html>
