@@ -25,14 +25,14 @@
 
   function bindImages(root) {
     const scope = root || document;
-    scope.querySelectorAll('.gallery-list img').forEach(function (img) {
+    scope.querySelectorAll('.gallery-list img, .terms-gallery-grid img, .art-gallery__grid img').forEach(function (img) {
       if (img.dataset.nvLbBound) return;
       img.dataset.nvLbBound = '1';
       img.addEventListener('click', function () {
         openLightbox(img.getAttribute('data-full') || img.currentSrc || img.src);
       });
     });
-    scope.querySelectorAll('.project-image > img').forEach(function (img) {
+    scope.querySelectorAll('.project-image > img, .terms-art__frame img, .art-project__feature img').forEach(function (img) {
       if (img.dataset.nvLbBound) return;
       img.dataset.nvLbBound = '1';
       img.style.cursor = 'zoom-in';

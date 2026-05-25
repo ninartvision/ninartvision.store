@@ -171,6 +171,10 @@
   opacity: 0.85;
 }
 
+.page-project-svaneti .terms-card--accordion.open .terms-card__body--hint {
+  display: none;
+}
+
 @media (max-width: 900px) {
   .page-project-svaneti .terms-gallery-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
