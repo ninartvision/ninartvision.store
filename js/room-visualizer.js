@@ -85,7 +85,7 @@
   let selectedId = null;
   let activeUploadToken = 0;
   let fullscreenPreviewModal = null;
-  let fullscreenPreviewImage = null;
+  let fullscreenPreviewScene = null;
   let fullscreenPreviewVisible = false;
   let fullscreenCloseTimer = null;
   /** Center x,y as % of stage; width as % of stage width; rotation deg */
@@ -985,14 +985,24 @@
     if (heroVisual) heroVisual.classList.toggle('nvr-hero-visual--live', !!show);
   }
 
+  function sanitizeFullscreenStageClone(clone) {
+    if (!clone) return;
+    clone.removeAttribute('id');
+    clone.style.pointerEvents = 'none';
+    clone.querySelectorAll('*').forEach(function (element) {
+      element.removeAttribute('id');
+      element.style.pointerEvents = 'none';
+    });
+  }
+
   function ensureFullscreenPreviewModal() {
     if (fullscreenPreviewModal) return fullscreenPreviewModal;
 
     fullscreenPreviewModal = document.createElement('div');
     fullscreenPreviewModal.className = 'nvr-fullscreen-preview';
     fullscreenPreviewModal.setAttribute('aria-hidden', 'true');
-    fullscreenPreviewModal.innerHTML = '<div class="nvr-fullscreen-preview__backdrop"></div><div class="nvr-fullscreen-preview__frame"><img class="nvr-fullscreen-preview__img" alt="" /><button type="button" class="nvr-fullscreen-preview__close" aria-label="Close fullscreen preview">&times;</button></div>';
-    fullscreenPreviewImage = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__img');
+    fullscreenPreviewModal.innerHTML = '<div class="nvr-fullscreen-preview__backdrop"></div><div class="nvr-fullscreen-preview__frame"><div class="nvr-fullscreen-preview__scene"></div><button type="button" class="nvr-fullscreen-preview__close" aria-label="Close fullscreen preview">&times;</button></div>';
+    fullscreenPreviewScene = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__scene');
     var backdrop = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__backdrop');
     var closeBtn = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__close');
 
@@ -1017,9 +1027,32 @@
   function openFullscreenPreview() {
     if (!roomImg.getAttribute('src')) return;
     ensureFullscreenPreviewModal();
-    fullscreenPreviewImage.src = roomImg.src;
-    fullscreenPreviewImage.alt = roomImg.alt || 'Uploaded room preview';
-    fullscreenPreviewImage.setAttribute('data-nvr-orient', roomImg.getAttribute('data-nvr-orient') || 'raw');
+
+    var stageRect = stage.getBoundingClientRect();
+    var viewportWidth = window.innerWidth;
+    var viewportHeight = window.innerHeight;
+    var scale = Math.min((viewportWidth * 0.95) / Math.max(stageRect.width, 1), (viewportHeight * 0.95) / Math.max(stageRect.height, 1));
+    scale = Number.isFinite(scale) && scale > 0 ? scale : 1;
+
+    var stageClone = stage.cloneNode(true);
+    sanitizeFullscreenStageClone(stageClone);
+    stageClone.style.width = '100%';
+    stageClone.style.height = '100%';
+    stageClone.style.maxWidth = 'none';
+    stageClone.style.maxHeight = 'none';
+    stageClone.style.margin = '0';
+    stageClone.style.aspectRatio = 'auto';
+    stageClone.style.transform = 'none';
+    stageClone.style.pointerEvents = 'none';
+
+    fullscreenPreviewScene.innerHTML = '';
+    fullscreenPreviewScene.style.width = stageRect.width + 'px';
+    fullscreenPreviewScene.style.height = stageRect.height + 'px';
+    fullscreenPreviewScene.style.transform = 'scale(' + scale + ')';
+    fullscreenPreviewScene.style.transformOrigin = 'center center';
+    fullscreenPreviewScene.style.pointerEvents = 'none';
+    fullscreenPreviewScene.appendChild(stageClone);
+
     fullscreenPreviewModal.setAttribute('aria-hidden', 'false');
     fullscreenPreviewModal.classList.add('is-open');
     fullscreenPreviewVisible = true;
