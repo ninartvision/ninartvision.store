@@ -118,7 +118,8 @@
     .as-arrow.left{left:12px}
     .as-arrow.right{right:12px}
     .hero-slider .hero-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:max(14px,1.25rem);z-index:8;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;max-width:min(96%,calc(100% - 120px));pointer-events:none}
-    .hero-slider .hero-dot{pointer-events:auto;width:6px;height:6px;padding:0;border:none;border-radius:50%;background:rgba(255,255,255,.5);box-shadow:0 0 0 1px rgba(0,0,0,.18);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+    .hero-slider .hero-dot{position:relative;pointer-events:auto;width:6px;height:6px;padding:0;border:none;border-radius:50%;background:rgba(255,255,255,.5);box-shadow:0 0 0 1px rgba(0,0,0,.18);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+    .hero-slider .hero-dot::before{content:"";position:absolute;inset:50% 0 0 50%;width:44px;height:44px;transform:translate(-50%,-50%);background:transparent}
     .hero-slider .hero-dot.active{background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.22),0 2px 10px rgba(0,0,0,.2);transform:scale(1.35)}
     .search-section{background:linear-gradient(180deg,#faf8f5 0%,#f5f1eb 100%);border-bottom:1px solid rgba(42,38,34,.06);padding:16px 0;margin-top:76px}
     .search-social-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:nowrap}
@@ -348,11 +349,11 @@
         <a href="news.html">News</a>
         <a href="about.html">About</a>
         <a href="terms.html">Terms</a>
-        <button id="loginBtn" class="nav-btn" style="display:none;">Log In</button>
+        <button type="button" id="loginBtn" class="nav-btn" style="display:none;">Log In</button>
         <div id="userInfo" class="user-info" style="display:none;">
           <img id="userAvatar" class="user-avatar" src="" alt="User">
           <span id="userName" class="user-name"></span>
-          <button id="logoutBtn" class="nav-btn logout-btn">Log Out</button>
+          <button type="button" id="logoutBtn" class="nav-btn logout-btn">Log Out</button>
         </div>
       </nav>
 
@@ -364,7 +365,7 @@
         <span class="header-cart__badge is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span>
       </a>
 
-      <button class="hamburger" id="openMenu" aria-label="Open menu">
+      <button type="button" class="hamburger" id="openMenu" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
       </div>
@@ -643,7 +644,7 @@
     <div class="projects-slider-wrap">
 
       <!-- Left Arrow -->
-      <button class="projects-arrow left" id="projectsPrev" aria-label="Previous project">
+      <button type="button" class="projects-arrow left" id="projectsPrev" aria-label="Previous project">
         &#10094;
       </button>
 
@@ -741,7 +742,7 @@
       </div>
 
       <!-- Right Arrow -->
-      <button class="projects-arrow right" id="projectsNext" aria-label="Next project">
+      <button type="button" class="projects-arrow right" id="projectsNext" aria-label="Next project">
         &#10095;
       </button>
 
@@ -1146,7 +1147,7 @@
         <strong>Ninart Vision</strong>
         <span>Online</span>
       </div>
-      <button class="wa-close" onclick="toggleWA()">×</button>
+      <button type="button" class="wa-close" onclick="toggleWA()" aria-label="Close WhatsApp chat">×</button>
     </div>
 
     <div class="wa-body">
@@ -1165,7 +1166,7 @@
   </div>
 
   <!-- FLOATING ICON -->
-  <button class="wa-float" onclick="toggleWA()" aria-label="WhatsApp chat">
+  <button type="button" class="wa-float" onclick="toggleWA()" aria-label="WhatsApp chat">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
   </button>
 

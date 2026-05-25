@@ -29,10 +29,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------------------------
   // GET ARTIST SLUG
+  // Source order:
+  //   1. ?artist=<slug> query param (canonical, used by artist.html)
+  //   2. Legacy filename mapping (nini.html / mzia.html / nanuli.html)
+  //   3. Derived from filename (foo.html → foo)
   // ---------------------------
   const params = new URLSearchParams(location.search);
-  const artistSlug = params.get("artist");
-  
+  let artistSlug = params.get("artist");
+
+  if (!artistSlug) {
+    const fileMatch = (location.pathname.split('/').pop() || '')
+      .toLowerCase()
+      .replace(/\.html?$/, '');
+    const LEGACY_SLUG_MAP = {
+      nini: 'nini-mzhavia-1990',
+      mzia: 'mzia-kashia-1961-',
+      nanuli: 'nanuli-gogiberidzeee'
+    };
+    if (fileMatch && fileMatch !== 'artist' && fileMatch !== 'index') {
+      artistSlug = LEGACY_SLUG_MAP[fileMatch] || fileMatch;
+    }
+  }
+
   if (!artistSlug) {
     title.textContent = "Artist not found";
     return;

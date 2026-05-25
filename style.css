@@ -4,6 +4,9 @@
 *{ margin:0; padding:0; box-sizing:border-box; }
 .is-hidden{ display:none !important; }
 
+/* Share confirmation message — hidden by default; revealed by JS after copy */
+#shareMsg{ display:none; }
+
 html {
   overflow-x: hidden;
   max-width: 100%;
@@ -492,6 +495,7 @@ img, video {
 
 .hero-slider .hero-dot{
   pointer-events: auto;
+  position: relative;
   width: 6px;
   height: 6px;
   padding: 0;
@@ -509,6 +513,18 @@ img, video {
   opacity: 0.92;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+}
+
+/* Invisible 44x44 touch target overlay — keeps the visual dot at 6px
+   while meeting the WCAG minimum tap-target size on mobile. */
+.hero-slider .hero-dot::before{
+  content: "";
+  position: absolute;
+  inset: 50% 0 0 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  background: transparent;
 }
 
 .hero-slider .hero-dot:hover{
@@ -8880,7 +8896,8 @@ a.pill:visited{
   position: fixed;
   right: 24px;
   bottom: 24px;
-  z-index: 99999;
+  /* Must stay below product modal (99999), cart drawer (100000), and mobile menu (10000) */
+  z-index: 9500;
   font-family: Arial, sans-serif;
 }
 

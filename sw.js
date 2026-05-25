@@ -4,24 +4,34 @@
  * Strategy: Cache-first for assets, Network-first for HTML pages.
  */
 
-const CACHE_NAME = 'ninart-v16';
-const ASSET_CACHE = 'ninart-assets-v16';
+const CACHE_NAME = 'ninart-v17';
+const ASSET_CACHE = 'ninart-assets-v17';
 
-/** Editable JS bundles: network-first so deploys are not masked by cache-first assets. */
+/**
+ * Editable JS/CSS bundles: network-first so deploys are not masked by cache-first assets.
+ * Anything that ships frequent code changes must be listed here, otherwise a stale
+ * copy can persist on the client across deploys.
+ */
 function isCriticalEditableBundle(url) {
   const p = url.pathname || '';
-  return /sanity-client\.min\.js$/i.test(p) ||
-    /\/js\/homeShopPreview\.min\.js$/i.test(p) ||
-    /gallery\.min\.js$/i.test(p) ||
+  return /style\.min\.css$/i.test(p) ||
     /script\.min\.js$/i.test(p) ||
-    /nv-gallery-modal\.min\.js$/i.test(p);
+    /sanity-client\.min\.js$/i.test(p) ||
+    /data\.min\.js$/i.test(p) ||
+    /lang\.js$/i.test(p) ||
+    /auth\.min\.js$/i.test(p) ||
+    /analytics\.min\.js$/i.test(p) ||
+    /payment-modal\.min\.js$/i.test(p) ||
+    /gallery\.min\.js$/i.test(p) ||
+    /\/js\/.+\.min\.js$/i.test(p) ||
+    /\/sale\/.+\.min\.js$/i.test(p) ||
+    /\/artists\/.+\.min\.js$/i.test(p);
 }
 
-// Static assets to pre-cache on install
+// Static assets to pre-cache on install. Use unversioned paths so cache keys
+// don't drift out of sync with the latest `?v=` strings on HTML pages.
 const PRECACHE_URLS = [
   './',
-  './style.min.css?v=nv20260527',
-  './script.min.js?v=nv20260527',
   './images/favicon.webp',
   './images/logo.webp',
   './images/garden9.webp',
