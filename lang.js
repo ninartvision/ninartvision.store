@@ -33,7 +33,11 @@ function nvNormalizeI18nString(s) {
 function setLangButtonsActive(lang) {
   document.querySelectorAll(".lang-item").forEach(function (btn) {
     var lid = nvResolveLangFromButton(btn);
-    btn.classList.toggle("active", lid === lang);
+    var on = lid === lang;
+    btn.classList.toggle("active", on);
+    try {
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    } catch (_) {}
   });
 }
 
@@ -76,6 +80,7 @@ function setLang(rawLang, event) {
 
   try {
     document.documentElement.setAttribute("lang", lang === "ka" ? "ka" : "en");
+    document.documentElement.setAttribute("data-site-lang", lang);
   } catch (_) {}
 
   try {

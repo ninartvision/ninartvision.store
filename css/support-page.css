@@ -33,6 +33,27 @@
   --sp-radius-lg: 28px;
   --sp-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --sp-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Hero h1 — English default (unchanged visually) */
+  --sp-hero-h1-min: 2.5rem;
+  --sp-hero-h1-fluid: 6.8vw;
+  --sp-hero-h1-max: 4rem;
+  --sp-hero-h1-lh: 1.06;
+  /* Section h2 — English default */
+  --sp-section-h2-min: 1.95rem;
+  --sp-section-h2-fluid: 4.5vw;
+  --sp-section-h2-max: 2.55rem;
+}
+
+/* Georgian headings: smaller scale to match EN layout proportions */
+html[data-site-lang="ka"] .page-support,
+html[lang="ka"] .page-support {
+  --sp-hero-h1-min: 1.6rem;
+  --sp-hero-h1-fluid: 4.1vw;
+  --sp-hero-h1-max: 2.5rem;
+  --sp-hero-h1-lh: 1.14;
+  --sp-section-h2-min: 1.45rem;
+  --sp-section-h2-fluid: 3.5vw;
+  --sp-section-h2-max: 1.95rem;
 }
 
 .page-support {
@@ -523,7 +544,13 @@
   position: absolute;
   top: clamp(12px, 2.5vw, 22px);
   right: clamp(12px, 3vw, 24px);
-  z-index: 4;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.page-support .support-hero-overlay .lang-switch .lang-item {
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .page-support .support-hero-content {
@@ -594,11 +621,21 @@
 .page-support .support-hero h1 {
   margin: 0 0 clamp(14px, 2.4vw, 18px);
   font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  font-size: clamp(2.5rem, 6.8vw, 4rem);
+  font-size: clamp(var(--sp-hero-h1-min), var(--sp-hero-h1-fluid), var(--sp-hero-h1-max));
   font-weight: 500;
-  line-height: 1.06;
+  line-height: var(--sp-hero-h1-lh);
   letter-spacing: -0.025em;
   color: var(--sp-ink);
+}
+
+html[data-site-lang="ka"] .page-support .support-hero h1,
+html[lang="ka"] .page-support .support-hero h1 {
+  max-width: min(13.5em, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 .page-support .support-hero-content > p:not(.small) {
@@ -871,6 +908,17 @@
   font-weight: 600;
   line-height: 1.1;
   color: var(--sp-ink);
+}
+
+html[data-site-lang="ka"] .page-support .support-intro h2,
+html[lang="ka"] .page-support .support-intro h2 {
+  font-size: clamp(var(--sp-section-h2-min), var(--sp-section-h2-fluid), var(--sp-section-h2-max));
+  line-height: 1.14;
+  max-width: min(15em, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 .page-support .support-intro .muted {
@@ -1261,6 +1309,15 @@
 }
 
 /* Responsive */
+@media (min-width: 901px) {
+  html[data-site-lang="ka"] .page-support,
+  html[lang="ka"] .page-support {
+    --sp-hero-h1-min: 1.75rem;
+    --sp-hero-h1-fluid: 3.25vw;
+    --sp-hero-h1-max: 2.45rem;
+  }
+}
+
 @media (max-width: 900px) {
   .page-support .support-options {
     grid-template-columns: 1fr;
@@ -1308,6 +1365,16 @@
     min-height: auto;
     padding-top: clamp(40px, 7vw, 52px);
     padding-bottom: clamp(40px, 7vw, 52px);
+  }
+
+  html[data-site-lang="ka"] .page-support,
+  html[lang="ka"] .page-support {
+    --sp-hero-h1-min: 1.45rem;
+    --sp-hero-h1-fluid: 5vw;
+    --sp-hero-h1-max: 1.85rem;
+    --sp-section-h2-min: 1.35rem;
+    --sp-section-h2-fluid: 4.2vw;
+    --sp-section-h2-max: 1.65rem;
   }
 
   .page-support .support-hero__backdrop::before {
