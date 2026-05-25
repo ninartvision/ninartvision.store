@@ -744,6 +744,220 @@
     }
   }
 
+  /** JPEG EXIF Orientation tag (1–8); 1 = no transform. */
+  function readExifOrientation(arrayBuffer) {
+    var view = new DataView(arrayBuffer);
+    if (view.byteLength < 12 || view.getUint16(0, false) !== 0xffd8) return 1;
+    var offset = 2;
+    while (offset + 4 < view.byteLength) {
+      if (view.getUint8(offset) !== 0xff) return 1;
+      var marker = view.getUint8(offset + 1);
+      if (marker === 0xe1) {
+        if (view.byteLength < offset + 10 || view.getUint32(offset + 4, false) !== 0x45786966) {
+          return 1;
+        }
+        var tiff = offset + 10;
+        var le = view.getUint16(tiff, false) === 0x4949;
+        var u16 = function (p) {
+          return view.getUint16(p, le);
+        };
+        var u32 = function (p) {
+          return view.getUint32(p, le);
+        };
+        if (u16(tiff) !== 42) return 1;
+        var ifd0 = tiff + u32(tiff + 4);
+        if (ifd0 + 2 > view.byteLength) return 1;
+        var n = u16(ifd0);
+        for (var i = 0; i < n; i++) {
+          var e = ifd0 + 2 + i * 12;
+          if (e + 12 > view.byteLength) break;
+          if (u16(e) === 274) {
+            var v = u16(e + 8);
+            return v >= 1 && v <= 8 ? v : 1;
+          }
+        }
+        return 1;
+      }
+      if (marker === 0xda || marker === 0xd9) break;
+      var len = view.getUint16(offset + 2, false);
+      if (len < 2) return 1;
+      offset += 2 + len;
+    }
+    return 1;
+  }
+
+  function canvasSizeForExif(orientation, w, h) {
+    if (orientation >= 5 && orientation <= 8) return { width: h, height: w };
+    return { width: w, height: h };
+  }
+
+  function drawSourceWithExif(ctx, source, orientation, srcW, srcH) {
+    var cw = ctx.canvas.width;
+    var ch = ctx.canvas.height;
+    ctx.save();
+    switch (orientation) {
+      case 2:
+        ctx.translate(cw, 0);
+        ctx.scale(-1, 1);
+        break;
+      case 3:
+        ctx.translate(cw, ch);
+        ctx.rotate(Math.PI);
+        break;
+      case 4:
+        ctx.translate(0, ch);
+        ctx.scale(1, -1);
+        break;
+      case 5:
+        ctx.translate(cw, 0);
+        ctx.rotate(Math.PI / 2);
+        ctx.scale(-1, 1);
+        break;
+      case 6:
+        ctx.translate(cw, 0);
+        ctx.rotate(Math.PI / 2);
+        break;
+      case 7:
+        ctx.translate(0, ch);
+        ctx.rotate(-Math.PI / 2);
+        ctx.scale(-1, 1);
+        break;
+      case 8:
+        ctx.translate(0, ch);
+        ctx.rotate(-Math.PI / 2);
+        break;
+      default:
+        break;
+    }
+    ctx.drawImage(source, 0, 0, srcW, srcH);
+    ctx.restore();
+  }
+
+  function bitmapToPreviewUrl(bitmap, file, exifOrientation, usedExifAuto, callback) {
+    var srcW = bitmap.width;
+    var srcH = bitmap.height;
+    if (!srcW || !srcH) {
+      if (bitmap.close) bitmap.close();
+      callback(null, 'raw');
+      return;
+    }
+    var orient = usedExifAuto ? 1 : exifOrientation;
+    var size = canvasSizeForExif(orient, srcW, srcH);
+    var canvas = document.createElement('canvas');
+    canvas.width = size.width;
+    canvas.height = size.height;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) {
+      if (bitmap.close) bitmap.close();
+      callback(null, 'raw');
+      return;
+    }
+    if (orient === 1) {
+      ctx.drawImage(bitmap, 0, 0);
+    } else {
+      drawSourceWithExif(ctx, bitmap, orient, srcW, srcH);
+    }
+    if (bitmap.close) bitmap.close();
+
+    var mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+    var quality = mime === 'image/jpeg' ? 0.92 : undefined;
+    canvas.toBlob(
+      function (blob) {
+        if (!blob) {
+          callback(null, 'raw');
+          return;
+        }
+        callback(URL.createObjectURL(blob), 'baked');
+      },
+      mime,
+      quality
+    );
+  }
+
+  /**
+   * Room photo preview: EXIF-aware, no crop (CSS contain), no forced landscape.
+   */
+  function loadRoomPreviewFromFile(file, callback) {
+    if (!file || !/^image\//.test(file.type)) {
+      callback(null, 'raw');
+      return;
+    }
+
+    function finish(url, mode) {
+      callback(url, mode || 'raw');
+    }
+
+    function rawBlobFallback() {
+      finish(URL.createObjectURL(file), 'raw');
+    }
+
+    var reader = new FileReader();
+    reader.onerror = rawBlobFallback;
+    reader.onload = function () {
+      var buffer = reader.result;
+      var exifOrient = readExifOrientation(buffer);
+      var blob = new Blob([buffer], { type: file.type || 'image/jpeg' });
+
+      if (typeof createImageBitmap !== 'function') {
+        var img = new Image();
+        img.onload = function () {
+          var c = document.createElement('canvas');
+          var sz = canvasSizeForExif(exifOrient, img.naturalWidth, img.naturalHeight);
+          c.width = sz.width;
+          c.height = sz.height;
+          var cx = c.getContext('2d');
+          if (!cx) {
+            URL.revokeObjectURL(img.src);
+            rawBlobFallback();
+            return;
+          }
+          if (exifOrient === 1) {
+            cx.drawImage(img, 0, 0);
+          } else {
+            drawSourceWithExif(cx, img, exifOrient, img.naturalWidth, img.naturalHeight);
+          }
+          URL.revokeObjectURL(img.src);
+          var mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+          c.toBlob(
+            function (b) {
+              if (!b) rawBlobFallback();
+              else finish(URL.createObjectURL(b), 'baked');
+            },
+            mime,
+            mime === 'image/jpeg' ? 0.92 : undefined
+          );
+        };
+        img.onerror = rawBlobFallback;
+        img.src = URL.createObjectURL(blob);
+        return;
+      }
+
+      createImageBitmap(blob, { imageOrientation: 'from-image' })
+        .then(function (bitmap) {
+          bitmapToPreviewUrl(bitmap, file, exifOrient, true, finish);
+        })
+        .catch(function () {
+          createImageBitmap(blob)
+            .then(function (bitmap) {
+              bitmapToPreviewUrl(bitmap, file, exifOrient, false, finish);
+            })
+            .catch(rawBlobFallback);
+        });
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function applyRoomPreviewSrc(url, orientMode) {
+    if (!url) return;
+    roomObjectUrl = url;
+    roomImg.src = url;
+    if (orientMode === 'baked') {
+      roomImg.setAttribute('data-nvr-orient', 'baked');
+    } else {
+      roomImg.setAttribute('data-nvr-orient', 'raw');
+    }
+  }
+
   function revealStage(show) {
     placeholder.hidden = show;
     stageWrap.hidden = !show;
@@ -860,16 +1074,22 @@
     const f = fileInput.files && fileInput.files[0];
     if (!f || !/^image\//.test(f.type)) return;
     if (roomObjectUrl) URL.revokeObjectURL(roomObjectUrl);
-    roomObjectUrl = URL.createObjectURL(f);
-    roomImg.src = roomObjectUrl;
-    revealStage(true);
-    updateArtVisibility();
+    roomObjectUrl = null;
+    roomImg.removeAttribute('src');
+    roomImg.removeAttribute('data-nvr-orient');
+    loadRoomPreviewFromFile(f, function (url, orientMode) {
+      if (!url) return;
+      applyRoomPreviewSrc(url, orientMode);
+      revealStage(true);
+      updateArtVisibility();
+    });
   });
 
   resetBtn.addEventListener('click', () => {
     if (roomObjectUrl) URL.revokeObjectURL(roomObjectUrl);
     roomObjectUrl = null;
     fileInput.value = '';
+    roomImg.removeAttribute('data-nvr-orient');
     revealStage(false);
     updateArtVisibility();
   });
