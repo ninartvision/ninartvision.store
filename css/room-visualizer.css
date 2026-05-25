@@ -404,7 +404,7 @@
   object-fit: contain !important;
   object-position: center center;
   user-select: none;
-  pointer-events: none;
+  pointer-events: auto;
   -webkit-user-drag: none;
 }
 
@@ -414,6 +414,94 @@
 
 .page-room-visualizer .nvr-stage .nvr-room[data-nvr-orient='raw'] {
   image-orientation: from-image;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 3vw, 24px);
+  background: rgba(0, 0, 0, 0.76);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__frame {
+  position: relative;
+  width: min(92vw, 1100px);
+  max-height: calc(100vh - 32px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.96);
+  opacity: 0;
+  transition:
+    transform 180ms ease,
+    opacity 180ms ease;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview.is-visible .nvr-fullscreen-preview__frame {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 56px);
+  object-fit: contain;
+  border-radius: 12px;
+  background: transparent;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__img[data-nvr-orient='baked'] {
+  image-orientation: none;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__img[data-nvr-orient='raw'] {
+  image-orientation: from-image;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(17, 17, 17, 0.9);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__close:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
 }
 
 .nvr-art-wrap {

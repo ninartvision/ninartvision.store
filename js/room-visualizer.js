@@ -84,6 +84,10 @@
   let roomObjectUrl = null;
   let selectedId = null;
   let activeUploadToken = 0;
+  let fullscreenPreviewModal = null;
+  let fullscreenPreviewImage = null;
+  let fullscreenPreviewVisible = false;
+  let fullscreenCloseTimer = null;
   /** Center x,y as % of stage; width as % of stage width; rotation deg */
   let cx = 50;
   let cy = 45;
@@ -949,6 +953,9 @@
   }
 
   function clearRoomPreviewState() {
+    if (fullscreenPreviewVisible) {
+      closeFullscreenPreview();
+    }
     if (roomObjectUrl) {
       URL.revokeObjectURL(roomObjectUrl);
       roomObjectUrl = null;
@@ -976,6 +983,65 @@
     resetBtn.dataset.visible = show ? '1' : '0';
     if (!show) roomImg.removeAttribute('src');
     if (heroVisual) heroVisual.classList.toggle('nvr-hero-visual--live', !!show);
+  }
+
+  function ensureFullscreenPreviewModal() {
+    if (fullscreenPreviewModal) return fullscreenPreviewModal;
+
+    fullscreenPreviewModal = document.createElement('div');
+    fullscreenPreviewModal.className = 'nvr-fullscreen-preview';
+    fullscreenPreviewModal.setAttribute('aria-hidden', 'true');
+    fullscreenPreviewModal.innerHTML = '<div class="nvr-fullscreen-preview__backdrop"></div><div class="nvr-fullscreen-preview__frame"><img class="nvr-fullscreen-preview__img" alt="" /><button type="button" class="nvr-fullscreen-preview__close" aria-label="Close fullscreen preview">&times;</button></div>';
+    fullscreenPreviewImage = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__img');
+    var backdrop = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__backdrop');
+    var closeBtn = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__close');
+
+    backdrop.addEventListener('click', closeFullscreenPreview);
+    closeBtn.addEventListener('click', closeFullscreenPreview);
+    fullscreenPreviewModal.addEventListener('click', function (event) {
+      if (event.target === fullscreenPreviewModal) {
+        closeFullscreenPreview();
+      }
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && fullscreenPreviewVisible) {
+        closeFullscreenPreview();
+      }
+    });
+
+    document.body.appendChild(fullscreenPreviewModal);
+    return fullscreenPreviewModal;
+  }
+
+  function openFullscreenPreview() {
+    if (!roomImg.getAttribute('src')) return;
+    ensureFullscreenPreviewModal();
+    fullscreenPreviewImage.src = roomImg.src;
+    fullscreenPreviewImage.alt = roomImg.alt || 'Uploaded room preview';
+    fullscreenPreviewImage.setAttribute('data-nvr-orient', roomImg.getAttribute('data-nvr-orient') || 'raw');
+    fullscreenPreviewModal.setAttribute('aria-hidden', 'false');
+    fullscreenPreviewModal.classList.add('is-open');
+    fullscreenPreviewVisible = true;
+    if (fullscreenCloseTimer) {
+      clearTimeout(fullscreenCloseTimer);
+    }
+    requestAnimationFrame(function () {
+      fullscreenPreviewModal.classList.add('is-visible');
+    });
+  }
+
+  function closeFullscreenPreview() {
+    if (!fullscreenPreviewModal || !fullscreenPreviewVisible) return;
+    fullscreenPreviewVisible = false;
+    fullscreenPreviewModal.classList.remove('is-visible');
+    if (fullscreenCloseTimer) {
+      clearTimeout(fullscreenCloseTimer);
+    }
+    fullscreenCloseTimer = setTimeout(function () {
+      fullscreenPreviewModal.classList.remove('is-open');
+      fullscreenPreviewModal.setAttribute('aria-hidden', 'true');
+    }, 180);
   }
 
   function updateArtVisibility() {
@@ -1080,6 +1146,11 @@
   rotateInput.addEventListener('input', () => {
     rot = clamp(Number(rotateInput.value), Number(rotateInput.min), Number(rotateInput.max));
     applyArtTransform();
+  });
+
+  roomImg.addEventListener('click', function () {
+    if (!roomImg.getAttribute('src')) return;
+    openFullscreenPreview();
   });
 
   fileInput.addEventListener('change', () => {
