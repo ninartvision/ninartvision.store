@@ -3026,18 +3026,24 @@ img, video {
   }
 }
 
-/* Shop / artist #shopGrid only — phones: 2-up grid, even image band (tablet/desktop rules above unchanged) */
+/* Shop / artist #shopGrid only — phones: clean 3-up grid with a balanced,
+   even image band (tablet/desktop rules above remain unchanged). Cards
+   are narrower than on the 2-up layout, so the gap and the image-wrap
+   height are re-balanced accordingly so artworks stay aligned and
+   nothing overflows the viewport. */
 @media (max-width: 600px) {
   #shopGrid.shop-grid-small {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
   }
 
   #shopGrid.shop-grid-small .shop-item .nv-img-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: clamp(152px, 48vw, 204px);
+    /* Scales from ~115px on the smallest phones up to ~180px near 600px,
+       keeping every card a consistent height regardless of artwork ratio. */
+    height: clamp(115px, 32vw, 180px);
     min-height: 0;
   }
 
@@ -3055,11 +3061,13 @@ img, video {
 
 @media (max-width: 420px) {
   #shopGrid.shop-grid-small {
-    gap: 10px;
+    gap: 8px;
   }
 
   #shopGrid.shop-grid-small .shop-item .nv-img-wrap {
-    height: clamp(146px, 54vw, 188px);
+    /* Slightly tighter band for the smallest phones so 3 columns stay
+       balanced without forcing the cards to feel cramped. */
+    height: clamp(108px, 33vw, 144px);
   }
 }
 
