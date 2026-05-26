@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ka">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,88 +12,170 @@
        during the very first style resolution. Defaults to Georgian. */
     (function () {
       try {
-        var l = localStorage.getItem("siteLang") || "ka";
+        var params = new URLSearchParams(location.search);
+        var fromUrl = params.get("lang");
+        var l = fromUrl || localStorage.getItem("siteLang") || "ka";
         l = l === "en" ? "en" : "ka";
         document.documentElement.setAttribute("lang", l);
         document.documentElement.setAttribute("data-site-lang", l);
       } catch (_) {}
     })();
   </script>
-  <title>Ninart Vision | Original Contemporary Art by Georgian Artists</title>
+  <title>Ninart Vision | Georgian Artists &amp; Original Paintings</title>
 
-<meta name="description" content="Discover and buy original contemporary paintings by Georgian artists. Ninart Vision is an independent art platform featuring handcrafted artworks, limited editions, and curated collections from emerging and established creators.">
+  <meta name="description" content="Original paintings by Georgian artists. Contemporary art, modern gallery &amp; collectible handcrafted artworks from Ninart Vision.">
+  <meta name="keywords" content="Ninart Vision, თანამედროვე ხელოვნება, თანამედროვე ქართული ხელოვნება, ქართველი მხატვრები, ორიგინალური ნახატები, კოლექციური ნამუშევრები, contemporary art, Georgian contemporary art, Georgian artists, original paintings, modern art gallery, collectible artworks, handcrafted artworks">
+  <meta name="author" content="Nini Mzhavia">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://ninartvision.store/">
 
-<meta name="keywords" content="Ninart Vision, Georgian art, contemporary paintings, buy original art, Georgian artists, handcrafted artwork, original paintings for sale, acrylic paintings, modern art gallery, art platform">
+  <!-- Multilingual SEO (hreflang) -->
+  <link rel="alternate" hreflang="ka" href="https://ninartvision.store/">
+  <link rel="alternate" hreflang="en" href="https://ninartvision.store/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://ninartvision.store/">
 
-<meta name="author" content="Nini Mzhavia">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://ninartvision.store/">
-<script>
-  if (/\/index\.html$/i.test(location.pathname)) {
-    location.replace(location.pathname.replace(/index\.html$/i, '/') + location.search + location.hash);
-  }
-</script>
+  <script>
+    if (/\/index\.html$/i.test(location.pathname)) {
+      location.replace(location.pathname.replace(/index\.html$/i, '/') + location.search + location.hash);
+    }
+  </script>
 
-  
-  <!-- Open Graph / Social Media -->
+  <!-- Open Graph (Facebook, Instagram, LinkedIn, WhatsApp, Telegram, iMessage) -->
   <meta property="og:type" content="website">
-<meta property="og:title" content="Ninart Vision | Original Contemporary Art by Georgian Artists">
-<meta property="og:description" content="Discover and buy original paintings by Georgian artists. Handcrafted artworks, limited editions, and curated collections.">
-<meta property="og:url" content="https://ninartvision.store/">
-<meta property="og:image" content="https://ninartvision.store/images/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:site_name" content="Ninart Vision">
-<!-- Two theme-color hints: cream for light UA chrome (matches our background),
-     dark for users on system dark mode. iOS Safari + Chromium pick whichever
-     media query matches. -->
-<meta name="theme-color" content="#fdfcfa" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1a1514" media="(prefers-color-scheme: dark)">
+  <meta property="og:site_name" content="Ninart Vision">
+  <meta property="og:url" content="https://ninartvision.store/">
+  <meta property="og:title" content="Ninart Vision · Georgian Artists &amp; Original Art">
+  <meta property="og:description" content="Original paintings by Georgian artists. Contemporary art, modern gallery &amp; collectible handcrafted artworks.">
+  <meta property="og:image" content="https://ninartvision.store/images/og-image.png?v=nv20260526">
+  <meta property="og:image:secure_url" content="https://ninartvision.store/images/og-image.png?v=nv20260526">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Ninart Vision — gold monogram on white with Georgian and English contemporary art taglines">
+  <meta property="og:locale" content="ka_GE">
+  <meta property="og:locale:alternate" content="en_US">
 
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ninart Vision · Georgian Artists &amp; Original Art">
+  <meta name="twitter:description" content="Original paintings by Georgian artists. Contemporary art, modern gallery &amp; collectible handcrafted artworks.">
+  <meta name="twitter:image" content="https://ninartvision.store/images/og-image.png?v=nv20260526">
+  <meta name="twitter:image:alt" content="Ninart Vision — Georgian contemporary art and original paintings">
 
-<meta property="og:locale" content="ka_GE">
-<meta name="google-site-verification" content="2y7dU9JzsmJ_4HwwbBIk9nZtx2JYGKvvTm9nRjGuzEg" />
+  <!-- Theme colors -->
+  <meta name="theme-color" content="#fdfcfa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a1514" media="(prefers-color-scheme: dark)">
 
+  <meta name="google-site-verification" content="2y7dU9JzsmJ_4HwwbBIk9nZtx2JYGKvvTm9nRjGuzEg">
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": "https://ninartvision.store/#organization",
-  "name": "Ninart Vision",
-  "alternateName": "Ninart Vision Art Platform",
-  "url": "https://ninartvision.store/",
-  "logo": {
-    "@type": "ImageObject",
-    "url": "https://ninartvision.store/images/logo.webp",
-    "width": 751,
-    "height": 134
-  },
-  "image": "https://ninartvision.store/images/og-image.png",
-  "description": "Ninart Vision is an independent Georgian art platform featuring original handcrafted paintings by Georgian artists — contemporary landscapes, florals, and abstract art available to collect worldwide.",
-  "foundingDate": "2024",
-  "founder": {
-    "@type": "Person",
-    "name": "Nini Mzhavia"
-  },
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "customer support",
-    "availableLanguage": ["Georgian", "English"]
-  },
-  "sameAs": [
-    "https://www.instagram.com/ninart.vision",
-    "https://www.facebook.com/share/1D6m5jjWW5/"
-  ]
-}
-</script>
-
-
-  <!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Ninart Vision | Original Contemporary Art by Georgian Artists">
-<meta name="twitter:description" content="Discover and buy original paintings by Georgian artists. Handcrafted artworks and curated collections.">
-<meta name="twitter:image" content="https://ninartvision.store/images/og-image.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://ninartvision.store/#organization",
+    "name": "Ninart Vision",
+    "alternateName": "Ninart Vision Art Platform",
+    "url": "https://ninartvision.store/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ninartvision.store/images/logo.webp",
+      "width": 751,
+      "height": 134
+    },
+    "image": "https://ninartvision.store/images/og-image.png?v=nv20260526",
+    "description": "Independent Georgian art platform — contemporary art, original paintings by Georgian artists, modern art gallery and collectible handcrafted artworks.",
+    "foundingDate": "2024",
+    "founder": {
+      "@type": "Person",
+      "name": "Nini Mzhavia"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "availableLanguage": ["Georgian", "English"]
+    },
+    "sameAs": [
+      "https://www.instagram.com/ninart.vision",
+      "https://www.facebook.com/share/1D6m5jjWW5/"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://ninartvision.store/#website",
+    "url": "https://ninartvision.store/",
+    "name": "Ninart Vision",
+    "description": "Georgian contemporary art platform — original paintings, modern art gallery and collectible artworks. თანამედროვე ხელოვნება · ქართველი მხატვრები.",
+    "inLanguage": ["ka", "en"],
+    "publisher": { "@id": "https://ninartvision.store/#organization" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ArtGallery",
+    "@id": "https://ninartvision.store/#artgallery",
+    "name": "Ninart Vision",
+    "url": "https://ninartvision.store/",
+    "description": "Modern art gallery featuring original paintings and collectible artworks by Georgian contemporary artists.",
+    "image": "https://ninartvision.store/images/og-image.png?v=nv20260526",
+    "inLanguage": ["ka", "en"],
+    "parentOrganization": { "@id": "https://ninartvision.store/#organization" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Featured Original Artworks",
+    "description": "Curated original paintings by Georgian artists — contemporary art available to collect.",
+    "numberOfItems": 3,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@type": "VisualArtwork",
+          "name": "Garden",
+          "creator": { "@type": "Person", "name": "Nini Mzhavia" },
+          "artMedium": "Acrylic on canvas",
+          "artform": "Painting",
+          "image": "https://ninartvision.store/images/garden9.webp",
+          "url": "https://ninartvision.store/sale/shop.html"
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "item": {
+          "@type": "VisualArtwork",
+          "name": "Svaneti",
+          "creator": { "@type": "Person", "name": "Nini Mzhavia" },
+          "artMedium": "Acrylic on canvas",
+          "artform": "Painting",
+          "image": "https://ninartvision.store/images/svaneti10.webp",
+          "url": "https://ninartvision.store/products/svaneti-svaneti/"
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@type": "VisualArtwork",
+          "name": "Silent Bloom",
+          "creator": { "@type": "Person", "name": "Nini Mzhavia" },
+          "artMedium": "Acrylic on canvas",
+          "artform": "Painting",
+          "image": "https://ninartvision.store/images/me10.webp",
+          "url": "https://ninartvision.store/products/silent-bloom/"
+        }
+      }
+    ]
+  }
+  </script>
 
 
   <!-- Preconnect to external origins before everything else -->
@@ -1128,6 +1210,7 @@
 
 <!-- Critical runtime first (menu, hero, modal, search) -->
 <script defer src="./js/nv-gallery-modal.min.js?v=nv20260527"></script>
+<script defer src="./js/seo-i18n.min.js?v=nv20260526"></script>
 <script defer src="./lang.js?v=nv20260724"></script>
 <script defer src="./script.min.js?v=nv20260527"></script>
 <script defer src="./js/editorial-rule.min.js?v=nv20260527"></script>

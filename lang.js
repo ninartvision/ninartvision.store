@@ -94,7 +94,16 @@ try {
 } catch (_) {}
 
 document.addEventListener("DOMContentLoaded", function () {
-  var savedLang = localStorage.getItem("siteLang") || "ka";
+  var savedLang = "ka";
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var fromUrl = params.get("lang");
+    savedLang = fromUrl || localStorage.getItem("siteLang") || "ka";
+  } catch (_) {
+    try {
+      savedLang = localStorage.getItem("siteLang") || "ka";
+    } catch (__) {}
+  }
   setLang(savedLang);
 
   document.querySelectorAll(".lang-item").forEach(function (btn) {
