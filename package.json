@@ -15,7 +15,13 @@
     "fix-slugs":               "node scripts/audit-slugs.mjs --fix",
     "fix-slugs:dry":           "node scripts/audit-slugs.mjs --dry-run",
     "fix-collisions":          "node scripts/fix-slug-collisions.mjs",
-    "fix-collisions:dry":      "node scripts/fix-slug-collisions.mjs --dry-run"
+    "fix-collisions:dry":      "node scripts/fix-slug-collisions.mjs --dry-run",
+
+    "//---- backend ----": "Backend lives in its own workspace under ./backend with its own package.json. These aliases forward to that workspace so the same `npm run …` cadence works from the repo root.",
+    "backend:install":         "npm --prefix backend install",
+    "backend:dev":             "npm --prefix backend run dev",
+    "backend:start":           "npm --prefix backend run start",
+    "backend:test":            "npm --prefix backend test"
   },
   "dependencies": {
     "@sanity/client": "^6.15.7"
