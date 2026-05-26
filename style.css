@@ -3508,6 +3508,84 @@ a.pill:visited{
 .menu-social .soc:hover svg {
   transform: scale(1.05);
 }
+
+/* ──────────────────────────────────────────────────────────────────────
+   Mobile / touch "tap cue" — a subtle staggered halo wave through the
+   social buttons so they signal interactivity on touch devices where
+   :hover never fires. Mirrors the brand-tinted glow used on desktop
+   hover, but animates a pseudo-element overlay only (never the button
+   itself), so :active/:focus and the icon stay visually intact.
+   ────────────────────────────────────────────────────────────────────── */
+.social-icons .soc[aria-label="Facebook"],
+.menu-social  .soc[aria-label="Facebook"]  { --nv-soc-glow: 24, 119, 242; }
+.social-icons .soc[aria-label="Instagram"],
+.menu-social  .soc[aria-label="Instagram"] { --nv-soc-glow: 228, 64, 95; }
+.social-icons .soc[aria-label="WhatsApp"],
+.menu-social  .soc[aria-label="WhatsApp"]  { --nv-soc-glow: 37, 211, 102; }
+
+.social-icons .soc::after,
+.menu-social  .soc::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(1);
+  box-shadow: 0 0 0 0 rgba(var(--nv-soc-glow, 17, 17, 17), 0);
+  z-index: 0;
+}
+
+@keyframes nv-soc-tap-cue{
+  0%, 88%, 100%{
+    opacity: 0;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(var(--nv-soc-glow, 17, 17, 17), 0);
+  }
+  6%{
+    opacity: 1;
+    transform: scale(1.06);
+    box-shadow:
+      0 0 0 3px rgba(var(--nv-soc-glow, 17, 17, 17), 0.32),
+      0 8px 22px rgba(var(--nv-soc-glow, 17, 17, 17), 0.22);
+  }
+  18%{
+    opacity: 0;
+    transform: scale(1.22);
+    box-shadow: 0 0 0 6px rgba(var(--nv-soc-glow, 17, 17, 17), 0);
+  }
+}
+
+@media (hover: none) and (pointer: coarse){
+  .social-icons .soc::after,
+  .menu-social  .soc::after{
+    animation: nv-soc-tap-cue 7.5s ease-out infinite;
+    will-change: transform, opacity, box-shadow;
+  }
+
+  /* Sequential stagger — gentle left-to-right wave through FB → IG → WA. */
+  .social-icons .soc:nth-of-type(2)::after,
+  .menu-social  .soc:nth-of-type(2)::after{ animation-delay: 0.30s; }
+
+  .social-icons .soc:nth-of-type(3)::after,
+  .menu-social  .soc:nth-of-type(3)::after{ animation-delay: 0.60s; }
+
+  /* Pause the cue while the user is actively touching so it never
+     competes with real tap feedback. */
+  .social-icons .soc:active::after,
+  .menu-social  .soc:active::after{
+    animation-play-state: paused;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .social-icons .soc::after,
+  .menu-social  .soc::after{
+    animation: none !important;
+  }
+}
+
 .imgModal img{
   max-width: 92vw;
   max-height: 86dvh;
@@ -7198,19 +7276,43 @@ a.pill:visited{
 }
 /* ===================================
    MOBILE HORIZONTAL SCROLL FIX
-   Prevent any sideways movement
+   Prevent any sideways movement / drift.
+
+   Three things have to be true for iOS Safari (and Android Chrome) to
+   keep the viewport perfectly locked horizontally:
+     1. The document body is never wider than the viewport.
+     2. Off-canvas / position:fixed children cannot bleed past the
+        viewport edge — see `.nv-cart-drawer` (overflow:hidden there).
+     3. Horizontal touch-pan gestures are disabled at the document
+        root so iOS rubber-band cannot drag the page sideways.
+
+   We deliberately use `width: 100%` / `max-width: 100%` instead of
+   `100vw` here: on mobile they are equivalent, but `100vw` includes the
+   scrollbar gutter on some browsers and is computed against the LARGE
+   viewport on iOS, which can leave the page a few pixels wider than
+   what the user actually sees while the address bar is collapsed.
 =================================== */
 @media (max-width: 768px) {
   html, body {
     overflow-x: hidden !important;
-    max-width: 100vw !important;
+    width: 100% !important;
+    max-width: 100% !important;
     position: relative;
   }
-  
-  body > * {
-    max-width: 100vw;
+
+  /* Lock the document to vertical scrolling only. `pan-y` permits the
+     normal vertical scroll, `pinch-zoom` keeps accessibility zoom, but
+     horizontal pan/swipe gestures no longer drift the page sideways
+     even if a stray descendant momentarily overflows. */
+  html, body {
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior-x: none;
   }
-  
+
+  body > * {
+    max-width: 100%;
+  }
+
   .container,
   .section,
   .hero-slider,
@@ -7219,13 +7321,13 @@ a.pill:visited{
     max-width: 100% !important;
     overflow-x: hidden !important;
   }
-  
+
   /* Projects slider wrap manages its own overflow per breakpoint */
   .projects-slider-wrap {
     max-width: 100% !important;
     /* Overflow controlled by specific breakpoints, not here */
   }
-  
+
   /* Ensure all images stay within bounds (exclude project detail gallery thumbs) */
   img:not(.gallery-list img):not(.lightbox-img) {
     max-width: 100%;
@@ -7264,16 +7366,11 @@ a.pill:visited{
     aspect-ratio: auto;
     object-fit: contain;
   }
-  
+
   /* Lock sliders horizontally */
   .projects-slider,
   .shop-slider {
     overflow-x: hidden !important;
-  }
-  
-  /* Prevent any element from creating horizontal scroll */
-  * {
-    max-width: 100vw;
   }
 }
 /* Shop header: title + filters + line art */

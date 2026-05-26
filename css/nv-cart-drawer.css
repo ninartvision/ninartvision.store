@@ -6,6 +6,11 @@
   z-index: 100000;
   pointer-events: none;
   visibility: hidden;
+  /* Clip the offscreen panel (translateX(100%) when closed) so it cannot
+     extend past the right edge of the viewport. iOS Safari otherwise
+     includes the transformed child in its horizontal scroll/rubber-band
+     calculation, which produces the global sideways drift on mobile. */
+  overflow: hidden;
 }
 
 .nv-cart-drawer.is-open {
