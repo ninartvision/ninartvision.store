@@ -7,6 +7,41 @@
 /* Share confirmation message — hidden by default; revealed by JS after copy */
 #shareMsg{ display:none; }
 
+/* ─── Skip-to-main-content link (accessibility) ─────────────────────────────
+   Visible only when focused — invisible to mouse/touch users, but the first
+   tab stop on the page for keyboard / screen-reader users. The default
+   browser focus path on every Ninart page starts at the header brand link,
+   which means a keyboard user must tab past the entire menu before reaching
+   the actual page content. This link gives them a one-tab jump.
+
+   We use `position:fixed` + transform off-screen instead of `display:none`
+   so the element stays in the focus order — `display:none` would remove it
+   entirely and break the feature. */
+.nv-skip-link{
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100001;
+  padding: 10px 16px;
+  background: #111;
+  color: #fff;
+  font: 600 14px/1.2 "FiraGO","Fira Sans",system-ui,-apple-system,sans-serif;
+  text-decoration: none;
+  border-radius: 10px;
+  box-shadow: 0 6px 22px rgba(0,0,0,.18);
+  transform: translateY(calc(-100% - 24px));
+  transition: transform .18s ease;
+}
+.nv-skip-link:focus,
+.nv-skip-link:focus-visible{
+  transform: translateY(0);
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce){
+  .nv-skip-link{ transition: none; }
+}
+
 html {
   overflow-x: hidden;
   max-width: 100%;

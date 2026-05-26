@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Page not found · Ninart Vision</title>
+  <meta name="description" content="The page you’re looking for isn’t here — but the rest of the gallery is. Return to Ninart Vision to explore original Georgian artworks." />
+  <meta name="robots" content="noindex,follow" />
+  <link rel="canonical" href="https://ninartvision.store/404.html" />
+  <link rel="icon" href="/images/favicon.webp" />
+
+  <!-- Inline minimal styles so the page renders even if the main stylesheet 404s
+       (a real possibility on the exact request that lands here). Mirrors the
+       brand palette from style.css; we deliberately avoid the heavy global
+       stylesheet so this page is fast and self-contained. -->
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font-family:"FiraGO","Fira Sans","DejaVu Sans",system-ui,-apple-system,Arial,sans-serif;
+      background:linear-gradient(168deg,#fdfcfa 0%,#f6f1e9 48%,#efe9e0 100%);
+      color:#1a1514;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+    }
+    a{color:inherit;text-decoration:none}
+    header.brand{
+      padding:22px clamp(16px,4vw,32px);
+    }
+    header.brand img{height:36px;width:auto;display:block}
+    main{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:clamp(24px,6vw,56px);
+      text-align:center;
+    }
+    .panel{max-width:560px}
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:.75rem;
+      font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+      font-size:13px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:rgba(46,40,36,.62);
+      margin-bottom:14px;
+    }
+    .eyebrow::before,.eyebrow::after{
+      content:"";
+      display:block;
+      width:34px;
+      height:1px;
+      background:linear-gradient(90deg,transparent,#b8956e 50%,transparent);
+    }
+    h1{
+      font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+      font-weight:500;
+      font-size:clamp(2.2rem,5.4vw,3.4rem);
+      line-height:1.06;
+      letter-spacing:-.02em;
+      margin-bottom:14px;
+    }
+    .number{
+      display:block;
+      font-size:clamp(4rem,12vw,6.5rem);
+      line-height:1;
+      letter-spacing:-.04em;
+      color:rgba(58,48,40,.18);
+      margin-bottom:4px;
+    }
+    p.lede{
+      font-size:clamp(.95rem,2.2vw,1.05rem);
+      line-height:1.7;
+      letter-spacing:.01em;
+      color:rgba(46,40,36,.78);
+      max-width:38ch;
+      margin:0 auto 26px;
+    }
+    .cta-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:center;
+    }
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+      padding:12px 22px;
+      border-radius:12px;
+      font-weight:600;
+      font-size:14px;
+      letter-spacing:.02em;
+      transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+    }
+    .cta.primary{
+      background:#111;
+      color:#fff;
+      box-shadow:0 4px 16px rgba(0,0,0,.14);
+    }
+    .cta.primary:hover,.cta.primary:focus-visible{
+      background:#222;
+      transform:translateY(-1px);
+      box-shadow:0 6px 22px rgba(0,0,0,.18);
+    }
+    .cta.ghost{
+      border:1px solid rgba(0,0,0,.18);
+      color:#1a1514;
+    }
+    .cta.ghost:hover,.cta.ghost:focus-visible{
+      background:rgba(255,255,255,.7);
+      transform:translateY(-1px);
+    }
+    .meta-links{
+      margin-top:32px;
+      font-size:13px;
+      color:rgba(46,40,36,.6);
+    }
+    .meta-links a{
+      margin:0 8px;
+      border-bottom:1px solid transparent;
+      transition:border-color .2s ease,color .2s ease;
+    }
+    .meta-links a:hover,.meta-links a:focus-visible{
+      color:#1a1514;
+      border-bottom-color:rgba(184,149,110,.6);
+    }
+    footer{
+      text-align:center;
+      padding:18px 16px 28px;
+      font-size:12px;
+      color:rgba(46,40,36,.55);
+    }
+    @media (prefers-reduced-motion: reduce){
+      .cta,.cta.primary,.cta.ghost{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <header class="brand">
+    <a href="/" aria-label="Ninart Vision — home">
+      <img src="/images/logo.webp" alt="Ninart Vision" width="120" height="36" />
+    </a>
+  </header>
+
+  <main>
+    <div class="panel">
+      <span class="number" aria-hidden="true">404</span>
+      <span class="eyebrow">Page not found</span>
+      <h1 data-en="This canvas is blank." data-ka="ეს ტილო ცარიელია.">This canvas is blank.</h1>
+      <p class="lede" data-en="The page you were looking for has moved, been renamed, or never existed. Step back into the gallery and pick a thread."
+                     data-ka="გვერდი არ მოიძებნა — დაბრუნდით გალერეაში და განაგრძეთ თვალიერება.">
+        The page you were looking for has moved, been renamed, or never existed. Step back into the gallery and pick a thread.
+      </p>
+
+      <div class="cta-row">
+        <a class="cta primary" href="/" data-en="Back to home" data-ka="დაბრუნება მთავარზე">Back to home</a>
+        <a class="cta ghost" href="/sale/shop.html" data-en="Browse the shop" data-ka="გადახედეთ მაღაზიას">Browse the shop</a>
+      </div>
+
+      <nav class="meta-links" aria-label="Recover">
+        <a href="/artists/">Artists</a>·
+        <a href="/news.html">News</a>·
+        <a href="/about.html">About</a>·
+        <a href="/support.html">Contact</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer>&copy; 2026 Ninart Vision · Original Georgian Art</footer>
+</body>
+</html>

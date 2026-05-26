@@ -87,6 +87,13 @@
   </url>
 
   <url>
+    <loc>https://ninartvision.store/terms.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.40</priority>
+  </url>
+
+  <url>
     <loc>https://ninartvision.store/shipping.html</loc>
     <lastmod>2026-05-19</lastmod>
     <changefreq>yearly</changefreq>

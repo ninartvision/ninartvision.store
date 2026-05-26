@@ -1,0 +1,27 @@
+{
+  "name": "Ninart Vision — Original Georgian Art",
+  "short_name": "Ninart Vision",
+  "description": "Discover and collect original artworks by contemporary Georgian artists.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fdfcfa",
+  "theme_color": "#1a1514",
+  "lang": "ka",
+  "categories": ["art", "shopping", "lifestyle"],
+  "icons": [
+    {
+      "src": "/images/favicon.webp",
+      "sizes": "any",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo.webp",
+      "sizes": "any",
+      "type": "image/webp",
+      "purpose": "maskable"
+    }
+  ]
+}

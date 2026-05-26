@@ -39,6 +39,7 @@
 <script defer src="../analytics.min.js?v=nv20260527"></script>
 </head>
 <body>
+<a class="nv-skip-link" href="#artists-main">Skip to main content</a>
 
 <!-- HEADER -->
 <header class="header">
@@ -69,7 +70,7 @@
     </a>
 
     <!-- Mobile hamburger -->
-    <button class="hamburger" id="openMenu" aria-label="Open menu">
+    <button class="hamburger" id="openMenu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menuOverlay">
       <span></span><span></span><span></span>
     </button>
     </div>
@@ -92,6 +93,7 @@
   </nav>
 </div>
 
+<main id="artists-main">
 <div class="artists-header">
   <h2>Artists</h2>
   <div class="artists-art"></div>
@@ -109,6 +111,13 @@
 </div>
 
 <div class="artists-grid" id="artistsGrid"></div>
+</main>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <p>&copy; 2026 Ninart Vision &middot; Original Georgian Art &middot; <a href="../about.html">About</a> &middot; <a href="../support.html">Contact</a> &middot; <a href="../shipping.html">Shipping</a> &middot; <a href="../returns.html">Returns</a> &middot; <a href="../privacy.html">Privacy</a></p>
+  </div>
+</footer>
 
 <!-- SCRIPTS -->
 <script src="../script.min.js?v=nv20260527"></script>

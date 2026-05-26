@@ -28,7 +28,11 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:site_name" content="Ninart Vision">
-<meta name="theme-color" content="#000000">
+<!-- Two theme-color hints: cream for light UA chrome (matches our background),
+     dark for users on system dark mode. iOS Safari + Chromium pick whichever
+     media query matches. -->
+<meta name="theme-color" content="#fdfcfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1514" media="(prefers-color-scheme: dark)">
 
 
 <meta property="og:locale" content="ka_GE">
@@ -289,6 +293,15 @@
   <link rel="icon" type="image/webp" href="./images/favicon.webp">
   <link rel="shortcut icon" type="image/webp" href="./images/favicon.webp">
   <link rel="apple-touch-icon" href="./images/icon.jpg">
+  <!-- Web app manifest — controls install / "Add to Home Screen" identity on
+       Android, iOS Safari and Chromium desktops. The earlier
+       `theme-color: #000000` further up the head was paired with this and
+       made the iOS Safari URL bar pitch black (clashes with our cream
+       palette); the manifest carries the proper brand colors as well. -->
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="apple-mobile-web-app-title" content="Ninart Vision">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
   <!-- Google Fonts loaded non-blocking (font-display:swap already set via &display=swap) -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -326,7 +339,7 @@
 
 </head>
 <body>
-  
+  <a class="nv-skip-link" href="#home">Skip to main content</a>
 
   <!-- TOP NAV -->
   <header class="header">
@@ -367,7 +380,7 @@
         <span class="header-cart__badge is-empty" data-cart-badge aria-live="polite" aria-hidden="true"></span>
       </a>
 
-      <button type="button" class="hamburger" id="openMenu" aria-label="Open menu">
+      <button type="button" class="hamburger" id="openMenu" aria-label="Open menu" aria-expanded="false" aria-controls="menuOverlay">
         <span></span><span></span><span></span>
       </button>
       </div>
@@ -1244,6 +1257,23 @@
       }
 
       function scheduleAutoplay() {
+        /* Respect prefers-reduced-motion — visitors who set this OS-level
+           preference (motion sensitivity, vestibular conditions) get a static
+           hero. Dot/arrow controls still work; we just don't auto-rotate. */
+        try {
+          var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+          if (rm && rm.matches) return;
+          if (rm && typeof rm.addEventListener === 'function') {
+            rm.addEventListener('change', function (e) {
+              if (e.matches && timer) {
+                clearInterval(timer);
+                timer = null;
+                autoplayStarted = false;
+              }
+            });
+          }
+        } catch (_) { /* matchMedia missing — fall through to autoplay */ }
+
         var fallbackMs = 8000;
         var started = false;
         function go() {
