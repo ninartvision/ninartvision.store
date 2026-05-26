@@ -18,7 +18,7 @@
   <meta name="twitter:image" content="https://ninartvision.store/images/og-image.png">
 
   <link rel="stylesheet" href="./style.min.css?v=nv20260527" />
-  <link rel="stylesheet" href="./css/room-visualizer.css?v=nv20260727" />
+  <link rel="stylesheet" href="./css/room-visualizer.css?v=nv20260527room" />
   <link rel="icon" href="./images/favicon.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -169,10 +169,10 @@
         </p>
         <div class="nvr-toolbar" aria-label="Artwork adjustments">
           <label class="nvr-slider-field"><span class="nvr-slider-label-text"><span data-en="Size" data-ka="Size">Size</span> <span class="muted nvr-slider-meta">(<span id="nvrScaleVal">32%</span>)</span></span>
-            <input type="range" id="nvrScale" min="12" max="78" step="1" value="32" aria-label="Artwork width in frame" />
+            <input type="range" id="nvrScale" min="8" max="95" step="1" value="32" aria-label="Artwork width in frame" />
           </label>
           <label class="nvr-slider-field"><span class="nvr-slider-label-text"><span data-en="Tilt" data-ka="Tilt">Tilt</span> <span class="muted nvr-slider-meta">(<span id="nvrRotateVal">0°</span>)</span></span>
-            <input type="range" id="nvrRotate" min="-35" max="35" step="1" value="0" aria-label="Artwork rotation degrees" />
+            <input type="range" id="nvrRotate" min="-180" max="180" step="1" value="0" aria-label="Artwork rotation degrees" />
           </label>
         </div>
 
@@ -180,7 +180,6 @@
           <img class="nvr-room" id="nvrRoom" alt="" draggable="false" />
           <div class="nvr-art-wrap" id="nvrArtWrap" hidden>
             <img id="nvrArtImg" alt="" draggable="false" />
-            <div class="nvr-resize-corner" id="nvrCorner" aria-label="Resize artwork" role="presentation" hidden></div>
           </div>
         </div>
       </div>
@@ -218,7 +217,7 @@
 </script>
 <script defer src="./lang.js?v=nv20260724"></script>
 <script defer src="./sanity-client.min.js?v=nv20260527"></script>
-<script defer src="./js/room-visualizer.min.js?v=nv20260613"></script>
+<script defer src="./js/room-visualizer.min.js?v=nv20260527room"></script>
 <script defer src="./script.min.js?v=nv20260527"></script>
 </body>
 </html>

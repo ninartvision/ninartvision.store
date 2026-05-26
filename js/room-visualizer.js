@@ -1,6 +1,5 @@
 /**
- * Room / wall artwork preview — uses fetchAllArtworks + sanityImgUrl.
- * Drag artwork to reposition; drag corner handle to resize; sliders for refine.
+ * Room / wall artwork preview — pinch, pan, rotate, corner handles (mobile-first).
  */
 (function () {
   'use strict';
@@ -9,7 +8,6 @@
   const roomImg = document.getElementById('nvrRoom');
   const artWrap = document.getElementById('nvrArtWrap');
   const artImg = document.getElementById('nvrArtImg');
-  const corner = document.getElementById('nvrCorner');
   const placeholder = document.getElementById('nvrPlaceholder');
   const stageWrap = document.getElementById('nvrStageWrap');
   const heroVisual = document.querySelector('.nvr-hero-visual');
@@ -92,15 +90,32 @@
   let stageRestoreNext = null;
   let interactiveStage = stage;
   let interactiveArtWrap = artWrap;
-  let interactiveCorner = corner;
+  let handlesEl = null;
   /** Center x,y as % of stage; width as % of stage width; rotation deg */
   let cx = 50;
   let cy = 45;
   let sw = 32;
   let rot = 0;
 
-  let dragMode = null;
-  let dragStart = null;
+  const MIN_SW = 8;
+  const MAX_SW = 95;
+  const NON_PASSIVE = { passive: false };
+
+  const gesture = {
+    mode: null,
+    handle: null,
+    pointers: new Map(),
+    sw0: 32,
+    rot0: 0,
+    cx0: 50,
+    cy0: 45,
+    dist0: 0,
+    angle0: 0,
+    panX: 0,
+    panY: 0,
+    stageW: 0,
+    stageH: 0,
+  };
 
   function imgUrlForArt(a) {
     if (!a || !a.img) return '';
@@ -743,15 +758,33 @@
     artWrap.style.left = cx + '%';
     artWrap.style.top = cy + '%';
     artWrap.style.width = sw + '%';
-    artWrap.style.transform = 'translate(-50%, -50%) rotate(' + rot + 'deg)';
+    artWrap.style.transform = 'translate3d(-50%, -50%, 0) rotate(' + rot + 'deg)';
     if (scaleInput && scaleVal) {
-      scaleInput.value = String(Math.round(sw));
-      scaleVal.textContent = Math.round(sw) + '%';
+      var swClamped = clamp(Math.round(sw), MIN_SW, MAX_SW);
+      scaleInput.value = String(swClamped);
+      scaleVal.textContent = swClamped + '%';
     }
     if (rotateInput && rotateVal) {
-      rotateInput.value = String(Math.round(rot));
-      rotateVal.textContent = rot + '°';
+      var rotNorm = Math.round(rot);
+      rotateInput.value = String(clamp(rotNorm, Number(rotateInput.min), Number(rotateInput.max)));
+      rotateVal.textContent = rotNorm + '°';
     }
+  }
+
+  function ensureArtHandles() {
+    if (handlesEl) return handlesEl;
+    handlesEl = document.createElement('div');
+    handlesEl.className = 'nvr-art-handles';
+    handlesEl.setAttribute('aria-hidden', 'true');
+    ['nw', 'ne', 'sw', 'se', 'rotate'].forEach(function (name) {
+      var el = document.createElement('span');
+      el.className = 'nvr-handle nvr-handle--' + name;
+      el.dataset.handle = name;
+      el.setAttribute('role', 'presentation');
+      handlesEl.appendChild(el);
+    });
+    artWrap.appendChild(handlesEl);
+    return handlesEl;
   }
 
   /** JPEG EXIF Orientation tag (1–8); 1 = no transform. */
@@ -1011,8 +1044,8 @@
     roomImg.style.pointerEvents = 'none';
     artWrap.style.pointerEvents = 'auto';
     artWrap.style.touchAction = 'none';
-    corner.style.pointerEvents = 'auto';
-    corner.style.touchAction = 'none';
+    if (handlesEl) handlesEl.style.pointerEvents = 'auto';
+    stage.style.touchAction = 'none';
   }
 
   function restoreStageInlineStyles() {
@@ -1020,32 +1053,272 @@
     roomImg.style.pointerEvents = '';
     artWrap.style.pointerEvents = '';
     artWrap.style.touchAction = '';
-    corner.style.pointerEvents = '';
-    corner.style.touchAction = '';
+    if (handlesEl) handlesEl.style.pointerEvents = '';
+    stage.style.touchAction = '';
   }
 
-  function cancelActiveDrag() {
-    window.removeEventListener('pointermove', onPointerMove);
-    window.removeEventListener('pointerup', onPointerUp);
-    window.removeEventListener('pointercancel', onPointerUp);
-    dragMode = null;
-    dragStart = null;
-    artWrap.classList.remove('is-dragging');
-    if (interactiveArtWrap && interactiveArtWrap !== artWrap) {
-      interactiveArtWrap.classList.remove('is-dragging');
-    }
+  function cancelActiveGesture() {
+    stage.removeEventListener('touchmove', onStageTouchMove, NON_PASSIVE);
+    stage.removeEventListener('touchend', onStageTouchEnd);
+    stage.removeEventListener('touchcancel', onStageTouchEnd);
+    window.removeEventListener('pointermove', onStagePointerMove, NON_PASSIVE);
+    window.removeEventListener('pointerup', onStagePointerUp);
+    window.removeEventListener('pointercancel', onStagePointerUp);
+    gesture.mode = null;
+    gesture.handle = null;
+    gesture.pointers.clear();
+    artWrap.classList.remove('is-dragging', 'is-gesturing');
   }
 
   function setFullscreenInteractionTargets() {
     interactiveStage = stage;
     interactiveArtWrap = artWrap;
-    interactiveCorner = corner;
   }
 
   function clearFullscreenInteractionTargets() {
     interactiveStage = stage;
     interactiveArtWrap = artWrap;
-    interactiveCorner = corner;
+  }
+
+  function handleNameFromTarget(target) {
+    var el = target && target.closest ? target.closest('[data-handle]') : null;
+    return el ? el.dataset.handle : null;
+  }
+
+  function isArtTarget(target) {
+    return !!(target && target.closest && target.closest('#nvrArtWrap') && !artWrap.hidden);
+  }
+
+  function artCenterClient() {
+    var rect = artWrap.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  }
+
+  function touchPairDist(t0, t1) {
+    return Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+  }
+
+  function touchPairAngle(t0, t1) {
+    return Math.atan2(t1.clientY - t0.clientY, t1.clientX - t0.clientX);
+  }
+
+  function touchPairCenter(t0, t1) {
+    return { x: (t0.clientX + t1.clientX) / 2, y: (t0.clientY + t1.clientY) / 2 };
+  }
+
+  function beginPan(clientX, clientY) {
+    var r = stageRect();
+    gesture.mode = 'pan';
+    gesture.panX = clientX;
+    gesture.panY = clientY;
+    gesture.cx0 = cx;
+    gesture.cy0 = cy;
+    gesture.stageW = r.width;
+    gesture.stageH = r.height;
+    artWrap.classList.add('is-dragging', 'is-gesturing');
+  }
+
+  function updatePan(clientX, clientY) {
+    var dx = clientX - gesture.panX;
+    var dy = clientY - gesture.panY;
+    cx = clamp(gesture.cx0 + (dx / gesture.stageW) * 100, 2, 98);
+    cy = clamp(gesture.cy0 + (dy / gesture.stageH) * 100, 2, 98);
+    applyArtTransform();
+  }
+
+  function beginPinch(t0, t1) {
+    var r = stageRect();
+    gesture.mode = 'pinch';
+    gesture.dist0 = touchPairDist(t0, t1);
+    gesture.angle0 = touchPairAngle(t0, t1);
+    gesture.sw0 = sw;
+    gesture.rot0 = rot;
+    gesture.cx0 = cx;
+    gesture.cy0 = cy;
+    gesture.pinchCenter0 = touchPairCenter(t0, t1);
+    gesture.stageW = r.width;
+    gesture.stageH = r.height;
+    artWrap.classList.add('is-gesturing');
+  }
+
+  function updatePinch(t0, t1) {
+    if (gesture.dist0 <= 0) return;
+    var dist = touchPairDist(t0, t1);
+    var angle = touchPairAngle(t0, t1);
+    var ratio = dist / gesture.dist0;
+    sw = clamp(gesture.sw0 * ratio, MIN_SW, MAX_SW);
+    rot = gesture.rot0 + ((angle - gesture.angle0) * 180) / Math.PI;
+    var center = touchPairCenter(t0, t1);
+    var dx = center.x - gesture.pinchCenter0.x;
+    var dy = center.y - gesture.pinchCenter0.y;
+    cx = clamp(gesture.cx0 + (dx / gesture.stageW) * 100, 2, 98);
+    cy = clamp(gesture.cy0 + (dy / gesture.stageH) * 100, 2, 98);
+    applyArtTransform();
+  }
+
+  function beginHandleDrag(handle, clientX, clientY) {
+    var center = artCenterClient();
+    gesture.mode = 'handle';
+    gesture.handle = handle;
+    gesture.sw0 = sw;
+    gesture.rot0 = rot;
+    gesture.dist0 = Math.max(24, Math.hypot(clientX - center.x, clientY - center.y));
+    gesture.angle0 = Math.atan2(clientY - center.y, clientX - center.x);
+    gesture.px0 = clientX;
+    gesture.py0 = clientY;
+    artWrap.classList.add('is-gesturing');
+  }
+
+  function updateHandleDrag(clientX, clientY) {
+    var center = artCenterClient();
+    if (gesture.handle === 'rotate') {
+      var ang = Math.atan2(clientY - center.y, clientX - center.x);
+      rot = gesture.rot0 + ((ang - gesture.angle0) * 180) / Math.PI;
+      applyArtTransform();
+      return;
+    }
+    var dist = Math.max(24, Math.hypot(clientX - center.x, clientY - center.y));
+    var ratio = dist / gesture.dist0;
+    sw = clamp(gesture.sw0 * ratio, MIN_SW, MAX_SW);
+    applyArtTransform();
+  }
+
+  function onStageTouchStart(e) {
+    if (artWrap.hidden) return;
+    var handle = handleNameFromTarget(e.target);
+    if (handle) {
+      e.preventDefault();
+      beginHandleDrag(handle, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      stage.addEventListener('touchmove', onStageTouchMove, NON_PASSIVE);
+      stage.addEventListener('touchend', onStageTouchEnd, NON_PASSIVE);
+      stage.addEventListener('touchcancel', onStageTouchEnd, NON_PASSIVE);
+      return;
+    }
+    if (!isArtTarget(e.target)) return;
+    if (e.touches.length >= 2) {
+      e.preventDefault();
+      beginPinch(e.touches[0], e.touches[1]);
+    } else if (e.touches.length === 1) {
+      e.preventDefault();
+      beginPan(e.touches[0].clientX, e.touches[0].clientY);
+    }
+    stage.addEventListener('touchmove', onStageTouchMove, NON_PASSIVE);
+    stage.addEventListener('touchend', onStageTouchEnd, NON_PASSIVE);
+    stage.addEventListener('touchcancel', onStageTouchEnd, NON_PASSIVE);
+  }
+
+  function onStageTouchMove(e) {
+    if (!gesture.mode) return;
+    if (gesture.mode === 'handle' && e.touches.length >= 1) {
+      e.preventDefault();
+      var t = e.touches[0];
+      updateHandleDrag(t.clientX, t.clientY);
+      return;
+    }
+    if (gesture.mode === 'pinch' && e.touches.length >= 2) {
+      e.preventDefault();
+      updatePinch(e.touches[0], e.touches[1]);
+      return;
+    }
+    if (gesture.mode === 'pan' && e.touches.length === 1) {
+      e.preventDefault();
+      updatePan(e.touches[0].clientX, e.touches[0].clientY);
+      return;
+    }
+    if (e.touches.length >= 2 && isArtTarget(e.target)) {
+      e.preventDefault();
+      beginPinch(e.touches[0], e.touches[1]);
+      updatePinch(e.touches[0], e.touches[1]);
+    }
+  }
+
+  function onStageTouchEnd(e) {
+    if (e.touches.length >= 2 && gesture.mode === 'pinch') {
+      beginPinch(e.touches[0], e.touches[1]);
+      return;
+    }
+    if (e.touches.length === 1 && gesture.mode === 'pinch') {
+      beginPan(e.touches[0].clientX, e.touches[0].clientY);
+      return;
+    }
+    if (e.touches.length === 0) {
+      cancelActiveGesture();
+    }
+  }
+
+  function onStagePointerDown(e) {
+    if (artWrap.hidden) return;
+    if (e.pointerType === 'touch') return;
+    if (e.button !== 0) return;
+    var handle = handleNameFromTarget(e.target);
+    if (handle) {
+      e.preventDefault();
+      beginHandleDrag(handle, e.clientX, e.clientY);
+      gesture.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      window.addEventListener('pointermove', onStagePointerMove, NON_PASSIVE);
+      window.addEventListener('pointerup', onStagePointerUp);
+      window.addEventListener('pointercancel', onStagePointerUp);
+      return;
+    }
+    if (!isArtTarget(e.target)) return;
+    e.preventDefault();
+    gesture.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (gesture.pointers.size >= 2) {
+      var pts = Array.from(gesture.pointers.values());
+      beginPinch({ clientX: pts[0].x, clientY: pts[0].y }, { clientX: pts[1].x, clientY: pts[1].y });
+    } else {
+      beginPan(e.clientX, e.clientY);
+    }
+    window.addEventListener('pointermove', onStagePointerMove, NON_PASSIVE);
+    window.addEventListener('pointerup', onStagePointerUp);
+    window.addEventListener('pointercancel', onStagePointerUp);
+  }
+
+  function onStagePointerMove(e) {
+    if (e.pointerType === 'touch') return;
+    if (!gesture.mode) return;
+    if (!gesture.pointers.has(e.pointerId) && gesture.mode !== 'handle') return;
+    gesture.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (gesture.mode === 'handle') {
+      e.preventDefault();
+      updateHandleDrag(e.clientX, e.clientY);
+      return;
+    }
+    if (gesture.pointers.size >= 2) {
+      e.preventDefault();
+      var pts = Array.from(gesture.pointers.values());
+      if (gesture.mode !== 'pinch') {
+        beginPinch({ clientX: pts[0].x, clientY: pts[0].y }, { clientX: pts[1].x, clientY: pts[1].y });
+      }
+      updatePinch({ clientX: pts[0].x, clientY: pts[0].y }, { clientX: pts[1].x, clientY: pts[1].y });
+      return;
+    }
+    if (gesture.mode === 'pan') {
+      e.preventDefault();
+      updatePan(e.clientX, e.clientY);
+    }
+  }
+
+  function onStagePointerUp(e) {
+    if (e.pointerType === 'touch') return;
+    gesture.pointers.delete(e.pointerId);
+    if (gesture.pointers.size >= 2) {
+      var pts = Array.from(gesture.pointers.values());
+      beginPinch({ clientX: pts[0].x, clientY: pts[0].y }, { clientX: pts[1].x, clientY: pts[1].y });
+      return;
+    }
+    if (gesture.pointers.size === 1) {
+      var rem = Array.from(gesture.pointers.values())[0];
+      beginPan(rem.x, rem.y);
+      return;
+    }
+    cancelActiveGesture();
+  }
+
+  function initArtGestures() {
+    ensureArtHandles();
+    stage.addEventListener('touchstart', onStageTouchStart, NON_PASSIVE);
+    stage.addEventListener('pointerdown', onStagePointerDown, NON_PASSIVE);
   }
 
   function ensureFullscreenPreviewModal() {
@@ -1071,7 +1344,7 @@
     });
 
     fullscreenPreviewScene.addEventListener('click', function (event) {
-      if (!event.target.closest('.nvr-art-wrap, .nvr-resize-corner')) {
+      if (!event.target.closest('.nvr-art-wrap, .nvr-handle')) {
         event.stopPropagation();
       }
     });
@@ -1114,7 +1387,7 @@
     fullscreenPreviewVisible = false;
     fullscreenPreviewModal.classList.remove('is-visible');
 
-    cancelActiveDrag();
+    cancelActiveGesture();
 
     if (stage.parentNode === fullscreenPreviewScene) {
       restoreStageHome();
@@ -1135,7 +1408,12 @@
     const hasRoom = !!roomImg.getAttribute('src');
     const hasArt = !!(selectedId && artImg.getAttribute('src'));
     artWrap.hidden = !(hasRoom && hasArt);
-    corner.hidden = artWrap.hidden;
+    if (hasRoom && hasArt) {
+      ensureArtHandles();
+      artWrap.classList.add('is-editing');
+    } else {
+      artWrap.classList.remove('is-editing', 'is-gesturing', 'is-dragging');
+    }
   }
 
   function setSelectedArtwork(id) {
@@ -1174,62 +1452,8 @@
     return Math.min(hi, Math.max(lo, n));
   }
 
-  function onPointerMove(e) {
-    if (!dragMode || !dragStart) return;
-    if (dragMode === 'move') {
-      const dx = e.clientX - dragStart.px;
-      const dy = e.clientY - dragStart.py;
-      cx = clamp(dragStart.cx + (dx / dragStart.rw) * 100, 5, 95);
-      cy = clamp(dragStart.cy + (dy / dragStart.rh) * 100, 5, 95);
-      applyArtTransform();
-    } else if (dragMode === 'resize') {
-      const dx = e.clientX - dragStart.px;
-      const deltaPct = (dx / dragStart.rw) * 100 * 2;
-      sw = clamp(dragStart.sw + deltaPct, Number(scaleInput.min), Number(scaleInput.max));
-      applyArtTransform();
-    }
-  }
-
-  function onPointerUp(e) {
-    if (!dragMode) return;
-    window.removeEventListener('pointermove', onPointerMove);
-    window.removeEventListener('pointerup', onPointerUp);
-    window.removeEventListener('pointercancel', onPointerUp);
-    dragMode = null;
-    dragStart = null;
-    if (interactiveArtWrap) {
-      interactiveArtWrap.classList.remove('is-dragging');
-    }
-    artWrap.classList.remove('is-dragging');
-  }
-
-  artWrap.addEventListener('pointerdown', e => {
-    if (dragMode) return;
-    if (e.target.closest('.nvr-resize-corner')) return;
-    e.preventDefault();
-    const r = stageRect();
-    dragMode = 'move';
-    dragStart = { px: e.clientX, py: e.clientY, cx, cy, rw: r.width, rh: r.height };
-    artWrap.classList.add('is-dragging');
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp);
-    window.addEventListener('pointercancel', onPointerUp);
-  });
-
-  corner.addEventListener('pointerdown', e => {
-    if (dragMode) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const r = stageRect();
-    dragMode = 'resize';
-    dragStart = { px: e.clientX, py: e.clientY, sw, rw: r.width };
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp);
-    window.addEventListener('pointercancel', onPointerUp);
-  });
-
   scaleInput.addEventListener('input', () => {
-    sw = clamp(Number(scaleInput.value), Number(scaleInput.min), Number(scaleInput.max));
+    sw = clamp(Number(scaleInput.value), MIN_SW, MAX_SW);
     applyArtTransform();
   });
 
@@ -1351,6 +1575,7 @@
   document.addEventListener('DOMContentLoaded', async () => {
     placeholder.hidden = false;
     stageWrap.hidden = true;
+    initArtGestures();
 
     try {
       if (typeof window.fetchAllArtworks !== 'function') {

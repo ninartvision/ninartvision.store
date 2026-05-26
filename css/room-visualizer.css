@@ -1251,10 +1251,13 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
   left: 50%;
   top: 45%;
   width: 32%;
-  transform: translate(-50%, -50%) rotate(0deg);
+  transform: translate3d(-50%, -50%, 0) rotate(0deg);
   transform-origin: center center;
   cursor: grab;
   touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
   background: transparent;
   border-radius: 4px;
   box-shadow:
@@ -1263,9 +1266,103 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
     0 20px 48px rgba(26, 21, 18, 0.14),
     0 10px 24px rgba(26, 21, 18, 0.1);
   z-index: 2;
+  will-change: transform, width, left, top;
+}
+
+.nvr-art-wrap.is-editing::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 1.5px dashed rgba(184, 149, 110, 0.55);
+  border-radius: 6px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.nvr-art-wrap.is-gesturing {
+  cursor: grabbing;
 }
 
 .nvr-art-wrap.is-dragging {
+  cursor: grabbing;
+}
+
+.nvr-art-handles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.nvr-handle {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  margin: -11px;
+  border-radius: 50%;
+  background: var(--nvr-ink);
+  border: 2.5px solid #fff;
+  box-shadow: 0 4px 14px rgba(26, 21, 18, 0.22);
+  pointer-events: auto;
+  touch-action: none;
+  transition: transform 0.2s var(--nvr-ease), background 0.2s ease;
+}
+
+.nvr-handle:active,
+.nvr-handle:hover {
+  transform: scale(1.12);
+  background: var(--nvr-brown);
+}
+
+.nvr-handle--nw {
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+}
+
+.nvr-handle--ne {
+  top: 0;
+  right: 0;
+  cursor: nesw-resize;
+}
+
+.nvr-handle--sw {
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+}
+
+.nvr-handle--se {
+  bottom: 0;
+  right: 0;
+  cursor: nwse-resize;
+}
+
+.nvr-handle--rotate {
+  top: -36px;
+  left: 50%;
+  margin-left: -11px;
+  margin-top: -11px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: grab;
+  background: var(--nvr-gold);
+}
+
+.nvr-handle--rotate::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  height: 18px;
+  margin-left: -0.5px;
+  background: rgba(184, 149, 110, 0.65);
+  pointer-events: none;
+}
+
+.nvr-handle--rotate:active {
   cursor: grabbing;
 }
 
@@ -1285,27 +1382,6 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
 .page-room-visualizer .nvr-art-wrap[data-nvr-art-alpha='1'] img {
   mix-blend-mode: normal;
   -webkit-mix-blend-mode: normal;
-}
-
-.nvr-resize-corner {
-  position: absolute;
-  right: -8px;
-  bottom: -8px;
-  width: 20px;
-  height: 20px;
-  background: var(--nvr-ink);
-  border: 2px solid #fff;
-  border-radius: 6px;
-  cursor: nwse-resize;
-  z-index: 3;
-  box-shadow: 0 4px 12px rgba(26, 21, 18, 0.2);
-  touch-action: none;
-  transition: transform 0.35s var(--nvr-ease), background 0.35s ease;
-}
-
-.nvr-resize-corner:hover {
-  transform: scale(1.08);
-  background: var(--nvr-brown);
 }
 
 /* ── Fullscreen preview (unchanged behavior) ──────────────────────── */
@@ -1425,15 +1501,22 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
   cursor: grabbing;
 }
 
-.nvr-stage.nvr-stage--fullscreen .nvr-resize-corner,
-.page-room-visualizer .nvr-fullscreen-preview__scene .nvr-resize-corner {
+.nvr-stage.nvr-stage--fullscreen .nvr-art-wrap,
+.page-room-visualizer .nvr-fullscreen-preview__scene .nvr-art-wrap {
   pointer-events: auto !important;
   touch-action: none;
-  z-index: 3;
+  z-index: 2;
+  cursor: grab;
 }
 
-.nvr-stage.nvr-stage--fullscreen .nvr-art-wrap[hidden],
-.nvr-stage.nvr-stage--fullscreen .nvr-resize-corner[hidden] {
+.nvr-stage.nvr-stage--fullscreen .nvr-handle,
+.page-room-visualizer .nvr-fullscreen-preview__scene .nvr-handle {
+  pointer-events: auto !important;
+  touch-action: none;
+  z-index: 5;
+}
+
+.nvr-stage.nvr-stage--fullscreen .nvr-art-wrap[hidden] {
   display: none !important;
   pointer-events: none !important;
 }
@@ -1510,6 +1593,19 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
 }
 
 @media (max-width: 640px) {
+  .nvr-handle {
+    width: 28px;
+    height: 28px;
+    margin: -14px;
+  }
+
+  .nvr-handle--rotate {
+    top: -42px;
+    margin-left: -14px;
+    width: 30px;
+    height: 30px;
+  }
+
   .nvr-hero-block,
   .nvr-catalog-block,
   .nvr-gallery-shell {
@@ -1582,7 +1678,7 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
   .nvr-cat-card,
   .nvr-cat-card img,
   .page-room-visualizer .nvr-upload-row .btn,
-  .nvr-resize-corner {
+  .nvr-handle {
     transition: none;
   }
 
