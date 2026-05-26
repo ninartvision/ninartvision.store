@@ -2929,6 +2929,12 @@ img, video {
   transition: opacity 0.3s ease, visibility 0.3s ease;
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.lightbox.lightbox--touch{
+  touch-action: none;
 }
 
 .lightbox.open{
@@ -2936,26 +2942,52 @@ img, video {
   visibility: visible;
 }
 
+.lightbox-viewport{
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+}
+
 .lightbox-img{
   max-width: 92vw;
   max-height: 88dvh;
+  width: auto;
+  height: auto;
   border-radius: 18px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  transform: scale(0.8);
-  transition: transform 0.3s ease;
   object-fit: contain;
   cursor: default;
   pointer-events: auto;
+  transform-origin: center center;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-.lightbox.open .lightbox-img{
+.lightbox:not(.lightbox--touch) .lightbox-img{
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+}
+
+.lightbox:not(.lightbox--touch).open .lightbox-img{
   transform: scale(1);
 }
 
 .close{
-  position: absolute;
-  top: 16px;
-  right: 22px;
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top, 0px));
+  right: max(22px, env(safe-area-inset-right, 0px));
   font-size: 40px;
   color: #fff;
   cursor: pointer;
@@ -2969,6 +3001,8 @@ img, video {
   justify-content: center;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 50%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .close:hover{
@@ -3850,6 +3884,10 @@ a.pill:visited{
 
   .lightbox{
     padding: 15px;
+  }
+
+  .lightbox-viewport{
+    padding: 0;
   }
 
   .lightbox-img{
