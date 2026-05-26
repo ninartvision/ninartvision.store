@@ -4617,15 +4617,12 @@ a.pill:visited{
   line-height: 1.6;
 }
 
-/* Show only the active language. The cloth banner is the one place where
-   we have parallel KA / EN copy in the DOM instead of using `data-en` /
-   `data-ka` attributes, so lang.js can't toggle it on its own. We let
-   the `data-site-lang` attribute on <html> (set by lang.js before the
-   first paint via the pre-paint snippet in <head>) hide the other one. */
-html[data-site-lang="ka"] .cloth-banner-text .en,
-html[data-site-lang="en"] .cloth-banner-text .ka{
-  display: none;
-}
+/* The cloth banner is intentionally BILINGUAL — Georgian (primary, bolder)
+   stacked above English (secondary, lighter) — to greet visitors in both
+   languages at once. Do not add `display:none` rules that hide one
+   language based on `html[data-site-lang]`; the existing mobile rules
+   (< 768px and < 480px) equalize both lines to the same font-size so
+   they balance visually on small screens. */
 
 /* ===== HERO SLIDER (legacy slide-bg support) ===== */
 
@@ -9306,4 +9303,132 @@ svg { overflow: hidden; }
   .header .container.header-row > .header-actions {
     gap: 8px;
   }
+}
+
+/* =========================================================================
+   GLOBAL SITE FOOTER — luxury, minimal, brand-consistent.
+
+   The `.site-footer` styling used to live ONLY in index.html's inline <style>
+   block, which meant every other page (shipping, returns, privacy, support,
+   terms, artist pages, shop, etc.) was rendering the footer with browser
+   defaults: blue underlined links on a transparent background. Lift the
+   ruleset into the global stylesheet so the footer matches site-wide.
+
+   Palette: dark ink #111 background, muted #ccc body, beige #c9a66b accent
+   on hover (the same brand gold used by `.artist-link` and the editorial
+   rule), and a soft border-bottom on hover instead of the harsh underline
+   the browser default produces.
+   ========================================================================= */
+.site-footer{
+  background: #111;
+  color: #aaa;
+  text-align: center;
+  padding: 28px 20px;
+  font-size: 13px;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+.site-footer .container{
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.site-footer p{
+  margin: 0;
+}
+.site-footer a{
+  color: #d6d2cb;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 1px;
+  transition: color 0.25s ease, border-bottom-color 0.25s ease;
+}
+.site-footer a:hover,
+.site-footer a:focus-visible{
+  color: #c9a66b;
+  border-bottom-color: rgba(201, 166, 107, 0.55);
+}
+
+/* =========================================================================
+   PROSE LINK STYLING — applies to <a> tags inside body paragraphs of the
+   minimal legal/policy pages (privacy, returns, shipping). These pages
+   place mailto: / wa.me links directly inside <p>, which without a global
+   rule render as default browser blue + underline — visually out-of-band
+   with the rest of the site.
+
+   We scope to `main p > a` so we DON'T touch nav links, cart icons, or
+   any link that already lives inside a styled component (cards, buttons,
+   footer, etc.). Color uses the brand muted ink with a soft beige
+   underline that picks up on hover, matching the `.artist-link`
+   treatment used on the About page.
+   ========================================================================= */
+main p > a:not([class]):not([role]){
+  color: #1a1514;
+  text-decoration: underline;
+  text-decoration-color: rgba(184, 149, 110, 0.45);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 0.25s ease, text-decoration-color 0.25s ease;
+}
+main p > a:not([class]):not([role]):hover,
+main p > a:not([class]):not([role]):focus-visible{
+  color: #b8956e;
+  text-decoration-color: #b8956e;
+}
+
+/* =========================================================================
+   ARTIST PHOTO HARDENING — defensive rules that guarantee artist avatars,
+   profile photos, and founder portraits ALWAYS render as a true circle
+   (or square portrait), never elongated, on any screen size.
+
+   The historic rules already set explicit width + height with object-fit:
+   cover. These extra declarations are belt-and-suspenders:
+
+     1. `aspect-ratio: 1 / 1`    — modern guarantee the box is square
+                                    even if a parent flex/grid would
+                                    otherwise stretch the height.
+     2. `flex-shrink: 0`         — never let a flex parent compress
+                                    the photo horizontally on narrow
+                                    screens.
+     3. `min-width`/`min-height` — pin the photo to its declared size
+                                    so a tight column can't squish it.
+     4. `object-fit: cover`      — preserve the source image's aspect
+                                    ratio (fills the frame, crops
+                                    overflow).
+     5. `display: block`         — kill inline baseline gaps.
+     6. `background-size: cover` — same idea for the <div>-with-
+                                    background-image variant.
+
+   We deliberately do NOT change the existing pixel sizes — only enforce
+   that whatever size is set is preserved as a square.
+   ========================================================================= */
+.artist-avatar,
+.artists-grid .artist-avatar,
+.artist-card .artist-avatar,
+#artistsGrid .artist-avatar,
+#homeArtistsGrid.artists-grid--showcase .artist-avatar,
+#homeArtistsGrid.artists-grid--showcase .artist-showcase-media,
+.founder-photo-circle{
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* <img>-based avatars: lock object-fit. The inline `style="object-fit:cover"`
+   on nini/mzia/nanuli already does this, but enforce it globally so any
+   future <img class="artist-avatar"> automatically inherits the rule. */
+img.artist-avatar,
+img.founder-photo-circle{
+  object-fit: cover;
+  object-position: center;
+}
+
+/* <div>-with-background-image avatars (artists/index.html listing grid,
+   #homeArtistsGrid showcase): make the background fill the square
+   without distortion. */
+div.artist-avatar,
+#artistsGrid .artist-avatar,
+#homeArtistsGrid.artists-grid--showcase .artist-avatar{
+  background-size: cover !important;
+  background-position: center;
+  background-repeat: no-repeat;
 }
