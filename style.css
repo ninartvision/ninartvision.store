@@ -2987,7 +2987,7 @@ img, video {
 }
 /* Small gallery grid for sale/shop page */
 .shop-grid-small{
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
@@ -3231,6 +3231,10 @@ img, video {
   .product-layout{
     grid-template-columns: minmax(0, 1fr);
   }
+  /* Stacked single-column on mobile: image first, text below — matches the
+     intent of an artwork-detail view (image is the subject, not the metadata). */
+  .product-layout .product-left{ order: 1; }
+  .product-layout .product-right{ order: 2; }
 }
 
 @media (max-width: 540px){

@@ -333,13 +333,43 @@
         });
       }
 
-      this._modal.classList.add('open');
-      this._modal.setAttribute('aria-hidden', 'false');
-      this._syncBodyScrollLock();
+      // Reveal the modal only once the primary artwork image is ready so that
+      // the artwork and its content appear together. Without this guard the
+      // text (set via textContent — instant) would paint first while the
+      // <img> is still being fetched, producing a brief "text-before-image"
+      // flash that is especially obvious on the stacked mobile layout.
+      const revealModal = () => {
+        this._modal.classList.add('open');
+        this._modal.setAttribute('aria-hidden', 'false');
+        this._syncBodyScrollLock();
+        requestAnimationFrame(() => {
+          e.closeBtn?.focus({ preventScroll: true });
+        });
+      };
 
-      requestAnimationFrame(() => {
-        e.closeBtn?.focus({ preventScroll: true });
-      });
+      const primaryImg = e.productImg;
+      if (primaryImg && this._photos.length) {
+        if (primaryImg.complete && primaryImg.naturalWidth > 0) {
+          // Cached / already decoded — open immediately.
+          revealModal();
+        } else {
+          let revealed = false;
+          const onceReveal = () => {
+            if (revealed) return;
+            revealed = true;
+            primaryImg.removeEventListener('load', onceReveal);
+            primaryImg.removeEventListener('error', onceReveal);
+            revealModal();
+          };
+          primaryImg.addEventListener('load', onceReveal);
+          primaryImg.addEventListener('error', onceReveal);
+          // Safety fallback: never block the click longer than ~900ms,
+          // even on slow connections. The image will then fade in normally.
+          setTimeout(onceReveal, 900);
+        }
+      } else {
+        revealModal();
+      }
     },
 
     close() {
