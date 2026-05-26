@@ -21,7 +21,8 @@
     "backend:install":         "npm --prefix backend install",
     "backend:dev":             "npm --prefix backend run dev",
     "backend:start":           "npm --prefix backend run start",
-    "backend:test":            "npm --prefix backend test"
+    "backend:test":            "npm --prefix backend test",
+    "backend:check:env":       "npm --prefix backend run check:env"
   },
   "dependencies": {
     "@sanity/client": "^6.15.7"

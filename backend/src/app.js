@@ -39,14 +39,14 @@ import { createPaymentProviderRegistry } from './payments/index.js';
 export function buildApp(overrides = {}) {
   const orderRepository = overrides.orderRepository ?? createInMemoryOrderRepository();
   const paymentRepository = overrides.paymentRepository ?? createInMemoryPaymentRepository();
-  const providers = overrides.providers ?? createPaymentProviderRegistry();
+  const providers = overrides.providers ?? createPaymentProviderRegistry(config.payments);
 
   const paymentService = createPaymentService({
     payments: paymentRepository,
     orders: orderRepository,
     providers,
     defaultProvider: config.payments.defaultProvider,
-    publicApiUrl: config.publicApiUrl,
+    webhookBaseUrl: config.payments.webhookBaseUrl,
     logger,
   });
 

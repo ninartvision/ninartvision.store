@@ -227,8 +227,12 @@
       gap:14px;
     }
     .home-shop-preview .home-shop-carousel__slide .shop-item img{
+      /* Show paintings in full proportion instead of cropping them into
+         a fixed-height band. The cream backdrop matches the gallery
+         aesthetic (frame mat) so the letterboxing reads as intentional. */
       height:200px;
-      object-fit:cover;
+      object-fit:contain;
+      background:#f8f4ed;
     }
     .home-shop-preview .home-shop-carousel__slide .shop-meta{
       padding:8px 10px 10px;

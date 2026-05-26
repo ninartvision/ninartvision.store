@@ -3249,11 +3249,16 @@ img, video {
 }
 
 .product-layout .product-thumb{
+  /* Legacy thumb rule used outside `.product-buy`. Match the same
+     "show the whole painting" philosophy used for the in-modal thumbs
+     — contain on a cream backdrop, never crop the artwork. */
   width: 100%;
   max-width: none;
   aspect-ratio: 4 / 3;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
+  padding: 4px;
+  background: #f8f4ed;
   border-radius: 16px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -4105,11 +4110,17 @@ a.pill:visited{
 }
 
 #support.section-featured-projects .projects-track .card img{
+  /* Featured-project images are showcase artworks; on an art-gallery
+     site the painting must always be visible in full. Switching from
+     `cover` to `contain` lets portrait (5:8) and square paintings sit
+     correctly inside the 5:6 picture frame without losing any edges.
+     The picture wrapper already has a cream backdrop (#f4efe8), so the
+     letterbox reads as mat board, not a layout bug. */
   width: 100%;
   height: 100%;
   max-height: none;
   min-height: 0;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
 }
@@ -5365,16 +5376,19 @@ a.pill:visited{
 }
 
 .product-buy #productThumbs .product-thumb{
-  /* Square, compact preview tiles. Overrides the looser `.product-layout
-     .product-thumb { aspect-ratio: 4/3 }` rule so every artwork —
-     portrait, landscape or square — yields a uniform thumb size and
-     the gallery stays visually tidy. */
+  /* Square preview tiles for the modal "More Photos" gallery. We keep
+     the 1:1 box for grid consistency but use `object-fit: contain` so
+     mixed portrait/landscape paintings show in full ratio without
+     being cropped — an art-gallery site should never crop the art.
+     The soft cream backdrop reads as canvas/paper, not blank space. */
   width: 100%;
   height: auto;
   max-width: none;
   aspect-ratio: 1 / 1;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
+  padding: 4px;
+  background: #f8f4ed;
   border-radius: 12px;
   box-shadow: 0 4px 14px rgba(38, 28, 22, 0.07);
 }
@@ -7414,14 +7428,20 @@ a.pill:visited{
 
   .project-page .gallery-list > img,
   .project-page .gallery-list__item img{
+    /* Project gallery on mobile — keep a uniform 4:3 grid cell for
+       rhythm but show each painting in its full natural ratio inside
+       it. The cream backdrop matches the rest of the site's image
+       framing language, so portrait works don't get top/bottom-cropped
+       just to fill a landscape tile. */
     width: 100% !important;
     max-width: 100% !important;
     height: 100% !important;
     min-height: 0;
     max-height: none !important;
     aspect-ratio: 4 / 3 !important;
-    object-fit: cover !important;
+    object-fit: contain !important;
     object-position: center !important;
+    background: #f8f4ed;
     display: block !important;
   }
 

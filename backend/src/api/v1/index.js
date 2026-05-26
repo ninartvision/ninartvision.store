@@ -29,9 +29,14 @@ export function createV1Router({ orderService, paymentService, providers }) {
   router.use('/payments', createPaymentsRouter({ paymentsController }));
   router.use('/webhooks', createWebhooksRouter({ webhooksController }));
 
+  // Provider directory. Lists every known provider (manual / tbc / bog),
+  // whether it's currently configured, what env keys are still missing,
+  // and which currencies it accepts. The storefront uses this to decide
+  // which payment buttons to render. Operators can curl it to confirm
+  // "TBC is ready" once they paste credentials in.
   router.get('/providers', (_req, res) => {
     res.json({
-      providers: providers.list().map((p) => ({ name: p.name, enabled: p.enabled })),
+      providers: providers.describe(),
     });
   });
 

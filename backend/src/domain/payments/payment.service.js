@@ -23,11 +23,11 @@ import { PaymentStatus, isTerminal } from './payment.status.js';
  *   orders: import('../orders/order.repository.js').OrderRepository,
  *   providers: import('../../payments/index.js').PaymentProviderRegistry,
  *   defaultProvider: string,
- *   publicApiUrl: string,
+ *   webhookBaseUrl: string,
  *   logger?: { info: Function, warn: Function, error: Function },
  * }} deps
  */
-export function createPaymentService({ payments, orders, providers, defaultProvider, publicApiUrl, logger }) {
+export function createPaymentService({ payments, orders, providers, defaultProvider, webhookBaseUrl, logger }) {
   const events = new EventEmitter();
 
   /**
@@ -55,6 +55,21 @@ export function createPaymentService({ payments, orders, providers, defaultProvi
     const providerName = input.provider || defaultProvider;
     const provider = providers.get(providerName);
 
+    // Currency guard. TBC/BOG contracts usually allow GEL only — surface
+    // that as a 400 here rather than letting the bank reject the request
+    // 5 seconds later with a less actionable error. The allowlist lives
+    // in config (per-provider env override) so adding USD when your
+    // contract permits is a one-line .env change.
+    const readiness = providers.describe().find((p) => p.name === providerName);
+    const allowed = readiness?.supportedCurrencies ?? [];
+    if (allowed.length && !allowed.includes(order.currency)) {
+      throw new ValidationError(
+        `Provider "${providerName}" does not accept ${order.currency}. ` +
+          `Allowed: ${allowed.join(', ')}.`,
+        { providerName, currency: order.currency, allowed },
+      );
+    }
+
     const idempotencyKey = input.idempotencyKey ?? newIdempotencyKey();
     const existing = await payments.findByIdempotencyKey(idempotencyKey);
     if (existing) {
@@ -78,7 +93,7 @@ export function createPaymentService({ payments, orders, providers, defaultProvi
       amountMinor: order.totalMinor,
       currency: order.currency,
       returnUrl: input.returnUrl,
-      webhookUrl: `${publicApiUrl}/v1/webhooks/${providerName}`,
+      webhookUrl: `${webhookBaseUrl}/v1/webhooks/${providerName}`,
       idempotencyKey,
       metadata: input.metadata ?? {},
     });

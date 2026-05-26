@@ -4,10 +4,10 @@
 
 import http from 'node:http';
 import { buildApp } from './app.js';
-import { config } from './config/index.js';
+import { config, describePaymentsReadiness } from './config/index.js';
 import { logger } from './lib/logger.js';
 
-const { app } = buildApp();
+const { app, providers } = buildApp();
 const server = http.createServer(app);
 
 server.listen(config.port, () => {
@@ -16,9 +16,38 @@ server.listen(config.port, () => {
       port: config.port,
       env: config.nodeEnv,
       publicApiUrl: config.publicApiUrl,
+      webhookBaseUrl: config.payments.webhookBaseUrl,
     },
     'server_listening',
   );
+
+  // Operator-facing summary: which providers are live, which are still
+  // waiting on env vars, and which env vars are missing. Printed every
+  // boot so it's the first thing you see in CI / docker logs after a
+  // deploy. The structured `providers` field stays log-aggregator
+  // friendly while the per-line text version is human-friendly.
+  const readiness = describePaymentsReadiness(config);
+  logger.info(
+    {
+      defaultProvider: readiness.defaultProvider,
+      defaultProviderWasAutoPicked: readiness.defaultProviderWasAutoPicked,
+      providers: readiness.providers,
+    },
+    'payment_providers_status',
+  );
+  for (const p of readiness.providers) {
+    if (p.enabled) {
+      logger.info(`  ✓ ${p.name.padEnd(8)} ready · currencies=${p.supportedCurrencies.join(',')}`);
+    } else {
+      logger.warn(
+        `  ✗ ${p.name.padEnd(8)} disabled · set ${p.missing.join(', ') || '(unknown)'} to enable`,
+      );
+    }
+  }
+  // Cross-check that the live registry matches the config snapshot, in
+  // case a future refactor introduces a divergence.
+  const liveNames = providers.list().map((p) => p.name);
+  logger.info({ activeProviders: liveNames }, 'payment_providers_registered');
 });
 
 function shutdown(signal) {
