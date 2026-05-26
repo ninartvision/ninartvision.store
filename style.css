@@ -4617,6 +4617,16 @@ a.pill:visited{
   line-height: 1.6;
 }
 
+/* Show only the active language. The cloth banner is the one place where
+   we have parallel KA / EN copy in the DOM instead of using `data-en` /
+   `data-ka` attributes, so lang.js can't toggle it on its own. We let
+   the `data-site-lang` attribute on <html> (set by lang.js before the
+   first paint via the pre-paint snippet in <head>) hide the other one. */
+html[data-site-lang="ka"] .cloth-banner-text .en,
+html[data-site-lang="en"] .cloth-banner-text .ka{
+  display: none;
+}
+
 /* ===== HERO SLIDER (legacy slide-bg support) ===== */
 
 .hero-slides{

@@ -3,6 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    /* Pre-paint language hint. lang.js runs on DOMContentLoaded which is
+       AFTER first paint, so without this snippet the cloth banner (and
+       any other `html[data-site-lang=…]` CSS rule) flashes the wrong
+       language for one frame. This block must stay INLINE and BEFORE
+       any stylesheet link so CSS matches on the right attribute value
+       during the very first style resolution. Defaults to Georgian. */
+    (function () {
+      try {
+        var l = localStorage.getItem("siteLang") || "ka";
+        l = l === "en" ? "en" : "ka";
+        document.documentElement.setAttribute("lang", l);
+        document.documentElement.setAttribute("data-site-lang", l);
+      } catch (_) {}
+    })();
+  </script>
   <title>Ninart Vision | Original Contemporary Art by Georgian Artists</title>
 
 <meta name="description" content="Discover and buy original contemporary paintings by Georgian artists. Ninart Vision is an independent art platform featuring handcrafted artworks, limited editions, and curated collections from emerging and established creators.">

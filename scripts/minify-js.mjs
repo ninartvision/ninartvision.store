@@ -34,6 +34,7 @@ const PAIRS = [
   ['js/featured-project-page.js', 'js/featured-project-page.min.js'],
   ['js/nv-gallery-modal.js', 'js/nv-gallery-modal.min.js'],
   ['js/nv-cart-drawer.js', 'js/nv-cart-drawer.min.js'],
+  ['js/nv-payments-client.js', 'js/nv-payments-client.min.js'],
   ['sale/shop-render.js', 'sale/shop-render.min.js'],
   ['sale/shopFilter.js', 'sale/shopFilter.min.js'],
 ];

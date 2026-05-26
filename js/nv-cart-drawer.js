@@ -165,13 +165,21 @@
       '<span class="nv-cart-drawer__subtotal-label">Subtotal</span>' +
       '<span class="nv-cart-drawer__subtotal-val" id="nvCartSubtotal">₾0</span>' +
       '</div>' +
+      /* The bank buttons currently start a WhatsApp confirmation flow —
+         the backend payment gateway (TBC / BOG) isn't activated yet.
+         When `js/nv-payments-client.js` is configured with
+         `window.NV_BACKEND_API_BASE`, these handlers should call
+         `nvPayments.initiate({ provider: 'bog' | 'tbc', ... })` and redirect
+         to the returned `redirectUrl`. Until then the aria-labels are
+         honest about routing through WhatsApp so screen readers don't
+         promise a hosted bank checkout. */
       '<div class="nv-cart-drawer__banks">' +
-      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--bog" id="nvCartPayBog" aria-label="საქართველოს ბანკი">' +
+      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--bog" id="nvCartPayBog" aria-label="საქართველოს ბანკი — დადასტურება WhatsApp-ით" title="Bank of Georgia — confirm on WhatsApp">' +
       '<span class="nv-cart-drawer__bank-logo">' +
       '<img src="/images/nv-logo-bog.png" alt="საქართველოს ბანკი" width="140" height="40" loading="lazy" decoding="async">' +
       '</span>' +
       '</button>' +
-      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--tbc" id="nvCartPayTbc" aria-label="თიბისი ბანკი">' +
+      '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--tbc" id="nvCartPayTbc" aria-label="თიბისი ბანკი — დადასტურება WhatsApp-ით" title="TBC Bank — confirm on WhatsApp">' +
       '<span class="nv-cart-drawer__bank-logo">' +
       '<img src="/images/nv-logo-tbc.png" alt="თიბისი ბანკი" width="140" height="40" loading="lazy" decoding="async">' +
       '</span>' +

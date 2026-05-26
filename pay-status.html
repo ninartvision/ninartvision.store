@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    /* Pre-paint language hint — see index.html for full rationale. */
+    (function () {
+      try {
+        var l = localStorage.getItem("siteLang") || "ka";
+        l = l === "en" ? "en" : "ka";
+        document.documentElement.setAttribute("lang", l);
+        document.documentElement.setAttribute("data-site-lang", l);
+      } catch (_) {}
+    })();
+  </script>
+  <title>Payment status · Ninart Vision</title>
+  <meta name="description" content="Confirmation page for payments made on Ninart Vision. This page is the destination after returning from your bank's hosted checkout." />
+  <!-- This is the page the backend passes as `returnUrl` to hosted-checkout
+       providers (TBC, BOG). It's deliberately noindex because every URL is
+       a one-shot result page tied to a specific order. -->
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://ninartvision.store/pay-status.html" />
+  <link rel="icon" href="/images/favicon.webp" />
+
+  <!-- Inline styles so the page renders fast and works even if the global
+       stylesheet has a network hiccup. Mirrors 404.html's self-contained
+       approach. -->
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font-family:"FiraGO","Fira Sans","DejaVu Sans",system-ui,-apple-system,Arial,sans-serif;
+      background:linear-gradient(168deg,#fdfcfa 0%,#f6f1e9 48%,#efe9e0 100%);
+      color:#1a1514;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    header.brand{padding:22px clamp(16px,4vw,32px)}
+    header.brand img{height:36px;width:auto;display:block}
+
+    main{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:clamp(24px,6vw,56px);
+      text-align:center;
+    }
+    .panel{
+      max-width:560px;
+      width:100%;
+    }
+
+    .badge{
+      width:84px;
+      height:84px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:0 auto 22px;
+      background:rgba(255,255,255,.7);
+      box-shadow:0 8px 32px rgba(0,0,0,.06), inset 0 0 0 1px rgba(0,0,0,.04);
+    }
+    .badge svg{width:42px;height:42px;stroke-width:1.8}
+
+    .badge--ok{color:#2f7a4a;background:rgba(207,232,213,.55);box-shadow:0 8px 32px rgba(47,122,74,.12), inset 0 0 0 1px rgba(47,122,74,.18)}
+    .badge--err{color:#a53b3b;background:rgba(245,210,210,.55);box-shadow:0 8px 32px rgba(165,59,59,.12), inset 0 0 0 1px rgba(165,59,59,.18)}
+    .badge--info{color:#7c5a2c;background:rgba(238,224,194,.55);box-shadow:0 8px 32px rgba(124,90,44,.12), inset 0 0 0 1px rgba(124,90,44,.2)}
+    .badge--pending{color:#604a3a;background:rgba(238,224,194,.4)}
+
+    /* Soft pending spinner, ring-only, no flashing. */
+    .ring{
+      width:42px;
+      height:42px;
+      border:2.5px solid rgba(96,74,58,.18);
+      border-top-color:#604a3a;
+      border-radius:50%;
+      animation:nvSpin 1.05s linear infinite;
+    }
+    @keyframes nvSpin{to{transform:rotate(360deg)}}
+    @media (prefers-reduced-motion: reduce){
+      .ring{animation:none;border-top-color:rgba(96,74,58,.55)}
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:.75rem;
+      font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+      font-size:13px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:rgba(46,40,36,.62);
+      margin-bottom:14px;
+    }
+    .eyebrow::before,.eyebrow::after{
+      content:"";
+      display:block;
+      width:34px;
+      height:1px;
+      background:linear-gradient(90deg,transparent,#b8956e 50%,transparent);
+    }
+
+    h1{
+      font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+      font-weight:500;
+      font-size:clamp(2rem,5vw,3.1rem);
+      line-height:1.08;
+      letter-spacing:-.018em;
+      margin-bottom:14px;
+    }
+    p.lede{
+      font-size:clamp(.95rem,2.2vw,1.05rem);
+      line-height:1.7;
+      letter-spacing:.01em;
+      color:rgba(46,40,36,.78);
+      max-width:42ch;
+      margin:0 auto 22px;
+    }
+
+    .receipt{
+      font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+      font-size:14px;
+      letter-spacing:.04em;
+      color:rgba(46,40,36,.65);
+      margin:0 auto 22px;
+      padding:10px 16px;
+      display:inline-block;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:10px;
+      background:rgba(255,255,255,.55);
+    }
+    .receipt code{
+      font-family:"Fira Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+      font-size:13px;
+      color:#1a1514;
+    }
+
+    .cta-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:center;
+    }
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+      padding:12px 22px;
+      border-radius:12px;
+      font-weight:600;
+      font-size:14px;
+      letter-spacing:.02em;
+      transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+      border:none;
+      cursor:pointer;
+      font-family:inherit;
+    }
+    .cta.primary{
+      background:#111;
+      color:#fff;
+      box-shadow:0 4px 16px rgba(0,0,0,.14);
+    }
+    .cta.primary:hover,.cta.primary:focus-visible{
+      background:#222;
+      transform:translateY(-1px);
+      box-shadow:0 6px 22px rgba(0,0,0,.18);
+    }
+    .cta.ghost{
+      border:1px solid rgba(0,0,0,.18);
+      color:#1a1514;
+      background:transparent;
+    }
+    .cta.ghost:hover,.cta.ghost:focus-visible{
+      background:rgba(255,255,255,.7);
+      transform:translateY(-1px);
+    }
+
+    .meta-links{
+      margin-top:30px;
+      font-size:13px;
+      color:rgba(46,40,36,.6);
+    }
+    .meta-links a{
+      margin:0 8px;
+      border-bottom:1px solid transparent;
+      transition:border-color .2s ease,color .2s ease;
+    }
+    .meta-links a:hover,.meta-links a:focus-visible{
+      color:#1a1514;
+      border-bottom-color:rgba(184,149,110,.6);
+    }
+
+    footer{
+      text-align:center;
+      padding:18px 16px 28px;
+      font-size:12px;
+      color:rgba(46,40,36,.55);
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .cta,.cta.primary,.cta.ghost{transition:none}
+    }
+
+    /* Skip link for accessibility */
+    .nv-skip-link{
+      position:absolute;
+      left:-9999px;
+      top:auto;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+    }
+    .nv-skip-link:focus{
+      position:fixed;
+      left:16px;
+      top:16px;
+      width:auto;
+      height:auto;
+      padding:10px 16px;
+      background:#1a1514;
+      color:#fff;
+      border-radius:8px;
+      z-index:1000;
+    }
+  </style>
+</head>
+<body>
+  <a class="nv-skip-link" href="#pay-status-main">Skip to main content</a>
+
+  <header class="brand">
+    <a href="/" aria-label="Ninart Vision — home">
+      <img src="/images/logo.webp" alt="Ninart Vision" width="120" height="36" />
+    </a>
+  </header>
+
+  <main id="pay-status-main">
+    <div class="panel" id="nvPayPanel" aria-live="polite">
+      <!-- Render is done by the inline script below to keep the page
+           fully static-deployable; no JS dependency on the backend. -->
+    </div>
+  </main>
+
+  <footer>&copy; 2026 Ninart Vision · Original Georgian Art</footer>
+
+  <script>
+    /* ------------------------------------------------------------------
+       Payment status renderer.
+
+       URL params we accept (all optional, kept loose on purpose so any
+       bank's redirect format can be massaged into this contract without
+       breaking the page):
+         ?status   one of: succeeded | pending | processing | failed |
+                   cancelled | unsupported | unavailable
+         ?orderId  display-only echo of the order id (no API lookup)
+         ?provider tbc | bog | manual (display-only)
+         ?error    optional short error message (failed state only)
+
+       This page deliberately does NOT call the backend on load. When the
+       payments client (`js/nv-payments-client.js`) is wired up, it can
+       hook into `window.NV_PAY_STATUS_POLL` to refresh pending → final.
+    ------------------------------------------------------------------ */
+    (function () {
+      function getParam(name) {
+        var url = new URL(window.location.href);
+        return url.searchParams.get(name) || '';
+      }
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      var rawStatus = getParam('status').toLowerCase();
+      // Normalize: 'processing' renders as 'pending'; unknown → 'pending' (safer than 'failed').
+      var STATES = ['succeeded', 'pending', 'failed', 'cancelled', 'unsupported', 'unavailable'];
+      var status = rawStatus === 'processing' ? 'pending' : rawStatus;
+      if (STATES.indexOf(status) < 0) status = 'pending';
+
+      var orderId = getParam('orderId');
+      var provider = getParam('provider');
+      var errorMsg = getParam('error');
+      var isKa = document.documentElement.getAttribute('data-site-lang') === 'ka';
+
+      function t(en, ka) { return isKa && ka ? ka : en; }
+
+      var copy = {
+        succeeded: {
+          eyebrow: t('Payment received', 'გადახდა დადასტურდა'),
+          h1:      t('Thank you — your order is confirmed.', 'მადლობა — თქვენი შეკვეთა დადასტურდა.'),
+          lede:    t(
+            'We will contact you with shipping details and an estimated delivery window. A receipt has been sent to your bank.',
+            'მალე დაგიკავშირდებით მიწოდების დეტალებითა და სავარაუდო თარიღით. ქვითარი გამოგზავნილია თქვენი ბანკის სისტემიდან.'
+          ),
+          badge:   '<div class="badge badge--ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>',
+          primary: { href: '/sale/shop.html', label: t('Continue browsing', 'მაღაზიის გვერდი') },
+          ghost:   { href: '/', label: t('Back to home', 'მთავარი გვერდი') }
+        },
+        pending: {
+          eyebrow: t('Payment pending', 'გადახდა მუშავდება'),
+          h1:      t('We\u2019re confirming your payment with the bank.', 'ვამოწმებთ თქვენი გადახდის სტატუსს.'),
+          lede:    t(
+            'This usually takes a few seconds. You can safely close this tab — we will update your order once the bank confirms.',
+            'ამას ჩვეულებრივ რამდენიმე წამი სჭირდება. შეგიძლიათ უსაფრთხოდ დახუროთ ეს გვერდი — შეკვეთის სტატუსს განვაახლებთ ბანკის დადასტურების შემდეგ.'
+          ),
+          badge:   '<div class="badge badge--pending" aria-hidden="true"><div class="ring"></div></div>',
+          primary: { href: '#', label: t('Refresh status', 'სტატუსის განახლება'), action: 'refresh' },
+          ghost:   { href: '/support.html', label: t('Need help?', 'დახმარება') }
+        },
+        failed: {
+          eyebrow: t('Payment failed', 'გადახდა ვერ მოხერხდა'),
+          h1:      t('We couldn\u2019t complete your payment.', 'გადახდის დასრულება ვერ მოხერხდა.'),
+          lede:    t(
+            errorMsg || 'No charge was made. You can try again or contact us and we\u2019ll arrange a manual transfer.',
+            errorMsg || 'თანხა არ ჩამოგეჭრათ. სცადეთ თავიდან ან დაგვიკავშირდით ხელით გადარიცხვისთვის.'
+          ),
+          badge:   '<div class="badge badge--err" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></div>',
+          primary: { href: '/sale/shop.html', label: t('Try again', 'სცადეთ თავიდან') },
+          ghost:   { href: '/support.html', label: t('Contact us', 'დაგვიკავშირდით') }
+        },
+        cancelled: {
+          eyebrow: t('Payment cancelled', 'გადახდა გაუქმდა'),
+          h1:      t('You cancelled the payment.', 'თქვენ გააუქმეთ გადახდა.'),
+          lede:    t(
+            'No charge was made and your cart is still here. You can resume checkout whenever you\u2019re ready.',
+            'თანხა არ ჩამოგეჭრათ და თქვენი კალათა შენახულია. შეგიძლიათ შეკვეთა გააგრძელოთ ნებისმიერ დროს.'
+          ),
+          badge:   '<div class="badge badge--info" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1.5 14a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2L5 6"/></svg></div>',
+          primary: { href: '/sale/shop.html', label: t('Back to shop', 'მაღაზიის გვერდი') },
+          ghost:   { href: '/', label: t('Home', 'მთავარი') }
+        },
+        unsupported: {
+          eyebrow: t('Currency not supported', 'ვალუტა ხელმიუწვდომელია'),
+          h1:      t('That currency isn\u2019t supported by this payment method yet.', 'ეს ვალუტა ჯერ მხარდაჭერილი არ არის.'),
+          lede:    t(
+            'Please contact us via WhatsApp and we\u2019ll arrange a direct transfer in a supported currency.',
+            'გთხოვთ, დაგვიკავშირდით WhatsApp-ით — გადარიცხვას მოვაწყობთ ხელით.'
+          ),
+          badge:   '<div class="badge badge--info" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>',
+          primary: { href: 'https://wa.me/995579388833', label: t('Message on WhatsApp', 'WhatsApp-ით კავშირი') },
+          ghost:   { href: '/', label: t('Back to home', 'მთავარი') }
+        },
+        unavailable: {
+          eyebrow: t('Provider unavailable', 'მიმწოდებელი ხელმიუწვდომელია'),
+          h1:      t('This payment method isn\u2019t active right now.', 'ეს გადახდის მეთოდი ჯერ აქტიური არ არის.'),
+          lede:    t(
+            'You can still complete your order via WhatsApp — we\u2019ll share bank details directly and confirm shipping.',
+            'შეგიძლიათ შეკვეთა დაასრულოთ WhatsApp-ით — ბანკის რეკვიზიტებს გავიზიარებთ პირადად.'
+          ),
+          badge:   '<div class="badge badge--info" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>',
+          primary: { href: 'https://wa.me/995579388833', label: t('Message on WhatsApp', 'WhatsApp-ით კავშირი') },
+          ghost:   { href: '/sale/shop.html', label: t('Back to shop', 'მაღაზიის გვერდი') }
+        }
+      };
+
+      var c = copy[status];
+
+      var receiptHtml = '';
+      if (orderId || provider) {
+        receiptHtml = '<div class="receipt">';
+        if (orderId) {
+          receiptHtml += '<span>' + escapeHtml(t('Order', 'შეკვეთა')) + ' </span><code>' + escapeHtml(orderId) + '</code>';
+        }
+        if (orderId && provider) receiptHtml += ' · ';
+        if (provider) {
+          receiptHtml += '<span>' + escapeHtml(t('via', 'საშუალებით')) + ' </span><code>' + escapeHtml(provider) + '</code>';
+        }
+        receiptHtml += '</div>';
+      }
+
+      var primaryAttrs = c.primary.action === 'refresh'
+        ? ' id="nvPayPrimary"'
+        : ' href="' + escapeHtml(c.primary.href) + '"';
+      var primaryTag = c.primary.action === 'refresh' ? 'button' : 'a';
+      var primaryClass = c.primary.action === 'refresh' ? 'cta primary' : 'cta primary';
+
+      var html =
+        c.badge +
+        '<span class="eyebrow">' + escapeHtml(c.eyebrow) + '</span>' +
+        '<h1>' + escapeHtml(c.h1) + '</h1>' +
+        '<p class="lede">' + escapeHtml(c.lede) + '</p>' +
+        receiptHtml +
+        '<div class="cta-row">' +
+          '<' + primaryTag + ' class="' + primaryClass + '"' + primaryAttrs + '>' + escapeHtml(c.primary.label) + '</' + primaryTag + '>' +
+          '<a class="cta ghost" href="' + escapeHtml(c.ghost.href) + '">' + escapeHtml(c.ghost.label) + '</a>' +
+        '</div>' +
+        '<nav class="meta-links" aria-label="More">' +
+          '<a href="/">' + escapeHtml(t('Home', 'მთავარი')) + '</a>·' +
+          '<a href="/sale/shop.html">' + escapeHtml(t('Shop', 'მაღაზია')) + '</a>·' +
+          '<a href="/support.html">' + escapeHtml(t('Contact', 'კონტაქტი')) + '</a>·' +
+          '<a href="/terms.html">' + escapeHtml(t('Terms', 'წესები')) + '</a>' +
+        '</nav>';
+
+      document.getElementById('nvPayPanel').innerHTML = html;
+
+      // Pending state: wire the Refresh button. If the payments client is
+      // configured, defer to its poll; otherwise just reload.
+      if (status === 'pending') {
+        var btn = document.getElementById('nvPayPrimary');
+        if (btn) {
+          btn.addEventListener('click', function () {
+            if (window.nvPayments && typeof window.nvPayments.refreshStatus === 'function' && orderId) {
+              window.nvPayments.refreshStatus(orderId).then(function (next) {
+                if (next && next.status && next.status !== status) {
+                  var url = new URL(window.location.href);
+                  url.searchParams.set('status', next.status);
+                  window.location.replace(url.toString());
+                } else {
+                  window.location.reload();
+                }
+              }).catch(function () { window.location.reload(); });
+            } else {
+              window.location.reload();
+            }
+          });
+        }
+      }
+
+      // Tag the document for analytics-friendly status labels.
+      try { document.documentElement.setAttribute('data-pay-status', status); } catch (_) {}
+    })();
+  </script>
+</body>
+</html>

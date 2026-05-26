@@ -341,17 +341,23 @@ async function fetchShopArtworks(limit = null) {
     const data = await res.json();
 
     const result = data.result || [];
-    if (!result.length) {
-      console.warn('[shop] 0 results — raw Sanity response:', JSON.stringify(data));
-    } else {
-      console.log('[shop] Sanity returned', result.length, 'Nini Mzhavia artworks');
-      const _h = {};
-      result.forEach(x => {
-        const k = String(x.status == null ? '(missing)' : x.status);
-        _h[k] = (_h[k] || 0) + 1;
-      });
-      console.log('[shop] fetchShopArtworks status histogram (CDN raw):', _h);
-      console.log('[shop] Expected GROQ statuses: sale, sold, published. If histogram is only sold, load is likely a cached sanity-client without published in the query.');
+    // Diagnostic logging — useful during development but pure noise in a
+    // visitor's DevTools console on production. Gate everything behind a
+    // global flag so it stays one-line to re-enable when debugging:
+    //   window.NV_DEBUG = true; before this script runs.
+    if (window.NV_DEBUG) {
+      if (!result.length) {
+        console.warn('[shop] 0 results — raw Sanity response:', JSON.stringify(data));
+      } else {
+        console.log('[shop] Sanity returned', result.length, 'Nini Mzhavia artworks');
+        const _h = {};
+        result.forEach(x => {
+          const k = String(x.status == null ? '(missing)' : x.status);
+          _h[k] = (_h[k] || 0) + 1;
+        });
+        console.log('[shop] fetchShopArtworks status histogram (CDN raw):', _h);
+        console.log('[shop] Expected GROQ statuses: sale, sold, published. If histogram is only sold, load is likely a cached sanity-client without published in the query.');
+      }
     }
     if (result.length) cacheSet(_cKey, result);
     return result;

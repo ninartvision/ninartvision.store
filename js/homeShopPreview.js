@@ -105,6 +105,15 @@ async function initHomeShopPreview() {
 
   if (!track) return;
 
+  // Paint shimmer placeholders while the Sanity fetch is in flight. Without
+  // this the homepage shop carousel is a blank rectangle for ~300–800ms on
+  // a cold load, which reads as "site is broken" on slow connections. The
+  // helper is defined in sanity-client.js which sits earlier in the same
+  // idle-loaded batch, so it's available by the time we reach this code.
+  if (typeof window.nvSkeleton === 'function') {
+    window.nvSkeleton(track, 3);
+  }
+
   const carouselRoot = track.closest('[data-home-shop-carousel]');
 
   let items = [];

@@ -4,5 +4,6 @@
 User-agent: *
 Disallow: /admin.html
 Disallow: /sanity-diagnostic.html
+Disallow: /pay-status.html
 
 Sitemap: https://ninartvision.store/sitemap.xml

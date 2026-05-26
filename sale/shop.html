@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    /* Pre-paint language hint — see index.html for full rationale. */
+    (function () {
+      try {
+        var l = localStorage.getItem("siteLang") || "ka";
+        l = l === "en" ? "en" : "ka";
+        document.documentElement.setAttribute("lang", l);
+        document.documentElement.setAttribute("data-site-lang", l);
+      } catch (_) {}
+    })();
+  </script>
   <title>Shop Original Paintings | Ninart Vision</title>
   <meta name="description" content="Browse and purchase original acrylic paintings by contemporary Georgian artists. Filter by artist, view available and sold artworks. Direct purchase via WhatsApp.">
   <meta name="robots" content="index, follow">
