@@ -5299,16 +5299,29 @@ a.pill:visited{
   margin-top: 14px;
   margin-bottom: 0;
   padding-bottom: 2px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  align-content: flex-start;
+  /* Compact, uniformly-sized gallery grid. The previous flex layout
+     combined with the ancestor's `.product-thumb { width:100% }` rule
+     stretched every thumbnail to fill the column, which made the
+     "More photos" section look oversized once it expanded. Switching
+     to an explicit 4-column grid (3 on phones) keeps the additional
+     images small, balanced and aligned regardless of how many photos
+     the artwork has, while preserving the accordion fade/slide
+     animation below. */
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
   opacity: 0;
   transform: translateY(-8px);
   transition:
     opacity 0.42s ease 0.06s,
     transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
+}
+
+@media (max-width: 600px){
+  .product-buy #productThumbs.product-thumbs{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
 }
 
 .product-buy #productThumbsShell.is-open #productThumbs.product-thumbs{
@@ -5317,7 +5330,17 @@ a.pill:visited{
 }
 
 .product-buy #productThumbs .product-thumb{
-  border-radius: 16px;
+  /* Square, compact preview tiles. Overrides the looser `.product-layout
+     .product-thumb { aspect-ratio: 4/3 }` rule so every artwork —
+     portrait, landscape or square — yields a uniform thumb size and
+     the gallery stays visually tidy. */
+  width: 100%;
+  height: auto;
+  max-width: none;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
   box-shadow: 0 4px 14px rgba(38, 28, 22, 0.07);
 }
 
@@ -7388,6 +7411,18 @@ a.pill:visited{
   justify-content: space-between;
   gap: 40px;
   margin-bottom: 30px;
+}
+
+/* Shop header copy — match the rest of the site's typography for Georgian
+   content. Without this, `.section-top p.muted.small` inherits the body's
+   `Arial, Helvetica, sans-serif` stack, which has no native Georgian glyphs
+   and forces the browser to fall back to a system Georgian face that looks
+   visibly different from the FiraGO used in the search bar, cart drawer,
+   product modal and homepage editorial ledes. Scoping to `.shop-header`
+   keeps this change confined to the Shop page and does not alter any other
+   `.section-top` block on the site. */
+.shop-header .section-top p{
+  font-family: "FiraGO", "Fira Sans", "DejaVu Sans", system-ui, -apple-system, sans-serif;
 }
 
 /* Filter buttons row */
