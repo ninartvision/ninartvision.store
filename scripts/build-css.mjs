@@ -15,10 +15,17 @@ const minPath = path.join(root, 'style.min.css');
 
 const modalImportRe = /^@import\s+url\(['"]\.\/css\/nv-gallery-modal\.css['"]\);\s*\n/m;
 const cartImportRe = /^@import\s+url\(['"]\.\/css\/nv-cart-drawer\.css['"]\);\s*\n/m;
+const fontsImportRe = /^@import\s+url\(['"]https:\/\/fonts\.googleapis\.com\/css2\?family=Cormorant\+Garamond[^'"]+['"]\);\s*\n/m;
 
 let style = fs.readFileSync(stylePath, 'utf8');
 const modalCss = fs.readFileSync(modalPath, 'utf8');
 const cartCss = fs.readFileSync(cartPath, 'utf8');
+
+let fontsImport = '';
+if (fontsImportRe.test(style)) {
+  fontsImport = style.match(fontsImportRe)[0];
+  style = style.replace(fontsImportRe, '');
+}
 
 let prefix = '';
 if (modalImportRe.test(style)) {
@@ -38,5 +45,10 @@ if (prefix) style = prefix + style;
 fs.writeFileSync(bundledPath, style, 'utf8');
 execSync(`npx cleancss -o "${minPath}" "${bundledPath}"`, { cwd: root, stdio: 'inherit' });
 fs.unlinkSync(bundledPath);
+
+if (fontsImport) {
+  const minCss = fs.readFileSync(minPath, 'utf8');
+  fs.writeFileSync(minPath, fontsImport + minCss, 'utf8');
+}
 
 console.log('✓ style.min.css (modal + cart drawer CSS inlined, no @import)');

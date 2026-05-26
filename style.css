@@ -1,5 +1,6 @@
 @import url('./css/nv-gallery-modal.css');
 @import url('./css/nv-cart-drawer.css');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap');
 
 *{ margin:0; padding:0; box-sizing:border-box; }
 .is-hidden{ display:none !important; }
@@ -7485,6 +7486,16 @@ a.pill:visited{
    `.section-top` block on the site. */
 .shop-header .section-top p{
   font-family: "FiraGO", "Fira Sans", "DejaVu Sans", system-ui, -apple-system, sans-serif;
+}
+
+/* Shop page title — match homepage `.editorial-heading__title` exactly */
+.shop-header .section-top h2 {
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5.35vw, 3.35rem);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  color: #1a1514;
 }
 
 /* Filter buttons row */
