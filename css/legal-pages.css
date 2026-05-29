@@ -1,0 +1,237 @@
+/* Legal / policy pages — bank compliance layout */
+
+.legal-page {
+  padding-top: 100px;
+  padding-bottom: 48px;
+}
+
+.legal-page .container {
+  max-width: 760px;
+}
+
+.legal-page h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+  color: #1a1514;
+}
+
+.legal-page__meta {
+  color: #7a7268;
+  font-size: 0.95rem;
+  margin: 0 0 2rem;
+}
+
+.legal-page__company {
+  background: linear-gradient(135deg, #faf8f5 0%, #f3ede5 100%);
+  border: 1px solid rgba(58, 48, 40, 0.1);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.legal-page__company dt {
+  font-weight: 600;
+  color: #3a3028;
+  margin-top: 0.65rem;
+}
+
+.legal-page__company dt:first-child {
+  margin-top: 0;
+}
+
+.legal-page__company dd {
+  margin: 0.15rem 0 0;
+  color: #4a423c;
+}
+
+.legal-section {
+  margin-bottom: 2rem;
+}
+
+.legal-section h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  color: #1a1514;
+}
+
+.legal-section p,
+.legal-section li {
+  line-height: 1.75;
+  color: #3a3530;
+}
+
+.legal-section ul,
+.legal-section ol {
+  margin: 0.75rem 0 0;
+  padding-left: 1.35rem;
+}
+
+.legal-section li + li {
+  margin-top: 0.35rem;
+}
+
+.legal-page__back {
+  display: inline-block;
+  margin-top: 2rem;
+  color: #7a7268;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.legal-page__back:hover,
+.legal-page__back:focus-visible {
+  color: #b8956e;
+  border-bottom-color: rgba(184, 149, 110, 0.45);
+}
+
+.legal-page__payments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.legal-page__payments img {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .legal-page__payments img {
+    height: 42px;
+  }
+}
+
+.contact-cards {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+@media (min-width: 560px) {
+  .contact-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.contact-card {
+  background: #faf8f5;
+  border: 1px solid rgba(58, 48, 40, 0.1);
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+}
+
+.contact-card h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7a7268;
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+}
+
+.contact-card p,
+.contact-card a {
+  margin: 0;
+  font-size: 1rem;
+  color: #1a1514;
+}
+
+.contact-card a {
+  text-decoration: underline;
+  text-decoration-color: rgba(184, 149, 110, 0.45);
+  text-underline-offset: 3px;
+}
+
+.contact-card a:hover,
+.contact-card a:focus-visible {
+  color: #b8956e;
+}
+
+/* Footer — legal links + payment badges */
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.site-footer__links a {
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+
+.site-footer__payments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 14px;
+  margin-bottom: 1rem;
+}
+
+.site-footer__payments img {
+  height: 28px;
+  width: auto;
+  display: block;
+  filter: brightness(1.05);
+}
+
+@media (min-width: 640px) {
+  .site-footer__payments img {
+    height: 32px;
+  }
+}
+
+.site-footer__copy {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
+
+/* Cart drawer — card network logos */
+.nv-cart-drawer__cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 14px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 252, 248, 0.85);
+  border: 1px solid rgba(58, 48, 40, 0.08);
+  border-radius: 10px;
+}
+
+.nv-cart-drawer__cards-label {
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7a7268;
+  margin: 0 0 2px;
+}
+
+.nv-cart-drawer__cards img {
+  height: 26px;
+  width: auto;
+  display: block;
+}
+
+@media (min-width: 380px) {
+  .nv-cart-drawer__cards img {
+    height: 30px;
+  }
+}

@@ -26,6 +26,7 @@
 
   <link rel="stylesheet" href="./style.min.css?v=nv20260527" />
   <link rel="stylesheet" href="./css/terms-page.css?v=nv20260622" />
+  <link rel="stylesheet" href="./css/legal-pages.css?v=nv20260529" />
   <link rel="icon" href="./images/favicon.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,6 +93,21 @@
           <span class="terms-hero__line"></span>
         </div>
         <p class="terms-hero__lede">წესები და პირობები · ბოლო განახლება 2026</p>
+      </div>
+    </section>
+
+    <section class="terms-body" aria-label="კომპანიის ინფორმაცია">
+      <div class="terms-body__inner">
+        <dl class="legal-page__company" data-terms-reveal style="max-width:720px;margin:0 auto 2rem;">
+          <dt>სრული დასახელება / Legal name</dt>
+          <dd>შ.პ.ს. „ნინართ ვიჟენ" / Ninart Vision LLC</dd>
+          <dt>საიდენტიფიკაციო კოდი / ID code</dt>
+          <dd data-nv-legal-field="identificationCode">—</dd>
+          <dt>პროდუქტი / Service</dt>
+          <dd>ორიგინალური ქართული ხელოვნება — ნახატები და ხელოვნების ნამუშევრები ონლაინ მაღაზიით</dd>
+          <dt>საკონტაქტო / Contact</dt>
+          <dd><a href="contact.html">contact.html</a> · <a href="mailto:ninartvision@gmail.com">ninartvision@gmail.com</a> · <a href="tel:+995579388833">+995 579 388 833</a></dd>
+        </dl>
       </div>
     </section>
 
@@ -209,12 +225,28 @@
                 <span class="terms-card__exp-icon" aria-hidden="true"><svg class="terms-card__chevron" viewBox="0 0 24 24" focusable="false"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
               </header>
               <div class="terms-card__body">
+                <p>გადახდის მეთოდები:</p>
+                <ul>
+                  <li>Visa და Mastercard ბარათით ონლაინ გადახდა (TBC Bank / Bank of Georgia)</li>
+                  <li>ბანკის გადარიცხვა</li>
+                  <li>WhatsApp-ით შეთანხმებული გადახდა</li>
+                </ul>
+                <div class="legal-page__payments" aria-label="Accepted cards">
+                  <img src="./images/payments/visa.svg" alt="Visa" width="78" height="50" loading="lazy" decoding="async">
+                  <img src="./images/payments/mastercard.svg" alt="Mastercard" width="78" height="50" loading="lazy" decoding="async">
+                </div>
                 <p>გადახდის დეტალები მომხმარებელთან ინდივიდუალურად შეთანხმდება შეკვეთის დადასტურებისას.</p>
                 <p>ყველა შეკვეთა მუშავდება მხოლოდ შეთანხმების შემდეგ.</p>
               </div>
             </div>
             <div class="terms-card__translate" id="terms-t-04" role="region" aria-labelledby="terms-title-04" aria-hidden="true">
               <div class="terms-card__translate-inner terms-card__body terms-card__body--en" lang="en">
+                <p>Payment methods:</p>
+                <ul>
+                  <li>Online card payment via Visa and Mastercard (TBC Bank / Bank of Georgia)</li>
+                  <li>Bank transfer</li>
+                  <li>Payment arranged via WhatsApp</li>
+                </ul>
                 <p>Payment details are agreed individually with the customer upon order confirmation.</p>
                 <p>Every order is processed only after mutual agreement has been reached.</p>
               </div>
@@ -353,12 +385,22 @@
   </main>
 
   <footer class="site-footer" aria-label="Site footer">
-    <div class="container">
-      <p>&copy; 2026 Ninart Vision &middot; <a href="./">Home</a> &middot; <a href="support.html">Contact</a></p>
-    </div>
+    <div class="container"><p>&copy; 2026 Ninart Vision</p></div>
   </footer>
 
+  <script defer src="./js/nv-legal-info.min.js?v=nv20260529"></script>
   <script defer src="./script.min.js?v=nv20260527"></script>
+  <script>
+    (function () {
+      var L = window.NV_LEGAL;
+      if (!L) return;
+      document.querySelectorAll('[data-nv-legal-field]').forEach(function (el) {
+        var key = el.getAttribute('data-nv-legal-field');
+        var val = L[key];
+        if (val) el.textContent = val;
+      });
+    })();
+  </script>
   <script>
     (function () {
       var items = document.querySelectorAll('[data-terms-reveal]');

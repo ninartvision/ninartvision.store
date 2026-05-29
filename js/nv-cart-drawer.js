@@ -165,6 +165,11 @@
       '<span class="nv-cart-drawer__subtotal-label">Subtotal</span>' +
       '<span class="nv-cart-drawer__subtotal-val" id="nvCartSubtotal">₾0</span>' +
       '</div>' +
+      '<div class="nv-cart-drawer__cards" aria-label="Accepted payment methods">' +
+      '<p class="nv-cart-drawer__cards-label">Visa · Mastercard</p>' +
+      '<img src="/images/payments/visa.svg" alt="Visa" width="78" height="50" loading="lazy" decoding="async">' +
+      '<img src="/images/payments/mastercard.svg" alt="Mastercard" width="78" height="50" loading="lazy" decoding="async">' +
+      '</div>' +
       /* The bank buttons currently start a WhatsApp confirmation flow —
          the backend payment gateway (TBC / BOG) isn't activated yet.
          When `js/nv-payments-client.js` is configured with

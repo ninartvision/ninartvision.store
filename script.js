@@ -110,11 +110,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const src = ref?.getAttribute("src") || "script.min.js";
     const dir = src.includes("/") ? src.replace(/[^/]+$/, "") : "";
     const jsBase = dir.includes("js/") ? dir : dir + "js/";
-    const el = document.createElement("script");
-    el.src = jsBase + "nv-cart-drawer.min.js?v=nv20260609";
-    el.defer = true;
-    el.dataset.nvCartDrawer = "1";
-    document.head.appendChild(el);
+    const load = (file, dataAttr) => {
+      if (document.querySelector('script[data-' + dataAttr + ']')) return;
+      const el = document.createElement('script');
+      el.src = jsBase + file;
+      el.defer = true;
+      el.setAttribute('data-' + dataAttr, '1');
+      document.head.appendChild(el);
+    };
+    load('nv-legal-info.min.js?v=nv20260529', 'nv-legal-info');
+    load('nv-site-footer.min.js?v=nv20260529', 'nv-site-footer');
+    load('nv-cart-drawer.min.js?v=nv20260609', 'nv-cart-drawer');
   })();
 
   const fmtPrice = p => {
