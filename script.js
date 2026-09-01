@@ -293,6 +293,64 @@ document.addEventListener("DOMContentLoaded", () => {
         link.addEventListener("click", () => closeMobileMenu());
       });
 
+      const setupMobileInfoGroup = () => {
+        const menuList = menuOverlay.querySelector(".menu-links");
+        if (!menuList || menuList.querySelector(".mobile-info-group")) return;
+
+        const infoGroup = document.createElement("div");
+        infoGroup.className = "mobile-info-group";
+        infoGroup.setAttribute("data-open", "false");
+
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "mobile-info-toggle";
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-controls", "mobileInfoLinks");
+        toggle.innerHTML = `
+          <span>Information</span>
+          <span class="mobile-info-toggle__chevron" aria-hidden="true">▾</span>
+        `;
+
+        const infoLinks = document.createElement("div");
+        infoLinks.className = "mobile-info-links";
+        infoLinks.id = "mobileInfoLinks";
+        infoLinks.hidden = true;
+
+        [
+          { label: "Terms", href: "terms.html" },
+          { label: "Shipping", href: "shipping.html" },
+          { label: "Returns", href: "returns.html" },
+          { label: "Contact", href: "contact.html" }
+        ].forEach(({ label, href }) => {
+          const link = document.createElement("a");
+          link.href = href;
+          link.className = "menu-link mobile-info-link";
+          link.textContent = label;
+          link.addEventListener("click", () => closeMobileMenu());
+          infoLinks.appendChild(link);
+        });
+
+        toggle.addEventListener("click", () => {
+          const isOpen = infoGroup.dataset.open === "true";
+          infoGroup.dataset.open = String(!isOpen);
+          toggle.setAttribute("aria-expanded", String(!isOpen));
+          infoLinks.hidden = isOpen;
+          infoGroup.classList.toggle("is-open", !isOpen);
+        });
+
+        infoGroup.appendChild(toggle);
+        infoGroup.appendChild(infoLinks);
+
+        const social = menuList.querySelector(".menu-social");
+        if (social) {
+          menuList.insertBefore(infoGroup, social);
+        } else {
+          menuList.appendChild(infoGroup);
+        }
+      };
+
+      setupMobileInfoGroup();
+
       // Close only when tapping/clicking the backdrop itself.
       menuOverlay.addEventListener("click", (ev) => {
         if (ev.target === menuOverlay) {

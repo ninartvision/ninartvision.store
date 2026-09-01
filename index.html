@@ -197,21 +197,17 @@ src="https://www.facebook.com/tr?id=930087760077667&ev=PageView&noscript=1"
   </script>
 
 
-  <!-- Preconnect to external origins before everything else -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://www.gstatic.com">
   <link rel="dns-prefetch" href="https://cdn.sanity.io">
 
-  <!-- Preload only the exact LCP image candidate to avoid duplicate downloads -->
-  <link rel="preload" as="image" href="./images/garden9.avif" type="image/avif" fetchpriority="high">
+  <!-- Use the existing WebP asset for the homepage hero so the LCP image never 404s under restricted network conditions -->
+  <link rel="preload" as="image" href="./images/garden9.webp" type="image/webp" fetchpriority="high">
 
   <!-- Critical above-the-fold CSS inlined to prevent FOUC while full CSS loads async -->
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     html{overflow-x:hidden;max-width:100%;scroll-behavior:auto;-webkit-text-size-adjust:100%;text-size-adjust:100%}
     html.loaded{scroll-behavior:smooth}
-    body{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;overflow-x:hidden;width:100%;position:relative}
+    body{font-family:"FiraGO","Fira Sans","DejaVu Sans","Segoe UI",Arial,Helvetica,sans-serif;color:#000;background:#fff;overflow-x:hidden;width:100%;position:relative}
     /* Anchor reset — prevents brief user-agent blue/underlined link flash before async style.min.css loads. The full stylesheet overrides per-class colors. */
     a,a:visited{color:inherit;text-decoration:none}
     img,video{max-width:100%;height:auto}
@@ -413,7 +409,7 @@ src="https://www.facebook.com/tr?id=930087760077667&ev=PageView&noscript=1"
 
   <link rel="icon" type="image/webp" href="./images/favicon.webp">
   <link rel="shortcut icon" type="image/webp" href="./images/favicon.webp">
-  <link rel="apple-touch-icon" href="./images/icon.jpg">
+  <link rel="apple-touch-icon" href="./images/icon.webp">
   <!-- Web app manifest — controls install / "Add to Home Screen" identity on
        Android, iOS Safari and Chromium desktops. The earlier
        `theme-color: #000000` further up the head was paired with this and
@@ -424,9 +420,7 @@ src="https://www.facebook.com/tr?id=930087760077667&ev=PageView&noscript=1"
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-  <!-- Google Fonts loaded non-blocking (font-display:swap already set via &display=swap) -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=FiraGO:wght@400;600;700;800;900&display=swap"></noscript>
+  <!-- Keep typography self-contained so the site remains stable when Google Fonts are blocked or unavailable. -->
 
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-1H7SY0J2EB"></script>
@@ -609,7 +603,6 @@ src="https://www.facebook.com/tr?id=930087760077667&ev=PageView&noscript=1"
     <!-- First slide: fetchpriority=high for LCP, no lazy loading -->
     <div class="slide active">
       <picture>
-        <source srcset="./images/garden9.avif" type="image/avif">
         <source srcset="./images/garden9.webp" type="image/webp">
         <img src="./images/garden9.webp" alt="Garden painting by Nini Mzhavia — original acrylic on canvas" width="1500" height="1875" fetchpriority="high" decoding="async" loading="eager">
       </picture>
@@ -729,6 +722,9 @@ src="https://www.facebook.com/tr?id=930087760077667&ev=PageView&noscript=1"
 
   <div class="hero-inner">
   <div class="hero-content">
+    <div class="hero-cta-wrap">
+      <a class="hero-primary-cta" href="sale/shop.html">View Artworks</a>
+    </div>
   </div>
 </div>
 
@@ -817,7 +813,7 @@ src="https://www.facebook.com/tr?id=930087760077667&ev=PageView&noscript=1"
               <img src="./images/me6.webp" alt="Roseslover project" loading="lazy" decoding="async" width="800" height="835">
             </picture>
             <div class="card-body">
-              <h3>„Roseslover"</h3>
+              <h3>Roseslover</h3>
               <p class="muted">A tender rose composition in warm pastel tones.</p>
               <span class="link">Read more →</span>
             </div>
@@ -828,7 +824,7 @@ src="https://www.facebook.com/tr?id=930087760077667&ev=PageView&noscript=1"
               <img src="./images/me5.webp" alt="Origin of Nature project" loading="lazy" decoding="async" width="800" height="1067">
             </picture>
             <div class="card-body">
-              <h3>„The Origin of Nature“ – „ბუნების საწყისი“</h3>
+              <h3>The Origin of Nature — ბუნების საწყისი</h3>
               <p class="muted">An abstract exploration of nature’s awakening energy.</p>
               <span class="link">Read more →</span>
             </div>
@@ -919,13 +915,12 @@ src="https://www.facebook.com/tr?id=930087760077667&ev=PageView&noscript=1"
 
   </div>
 
-  <a href="sale/shop.html" class="nv-gallery-entrance" aria-label="Gallery → — CLICK HERE">
+  <a href="sale/shop.html" class="nv-gallery-entrance" aria-label="View the Gallery">
     <div class="nv-gallery-entrance__surface">
       <div class="nv-gallery-entrance__content">
         <span class="nv-gallery-entrance__title">
-          Gallery&nbsp;<span class="nv-gallery-entrance__arrow" aria-hidden="true">→</span>
+          View the Gallery&nbsp;<span class="nv-gallery-entrance__arrow" aria-hidden="true">→</span>
         </span>
-        <span class="nv-gallery-entrance__sub" data-en="CLICK HERE" data-ka="CLICK HERE">CLICK HERE</span>
       </div>
     </div>
   </a>

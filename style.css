@@ -1,6 +1,12 @@
+/* Font loading is intentionally local-only to avoid blocked Google requests.
+   If an external font is unavailable, the browser falls back to system UI stacks. */
+:root {
+  --font-sans: "FiraGO", "Fira Sans", "DejaVu Sans", "Segoe UI", Arial, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+}
+
 @import url('./css/nv-gallery-modal.css');
 @import url('./css/nv-cart-drawer.css');
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap');
 
 *{ margin:0; padding:0; box-sizing:border-box; }
 .is-hidden{ display:none !important; }
@@ -477,6 +483,62 @@ img, video {
   font-weight: 400;
 }
 
+.hero-slider .hero-cta-wrap{
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.hero-slider .hero-primary-cta{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+  padding: 15px 30px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  color: #fff;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  line-height: 1;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.hero-slider .hero-primary-cta::before{
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+  z-index: 0;
+}
+
+.hero-slider .hero-primary-cta:hover,
+.hero-slider .hero-primary-cta:focus-visible{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 18px 36px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.hero-slider .hero-primary-cta:focus-visible{
+  outline: 2px solid rgba(255,255,255,0.85);
+  outline-offset: 3px;
+}
+
+.hero-slider .hero-primary-cta{
+  position: relative;
+  z-index: 1;
+}
+
 /* Navigation Arrows - Mobile optimized */
 .as-arrow{
   position: absolute;
@@ -745,6 +807,200 @@ img, video {
 .section-gray{
   background:#f4f4f4;
 }
+
+/* Homepage-only visual refinement pass (warm editorial gallery styling) */
+:root{
+  --nv-home-bg: #f7f3ee;
+  --nv-home-ink: #1d1a17;
+  --nv-home-muted: #5d5049;
+  --nv-home-line: rgba(29, 26, 23, 0.09);
+  --nv-home-card: rgba(255, 255, 255, 0.78);
+  --nv-home-accent: #a87d5b;
+  --nv-home-accent-soft: rgba(168, 125, 91, 0.16);
+  --nv-home-shadow: 0 14px 34px rgba(31, 25, 20, 0.06);
+}
+
+body{
+  background: var(--nv-home-bg);
+  color: var(--nv-home-ink);
+}
+
+.section,
+.section-featured-projects,
+#artists.section,
+#news.section,
+#about.section{
+  padding-top: clamp(54px, 7vw, 82px);
+  padding-bottom: clamp(50px, 6vw, 74px);
+}
+
+.section-featured-projects .editorial-heading__eyebrow,
+.home-shop-preview .editorial-heading__eyebrow,
+#artists .editorial-heading__eyebrow,
+#news .editorial-heading__eyebrow,
+#about .editorial-heading__eyebrow{
+  color: var(--nv-home-accent);
+  letter-spacing: 0.18em;
+}
+
+.section-featured-projects .editorial-heading__title,
+.home-shop-preview .editorial-heading__title,
+#artists .editorial-heading__title,
+#news .editorial-heading__title,
+#about .editorial-heading__title{
+  color: var(--nv-home-ink);
+  text-shadow: none;
+}
+
+.card,
+.shop-item,
+.artist-card,
+.news-item{
+  background: var(--nv-home-card);
+  border: 1px solid var(--nv-home-line);
+  border-radius: 18px;
+  box-shadow: var(--nv-home-shadow);
+}
+
+.card:hover,
+.shop-item:hover,
+.artist-card:hover{
+  box-shadow: 0 16px 38px rgba(31, 25, 20, 0.08);
+  border-color: rgba(29, 26, 23, 0.12);
+}
+
+.card img,
+.shop-item img,
+.artist-card img{
+  border-radius: 18px 18px 0 0;
+  background: #f6f1eb;
+}
+
+.card-body,
+.shop-meta{
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.card-body h3{
+  font-size: clamp(1.08rem, 1vw + 0.7rem, 1.4rem);
+  line-height: 1.26;
+  letter-spacing: -0.015em;
+  color: var(--nv-home-ink);
+  margin-bottom: 8px;
+}
+
+.card-body .muted,
+.shop-meta span:first-child,
+.shop-meta .price,
+.editorial-heading__lede,
+#about .about-mission-body__text,
+#artists .editorial-heading__lede{
+  color: var(--nv-home-muted);
+}
+
+.preview-btn,
+#artists .btn,
+.home-shop-preview .btn,
+.btn,
+.nav-btn{
+  border-radius: 999px;
+  border: 1px solid var(--nv-home-line);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.preview-btn.active,
+#artists .btn:hover,
+.home-shop-preview .btn:hover,
+.btn-dark:hover,
+.hero-slider .hero-primary-cta:hover{
+  box-shadow: 0 12px 22px rgba(29, 26, 23, 0.1);
+}
+
+.preview-btn.active{
+  background: var(--nv-home-ink);
+  border-color: var(--nv-home-ink);
+  color: #f8f3ee;
+}
+
+.preview-btn,
+#artists .btn,
+.home-shop-preview .btn,
+.btn-light{
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--nv-home-ink);
+}
+
+.home-shop-preview .home-shop-expand-rule__base,
+.section-featured-projects .editorial-heading__rule.editorial-rule .editorial-rule__base,
+#artists .editorial-heading__rule.editorial-rule .editorial-rule__base,
+#news .editorial-heading__rule.editorial-rule .editorial-rule__base,
+#about .editorial-heading__rule.editorial-rule .editorial-rule__base{
+  background: linear-gradient(90deg, rgba(234, 217, 201, 0.58) 0%, rgba(169, 129, 97, 0.9) 48%, rgba(234, 217, 201, 0.56) 100%);
+}
+
+.home-shop-preview .home-shop-expand-rule__shimmer,
+.section-featured-projects .editorial-heading__rule.editorial-rule .editorial-rule__shimmer,
+#artists .editorial-heading__rule.editorial-rule .editorial-rule__shimmer,
+#news .editorial-heading__rule.editorial-rule .editorial-rule__shimmer,
+#about .editorial-heading__rule.editorial-rule .editorial-rule__shimmer{
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.58) 42%, rgba(255,255,255,0.22) 52%, rgba(255,255,255,0.62) 58%, transparent 100%);
+}
+
+#homeShopGrid .shop-item,
+.shop-grid-small .shop-item{
+  margin-bottom: 0;
+}
+
+#homeShopGrid .shop-meta,
+.shop-grid-small .shop-meta{
+  padding: 12px 12px 14px;
+  align-items: center;
+}
+
+#homeShopGrid .shop-meta span:first-child,
+.shop-grid-small .shop-meta span:first-child{
+  color: var(--nv-home-ink);
+  font-weight: 600;
+}
+
+#homeShopGrid .shop-meta .price,
+.shop-grid-small .shop-meta .price{
+  color: var(--nv-home-muted);
+  font-weight: 700;
+}
+
+#artists.section,
+#news.section,
+#about.section{
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(249,242,234,0.68) 100%);
+}
+
+#artists .btn{
+  margin-top: 18px;
+}
+
+@media (max-width: 900px){
+  .section,
+  .section-featured-projects,
+  #artists.section,
+  #news.section,
+  #about.section{
+    padding-top: clamp(46px, 9vw, 62px);
+    padding-bottom: clamp(42px, 8vw, 58px);
+  }
+
+  .card,
+  .shop-item{
+    border-radius: 16px;
+  }
+
+  .card img,
+  .shop-item img{
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+/* Homepage-only visual refinement pass end */
 
 /* ─── Featured Projects: editorial luxury heading ─── */
 @keyframes nv-editorial-rise{
@@ -7124,6 +7380,62 @@ a.pill:visited{
     color: #111;
     text-decoration: none;
     font-weight: 600;
+  }
+
+  .mobile-info-group {
+    width: min(100%, 420px);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .mobile-info-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    padding: 16px 18px;
+    color: #111;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mobile-info-toggle__chevron {
+    font-size: 20px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+
+  .mobile-info-group.is-open .mobile-info-toggle__chevron {
+    transform: rotate(180deg);
+  }
+
+  .mobile-info-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(248, 245, 242, 0.9);
+    border-top: 1px solid rgba(17, 17, 17, 0.06);
+  }
+
+  .mobile-info-link {
+    width: 100%;
+    padding: 14px 18px;
+    border-top: 1px solid rgba(17, 17, 17, 0.06);
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: none;
   }
 
   /* Artists რომ აღარ იყოს ლურჯი */
