@@ -24,12 +24,12 @@
       cls +
       '" src="' +
       root +
-      'images/payments/visa.svg" alt="Visa" width="78" height="50" loading="lazy" decoding="async">' +
+      'images/payments/visa.svg" alt="Visa" width="140" height="70" loading="lazy" decoding="async">' +
       '<img class="' +
       cls +
       '" src="' +
       root +
-      'images/payments/mastercard.svg" alt="Mastercard" width="78" height="50" loading="lazy" decoding="async">'
+      'images/payments/mastercard.svg" alt="Mastercard" width="140" height="70" loading="lazy" decoding="async">'
     );
   }
 

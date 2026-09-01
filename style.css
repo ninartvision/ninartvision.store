@@ -9781,17 +9781,18 @@ svg { overflow: hidden; }
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 10px 14px;
+  gap: 8px 10px;
   margin-bottom: 1rem;
 }
 .site-footer__payments img{
-  height: 28px;
-  width: auto;
+  height: 70px;
+  width: 140px;
+  max-width: 140px;
   display: block;
   filter: brightness(1.05);
 }
 @media (min-width: 640px){
-  .site-footer__payments img{ height: 32px; }
+  .site-footer__payments img{ height: 70px; width: 140px; max-width: 140px; }
 }
 .site-footer__copy{
   font-size: 12px;

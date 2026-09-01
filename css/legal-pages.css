@@ -101,19 +101,21 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 8px 10px;
   margin-top: 1rem;
 }
 
 .legal-page__payments img {
-  height: 36px;
+  height: 68px;
   width: auto;
+  max-width: 118px;
   display: block;
 }
 
 @media (min-width: 640px) {
   .legal-page__payments img {
-    height: 42px;
+    height: 72px;
+    max-width: 124px;
   }
 }
 
@@ -214,15 +216,18 @@
 }
 
 .site-footer__payments img {
-  height: 28px;
-  width: auto;
+  height: 70px;
+  width: 140px;
+  max-width: 140px;
   display: block;
   filter: brightness(1.05);
 }
 
 @media (min-width: 640px) {
   .site-footer__payments img {
-    height: 32px;
+    height: 70px;
+    width: 140px;
+    max-width: 140px;
   }
 }
 
@@ -257,13 +262,16 @@
 }
 
 .nv-cart-drawer__cards img {
-  height: 26px;
-  width: auto;
+  height: 70px;
+  width: 140px;
+  max-width: 140px;
   display: block;
 }
 
 @media (min-width: 380px) {
   .nv-cart-drawer__cards img {
-    height: 30px;
+    height: 70px;
+    width: 140px;
+    max-width: 140px;
   }
 }

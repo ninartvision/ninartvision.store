@@ -167,8 +167,8 @@
       '</div>' +
       '<div class="nv-cart-drawer__cards" aria-label="Accepted payment methods">' +
       '<p class="nv-cart-drawer__cards-label">Visa · Mastercard</p>' +
-      '<img src="/images/payments/visa.svg" alt="Visa" width="78" height="50" loading="lazy" decoding="async">' +
-      '<img src="/images/payments/mastercard.svg" alt="Mastercard" width="78" height="50" loading="lazy" decoding="async">' +
+      '<img src="/images/payments/visa.svg" alt="Visa" width="140" height="70" loading="lazy" decoding="async">' +
+      '<img src="/images/payments/mastercard.svg" alt="Mastercard" width="140" height="70" loading="lazy" decoding="async">' +
       '</div>' +
       /* The bank buttons currently start a WhatsApp confirmation flow —
          the backend payment gateway (TBC / BOG) isn't activated yet.
