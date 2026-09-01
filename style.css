@@ -1,5 +1,32 @@
-/* Font loading is intentionally local-only to avoid blocked Google requests.
-   If an external font is unavailable, the browser falls back to system UI stacks. */
+/* Font loading is intentionally local-only and uses the historical Cormorant Garamond font files bundled in this repo.
+   This restores the original English editorial typography without any external Google Fonts request. */
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url('./fonts/cormorant-garamond/cormorant-garamond-latin-500-normal.woff2') format('woff2'),
+       url('./fonts/cormorant-garamond/cormorant-garamond-latin-500-normal.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url('./fonts/cormorant-garamond/cormorant-garamond-latin-600-normal.woff2') format('woff2'),
+       url('./fonts/cormorant-garamond/cormorant-garamond-latin-600-normal.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url('./fonts/cormorant-garamond/cormorant-garamond-latin-700-normal.woff2') format('woff2'),
+       url('./fonts/cormorant-garamond/cormorant-garamond-latin-700-normal.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --font-sans: "FiraGO", "Fira Sans", "DejaVu Sans", "Segoe UI", Arial, sans-serif;
   --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
@@ -1084,9 +1111,9 @@ body{
   --fp-ink-muted: rgba(72, 64, 58, 0.76);
   --fp-accent: rgba(154, 96, 74, 0.88);
   --fp-accent-soft: rgba(198, 148, 122, 0.42);
-  --fp-eyebrow: rgba(148, 108, 90, 0.82);
-  --fp-eyebrow-rule: rgba(198, 165, 142, 0.48);
-  --fp-lede-subtle: rgba(58, 52, 46, 0.58);
+  --fp-eyebrow: rgba(154, 129, 111, 0.82);
+  --fp-eyebrow-rule: rgba(207, 182, 162, 0.44);
+  --fp-lede-subtle: rgba(92, 85, 79, 0.58);
 }
 
 .home-shop-preview.section{
@@ -1155,8 +1182,8 @@ body{
   margin: 0 0 clamp(7px, 1vw, 11px);
   font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   font-size: clamp(11px, 1.05vw, 13px);
-  font-weight: 600;
-  letter-spacing: 0.28em;
+  font-weight: 500;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--fp-eyebrow);
 }
@@ -1178,10 +1205,10 @@ body{
 #news .editorial-heading__title,
 #about .editorial-heading__title{
   font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: clamp(2.2rem, 5.35vw, 3.35rem);
   line-height: 1.06;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   color: var(--fp-ink);
   margin: 0 0 clamp(7px, 1vw, 11px);
   transition: text-shadow 0.55s ease, color 0.35s ease;
@@ -1211,7 +1238,7 @@ body{
   font-size: clamp(12px, 1.18vw, 15px);
   line-height: 1.35;
   letter-spacing: 0.02em;
-  color: var(--fp-lede-subtle);
+  color: rgba(110, 104, 98, 0.82);
   max-width: 100%;
   margin: 0;
   font-weight: 400;
