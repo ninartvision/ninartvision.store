@@ -5169,6 +5169,31 @@ a.pill:visited{
   box-shadow: 0 6px 16px rgba(0,0,0,0.3), 0 2px 6px rgba(0,0,0,0.2);
 }
 
+.preview-btn::after{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border:1px solid rgba(169,129,97,0.48);
+  border-radius:inherit;
+  opacity:0;
+  transform:scale(0.94);
+  pointer-events:none;
+}
+
+@keyframes nv-preview-tab-cue{
+  0%{opacity:0;transform:scale(0.94)}
+  32%{opacity:0.72;transform:scale(1)}
+  100%{opacity:0;transform:scale(1.12)}
+}
+
+.home-shop-preview .editorial-heading[data-editorial-reveal].editorial-heading--inview ~ .preview-tabs .preview-btn::after{
+  animation:nv-preview-tab-cue 0.9s ease-out 0.16s 2 both;
+}
+
+.home-shop-preview .editorial-heading[data-editorial-reveal].editorial-heading--inview ~ .preview-tabs .preview-btn:nth-child(2)::after{
+  animation-delay:0.34s;
+}
+
 /* Disable lift effect on touch devices for better mobile UX */
 @media (hover: none) {
   .preview-btn:hover{
@@ -5589,6 +5614,9 @@ a.pill:visited{
 }
 
 @media (prefers-reduced-motion: reduce){
+  .preview-btn::after{
+    animation:none !important;
+  }
   .home-shop-preview .nv-gallery-entrance__surface,
   .home-shop-preview .nv-gallery-entrance__surface::before,
   .home-shop-preview .nv-gallery-entrance__surface::after,
