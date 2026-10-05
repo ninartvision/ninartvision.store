@@ -5,26 +5,26 @@
 (function () {
   var SEO = {
     ka: {
-      title: 'Ninart Vision | ქართველი მხატვრები · ორიგინალური ნახატები',
+      title: 'Ninart Vision-ის გალერეა | ქართველი მხატვარი ნინი მჟავია',
       description:
-        'ქართველი მხატვრების ორიგინალური ნახატები. თანამედროვე ხელოვნება, კოლექციური ნამუშევრები და ხელით შექმნილი ნაწარმოები.',
-      ogTitle: 'Ninart Vision · ქართველი მხატვრები & Original Art',
+        'დაათვალიერეთ ქართველი მხატვრის, ნინი მჟავიას ნახატები Ninart Vision-ის გალერეაში. გაეცანით მის ხელოვნებას და თითოეული ნამუშევრის ისტორიას.',
+      ogTitle: 'Ninart Vision-ის გალერეა | ქართველი მხატვარი ნინი მჟავია',
       ogDescription:
-        'ორიგინალური ნახატები ქართველი მხატვრებისგან. თანამედროვე ხელოვნება და კოლექციური ნამუშევრები.',
+        'დაათვალიერეთ ქართველი მხატვრის, ნინი მჟავიას ნახატები Ninart Vision-ის გალერეაში. გაეცანით მის ხელოვნებას და თითოეული ნამუშევრის ისტორიას.',
       locale: 'ka_GE',
       keywords:
         'Ninart Vision, თანამედროვე ხელოვნება, თანამედროვე ქართული ხელოვნება, ქართველი მხატვრები, ორიგინალური ნახატები, კოლექციური ნამუშევრები, თანამედროვე სანახავ',
     },
     en: {
-      title: 'Ninart Vision | Georgian Artists & Original Paintings',
+      title: 'Ninart Vision Gallery | Georgian Artist Nini Mzhavia',
       description:
-        'Original paintings by Georgian artists. Contemporary art, modern art gallery and collectible handcrafted artworks.',
-      ogTitle: 'Ninart Vision · Georgian Artists & Original Art',
+        'Explore paintings by Georgian artist Nini Mzhavia in the Ninart Vision gallery. View her artwork and discover the stories behind each piece.',
+      ogTitle: 'Ninart Vision Gallery | Georgian Artist Nini Mzhavia',
       ogDescription:
-        'Original paintings by Georgian artists. Contemporary art, modern gallery & collectible handcrafted artworks.',
+        'Explore paintings by Georgian artist Nini Mzhavia in the Ninart Vision gallery. View her artwork and discover the stories behind each piece.',
       locale: 'en_US',
       keywords:
-        'Ninart Vision, Georgian contemporary art, Georgian artists, original paintings, modern art gallery, collectible artworks, contemporary art, handcrafted artworks',
+        'Ninart Vision gallery, Nini Mzhavia, Georgian artist, paintings, original artwork',
     },
   };
 
