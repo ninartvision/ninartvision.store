@@ -5172,22 +5172,23 @@ a.pill:visited{
 .preview-btn::after{
   content:"";
   position:absolute;
-  inset:-4px;
-  border:1px solid rgba(169,129,97,0.48);
+  inset:-5px;
+  border:2px solid rgba(154,96,74,0.68);
   border-radius:inherit;
   opacity:0;
-  transform:scale(0.94);
+  transform:scale(0.88);
+  box-shadow:0 0 0 2px rgba(198,148,122,0.12);
   pointer-events:none;
 }
 
 @keyframes nv-preview-tab-cue{
-  0%{opacity:0;transform:scale(0.94)}
-  32%{opacity:0.72;transform:scale(1)}
-  100%{opacity:0;transform:scale(1.12)}
+  0%{opacity:0;transform:scale(0.88)}
+  24%{opacity:0.96;transform:scale(1)}
+  100%{opacity:0;transform:scale(1.2)}
 }
 
 .home-shop-preview .editorial-heading[data-editorial-reveal].editorial-heading--inview ~ .preview-tabs .preview-btn::after{
-  animation:nv-preview-tab-cue 0.9s ease-out 0.16s 2 both;
+  animation:nv-preview-tab-cue 1.15s ease-out 0.16s 2 both;
 }
 
 .home-shop-preview .editorial-heading[data-editorial-reveal].editorial-heading--inview ~ .preview-tabs .preview-btn:nth-child(2)::after{
