@@ -322,7 +322,7 @@ if (statusEl) {
 
       // Update SEO meta tags
       window.updateSEO(Object.assign({}, artist, {
-        canonicalUrl: 'https://ninartvision.store/artists/artist.html?artist=' + encodeURIComponent(artistSlug)
+        canonicalUrl: 'https://ninartvision.com/artists/artist.html?artist=' + encodeURIComponent(artistSlug)
       }))
       window.injectSchema('person', artist)
 

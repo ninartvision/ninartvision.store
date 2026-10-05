@@ -1,4 +1,4 @@
-# Ninart Vision — https://ninartvision.store/
+# Ninart Vision — https://ninartvision.com/
 # Public static site; block tooling and admin-only pages from indexing.
 
 User-agent: *
@@ -6,4 +6,4 @@ Disallow: /admin.html
 Disallow: /sanity-diagnostic.html
 Disallow: /pay-status.html
 
-Sitemap: https://ninartvision.store/sitemap.xml
+Sitemap: https://ninartvision.com/sitemap.xml

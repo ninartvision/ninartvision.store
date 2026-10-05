@@ -153,7 +153,7 @@ function buildPage(a) {
   // OG image: 1200×630, cropped — used by WhatsApp / Facebook crawlers
   const ogImage = rawImgUrl
     ? sanityImg(rawImgUrl, { w: 1200, h: 630, fit: 'crop', q: 85 })
-    : 'https://ninartvision.store/images/og-image.png';
+    : 'https://ninartvision.com/images/og-image.png';
 
   // Display image: full-width on the page
   const displayImg = rawImgUrl ? sanityImg(rawImgUrl, { w: 900, q: 85 }) : '';
@@ -163,7 +163,7 @@ function buildPage(a) {
   const imgDimAttr =
     iw && ih ? ` width="${Number(iw)}" height="${Number(ih)}"` : '';
 
-  const pageUrl  = `https://ninartvision.store/products/${slug}/`;
+  const pageUrl  = `https://ninartvision.com/products/${slug}/`;
   const price    = fmtPrice(a.price);
   const isSold   = String(a.status || '').toLowerCase() === 'sold';
   const phone    = a.artist?.whatsapp || '995579388833';

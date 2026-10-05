@@ -1,6 +1,6 @@
 # Ninart Vision — Backend API
 
-Provider-agnostic order & payment service for `ninartvision.store`. Built so future TBC Bank and Bank of Georgia integrations can be plugged in without rewriting the rest of the backend.
+Provider-agnostic order & payment service for `ninartvision.com`. Built so future TBC Bank and Bank of Georgia integrations can be plugged in without rewriting the rest of the backend.
 
 The static storefront under `/` keeps shipping to GitHub Pages — this backend lives in its own workspace and gets deployed independently (Render, Railway, Fly.io, a small VPS — anywhere that runs Node 20+).
 
@@ -225,8 +225,8 @@ PAYMENTS_DEFAULT_PROVIDER=tbc
 Hand the bank's onboarding portal the URL `${PAYMENTS_WEBHOOK_BASE_URL or PUBLIC_API_URL}/v1/webhooks/<provider>`. For example:
 
 ```
-https://api.ninartvision.store/v1/webhooks/tbc
-https://api.ninartvision.store/v1/webhooks/bog
+https://api.ninartvision.com/v1/webhooks/tbc
+https://api.ninartvision.com/v1/webhooks/bog
 ```
 
 Both banks reject `http://`. Both expect a 200 response with no body content — the server already does that.
@@ -244,7 +244,7 @@ curl -s -X POST $API/v1/orders -H 'content-type: application/json' \
 
 # 6b. Start a TBC payment for it
 curl -s -X POST $API/v1/payments -H 'content-type: application/json' \
-  -d '{"orderId":"<id>","provider":"tbc","returnUrl":"https://ninartvision.store/sale/shop.html?paid=1"}'
+  -d '{"orderId":"<id>","provider":"tbc","returnUrl":"https://ninartvision.com/sale/shop.html?paid=1"}'
 
 # Response → { payment: { redirectUrl: 'https://...tbc.../checkout/...' } }
 # Open it in a browser, complete sandbox payment → webhook fires → order.status moves to "paid".
@@ -260,7 +260,7 @@ The frontend reads `GET /v1/providers` and renders a button per enabled provider
 
 ## Production checklist
 
-- [ ] Set `NODE_ENV=production`, `PUBLIC_API_URL=https://api.ninartvision.store`, `WEB_ORIGINS=https://ninartvision.store`.
+- [ ] Set `NODE_ENV=production`, `PUBLIC_API_URL=https://api.ninartvision.com`, `WEB_ORIGINS=https://ninartvision.com`.
 - [ ] Set `PAYMENTS_WEBHOOK_BASE_URL` if your webhook host differs from the API host (otherwise omit and it falls back to `PUBLIC_API_URL`).
 - [ ] Run `npm run check:env` — every provider you intend to use must show `READY`.
 - [ ] Configure `FIREBASE_PROJECT_ID` + `FIREBASE_SERVICE_ACCOUNT_JSON` for protected routes.

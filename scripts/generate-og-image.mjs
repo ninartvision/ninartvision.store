@@ -19,7 +19,7 @@ const H = 630;
 
 const TITLE = 'Ninart Vision';
 const SUBTITLE = 'Original Contemporary Art by Georgian Artists';
-const DOMAIN = 'NINARTVISION.STORE';
+const DOMAIN = 'NINARTVISION.COM';
 
 const SERIF_STACK = 'Cormorant Garamond, Didot, Playfair Display, Georgia, serif';
 const SANS_STACK = 'Helvetica Neue, Arial, sans-serif';

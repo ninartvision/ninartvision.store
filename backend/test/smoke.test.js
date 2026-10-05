@@ -83,7 +83,7 @@ test('orders → payments (manual provider) happy path', async (t) => {
   // 4) Initiate a payment (no provider specified → falls back to manual)
   const payRes = await jsonRequest(port, 'POST', '/v1/payments', {
     orderId,
-    returnUrl: 'https://ninartvision.store/sale/shop.html?paid=1',
+    returnUrl: 'https://ninartvision.com/sale/shop.html?paid=1',
   });
   assert.equal(payRes.status, 201, `unexpected status: ${JSON.stringify(payRes.body)}`);
   assert.equal(payRes.body.payment.provider, 'manual');

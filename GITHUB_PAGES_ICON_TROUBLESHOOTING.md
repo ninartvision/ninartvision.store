@@ -2,7 +2,7 @@
 
 ## Current Deployment
 - **Repository**: https://github.com/ninartvision/ninartvision.git
-- **Custom Domain**: ninartvision.store
+- **Custom Domain**: ninartvision.com
 - **Icon Type**: Inline SVG (not external files or Font Awesome)
 
 ---
@@ -203,12 +203,12 @@ git push origin master
 
 ### 8. Custom Domain HTTPS Issues
 
-**Your Domain**: ninartvision.store
+**Your Domain**: ninartvision.com
 
 **Check**:
 1. Go to repository Settings → Pages
 2. Verify "Enforce HTTPS" is checked ✅
-3. Verify custom domain is set to: `ninartvision.store`
+3. Verify custom domain is set to: `ninartvision.com`
 4. Wait 24-48 hours for DNS propagation if just set up
 
 **Test Direct GitHub URL**:
@@ -225,8 +225,8 @@ If works there but not on custom domain → DNS/HTTPS issue
 ### Step 1: Verify Files Are Deployed
 Visit these URLs directly:
 ```
-https://ninartvision.store/style.css
-https://ninartvision.store/index.html
+https://ninartvision.com/style.css
+https://ninartvision.com/index.html
 ```
 
 **Expected**: CSS file should download/display
@@ -235,7 +235,7 @@ https://ninartvision.store/index.html
 ---
 
 ### Step 2: Check Browser Console
-1. Open your GitHub Pages site: https://ninartvision.store
+1. Open your GitHub Pages site: https://ninartvision.com
 2. Press `F12` (Developer Tools)
 3. Go to **Console** tab
 4. Look for errors like:
@@ -319,7 +319,7 @@ If external factors are blocking CSS, add inline styles as backup:
 1. Go to: https://github.com/ninartvision/ninartvision/settings/pages
 2. **Source**: Should be "Deploy from a branch"
 3. **Branch**: Should be `main` or `master`, folder: `/ (root)`
-4. **Custom domain**: `ninartvision.store`
+4. **Custom domain**: `ninartvision.com`
 5. **Enforce HTTPS**: ✅ Checked
 
 ---
@@ -334,7 +334,7 @@ Before asking for help, verify:
 - [ ] Tried hard refresh (`Ctrl + Shift + R`)
 - [ ] Tested in Incognito/Private mode
 - [ ] Checked browser console for errors
-- [ ] Verified CSS loads: `https://ninartvision.store/style.css`
+- [ ] Verified CSS loads: `https://ninartvision.com/style.css`
 - [ ] CSS selectors match HTML attributes exactly
 - [ ] No typos in `aria-label` attributes
 
@@ -377,7 +377,7 @@ git push origin main
 # Press: Ctrl + Shift + R (Windows) or Cmd + Shift + R (Mac)
 
 # 6. Test direct CSS URL
-# Visit: https://ninartvision.store/style.css
+# Visit: https://ninartvision.com/style.css
 ```
 
 ---
@@ -416,5 +416,5 @@ git status
 ---
 
 **Generated**: January 31, 2026  
-**For**: Ninart Vision (ninartvision.store)  
+**For**: Ninart Vision (ninartvision.com)  
 **Issue**: Social media icon colors missing on GitHub Pages

@@ -434,7 +434,7 @@
 
   function formatCartLine(it, index) {
     const addonStr = addonLabels(it).join(', ');
-    const url = it.slug ? 'https://ninartvision.store/products/' + it.slug + '/' : '';
+    const url = it.slug ? 'https://ninartvision.com/products/' + it.slug + '/' : '';
     const parts = [
       index + 1 + '. ' + (it.title || 'Artwork'),
       it.size ? 'ზომა: ' + it.size : '',

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const tpl = fs.readFileSync(path.join(root, 'scripts', 'project-redirect.html'), 'utf8');
-const base = 'https://ninartvision.store';
+const base = 'https://ninartvision.com';
 
 const redirects = {
   'project1.html': `${base}/products/svaneti-svaneti/`,

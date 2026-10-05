@@ -316,7 +316,7 @@
 
       const rawSlug = payload.slug || slugify(payload.title || '');
       const productUrl = rawSlug
-        ? `https://ninartvision.store/products/${rawSlug}/`
+        ? `https://ninartvision.com/products/${rawSlug}/`
         : global.location.href;
 
       if (this._currentItem) this._currentItem._productUrl = productUrl;

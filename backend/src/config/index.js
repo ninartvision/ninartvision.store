@@ -148,7 +148,7 @@ function buildManualConfig(env) {
     supportedCurrencies: csv(env.MANUAL_SUPPORTED_CURRENCIES, ['GEL', 'USD', 'EUR']),
     instructionsUrl:
       env.MANUAL_PAYMENT_INSTRUCTIONS_URL?.trim() ||
-      'https://ninartvision.store/terms.html',
+      'https://ninartvision.com/terms.html',
   };
 }
 

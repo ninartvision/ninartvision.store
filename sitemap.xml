@@ -3,146 +3,146 @@
 
   <!-- Core pages -->
   <url>
-    <loc>https://ninartvision.store/</loc>
+    <loc>https://ninartvision.com/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.00</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/sale/shop.html</loc>
+    <loc>https://ninartvision.com/sale/shop.html</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/gallery.html</loc>
+    <loc>https://ninartvision.com/gallery.html</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/artists/index.html</loc>
+    <loc>https://ninartvision.com/artists/index.html</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/artists/nini.html</loc>
+    <loc>https://ninartvision.com/artists/nini.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/artists/mzia.html</loc>
+    <loc>https://ninartvision.com/artists/mzia.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/artists/nanuli.html</loc>
+    <loc>https://ninartvision.com/artists/nanuli.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/artists/artist.html</loc>
+    <loc>https://ninartvision.com/artists/artist.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/about.html</loc>
+    <loc>https://ninartvision.com/about.html</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/news.html</loc>
+    <loc>https://ninartvision.com/news.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.72</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/support.html</loc>
+    <loc>https://ninartvision.com/support.html</loc>
     <lastmod>2026-05-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://ninartvision.store/contact.html</loc>
+    <loc>https://ninartvision.com/contact.html</loc>
     <lastmod>2026-05-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/privacy.html</loc>
+    <loc>https://ninartvision.com/privacy.html</loc>
     <lastmod>2026-05-19</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.40</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/terms.html</loc>
+    <loc>https://ninartvision.com/terms.html</loc>
     <lastmod>2026-05-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.40</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/shipping.html</loc>
+    <loc>https://ninartvision.com/shipping.html</loc>
     <lastmod>2026-05-19</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.45</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/returns.html</loc>
+    <loc>https://ninartvision.com/returns.html</loc>
     <lastmod>2026-05-19</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.40</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/room-visualizer.html</loc>
+    <loc>https://ninartvision.com/room-visualizer.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/project.html</loc>
+    <loc>https://ninartvision.com/project.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/project3.html</loc>
+    <loc>https://ninartvision.com/project3.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/project4.html</loc>
+    <loc>https://ninartvision.com/project4.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/project7.html</loc>
+    <loc>https://ninartvision.com/project7.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
@@ -150,245 +150,245 @@
 
   <!-- Product pages -->
   <url>
-    <loc>https://ninartvision.store/products/bashi-1/</loc>
+    <loc>https://ninartvision.com/products/bashi-1/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/bashi-2/</loc>
+    <loc>https://ninartvision.com/products/bashi-2/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/blacksea-2/</loc>
+    <loc>https://ninartvision.com/products/blacksea-2/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/daffodils/</loc>
+    <loc>https://ninartvision.com/products/daffodils/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/forest/</loc>
+    <loc>https://ninartvision.com/products/forest/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/jvari-monastery/</loc>
+    <loc>https://ninartvision.com/products/jvari-monastery/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/jvari-monastery-1/</loc>
+    <loc>https://ninartvision.com/products/jvari-monastery-1/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/jvari-monastery-2/</loc>
+    <loc>https://ninartvision.com/products/jvari-monastery-2/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/leaves-1/</loc>
+    <loc>https://ninartvision.com/products/leaves-1/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/lechxumi/</loc>
+    <loc>https://ninartvision.com/products/lechxumi/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/lechxumi-1/</loc>
+    <loc>https://ninartvision.com/products/lechxumi-1/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/lechxumi-2/</loc>
+    <loc>https://ninartvision.com/products/lechxumi-2/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/lechxumi-3/</loc>
+    <loc>https://ninartvision.com/products/lechxumi-3/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/lechxumi-4/</loc>
+    <loc>https://ninartvision.com/products/lechxumi-4/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/lilac/</loc>
+    <loc>https://ninartvision.com/products/lilac/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/magical-world/</loc>
+    <loc>https://ninartvision.com/products/magical-world/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/naturmort/</loc>
+    <loc>https://ninartvision.com/products/naturmort/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/old-house-4/</loc>
+    <loc>https://ninartvision.com/products/old-house-4/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/old-village-house/</loc>
+    <loc>https://ninartvision.com/products/old-village-house/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/river-1/</loc>
+    <loc>https://ninartvision.com/products/river-1/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/scarlet-glow-3/</loc>
+    <loc>https://ninartvision.com/products/scarlet-glow-3/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/sea/</loc>
+    <loc>https://ninartvision.com/products/sea/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/sea-2/</loc>
+    <loc>https://ninartvision.com/products/sea-2/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/sea-waves-1/</loc>
+    <loc>https://ninartvision.com/products/sea-waves-1/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/silent-bloom/</loc>
+    <loc>https://ninartvision.com/products/silent-bloom/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/svaneti-svaneti/</loc>
+    <loc>https://ninartvision.com/products/svaneti-svaneti/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/theatre/</loc>
+    <loc>https://ninartvision.com/products/theatre/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/theatre-1/</loc>
+    <loc>https://ninartvision.com/products/theatre-1/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/theatre-2/</loc>
+    <loc>https://ninartvision.com/products/theatre-2/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/theatre-3/</loc>
+    <loc>https://ninartvision.com/products/theatre-3/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/the-feast-of-the-deer/</loc>
+    <loc>https://ninartvision.com/products/the-feast-of-the-deer/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/the-way-to-the-monastery/</loc>
+    <loc>https://ninartvision.com/products/the-way-to-the-monastery/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/village/</loc>
+    <loc>https://ninartvision.com/products/village/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/village-1/</loc>
+    <loc>https://ninartvision.com/products/village-1/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://ninartvision.store/products/village-6/</loc>
+    <loc>https://ninartvision.com/products/village-6/</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>

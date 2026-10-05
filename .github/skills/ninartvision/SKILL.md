@@ -1,6 +1,6 @@
 ---
 name: ninartvision
-description: 'Expert context for the Ninart Vision website (ninartvision.store) — a Georgian art portfolio, gallery, and store. Use for: adding pages, editing HTML/CSS/JS, Sanity CMS queries, adding artists or artworks, modifying the shop, updating design, understanding page connections, lang switcher, analytics, service worker, or any change to this specific project. Triggers: ninartvision, ninart, artist page, shop, gallery, Georgian art site, add artwork, add artist, sanity schema, update nav.'
+description: 'Expert context for the Ninart Vision website (ninartvision.com) — a Georgian art portfolio, gallery, and store. Use for: adding pages, editing HTML/CSS/JS, Sanity CMS queries, adding artists or artworks, modifying the shop, updating design, understanding page connections, lang switcher, analytics, service worker, or any change to this specific project. Triggers: ninartvision, ninart, artist page, shop, gallery, Georgian art site, add artwork, add artist, sanity schema, update nav.'
 argument-hint: 'What do you want to build or change on the Ninart Vision site?'
 ---
 
@@ -8,12 +8,12 @@ argument-hint: 'What do you want to build or change on the Ninart Vision site?'
 
 ## Project Identity
 
-**Ninart Vision** (`ninartvision.store`) is an independent art platform for contemporary Georgian painters.
+**Ninart Vision** (`ninartvision.com`) is an independent art platform for contemporary Georgian painters.
 Three combined roles: **Portfolio** · **Store** · **Editorial**
 
 - Primary artist: **Nini Mzhavia**; Secondary artists: Mzia Kashia, Nanuli Gogiberidze
 - Prices in **Georgian Lari (₾)**; purchase via **WhatsApp** (no payment processor)
-- Hosted on **GitHub Pages** with a `CNAME` pointing to `ninartvision.store`
+- Hosted on **GitHub Pages** with a `CNAME` pointing to `ninartvision.com`
 - Languages: **Georgian (KA) primary**, English (EN) secondary
 
 ---

@@ -36,7 +36,7 @@ function escapeAttr(s) {
     .replace(/'/g, '&#39;');
 }
 
-/** Project card href: https on ninartvision.store / www, or same-site relative path (no javascript:/data:). */
+/** Project card href: https on ninartvision.com / www, or same-site relative path (no javascript:/data:). */
 function sanitizeProjectHref(raw) {
   const s = String(raw ?? '').trim();
   if (!s) return '';
@@ -46,7 +46,7 @@ function sanitizeProjectHref(raw) {
       const u = new URL(s);
       if (u.protocol !== 'https:') return '';
       const h = u.hostname.toLowerCase();
-      if (h !== 'ninartvision.store' && h !== 'www.ninartvision.store') return '';
+      if (h !== 'ninartvision.com' && h !== 'www.ninartvision.com') return '';
       return u.href;
     } catch {
       return '';

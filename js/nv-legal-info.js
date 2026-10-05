@@ -21,7 +21,7 @@
     phoneDisplay: '+995 579 388 833',
     phoneHref: '995579388833',
     email: 'ninartvision@gmail.com',
-    website: 'https://ninartvision.store',
+    website: 'https://ninartvision.com',
     lastUpdated: '2026-05-29',
     productDescriptionKa:
       'ორიგინალური ქართული ხელოვნება — ნახატები, ტაპისტრი და ხელოვნების ნამუშევრები ონლაინ მაღაზიით; შეკვეთა, მიწოდება და ონლაინ გადახდა.',

@@ -440,7 +440,7 @@ git push origin main
 
 3. **Test on production**:
 ```
-https://ninartvision.store
+https://ninartvision.com
 ```
 
 4. **Hard refresh** to bypass cache:

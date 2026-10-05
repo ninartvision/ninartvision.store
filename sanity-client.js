@@ -446,7 +446,7 @@ const _seoRefs = {}; // cached element refs — avoids repeated DOM queries
 function updateSEO(data) {
   data = data || {};
   const SITE    = 'Ninart Vision';
-  const DEFIMG  = 'https://ninartvision.store/images/og-image.png';
+  const DEFIMG  = 'https://ninartvision.com/images/og-image.png';
   const DEFDESC = 'Discover original Georgian art on Ninart Vision.';
   const BASE_KW = 'Georgian art, original paintings, contemporary art, Georgian artists, Ninart Vision';
   const SUFFIX  = ' | ' + SITE;            // 16 chars
@@ -606,7 +606,7 @@ function nvError(el, msg, retryFn) {
      window.injectSchema('artwork', artworkData);
      window.injectSchema('article', postsArray);
 -------------------------------------------------- */
-const _SITE_URL = 'https://ninartvision.store';
+const _SITE_URL = 'https://ninartvision.com';
 
 function _buildSchema(type, d) {
   if (!d || typeof d !== 'object') return null;

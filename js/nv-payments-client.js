@@ -135,7 +135,7 @@
    * (`redirectUrl`) or an inline payment payload — depending on provider.
    *
    * Required fields: orderId, provider.
-   * Recommended: returnUrl (e.g. `https://ninartvision.store/pay-status.html?orderId=…`).
+   * Recommended: returnUrl (e.g. `https://ninartvision.com/pay-status.html?orderId=…`).
    */
   function initiate(input) {
     if (!input || !input.orderId || !input.provider) {
