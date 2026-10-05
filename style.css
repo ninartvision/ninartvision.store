@@ -1069,6 +1069,17 @@ body{
   }
 }
 
+@keyframes nv-editorial-rise-mobile{
+  from{
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes nv-editorial-rule-sweep{
   0%{
     background-position: 22% 50%;
@@ -1189,14 +1200,22 @@ body{
   animation: nv-editorial-rise 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
 }
 
+.section-featured-projects .editorial-heading[data-editorial-reveal],
+.home-shop-preview .editorial-heading[data-editorial-reveal],
+#artists .editorial-heading[data-editorial-reveal],
+#news .editorial-heading[data-editorial-reveal],
 #about .editorial-heading[data-editorial-reveal]{
   opacity: 0;
   transform: translateY(18px);
-  animation: none !important;
+  animation: none;
 }
 
+.section-featured-projects .editorial-heading[data-editorial-reveal].editorial-heading--inview,
+.home-shop-preview .editorial-heading[data-editorial-reveal].editorial-heading--inview,
+#artists .editorial-heading[data-editorial-reveal].editorial-heading--inview,
+#news .editorial-heading[data-editorial-reveal].editorial-heading--inview,
 #about .editorial-heading[data-editorial-reveal].editorial-heading--inview{
-  animation: nv-editorial-rise 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards !important;
+  animation: nv-editorial-rise 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
 }
 
 .section-featured-projects .editorial-heading__eyebrow,
@@ -1541,6 +1560,22 @@ body{
     nv-editorial-rule-sweep 58s ease-in-out 1.72s infinite alternate;
 }
 
+@media (max-width: 768px){
+  .section-featured-projects .editorial-heading[data-editorial-reveal].editorial-heading--inview,
+  .home-shop-preview .editorial-heading[data-editorial-reveal].editorial-heading--inview,
+  #artists .editorial-heading[data-editorial-reveal].editorial-heading--inview,
+  #news .editorial-heading[data-editorial-reveal].editorial-heading--inview,
+  #about .editorial-heading[data-editorial-reveal].editorial-heading--inview{
+    animation: nv-editorial-rise-mobile 0.78s cubic-bezier(0.22, 1, 0.36, 1) 0.04s both;
+  }
+
+  .editorial-rule:not(.editorial-rule--pointer).editorial-rule--mobile-inview .editorial-rule__shimmer{
+    animation:
+      nv-rule-mobile-shimmer 1.35s ease-out 0.24s forwards,
+      nv-editorial-rule-sweep 6.5s ease-in-out 1.5s 1 both;
+  }
+}
+
 .editorial-rule--pointer.editorial-rule--active .editorial-rule__shimmer{
   animation: none;
   opacity: calc(0.24 + var(--rule-proximity, 0) * 0.2);
@@ -1561,6 +1596,16 @@ body{
 }
 
 @media (prefers-reduced-motion: reduce){
+  .section-featured-projects .editorial-heading[data-editorial-reveal],
+  .home-shop-preview .editorial-heading[data-editorial-reveal],
+  #artists .editorial-heading[data-editorial-reveal],
+  #news .editorial-heading[data-editorial-reveal],
+  #about .editorial-heading[data-editorial-reveal]{
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
   .section-featured-projects .editorial-heading,
   .home-shop-preview .editorial-heading,
   #artists .editorial-heading,
