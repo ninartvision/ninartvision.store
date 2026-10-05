@@ -140,6 +140,13 @@
   let subtotalEl = null;
   let eventsBound = false;
 
+  function assetRoot() {
+    const path = String(global.location?.pathname || '/');
+    if (path.includes('/products/')) return '../../';
+    if (path.includes('/artists/') || path.includes('/sale/')) return '../';
+    return './';
+  }
+
   function mount() {
     if (document.getElementById('nvCartDrawer')) {
       root = document.getElementById('nvCartDrawer');
@@ -148,6 +155,7 @@
       return;
     }
 
+    const assets = assetRoot() + 'images/';
     const wrap = document.createElement('div');
     wrap.id = 'nvCartDrawer';
     wrap.className = 'nv-cart-drawer';
@@ -167,8 +175,8 @@
       '</div>' +
       '<div class="nv-cart-drawer__cards" aria-label="Accepted payment methods">' +
       '<p class="nv-cart-drawer__cards-label">Visa · Mastercard</p>' +
-      '<img src="/images/payments/visa.svg" alt="Visa" width="140" height="70" loading="lazy" decoding="async">' +
-      '<img src="/images/payments/mastercard.svg" alt="Mastercard" width="140" height="70" loading="lazy" decoding="async">' +
+      '<img src="' + assets + 'payments/visa.svg" alt="Visa" width="140" height="70" loading="lazy" decoding="async">' +
+      '<img src="' + assets + 'payments/mastercard.svg" alt="Mastercard" width="140" height="70" loading="lazy" decoding="async">' +
       '</div>' +
       /* The bank buttons currently start a WhatsApp confirmation flow —
          the backend payment gateway (TBC / BOG) isn't activated yet.
@@ -181,12 +189,12 @@
       '<div class="nv-cart-drawer__banks">' +
       '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--bog" id="nvCartPayBog" aria-label="საქართველოს ბანკი — დადასტურება WhatsApp-ით" title="Bank of Georgia — confirm on WhatsApp">' +
       '<span class="nv-cart-drawer__bank-logo">' +
-      '<img src="/images/nv-logo-bog.png" alt="საქართველოს ბანკი" width="140" height="40" loading="lazy" decoding="async">' +
+      '<img src="' + assets + 'nv-logo-bog.png" alt="საქართველოს ბანკი" width="140" height="40" loading="lazy" decoding="async">' +
       '</span>' +
       '</button>' +
       '<button type="button" class="nv-cart-drawer__bank nv-cart-drawer__bank--tbc" id="nvCartPayTbc" aria-label="თიბისი ბანკი — დადასტურება WhatsApp-ით" title="TBC Bank — confirm on WhatsApp">' +
       '<span class="nv-cart-drawer__bank-logo">' +
-      '<img src="/images/nv-logo-tbc.png" alt="თიბისი ბანკი" width="140" height="40" loading="lazy" decoding="async">' +
+      '<img src="' + assets + 'nv-logo-tbc.png" alt="თიბისი ბანკი" width="140" height="40" loading="lazy" decoding="async">' +
       '</span>' +
       '</button>' +
       '</div>' +

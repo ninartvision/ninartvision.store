@@ -42,6 +42,9 @@
       'terms.html">მომსახურების პირობები</a>' +
       '<a href="' +
       root +
+      'shipping.html">მიწოდება</a>' +
+      '<a href="' +
+      root +
       'privacy.html">კონფიდენციალურობა</a>' +
       '<a href="' +
       root +

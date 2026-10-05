@@ -7437,62 +7437,6 @@ a.pill:visited{
     font-weight: 600;
   }
 
-  .mobile-info-group {
-    width: min(100%, 420px);
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    background: rgba(255, 255, 255, 0.45);
-    border: 1px solid rgba(17, 17, 17, 0.08);
-    border-radius: 16px;
-    overflow: hidden;
-  }
-
-  .mobile-info-toggle {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: transparent;
-    border: none;
-    padding: 16px 18px;
-    color: #111;
-    font-size: 18px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .mobile-info-toggle__chevron {
-    font-size: 20px;
-    line-height: 1;
-    transition: transform 0.2s ease;
-  }
-
-  .mobile-info-group.is-open .mobile-info-toggle__chevron {
-    transform: rotate(180deg);
-  }
-
-  .mobile-info-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    background: rgba(248, 245, 242, 0.9);
-    border-top: 1px solid rgba(17, 17, 17, 0.06);
-  }
-
-  .mobile-info-link {
-    width: 100%;
-    padding: 14px 18px;
-    border-top: 1px solid rgba(17, 17, 17, 0.06);
-    font-size: 16px;
-    letter-spacing: 1px;
-    text-transform: none;
-  }
-
   /* Artists რომ აღარ იყოს ლურჯი */
   .menu-links a {
     color: #111;
@@ -9791,13 +9735,39 @@ svg { overflow: hidden; }
   display: block;
   filter: brightness(1.05);
 }
+.site-footer .site-footer__payments img[src*="/payments/visa.svg"],
+.site-footer .site-footer__payments img[src*="/payments/mastercard.svg"],
+.nv-cart-drawer .nv-cart-drawer__cards img[src*="/payments/visa.svg"],
+.nv-cart-drawer .nv-cart-drawer__cards img[src*="/payments/mastercard.svg"],
+.legal-page__payments img[src*="/payments/visa.svg"],
+.legal-page__payments img[src*="/payments/mastercard.svg"]{
+  width: auto;
+  height: 32px;
+  max-width: 100%;
+  object-fit: contain;
+}
 @media (min-width: 640px){
   .site-footer__payments img{ height: 70px; width: 140px; max-width: 140px; }
+  .site-footer .site-footer__payments img[src*="/payments/visa.svg"],
+  .site-footer .site-footer__payments img[src*="/payments/mastercard.svg"],
+  .nv-cart-drawer .nv-cart-drawer__cards img[src*="/payments/visa.svg"],
+  .nv-cart-drawer .nv-cart-drawer__cards img[src*="/payments/mastercard.svg"],
+  .legal-page__payments img[src*="/payments/visa.svg"],
+  .legal-page__payments img[src*="/payments/mastercard.svg"]{
+    height: 40px;
+  }
 }
 .site-footer__copy{
   font-size: 12px;
   color: #888;
   margin: 0;
+}
+@media (max-width: 639px){
+  .site-footer .site-footer__payments img{
+    width: auto;
+    height: 48px;
+    max-width: 76px;
+  }
 }
 
 /* =========================================================================
