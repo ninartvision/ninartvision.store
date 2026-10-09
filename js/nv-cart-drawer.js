@@ -7,6 +7,21 @@
 
   const STORAGE_KEY = 'nv_cart_items';
   const ADDON_GEL = { frame: 50, gift: 10, courier: 5 };
+  const ADDON_OPTIONS = [
+    { key: 'frame', option: 'frameSelection', label: 'ჩარჩო', price: ADDON_GEL.frame },
+    {
+      key: 'gift',
+      option: 'giftPackaging',
+      label: 'სასაჩუქრე შეფუთვა',
+      price: ADDON_GEL.gift,
+    },
+    {
+      key: 'courier',
+      option: 'courierDelivery',
+      label: 'საკურიერო მომსახურება',
+      price: ADDON_GEL.courier,
+    },
+  ];
   const DEFAULT_WA = '995579388833';
 
   function parsePriceNum(raw) {
@@ -66,12 +81,26 @@
     return items.reduce((s, i) => s + lineTotal(i), 0);
   }
 
+  function selectedAddons(options = {}) {
+    return Object.fromEntries(
+      ADDON_OPTIONS.map(({ key, option }) => [key, Boolean(options[option] ?? options[key])])
+    );
+  }
+
+  function sameAddons(itemAddons, selected) {
+    return ADDON_OPTIONS.every(({ key }) => Boolean(itemAddons?.[key]) === selected[key]);
+  }
+
+  function addonDetails(item) {
+    return ADDON_OPTIONS.filter(({ key }) => item.addons?.[key]).map(({ key, label, price }) => ({
+      key,
+      label,
+      price,
+    }));
+  }
+
   function addonLabels(item) {
-    const parts = [];
-    if (item.addons?.frame) parts.push('ჩარჩო (+50 ₾)');
-    if (item.addons?.gift) parts.push('სასაჩუქრე შეფუთვა (+10 ₾)');
-    if (item.addons?.courier) parts.push('საკურიერო (+5 ₾)');
-    return parts;
+    return addonDetails(item).map(({ label, price }) => label + ' +' + price + ' ₾');
   }
 
   function shopItemThumb(el) {
@@ -253,7 +282,14 @@
 
     if (!items.length) {
       bodyEl.innerHTML =
-        '<p class="nv-cart-drawer__empty">Your cart is empty. Add an artwork from the shop or gallery.</p>';
+        '<div class="nv-cart-drawer__empty">' +
+        '<svg class="nv-cart-drawer__empty-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">' +
+        '<path d="M12 17h24l2 24H10l2-24Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>' +
+        '<path d="M18 18v-4a6 6 0 0 1 12 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+        '<path d="M19 27c2 2 8 2 10 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+        '</svg>' +
+        '<p>Your cart is empty. Add an artwork from the shop or gallery.</p>' +
+        '</div>';
       return;
     }
 
@@ -264,6 +300,24 @@
             escapeAttr(item.image) +
             '" alt="" decoding="async" loading="lazy">'
           : '<div class="nv-cart-drawer__thumb" aria-hidden="true"></div>';
+        const addons = addonDetails(item);
+        const addonsMarkup = addons.length
+          ? '<div class="nv-cart-drawer__addons">' +
+            addons
+              .map(
+                addon =>
+                  '<div class="nv-cart-drawer__addon">' +
+                  '<span>' +
+                  escapeHtml(addon.label) +
+                  '</span>' +
+                  '<span>+' +
+                  addon.price +
+                  ' ₾</span>' +
+                  '</div>'
+              )
+              .join('') +
+            '</div>'
+          : '';
         return (
           '<article class="nv-cart-drawer__item" data-nv-cart-index="' +
           index +
@@ -273,6 +327,7 @@
           '<h3 class="nv-cart-drawer__item-title">' +
           escapeHtml(item.title || 'Untitled') +
           '</h3>' +
+          addonsMarkup +
           '<div class="nv-cart-drawer__item-row">' +
           '<div class="nv-cart-drawer__qty">' +
           '<button type="button" data-nv-cart-qty="-1" aria-label="Decrease quantity">−</button>' +
@@ -285,21 +340,30 @@
           fmtGel(lineTotal(item)) +
           '</span>' +
           '</div>' +
+          '<button type="button" class="nv-cart-drawer__remove" data-nv-cart-remove aria-label="Remove ' +
+          escapeAttr(item.title || 'artwork') +
+          ' from cart">Remove</button>' +
           '</div>' +
           '</article>'
         );
       })
       .join('');
 
-    bodyEl.querySelectorAll('[data-nv-cart-qty]').forEach(btn => {
+    bodyEl.querySelectorAll('[data-nv-cart-qty], [data-nv-cart-remove]').forEach(btn => {
       btn.addEventListener('click', () => {
         const row = btn.closest('.nv-cart-drawer__item');
         const idx = Number(row?.dataset.nvCartIndex);
-        const delta = Number(btn.dataset.nvCartQty);
-        if (!Number.isFinite(idx) || !Number.isFinite(delta)) return;
+        if (!Number.isFinite(idx)) return;
         const list = readItems();
         const it = list[idx];
         if (!it) return;
+        if (btn.hasAttribute('data-nv-cart-remove')) {
+          list.splice(idx, 1);
+          writeItems(list);
+          return;
+        }
+        const delta = Number(btn.dataset.nvCartQty);
+        if (!Number.isFinite(delta)) return;
         const next = (it.qty || 1) + delta;
         if (next < 1) list.splice(idx, 1);
         else it.qty = next;
@@ -347,18 +411,11 @@
     const id = itemIdFromDataset(ds);
     const artist = resolveArtist(ds.artist);
     const list = readItems();
-    let item = list.find(i => i.id === id);
-    const addons = {
-      frame: Boolean(options.frameSelection),
-      gift: Boolean(options.giftPackaging),
-      courier: Boolean(options.courierDelivery),
-    };
+    const addons = selectedAddons(options);
+    let item = list.find(i => i.id === id && sameAddons(i.addons, addons));
 
     if (item) {
       item.qty = (item.qty || 1) + 1;
-      if (addons.frame) item.addons = { ...item.addons, frame: true };
-      if (addons.gift) item.addons = { ...item.addons, gift: true };
-      if (addons.courier) item.addons = { ...item.addons, courier: true };
     } else {
       item = {
         id,
@@ -383,19 +440,12 @@
     if (!data?.title) return;
     if (layout?.querySelector?.('.status.sold')) return;
 
-    const addons = {
-      frame: Boolean(options.frameSelection),
-      gift: Boolean(options.giftPackaging),
-      courier: Boolean(options.courierDelivery),
-    };
+    const addons = selectedAddons(options);
 
     const list = readItems();
-    let item = list.find(i => i.id === data.id);
+    let item = list.find(i => i.id === data.id && sameAddons(i.addons, addons));
     if (item) {
       item.qty = (item.qty || 1) + 1;
-      if (addons.frame) item.addons = { ...item.addons, frame: true };
-      if (addons.gift) item.addons = { ...item.addons, gift: true };
-      if (addons.courier) item.addons = { ...item.addons, courier: true };
     } else {
       item = { ...data, qty: 1, addons };
       list.push(item);

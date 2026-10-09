@@ -9845,8 +9845,6 @@ svg { overflow: hidden; }
 }
 .site-footer .site-footer__payments img[src*="/payments/visa.svg"],
 .site-footer .site-footer__payments img[src*="/payments/mastercard.svg"],
-.nv-cart-drawer .nv-cart-drawer__cards img[src*="/payments/visa.svg"],
-.nv-cart-drawer .nv-cart-drawer__cards img[src*="/payments/mastercard.svg"],
 .legal-page__payments img[src*="/payments/visa.svg"],
 .legal-page__payments img[src*="/payments/mastercard.svg"]{
   width: auto;
@@ -9858,8 +9856,6 @@ svg { overflow: hidden; }
   .site-footer__payments img{ height: 70px; width: 140px; max-width: 140px; }
   .site-footer .site-footer__payments img[src*="/payments/visa.svg"],
   .site-footer .site-footer__payments img[src*="/payments/mastercard.svg"],
-  .nv-cart-drawer .nv-cart-drawer__cards img[src*="/payments/visa.svg"],
-  .nv-cart-drawer .nv-cart-drawer__cards img[src*="/payments/mastercard.svg"],
   .legal-page__payments img[src*="/payments/visa.svg"],
   .legal-page__payments img[src*="/payments/mastercard.svg"]{
     height: 40px;

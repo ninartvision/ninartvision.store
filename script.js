@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     load('nv-legal-info.min.js?v=nv20260529', 'nv-legal-info');
     load('nv-site-footer.min.js?v=nv20260529', 'nv-site-footer');
-    load('nv-cart-drawer.min.js?v=nv20260609', 'nv-cart-drawer');
+    load('nv-cart-drawer.min.js?v=nv20261009addons', 'nv-cart-drawer');
   })();
 
   const fmtPrice = p => {
