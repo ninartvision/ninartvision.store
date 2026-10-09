@@ -464,10 +464,62 @@
   box-shadow: 0 8px 24px rgba(26, 21, 18, 0.08);
 }
 
+.page-room-visualizer .nvr-upload-row label[for="nvrFile"].btn {
+  position: relative;
+}
+
+.page-room-visualizer .nvr-upload-row label[for="nvrFile"].btn::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 2px solid rgba(184, 149, 110, 0.68);
+  border-radius: inherit;
+  opacity: 0;
+  transform: scale(0.88);
+  box-shadow: 0 0 0 2px rgba(212, 184, 150, 0.16);
+  pointer-events: none;
+  animation: nv-preview-tab-cue 2.3s ease-in-out infinite;
+  transition: filter 0.3s ease;
+}
+
+.page-room-visualizer .nvr-upload-row label[for="nvrFile"].btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
 .page-room-visualizer .nvr-upload-row button.btn:not(.btn-dark):focus-visible,
 .page-room-visualizer .nvr-upload-row .btn.btn-dark:focus-visible {
   outline: 2px solid var(--nvr-gold);
   outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .page-room-visualizer .nvr-upload-row label[for="nvrFile"].btn:hover {
+    letter-spacing: 0.12em;
+  }
+
+  .page-room-visualizer .nvr-upload-row label[for="nvrFile"].btn:hover::after {
+    filter: drop-shadow(0 0 8px rgba(184, 149, 110, 0.48));
+  }
+}
+
+@media (hover: none) {
+  .page-room-visualizer .nvr-upload-row label[for="nvrFile"].btn:hover {
+    transform: none;
+    background: linear-gradient(135deg, var(--nvr-ink) 0%, #2a2320 100%);
+    box-shadow: 0 12px 32px rgba(26, 21, 18, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    letter-spacing: 0.12em;
+  }
+
+  .page-room-visualizer .nvr-upload-row #nvrExpand:hover {
+    transform: none;
+    background: var(--nvr-paper-solid);
+    border-color: var(--nvr-line-gold);
+    box-shadow: none;
+  }
+
+  .page-room-visualizer .nvr-upload-row label[for="nvrFile"].btn:active {
+    transform: translateY(0) scale(0.98);
+  }
 }
 
 #nvrExpand[aria-pressed="true"] {
@@ -1862,6 +1914,11 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
   .page-room-visualizer .nvr-upload-row .btn,
   .nvr-handle {
     transition: none;
+  }
+
+  .page-room-visualizer .nvr-upload-row label[for="nvrFile"].btn::after {
+    transition: none;
+    animation: none;
   }
 
   .nvr-cat-card:hover {

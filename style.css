@@ -3863,6 +3863,21 @@ a.pill:visited{
   margin-left: 6px;
 }
 
+.shop-header .shop-filter-buttons{
+  display: flex;
+  gap: 12px;
+}
+
+.shop-header .filter-tabs .pill.preview-btn{
+  font-size: 13.3333px;
+}
+
+.shop-header .filter-tabs .pill.preview-btn.active{
+  background: #000;
+  border-color: var(--nv-home-ink);
+  color: #fff;
+}
+
 @media (max-width: 600px){
   .pill{
     padding: 8px 16px;
@@ -5195,6 +5210,10 @@ a.pill:visited{
   animation-delay:0.34s;
 }
 
+.shop-header .shop-filter-buttons .preview-btn::after{
+  animation: nv-preview-tab-cue 2.3s ease-in-out infinite;
+}
+
 /* Disable lift effect on touch devices for better mobile UX */
 @media (hover: none) {
   .preview-btn:hover{
@@ -5202,6 +5221,21 @@ a.pill:visited{
   }
   .preview-btn.active:hover{
     transform: translateY(0);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shop-header .shop-filter-buttons .preview-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1);
+    border-color: #111;
+  }
+
+  .shop-header .shop-filter-buttons .preview-btn.active:hover {
+    background: #111;
+    border-color: var(--nv-home-ink);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3), 0 2px 6px rgba(0,0,0,0.2);
   }
 }
 
