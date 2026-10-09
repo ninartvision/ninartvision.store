@@ -18,7 +18,7 @@
   <meta name="twitter:image" content="https://ninartvision.com/images/og-image.png">
 
   <link rel="stylesheet" href="./style.min.css?v=nv20260903" />
-  <link rel="stylesheet" href="./css/room-visualizer.css?v=nv20260527room" />
+  <link rel="stylesheet" href="./css/room-visualizer.css?v=nv20261009download" />
   <link rel="icon" href="./images/favicon.webp">
   <script>
     (function () {
@@ -123,7 +123,7 @@
         <input type="file" id="nvrFile" accept="image/*" aria-label="Upload room or wall photo" />
         <label for="nvrFile" class="btn btn-dark" data-en="Upload your room photo" data-ka="ატვირთეთ ოთახის ფოტო">Upload your room photo</label>
         <button type="button" class="btn nvr-reset-btn" id="nvrResetRoom" data-visible="0" data-en="Remove photo" data-ka="ფოტოს წაშლა">Remove photo</button>
-        <button type="button" class="btn" id="nvrExpand" aria-pressed="false" title="Larger preview area" data-en="Larger preview" data-ka="დიდი პრევიუ">Larger preview</button>
+        <button type="button" class="btn" id="nvrExpand" aria-pressed="false" title="Larger preview area" data-en="Larger preview" data-ka="შედეგის ნახვა">Larger preview</button>
       </div>
       </div>
 
@@ -173,6 +173,12 @@
         </div>
 
         <div class="nvr-stage" id="nvrStage" aria-label="Room preview compose area">
+          <button type="button" class="nvr-download-btn" id="nvrDownload" aria-label="Download finished preview" title="Download finished preview" hidden>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4" />
+            </svg>
+          </button>
+          <p class="nvr-download-status" id="nvrDownloadStatus" role="status" aria-live="polite" hidden></p>
           <img class="nvr-room" id="nvrRoom" alt="" draggable="false" />
           <div class="nvr-art-wrap" id="nvrArtWrap" hidden>
             <img id="nvrArtImg" alt="" draggable="false" />
@@ -213,7 +219,7 @@
 </script>
 <script defer src="./lang.js?v=nv20260724"></script>
 <script defer src="./sanity-client.min.js?v=nv20260527"></script>
-<script defer src="./js/room-visualizer.min.js?v=nv20260527room"></script>
+<script defer src="./js/room-visualizer.min.js?v=nv20261009download"></script>
 <script defer src="./script.min.js?v=nv20260903"></script>
 </body>
 </html>

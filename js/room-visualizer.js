@@ -19,6 +19,8 @@
   const expandBtn = document.getElementById('nvrExpand');
   const scaleVal = document.getElementById('nvrScaleVal');
   const rotateVal = document.getElementById('nvrRotateVal');
+  const downloadBtn = document.getElementById('nvrDownload');
+  const downloadStatus = document.getElementById('nvrDownloadStatus');
 
   if (!stage || !catalogEl) return;
 
@@ -755,6 +757,55 @@
   }
 
   function applyArtTransform() {
+    var r = stageRect();
+    if (r.width > 0 && r.height > 0 && artImg.naturalWidth && artImg.naturalHeight) {
+      var styles = window.getComputedStyle(interactiveStage || stage);
+      var safeInline = parseFloat(styles.getPropertyValue('--nvr-control-safe-inline')) || 16;
+      var safeTop = parseFloat(styles.getPropertyValue('--nvr-control-safe-top')) || 60;
+      var safeBottom = parseFloat(styles.getPropertyValue('--nvr-control-safe-bottom')) || 16;
+      var ratio = artImg.naturalHeight / artImg.naturalWidth;
+      var radians = (rot * Math.PI) / 180;
+      var cos = Math.abs(Math.cos(radians));
+      var sin = Math.abs(Math.sin(radians));
+      var controlHeight = safeTop + safeBottom;
+      var widthLimit = (r.width - 2 * safeInline * cos - controlHeight * sin) / (cos + ratio * sin);
+      var heightLimit = (r.height - 2 * safeInline * sin - controlHeight * cos) / (sin + ratio * cos);
+      var maxWidth = Math.max(0, Math.min(widthLimit, heightLimit));
+      sw = Math.min(sw, Math.max(MIN_SW, (maxWidth / r.width) * 100));
+
+      var artWidth = r.width * sw / 100;
+      var artHeight = artWidth * ratio;
+      var left = -artWidth / 2 - safeInline;
+      var right = artWidth / 2 + safeInline;
+      var top = -artHeight / 2 - safeTop;
+      var bottom = artHeight / 2 + safeBottom;
+      var corners = [
+        [left, top],
+        [right, top],
+        [left, bottom],
+        [right, bottom]
+      ];
+      var minX = Infinity;
+      var maxX = -Infinity;
+      var minY = Infinity;
+      var maxY = -Infinity;
+      corners.forEach(function (point) {
+        var x = point[0] * Math.cos(radians) - point[1] * Math.sin(radians);
+        var y = point[0] * Math.sin(radians) + point[1] * Math.cos(radians);
+        minX = Math.min(minX, x);
+        maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y);
+        maxY = Math.max(maxY, y);
+      });
+
+      var minCx = -minX / r.width * 100;
+      var maxCx = (r.width - maxX) / r.width * 100;
+      var minCy = -minY / r.height * 100;
+      var maxCy = (r.height - maxY) / r.height * 100;
+      cx = clamp(cx, minCx, maxCx);
+      cy = clamp(cy, minCy, maxCy);
+    }
+
     artWrap.style.left = cx + '%';
     artWrap.style.top = cy + '%';
     artWrap.style.width = sw + '%';
@@ -1366,7 +1417,11 @@
 
     rememberStageHome();
     prepareStageForFullscreen();
-    /* Move live stage (not a clone) — keeps artWrap/corner listeners and transform state */
+    cancelActiveGesture();
+    stage.classList.add('nvr-stage--finished');
+    fullscreenPreviewModal.classList.add('is-finished');
+    downloadBtn.hidden = artWrap.hidden;
+    downloadStatus.hidden = true;
     fullscreenPreviewScene.appendChild(stage);
     setFullscreenInteractionTargets();
     applyArtTransform();
@@ -1388,6 +1443,9 @@
     fullscreenPreviewModal.classList.remove('is-visible');
 
     cancelActiveGesture();
+    stage.classList.remove('nvr-stage--finished');
+    downloadBtn.hidden = true;
+    downloadStatus.hidden = true;
 
     if (stage.parentNode === fullscreenPreviewScene) {
       restoreStageHome();
@@ -1400,6 +1458,7 @@
     }
     fullscreenCloseTimer = setTimeout(function () {
       fullscreenPreviewModal.classList.remove('is-open');
+      fullscreenPreviewModal.classList.remove('is-finished');
       fullscreenPreviewModal.setAttribute('aria-hidden', 'true');
     }, 180);
   }
@@ -1408,6 +1467,7 @@
     const hasRoom = !!roomImg.getAttribute('src');
     const hasArt = !!(selectedId && artImg.getAttribute('src'));
     artWrap.hidden = !(hasRoom && hasArt);
+    if (downloadBtn && !fullscreenPreviewVisible) downloadBtn.hidden = true;
     if (hasRoom && hasArt) {
       ensureArtHandles();
       artWrap.classList.add('is-editing');
@@ -1444,6 +1504,131 @@
     });
   }
 
+  function showDownloadError(error) {
+    console.error('[room-visualizer] Could not export preview:', error);
+    var isGeorgian = document.documentElement.lang === 'ka' ||
+      document.documentElement.getAttribute('data-site-lang') === 'ka';
+    downloadStatus.textContent = isGeorgian
+      ? 'პრევიუს ჩამოტვირთვა ვერ მოხერხდა. შესაძლოა ნამუშევრის სურათის წყარო ექსპორტს ზღუდავდეს. სცადეთ სხვა ნამუშევარი ან ხელახლა აირჩიეთ იგი.'
+      : 'The preview could not be exported. The artwork image source may block export; try another artwork or select it again.';
+    downloadStatus.hidden = false;
+  }
+
+  function loadExportImage(src) {
+    return new Promise(function (resolve, reject) {
+      var image = new Image();
+      image.onload = function () {
+        resolve(image);
+      };
+      image.onerror = function () {
+        reject(new Error('The artwork image could not be loaded with export access.'));
+      };
+      if (!/^data:|^blob:/i.test(src)) image.crossOrigin = 'anonymous';
+      image.src = src;
+    });
+  }
+
+  function downloadFinishedPreview() {
+    if (!fullscreenPreviewVisible || artWrap.hidden || !roomImg.naturalWidth || !artImg.naturalWidth) return;
+    downloadBtn.disabled = true;
+    downloadStatus.hidden = true;
+
+    var source = artImg.currentSrc || artImg.src;
+    loadExportImage(source).then(function (exportArt) {
+      var stageBox = stage.getBoundingClientRect();
+      var roomBox = roomImg.getBoundingClientRect();
+      var stageWidth = stage.clientWidth;
+      var stageHeight = stage.clientHeight;
+      if (!roomBox.width || !roomBox.height || !stageWidth || !stageHeight) {
+        throw new Error('The preview has no drawable dimensions.');
+      }
+      var styles = window.getComputedStyle(stage);
+      var insetLeft = parseFloat(styles.borderLeftWidth) || 0;
+      var insetTop = parseFloat(styles.borderTopWidth) || 0;
+      var outputScale = Math.max(
+        roomImg.naturalWidth / roomBox.width,
+        roomImg.naturalHeight / roomBox.height,
+        1
+      );
+      outputScale = Math.min(
+        outputScale,
+        16384 / stageWidth,
+        16384 / stageHeight,
+        Math.sqrt(40000000 / (stageWidth * stageHeight))
+      );
+
+      var canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(stageWidth * outputScale));
+      canvas.height = Math.max(1, Math.round(stageHeight * outputScale));
+      var context = canvas.getContext('2d');
+      if (!context) throw new Error('Canvas export is not available in this browser.');
+
+      context.scale(outputScale, outputScale);
+      var background = context.createLinearGradient(0, 0, 0, stageHeight);
+      background.addColorStop(0, '#fcfaf6');
+      background.addColorStop(1, '#f8f4ee');
+      context.fillStyle = background;
+      context.fillRect(0, 0, stageWidth, stageHeight);
+      context.drawImage(
+        roomImg,
+        roomBox.left - stageBox.left - insetLeft,
+        roomBox.top - stageBox.top - insetTop,
+        roomBox.width,
+        roomBox.height
+      );
+
+      var artWidth = artWrap.clientWidth;
+      var artHeight = artWrap.clientHeight;
+      var artCenterX = stageWidth * cx / 100;
+      var artCenterY = stageHeight * cy / 100;
+      context.save();
+      context.translate(artCenterX, artCenterY);
+      context.rotate(rot * Math.PI / 180);
+      context.shadowColor = 'rgba(26, 21, 18, 0.18)';
+      context.shadowBlur = 24;
+      context.shadowOffsetY = 10;
+      context.globalCompositeOperation = artWrap.getAttribute('data-nvr-art-alpha') === '1'
+        ? 'source-over'
+        : 'multiply';
+      context.drawImage(exportArt, -artWidth / 2, -artHeight / 2, artWidth, artHeight);
+      context.restore();
+
+      return new Promise(function (resolve, reject) {
+        try {
+          canvas.toBlob(function (blob) {
+            if (blob) resolve(blob);
+            else reject(new Error('The browser could not encode the preview as PNG.'));
+          }, 'image/png');
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }).then(function (blob) {
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      var title = (artImg.alt || 'artwork')
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/gi, '-')
+        .replace(/^-|-$/g, '')
+        .toLowerCase();
+      link.href = url;
+      link.download = 'ninart-vision-' + (title || 'artwork') + '-room-preview.png';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(function () {
+        URL.revokeObjectURL(url);
+      }, 1000);
+    }).catch(showDownloadError).finally(function () {
+      downloadBtn.disabled = false;
+    });
+  }
+
+  if (downloadBtn && downloadStatus) {
+    downloadBtn.addEventListener('click', downloadFinishedPreview);
+  }
+
   function stageRect() {
     return (interactiveStage && interactiveStage.getBoundingClientRect) ? interactiveStage.getBoundingClientRect() : stage.getBoundingClientRect();
   }
@@ -1461,6 +1646,16 @@
     rot = clamp(Number(rotateInput.value), Number(rotateInput.min), Number(rotateInput.max));
     applyArtTransform();
   });
+
+  if (typeof ResizeObserver === 'function') {
+    new ResizeObserver(function () {
+      if (!artWrap.hidden) applyArtTransform();
+    }).observe(stage);
+  } else {
+    window.addEventListener('resize', function () {
+      if (!artWrap.hidden) applyArtTransform();
+    });
+  }
 
   roomImg.addEventListener('click', function () {
     if (!roomImg.getAttribute('src')) return;
