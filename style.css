@@ -9928,3 +9928,58 @@ div.artist-avatar,
   background-position: center;
   background-repeat: no-repeat;
 }
+
+/* Refined navigation feedback — limited to navigation links, not social icons. */
+.desktop-nav a,
+.menu-links .menu-link{
+  position: relative;
+  transition: color 250ms ease, opacity 250ms ease, transform 250ms ease;
+}
+.desktop-nav a::after,
+.menu-links .menu-link::after{
+  position: absolute;
+  right: 0;
+  bottom: -5px;
+  left: 0;
+  height: 1px;
+  background: rgba(184, 149, 110, 0.75);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 250ms ease;
+}
+.desktop-nav a:focus-visible,
+.menu-links .menu-link:focus-visible{
+  color: #9a7953;
+}
+.desktop-nav a:focus-visible::after,
+.menu-links .menu-link:focus-visible::after{
+  transform: scaleX(1);
+}
+@media (hover: hover) and (pointer: fine){
+  .desktop-nav a:hover,
+  .menu-links .menu-link:hover{
+    color: #9a7953;
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+  .desktop-nav a:hover::after,
+  .menu-links .menu-link:hover::after{
+    transform: scaleX(1);
+  }
+  .header .desktop-nav a:hover{
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .desktop-nav a,
+  .menu-links .menu-link,
+  .desktop-nav a::after,
+  .menu-links .menu-link::after{
+    transition: none;
+  }
+  .desktop-nav a:hover,
+  .menu-links .menu-link:hover{
+    transform: none;
+  }
+}
