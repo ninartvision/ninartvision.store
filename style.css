@@ -2365,6 +2365,81 @@ body{
   shape-rendering: geometricPrecision;
 }
 
+.search-section .search-wrapper > .search-icon{
+  position: relative;
+  z-index: 0;
+  color: #59482f;
+  transition: color 0.24s ease, transform 0.24s ease;
+}
+
+.search-section .search-wrapper > .search-icon::before{
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -8px;
+  border: 1px solid rgba(167, 134, 78, 0.42);
+  border-radius: 50%;
+  background: rgba(238, 226, 204, 0.32);
+  box-shadow: 0 0 0 0 rgba(167, 134, 78, 0.2);
+  pointer-events: none;
+  transition: border-color 0.24s ease, background 0.24s ease, box-shadow 0.24s ease;
+  animation: nv-home-camera-breathe 3.2s ease-in-out infinite;
+}
+
+.search-section .search-wrapper > .search-icon svg{
+  stroke-width: 1.8;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6));
+}
+
+.search-section .search-wrapper > .search-icon:hover,
+.search-section .search-wrapper > .search-icon:focus-visible{
+  color: #3f3425;
+}
+
+.search-section .search-wrapper > .search-icon:focus-visible{
+  outline: 2px solid rgba(139, 115, 85, 0.55);
+  outline-offset: 5px;
+}
+
+@keyframes nv-home-camera-breathe{
+  0%, 100%{
+    border-color: rgba(167, 134, 78, 0.32);
+    background: rgba(238, 226, 204, 0.2);
+    box-shadow: 0 0 0 0 rgba(167, 134, 78, 0.08);
+  }
+  50%{
+    border-color: rgba(167, 134, 78, 0.62);
+    background: rgba(238, 226, 204, 0.42);
+    box-shadow: 0 0 0 4px rgba(167, 134, 78, 0.13), 0 0 13px rgba(167, 134, 78, 0.2);
+  }
+}
+
+@media (hover: hover) and (pointer: fine){
+  .search-section .search-wrapper > .search-icon:hover{
+    transform: translateY(-1px);
+  }
+
+  .search-section .search-wrapper > .search-icon:hover::before,
+  .search-section .search-wrapper > .search-icon:focus-visible::before{
+    animation: none;
+    border-color: rgba(167, 134, 78, 0.72);
+    background: rgba(238, 226, 204, 0.48);
+    box-shadow: 0 0 0 4px rgba(167, 134, 78, 0.16), 0 0 16px rgba(167, 134, 78, 0.25);
+  }
+}
+
+.search-section .search-wrapper > .search-icon:active{
+  transform: translateY(0) scale(0.94);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .search-section .search-wrapper > .search-icon,
+  .search-section .search-wrapper > .search-icon::before{
+    animation: none;
+    transition: none;
+  }
+}
+
 .search-input{
   flex: 1 1 auto;
   min-width: 0;
