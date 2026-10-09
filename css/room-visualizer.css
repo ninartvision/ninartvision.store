@@ -1828,16 +1828,17 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
 
 @media (max-width: 640px) {
   .nvr-handle {
-    width: 28px;
-    height: 28px;
-    margin: -14px;
+    width: 16px;
+    height: 16px;
+    margin: -8px;
   }
 
   .nvr-handle--rotate {
-    top: -42px;
-    margin-left: -14px;
-    width: 30px;
-    height: 30px;
+    top: -28px;
+    margin-left: -9px;
+    width: 18px;
+    height: 18px;
+    margin-top: -9px;
   }
 
   .nvr-hero-block,
