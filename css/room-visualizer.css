@@ -1506,12 +1506,23 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
   min-width: 0;
   min-height: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   pointer-events: auto;
   opacity: 0;
   transition: opacity 180ms ease;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview__actions {
+  display: flex;
+  flex: 0 0 auto;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
 }
 
 .page-room-visualizer .nvr-fullscreen-preview.is-visible .nvr-fullscreen-preview__frame {
@@ -1521,10 +1532,10 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
 .page-room-visualizer .nvr-fullscreen-preview__scene {
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: flex-start;
   width: 100%;
-  height: 100%;
+  height: auto;
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
@@ -1532,6 +1543,37 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
   max-height: 100%;
   pointer-events: auto;
   overflow: hidden;
+}
+
+.page-room-visualizer .nvr-stage-wrap--fullscreen {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.page-room-visualizer .nvr-stage-wrap--fullscreen .nvr-hint {
+  display: none;
+}
+
+.page-room-visualizer .nvr-stage-wrap--fullscreen .nvr-toolbar {
+  flex: 0 0 auto;
+  width: min(100%, 720px);
+  align-self: center;
+  margin: 0 auto 12px;
+}
+
+.page-room-visualizer .nvr-stage-wrap--fullscreen .nvr-stage {
+  flex: 1 1 auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: auto;
 }
 
 .page-room-visualizer .nvr-fullscreen-preview__scene > .nvr-stage,
@@ -1614,10 +1656,8 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
 }
 
 .page-room-visualizer .nvr-fullscreen-preview__close {
-  position: absolute;
+  position: relative;
   z-index: 10;
-  top: max(12px, env(safe-area-inset-top, 0px));
-  right: max(12px, env(safe-area-inset-right, 0px));
   width: 44px;
   height: 44px;
   border: none;
@@ -1635,11 +1675,6 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
   transition: background 0.35s ease, transform 0.35s var(--nvr-ease);
 }
 
-.page-room-visualizer .nvr-fullscreen-preview.is-finished .nvr-fullscreen-preview__close {
-  right: auto;
-  left: max(12px, env(safe-area-inset-left, 0px));
-}
-
 .nvr-stage.nvr-stage--finished .nvr-art-wrap {
   pointer-events: none !important;
   cursor: default;
@@ -1650,9 +1685,64 @@ html[lang="ka"] .page-room-visualizer .nvr-hero-head h2 {
   display: none !important;
 }
 
+.nvr-preview-mode-btn {
+  position: relative;
+  z-index: 12;
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid rgba(184, 149, 110, 0.38);
+  border-radius: 999px;
+  background: rgba(255, 253, 250, 0.94);
+  color: var(--nvr-ink);
+  box-shadow: 0 10px 28px rgba(26, 21, 18, 0.2);
+  font-family: "FiraGO", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.nvr-preview-mode-btn svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nvr-preview-mode-btn__edit {
+  display: none;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview.is-finished .nvr-preview-mode-btn__done {
+  display: none;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview.is-finished .nvr-preview-mode-btn__edit {
+  display: block;
+}
+
+.nvr-preview-mode-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
 .nvr-stage.nvr-stage--finished .nvr-download-btn,
 .page-room-visualizer .nvr-fullscreen-preview__scene .nvr-download-btn {
   pointer-events: auto !important;
+}
+
+.page-room-visualizer .nvr-fullscreen-preview.is-finished .nvr-stage-wrap--fullscreen .nvr-toolbar {
+  display: none !important;
 }
 
 .page-room-visualizer .nvr-fullscreen-preview__close:hover {

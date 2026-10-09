@@ -87,9 +87,11 @@
   let fullscreenPreviewModal = null;
   let fullscreenPreviewScene = null;
   let fullscreenPreviewVisible = false;
+  let fullscreenPreviewFinished = false;
   let fullscreenCloseTimer = null;
-  let stageRestoreParent = null;
-  let stageRestoreNext = null;
+  let stageWrapRestoreParent = null;
+  let stageWrapRestoreNext = null;
+  let previewModeBtn = null;
   let interactiveStage = stage;
   let interactiveArtWrap = artWrap;
   let handlesEl = null;
@@ -1075,19 +1077,19 @@
   }
 
   function rememberStageHome() {
-    stageRestoreParent = stage.parentNode;
-    stageRestoreNext = stage.nextSibling;
+    stageWrapRestoreParent = stageWrap.parentNode;
+    stageWrapRestoreNext = stageWrap.nextSibling;
   }
 
   function restoreStageHome() {
-    if (!stageRestoreParent) return;
-    if (stageRestoreNext) {
-      stageRestoreParent.insertBefore(stage, stageRestoreNext);
+    if (!stageWrapRestoreParent) return;
+    if (stageWrapRestoreNext) {
+      stageWrapRestoreParent.insertBefore(stageWrap, stageWrapRestoreNext);
     } else {
-      stageRestoreParent.appendChild(stage);
+      stageWrapRestoreParent.appendChild(stageWrap);
     }
-    stageRestoreParent = null;
-    stageRestoreNext = null;
+    stageWrapRestoreParent = null;
+    stageWrapRestoreNext = null;
   }
 
   function prepareStageForFullscreen() {
@@ -1378,13 +1380,17 @@
     fullscreenPreviewModal = document.createElement('div');
     fullscreenPreviewModal.className = 'nvr-fullscreen-preview';
     fullscreenPreviewModal.setAttribute('aria-hidden', 'true');
-    fullscreenPreviewModal.innerHTML = '<div class="nvr-fullscreen-preview__backdrop"></div><div class="nvr-fullscreen-preview__frame"><div class="nvr-fullscreen-preview__scene"></div><button type="button" class="nvr-fullscreen-preview__close" aria-label="Close fullscreen preview">&times;</button></div>';
+    fullscreenPreviewModal.innerHTML = '<div class="nvr-fullscreen-preview__backdrop"></div><div class="nvr-fullscreen-preview__frame"><div class="nvr-fullscreen-preview__actions"><button type="button" class="nvr-fullscreen-preview__close" aria-label="Close fullscreen preview">&times;</button><button type="button" class="nvr-preview-mode-btn" aria-pressed="false"><svg class="nvr-preview-mode-btn__done" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6"/></svg><svg class="nvr-preview-mode-btn__edit" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m16 4 4 4M4 20l4.5-1 11-11a2.12 2.12 0 0 0-3-3l-11 11L4 20Z"/></svg><span></span></button></div><div class="nvr-fullscreen-preview__scene"></div></div>';
     fullscreenPreviewScene = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__scene');
     var backdrop = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__backdrop');
     var closeBtn = fullscreenPreviewModal.querySelector('.nvr-fullscreen-preview__close');
+    previewModeBtn = fullscreenPreviewModal.querySelector('.nvr-preview-mode-btn');
 
     backdrop.addEventListener('click', closeFullscreenPreview);
     closeBtn.addEventListener('click', closeFullscreenPreview);
+    previewModeBtn.addEventListener('click', function () {
+      setFullscreenPreviewFinished(!fullscreenPreviewFinished);
+    });
     fullscreenPreviewModal.addEventListener('click', function (event) {
       if (
         event.target === fullscreenPreviewModal ||
@@ -1410,6 +1416,23 @@
     return fullscreenPreviewModal;
   }
 
+  function setFullscreenPreviewFinished(finished) {
+    fullscreenPreviewFinished = !!finished;
+    stage.classList.toggle('nvr-stage--finished', fullscreenPreviewFinished);
+    fullscreenPreviewModal.classList.toggle('is-finished', fullscreenPreviewFinished);
+    previewModeBtn.setAttribute('aria-pressed', String(fullscreenPreviewFinished));
+    var isGeorgian = document.documentElement.lang === 'ka' ||
+      document.documentElement.getAttribute('data-site-lang') === 'ka';
+    var label = fullscreenPreviewFinished
+      ? (isGeorgian ? 'რედაქტირება' : 'Edit')
+      : (isGeorgian ? 'დასრულება' : 'Done');
+    previewModeBtn.setAttribute('aria-label', label);
+    previewModeBtn.title = label;
+    previewModeBtn.querySelector('span').textContent = label;
+    downloadBtn.hidden = !fullscreenPreviewFinished || artWrap.hidden;
+    downloadStatus.hidden = true;
+  }
+
   function openFullscreenPreview() {
     if (!roomImg.getAttribute('src')) return;
     if (fullscreenPreviewVisible) return;
@@ -1418,17 +1441,15 @@
     rememberStageHome();
     prepareStageForFullscreen();
     cancelActiveGesture();
-    stage.classList.add('nvr-stage--finished');
-    fullscreenPreviewModal.classList.add('is-finished');
-    downloadBtn.hidden = artWrap.hidden;
-    downloadStatus.hidden = true;
-    fullscreenPreviewScene.appendChild(stage);
+    stageWrap.classList.add('nvr-stage-wrap--fullscreen');
+    fullscreenPreviewScene.appendChild(stageWrap);
     setFullscreenInteractionTargets();
+    fullscreenPreviewVisible = true;
+    setFullscreenPreviewFinished(false);
     applyArtTransform();
 
     fullscreenPreviewModal.setAttribute('aria-hidden', 'false');
     fullscreenPreviewModal.classList.add('is-open');
-    fullscreenPreviewVisible = true;
     if (fullscreenCloseTimer) {
       clearTimeout(fullscreenCloseTimer);
     }
@@ -1444,10 +1465,13 @@
 
     cancelActiveGesture();
     stage.classList.remove('nvr-stage--finished');
+    stageWrap.classList.remove('nvr-stage-wrap--fullscreen');
+    fullscreenPreviewFinished = false;
+    previewModeBtn.setAttribute('aria-pressed', 'false');
     downloadBtn.hidden = true;
     downloadStatus.hidden = true;
 
-    if (stage.parentNode === fullscreenPreviewScene) {
+    if (stageWrap.parentNode === fullscreenPreviewScene) {
       restoreStageHome();
     }
     restoreStageInlineStyles();
